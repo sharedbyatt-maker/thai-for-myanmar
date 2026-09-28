@@ -94,9 +94,7 @@ class _QuizScreenState extends State<QuizScreen> {
         const SizedBox(height: 14),
         LinearProgressIndicator(value: (_index + 1) / _questions.length),
         const SizedBox(height: 9),
-        Text(
-          'မေးခွန်း ${_index + 1} / ${_questions.length} • မှန် $_score ခု',
-        ),
+        Text('မေးခွန်း ${_index + 1} / ${_questions.length} • မှန် $_score ခု'),
         const SizedBox(height: 22),
         Card(
           child: Padding(
