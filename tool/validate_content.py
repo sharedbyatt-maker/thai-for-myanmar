@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES_PATH = ROOT / "assets/data/phrase_categories.json"
 PHRASES_PATH = ROOT / "assets/data/phrases.json"
-MIN_PHRASES = 250
+MIN_PHRASES = 450
 REQUIRED_CATEGORIES = {
     "greetings",
     "introductions",
@@ -195,8 +195,18 @@ def main() -> int:
         if category_id in HIGH_RISK_CATEGORIES and "high-risk" not in tags:
             fail(f"{phrase_id} in {category_id} must be marked high-risk")
             errors += 1
+        if (
+            "high-risk" in tags
+            and category_id not in HIGH_RISK_CATEGORIES
+            and "allergy" not in tags
+        ):
+            fail(f"{phrase_id} has an unexpected high-risk tag")
+            errors += 1
         if category_id == "emergency" and "emergency" not in tags:
             fail(f"{phrase_id} in emergency must carry the emergency tag")
+            errors += 1
+        if "emergency" in tags and category_id != "emergency":
+            fail(f"{phrase_id} has an emergency tag outside the emergency category")
             errors += 1
 
         for field in OPTIONAL_PHRASE_FIELDS:
@@ -224,6 +234,20 @@ def main() -> int:
             if not any(particle in phrase["thaiFemale"] for particle in ("ค่ะ", "คะ")):
                 fail(f"{phrase_id} female Thai variant must include ค่ะ or คะ")
                 errors += 1
+            if "นะค่ะ" in phrase["thaiFemale"]:
+                fail(f"{phrase_id} female Thai variant should use นะคะ")
+                errors += 1
+            if re.search(
+                r"(?:ไหม|หรือเปล่า|หรือยัง|เท่าไหร่|ที่ไหน|วันไหน|เวลาไหน|"
+                r"กี่[^ ]*|ไหน|อะไร(?:บ้าง)?|ใคร|เมื่อไหร่|อย่างไร|ยังไง|ทำไม)ค่ะ$",
+                phrase["thaiFemale"].rstrip(),
+            ):
+                fail(f"{phrase_id} female Thai question should end with คะ")
+                errors += 1
+        thai_text = phrase.get("thai")
+        if isinstance(thai_text, str) and "นะค่ะ" in thai_text:
+            fail(f"{phrase_id} Thai text contains the malformed particle นะค่ะ")
+            errors += 1
 
         values = {field: phrase.get(field) for field in ("thai", "my", "en")}
         if all(isinstance(value, str) and value.strip() for value in values.values()):

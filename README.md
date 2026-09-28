@@ -4,12 +4,12 @@ Practical, offline-first Thai for Myanmar speakers living, working, studying, or
 
 ## V1 snapshot
 
-- **302 phrase records across 35 categories**, with Thai text, Myanmar meaning, Myanmar-readable pronunciation, English meaning, keywords, and situation tags.
+- **500 phrase records across 35 categories**, with Thai text, Myanmar meaning, Myanmar-readable pronunciation, English meaning, keywords, and situation tags.
 - Home, Learn, Situations, Quick Speak, Search, Favorites, Quiz, Light/Dark/System theme, and persisted local progress.
 - Bundled lessons, search, favorites, quiz, and progress work without an account or network connection after install.
 - Thai speech uses the current device/browser TTS engine when available; failures are handled without blocking the app.
 - AdMob support is centralized and **disabled by default**. Debug test ads can be enabled explicitly. No production identifiers are included.
-- Structural dataset validation passes. The planned library is about 500 phrases; the current corpus is 302. Language quality still needs review by Myanmar and Thai speakers before a broad public launch, especially for high-risk workplace, medical, police, immigration, and employment phrases.
+- Content and structural validation pass, and an editorial pass checked meaning alignment, natural question phrasing, gendered Thai particles, and Myanmar-readable pronunciation. Independent fluent Thai–Myanmar review is still needed before broad public release, particularly for high-risk workplace, medical, police, immigration, and employment phrases.
 
 ## Run and build
 
