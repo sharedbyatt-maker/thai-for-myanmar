@@ -62,20 +62,25 @@ void main() {
         .evaluate()
         .length;
     final emergencyTitleCount = find.text('အရေးပေါ်စကားစု').evaluate().length;
-    if (emergencyTitleCount == 0) {
-      final renderedText = tester
-          .widgetList<Text>(find.byType(Text, skipOffstage: false))
-          .map((text) => text.data ?? text.textSpan?.toPlainText())
-          .whereType<String>()
-          .take(35)
-          .toList();
-      print(
-        'Quick Speak diagnostic: screen=$quickSpeakCount, text=$renderedText',
-      );
-    }
-    expect(quickSpeakCount, 1);
+    final renderedText = emergencyTitleCount == 0
+        ? tester
+              .widgetList<Text>(find.byType(Text, skipOffstage: false))
+              .map((text) => text.data ?? text.textSpan?.toPlainText())
+              .whereType<String>()
+              .take(35)
+              .toList()
+        : <String>[];
+    expect(
+      quickSpeakCount,
+      1,
+      reason: 'Quick Speak screen instance count: $quickSpeakCount',
+    );
     expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
-    expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
+    expect(
+      emergencyTitleCount,
+      1,
+      reason: 'Rendered text after selecting Quick Speak: $renderedText',
+    );
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);
   });
