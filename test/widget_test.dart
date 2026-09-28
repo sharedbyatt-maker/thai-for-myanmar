@@ -10,6 +10,11 @@ import 'package:thai_for_myanmar/services/speech_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  late PhraseRepository repository;
+
+  setUpAll(() async {
+    repository = await PhraseRepository.load(rootBundle);
+  });
 
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
@@ -25,9 +30,6 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
 
-    debugPrint('widget-smoke: loading repository');
-    final repository = await PhraseRepository.load(rootBundle);
-    debugPrint('widget-smoke: repository loaded');
     final appState = AppState();
     await appState.load();
     debugPrint('widget-smoke: state loaded');
@@ -58,9 +60,6 @@ void main() {
   testWidgets('dark theme can be selected without blocking navigation', (
     tester,
   ) async {
-    debugPrint('dark-theme: loading repository');
-    final repository = await PhraseRepository.load(rootBundle);
-    debugPrint('dark-theme: repository loaded');
     final appState = AppState();
     await appState.load();
     await appState.setThemePreference('dark');
