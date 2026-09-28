@@ -31,6 +31,7 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
+  final Set<int> _visitedTabs = <int>{0};
 
   static const _titles = <String>[
     'ထိုင်းစကား လက်တွေ့သုံး',
@@ -39,6 +40,13 @@ class _MainShellState extends State<MainShell> {
     'အမြန်ပြောရန်',
     'လေ့ကျင့်ခန်း',
   ];
+
+  void _selectTab(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _visitedTabs.add(index);
+    });
+  }
 
   void _openPhrase(String phraseId) {
     final matching = widget.repository.phrases.where(
@@ -97,7 +105,7 @@ class _MainShellState extends State<MainShell> {
         repository: widget.repository,
         appState: widget.appState,
         speechService: widget.speechService,
-        onSelectTab: (index) => setState(() => _selectedIndex = index),
+        onSelectTab: _selectTab,
         onOpenPhrase: _openPhrase,
       ),
       LearnScreen(
@@ -145,14 +153,21 @@ class _MainShellState extends State<MainShell> {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 960),
-            child: IndexedStack(index: _selectedIndex, children: pages),
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: List<Widget>.generate(
+                pages.length,
+                (index) => _visitedTabs.contains(index)
+                    ? pages[index]
+                    : const SizedBox.shrink(),
+              ),
+            ),
           ),
         ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) =>
-            setState(() => _selectedIndex = index),
+        onDestinationSelected: _selectTab,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
