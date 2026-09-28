@@ -211,7 +211,9 @@ jobs:
 
       - name: Install ChromeDriver
         run: |
-          npx --yes @puppeteer/browsers install chromedriver@stable
+          CHROME_BUILD="$(google-chrome --product-version | cut -d. -f1-3)"
+          echo "Installing ChromeDriver matching Chrome $CHROME_BUILD"
+          npx --yes @puppeteer/browsers install "chromedriver@$CHROME_BUILD"
           CHROMEDRIVER_BIN="$(find "$GITHUB_WORKSPACE/chromedriver" "$RUNNER_TEMP" "$HOME/.cache/puppeteer" -type f -name chromedriver -perm -u+x -print -quit 2>/dev/null)"
           if [ -z "$CHROMEDRIVER_BIN" ]; then
             echo "ChromeDriver installation did not produce an executable." >&2
