@@ -117,7 +117,7 @@ jobs:
           api-level: 35
           target: google_apis
           arch: x86_64
-          cores: 2
+          cores: 4
           disk-size: 4096M
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
@@ -139,10 +139,11 @@ jobs:
 
       - name: Capture Android emulator diagnostics after failure
         if: failure() && steps.android_core_flow.outcome == 'failure'
+        timeout-minutes: 2
         run: |
           mkdir -p ci-diagnostics
-          adb devices -l > ci-diagnostics/adb-devices.txt 2>&1 || true
-          adb -s emulator-5554 logcat -d -t 3000 > ci-diagnostics/android-logcat.txt 2>&1 || true
+          timeout 15s adb devices -l > ci-diagnostics/adb-devices.txt 2>&1 || true
+          timeout 20s adb -s emulator-5554 logcat -d -t 3000 > ci-diagnostics/android-logcat.txt 2>&1 || true
           free -h > ci-diagnostics/host-memory.txt 2>&1 || true
           df -h / > ci-diagnostics/host-disk.txt 2>&1 || true
           ps -eo pid,comm,%cpu,%mem,rss --sort=-rss | head -20 > ci-diagnostics/host-processes.txt 2>&1 || true
