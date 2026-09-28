@@ -1,10 +1,10 @@
 # Phrase content and validation
 
-## Current starter corpus
+## Current V1 corpus
 
-The bundled data currently contains **87 phrase records in 35 categories**. Categories cover greetings, introductions, numbers, money, time and dates, common questions and answers, food, shopping, daily life, transport and directions, workplace and factory, accommodation, restaurant/street-food/taxi/public transport, health and clinics, pharmacy, emergency, police, immigration/documents, bank, phone/SIM, job search, salary, overtime, and leave.
+The bundled data currently contains **302 phrase records in 35 categories**. Categories cover greetings, introductions, numbers, money, time and dates, common questions and answers, food, shopping, convenience stores, daily life, transport and directions, workplace and factory, accommodation, apartment/landlord conversations, restaurants and street food, taxi/public transport, health and clinics, pharmacy, emergency, police, immigration/documents, bank, phone/SIM, job search, salary, overtime, and leave.
 
-This is a useful starter set, not the requested future 500-phrase library. It is honest to extend gradually after language review rather than pad the dataset. The validator reports structural validity only; it does not certify that a translation or pronunciation is fluent or medically/legal correct.
+The long-term content target is about 500 genuinely useful phrases. This pass added 215 records to the original 87, for 302 total. No fluent Myanmar/Thai reviewer was available, so the library was not padded to the target; further expansion should wait for bilingual review. The validator checks structure and duplicate text; it does not certify fluency, pronunciation, or medical, legal, immigration, or employment accuracy. Myanmar and Thai speakers should review all translations before broad public release, with extra care for high-risk phrases. Content is written as practical communication help, not professional advice.
 
 ## Phrase fields
 
