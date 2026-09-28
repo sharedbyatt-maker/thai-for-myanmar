@@ -35,7 +35,7 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    await _settle(tester);
+    await _pumpUi(tester);
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
@@ -44,7 +44,7 @@ void main() {
       matching: find.byIcon(Icons.record_voice_over_outlined),
     );
     await tester.tap(quickSpeakDestination);
-    await _settle(tester);
+    await _pumpUi(tester);
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);
@@ -64,16 +64,13 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    await _settle(tester);
+    await _pumpUi(tester);
     expect(find.byType(MainShell), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
 
-Future<void> _settle(WidgetTester tester) async {
-  await tester.pumpAndSettle(
-    const Duration(milliseconds: 100),
-    EnginePhase.sendSemanticsUpdate,
-    const Duration(seconds: 30),
-  );
+Future<void> _pumpUi(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(seconds: 1));
 }
