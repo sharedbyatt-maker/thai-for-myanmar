@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES_PATH = ROOT / "assets/data/phrase_categories.json"
 PHRASES_PATH = ROOT / "assets/data/phrases.json"
-MIN_PHRASES = 450
+EXPECTED_PHRASES = 500
 REQUIRED_CATEGORIES = {
     "greetings",
     "introductions",
@@ -133,10 +133,10 @@ def main() -> int:
     used_categories = set()
     seen_phrases = set()
     seen_text = {field: {} for field in ("thai", "my", "en")}
-    if len(phrases) < MIN_PHRASES:
+    if len(phrases) != EXPECTED_PHRASES:
         fail(
-            f"phrase corpus is too small: {len(phrases)} records "
-            f"(minimum {MIN_PHRASES})"
+            f"phrase corpus has {len(phrases)} records "
+            f"(expected exactly {EXPECTED_PHRASES})"
         )
         errors += 1
 
