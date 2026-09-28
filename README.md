@@ -46,4 +46,4 @@ Ads are off unless `ENABLE_ADS=true` is passed at build time. A debug build uses
 - [Android / Google Play release checklist](docs/ANDROID_RELEASE.md)
 - [Draft store listing and screenshots](docs/STORE_LISTING.md)
 
-The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build. Only a passing `main` build publishes assets to the `web-preview` branch; the Render static site can serve that branch without rebuilding Flutter.
+The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build. A passing `main` build publishes the verified Web bundle to GitHub Pages. Before the first deployment, enable Pages for this repository and select **GitHub Actions** under Settings → Pages → Build and deployment. The deployment job adjusts Flutter’s base path for the repository URL.
