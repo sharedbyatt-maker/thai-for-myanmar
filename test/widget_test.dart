@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show EnginePhase;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,7 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    await tester.pumpAndSettle();
+    await _settle(tester);
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
@@ -44,7 +45,7 @@ void main() {
       matching: find.byIcon(Icons.record_voice_over_outlined),
     );
     await tester.tap(quickSpeakDestination);
-    await tester.pumpAndSettle();
+    await _settle(tester);
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);
@@ -64,8 +65,16 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    await tester.pumpAndSettle();
+    await _settle(tester);
     expect(find.byType(MainShell), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+}
+
+Future<void> _settle(WidgetTester tester) async {
+  await tester.pumpAndSettle(
+    const Duration(milliseconds: 100),
+    EnginePhase.sendSemanticsUpdate,
+    const Duration(seconds: 30),
+  );
 }
