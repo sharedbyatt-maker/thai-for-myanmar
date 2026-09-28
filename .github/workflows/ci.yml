@@ -69,12 +69,22 @@ jobs:
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost
           df -h /
 
+      - name: Enable Linux hardware acceleration for Android emulator
+        run: |
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            ls -l /dev/kvm
+          else
+            echo "/dev/kvm is not available; emulator will use software acceleration."
+          fi
+
       - name: Verify a core flow in an Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           target: google_apis
           arch: x86_64
+          cores: 4
           disk-size: 4096M
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
