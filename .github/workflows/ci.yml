@@ -60,7 +60,7 @@ jobs:
           --reporter expanded
 
       - name: Run widget tests
-        timeout-minutes: 12
+        timeout-minutes: 5
         run: flutter test test/widget_test.dart --reporter expanded
 
       - name: Verify a core flow in an Android emulator

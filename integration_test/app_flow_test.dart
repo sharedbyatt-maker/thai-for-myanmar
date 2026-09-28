@@ -27,28 +27,33 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    await tester.pumpAndSettle();
+    await _pumpUi(tester);
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
-    await tester.pumpAndSettle();
+    await _pumpUi(tester);
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
-    await tester.pumpAndSettle();
+    await _pumpUi(tester);
     expect(find.text('ဗိုက်နာနေပါတယ်။'), findsWidgets);
 
     await tester.tap(find.text('ဗိုက်နာနေပါတယ်။').last);
-    await tester.pumpAndSettle();
+    await _pumpUi(tester);
     expect(find.text('ปวดท้องค่ะ'), findsWidgets);
     expect(find.textContaining('အသံထွက်'), findsWidgets);
 
     await tester.tap(find.byTooltip('အကြိုက်ဆုံးအဖြစ် သိမ်းရန်'));
-    await tester.pumpAndSettle();
+    await _pumpUi(tester);
     expect(state.isFavorite('health_stomach'), isTrue);
 
     final restored = AppState();
     await restored.load();
     expect(restored.isFavorite('health_stomach'), isTrue);
   });
+}
+
+Future<void> _pumpUi(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(seconds: 1));
 }
