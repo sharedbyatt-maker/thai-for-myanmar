@@ -1,0 +1,9 @@
+{
+  "name": "Thai for Myanmar",
+  "short_name": "Thai for Myanmar",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f8f7",
+  "theme_color": "#167d75",
+  "description": "Practical Thai for Myanmar speakers in Thailand."
+}
