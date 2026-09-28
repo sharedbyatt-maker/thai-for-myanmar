@@ -49,9 +49,19 @@ jobs:
       - name: Analyze Dart source
         run: flutter analyze --fatal-infos
 
-      - name: Run unit and widget tests
+      - name: Run unit tests
+        timeout-minutes: 8
+        run: >-
+          flutter test
+          test/app_state_test.dart
+          test/phrase_repository_test.dart
+          test/quiz_logic_test.dart
+          test/speech_service_test.dart
+          --reporter expanded
+
+      - name: Run widget tests
         timeout-minutes: 12
-        run: flutter test --reporter expanded
+        run: flutter test test/widget_test.dart --reporter expanded
 
       - name: Verify a core flow in an Android emulator
         uses: reactivecircus/android-emulator-runner@v2
