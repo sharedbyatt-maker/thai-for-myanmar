@@ -44,8 +44,8 @@ class HomeScreen extends StatelessWidget {
         Text(
           'မြန်မာလိုနားလည်၊ ထိုင်းလိုလက်တွေ့ပြောပါ။',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 18),
         Row(
@@ -108,22 +108,31 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Icon(Icons.auto_stories_rounded,
-                      color: Theme.of(context).colorScheme.primary, size: 30),
+                  Icon(
+                    Icons.auto_stories_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 30,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('သင်ယူမှုမှတ်တမ်း',
-                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          'သင်ယူမှုမှတ်တမ်း',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                         const SizedBox(height: 3),
-                        Text('${appState.learned.length} / ${repository.phrases.length} စကားစု ကြည့်ပြီး'),
+                        Text(
+                          '${appState.learned.length} / ${repository.phrases.length} စကားစု ကြည့်ပြီး',
+                        ),
                       ],
                     ),
                   ),
-                  Text('${(100 * appState.learned.length / repository.phrases.length).round()}%',
-                      style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    '${(100 * appState.learned.length / repository.phrases.length).round()}%',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ],
               ),
             ),
@@ -148,8 +157,10 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('မကြာသေးခင်က ဖွင့်ထားတာ',
-                      style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    'မကြာသေးခင်က ဖွင့်ထားတာ',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   const SizedBox(height: 9),
                   PhraseTile(
                     phrase: recentPhrase,

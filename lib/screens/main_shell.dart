@@ -41,7 +41,9 @@ class _MainShellState extends State<MainShell> {
   ];
 
   void _openPhrase(String phraseId) {
-    final matching = widget.repository.phrases.where((item) => item.id == phraseId);
+    final matching = widget.repository.phrases.where(
+      (item) => item.id == phraseId,
+    );
     final phrase = matching.isEmpty ? null : matching.first;
     if (phrase == null) return;
     Navigator.of(context).push(
@@ -149,7 +151,8 @@ class _MainShellState extends State<MainShell> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) => setState(() => _selectedIndex = index),
+        onDestinationSelected: (index) =>
+            setState(() => _selectedIndex = index),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),

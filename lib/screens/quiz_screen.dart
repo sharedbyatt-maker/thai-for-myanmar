@@ -94,7 +94,9 @@ class _QuizScreenState extends State<QuizScreen> {
         const SizedBox(height: 14),
         LinearProgressIndicator(value: (_index + 1) / _questions.length),
         const SizedBox(height: 9),
-        Text('မေးခွန်း ${_index + 1} / ${_questions.length} • မှန် ${_score} ခု'),
+        Text(
+          'မေးခွန်း ${_index + 1} / ${_questions.length} • မှန် ${_score} ခု',
+        ),
         const SizedBox(height: 22),
         Card(
           child: Padding(
@@ -102,17 +104,18 @@ class _QuizScreenState extends State<QuizScreen> {
             child: Column(
               children: [
                 Text(
-                  _myanmarToThai ? 'ထိုင်းလို ဘယ်လိုပြောမလဲ?' : 'မြန်မာလို ဘာအဓိပ္ပာယ်လဲ?',
+                  _myanmarToThai
+                      ? 'ထိုင်းလို ဘယ်လိုပြောမလဲ?'
+                      : 'မြန်မာလို ဘာအဓိပ္ပာယ်လဲ?',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 const SizedBox(height: 14),
                 Text(
                   prompt,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontSize: 28),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(fontSize: 28),
                 ),
               ],
             ),
@@ -126,10 +129,10 @@ class _QuizScreenState extends State<QuizScreen> {
           final background = !answered
               ? null
               : isAnswer
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : isSelected
-                      ? Theme.of(context).colorScheme.errorContainer
-                      : null;
+              ? Theme.of(context).colorScheme.primaryContainer
+              : isSelected
+              ? Theme.of(context).colorScheme.errorContainer
+              : null;
           return Padding(
             padding: const EdgeInsets.only(bottom: 9),
             child: Card(
@@ -159,7 +162,9 @@ class _QuizScreenState extends State<QuizScreen> {
           const SizedBox(height: 10),
           FilledButton(
             onPressed: _next,
-            child: Text(_index + 1 == _questions.length ? 'ရလဒ်ကြည့်ရန်' : 'နောက်တစ်ခု'),
+            child: Text(
+              _index + 1 == _questions.length ? 'ရလဒ်ကြည့်ရန်' : 'နောက်တစ်ခု',
+            ),
           ),
         ],
       ],
@@ -174,11 +179,16 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.emoji_events_rounded,
-                size: 56, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.emoji_events_rounded,
+              size: 56,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 14),
-            Text('လေ့ကျင့်ခန်း ပြီးပါပြီ',
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'လေ့ကျင့်ခန်း ပြီးပါပြီ',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 8),
             Text('မှန်ကန်မှု $percent%  •  $_score / ${_questions.length} ခု'),
             const SizedBox(height: 20),

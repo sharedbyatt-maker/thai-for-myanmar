@@ -32,31 +32,37 @@ class LearnScreen extends StatelessWidget {
         const SizedBox(height: 5),
         Text('နှုတ်ဆက်စကားကနေ နေ့စဉ်အသုံးအနှုန်းအထိ။'),
         const SizedBox(height: 14),
-        ...categories.map((category) => Padding(
-              padding: const EdgeInsets.only(bottom: 9),
-              child: Card(
-                child: ListTile(
-                  minVerticalPadding: 12,
-                  leading: Text(category.icon,
-                      style: const TextStyle(fontSize: 26)),
-                  title: Text(category.my,
-                      style: Theme.of(context).textTheme.titleMedium),
-                  subtitle: Text(category.th),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => PhraseBrowserScreen(
-                        repository: repository,
-                        appState: appState,
-                        speechService: speechService,
-                        title: category.my,
-                        categoryId: category.id,
-                      ),
+        ...categories.map(
+          (category) => Padding(
+            padding: const EdgeInsets.only(bottom: 9),
+            child: Card(
+              child: ListTile(
+                minVerticalPadding: 12,
+                leading: Text(
+                  category.icon,
+                  style: const TextStyle(fontSize: 26),
+                ),
+                title: Text(
+                  category.my,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                subtitle: Text(category.th),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => PhraseBrowserScreen(
+                      repository: repository,
+                      appState: appState,
+                      speechService: speechService,
+                      title: category.my,
+                      categoryId: category.id,
                     ),
                   ),
                 ),
               ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }

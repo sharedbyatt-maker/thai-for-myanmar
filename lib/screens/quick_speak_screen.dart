@@ -58,7 +58,9 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
     );
     if (result == SpeechResult.unavailable && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။')),
+        const SnackBar(
+          content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။'),
+        ),
       );
     }
   }
@@ -81,16 +83,19 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.translate_rounded,
-                    size: 42, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.translate_rounded,
+                  size: 42,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(height: 26),
                 Text(
                   phrase.thaiFor(widget.appState.politeStyle),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontSize: 34, height: 1.5),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontSize: 34,
+                    height: 1.5,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -126,7 +131,9 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 5),
-        const Text('ထိုင်းစာကြောင်းကို အသံဖတ်ပြနိုင်သလို ထိုင်းစကားပြောသူကိုလည်း ပြနိုင်ပါတယ်။'),
+        const Text(
+          'ထိုင်းစာကြောင်းကို အသံဖတ်ပြနိုင်သလို ထိုင်းစကားပြောသူကိုလည်း ပြနိုင်ပါတယ်။',
+        ),
         const SizedBox(height: 14),
         TextField(
           controller: _controller,
@@ -147,65 +154,80 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
           ),
         ),
         const SizedBox(height: 14),
-        if (selected != null) _PhraseBoard(
-          phrase: selected,
-          appState: widget.appState,
-          onSpeak: () => _speak(selected),
-          onShow: () => _showToSpeaker(selected),
-        ),
+        if (selected != null)
+          _PhraseBoard(
+            phrase: selected,
+            appState: widget.appState,
+            onSpeak: () => _speak(selected),
+            onShow: () => _showToSpeaker(selected),
+          ),
         if (_query.trim().isEmpty) ...[
           const SizedBox(height: 18),
-          Text('အရေးပေါ်စကားစု',
-              style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            'အရေးပေါ်စကားစု',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
-          ...emergency.map((phrase) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _PhraseChoice(
-                  phrase: phrase,
-                  selected: phrase.id == _selectedId,
-                  appState: widget.appState,
-                  onTap: () => _select(phrase),
-                ),
-              )),
+          ...emergency.map(
+            (phrase) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _PhraseChoice(
+                phrase: phrase,
+                selected: phrase.id == _selectedId,
+                appState: widget.appState,
+                onTap: () => _select(phrase),
+              ),
+            ),
+          ),
           const SizedBox(height: 8),
-          Text('လူသုံးများတဲ့ စကားစု',
-              style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            'လူသုံးများတဲ့ စကားစု',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           ...widget.repository.phrases
-              .where((phrase) => const {
-                    'question_slowly',
-                    'food_not_spicy',
-                    'money_price',
-                    'health_stomach',
-                  }.contains(phrase.id))
-              .map((phrase) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: _PhraseChoice(
-                      phrase: phrase,
-                      selected: phrase.id == _selectedId,
-                      appState: widget.appState,
-                      onTap: () => _select(phrase),
-                    ),
-                  )),
+              .where(
+                (phrase) => const {
+                  'question_slowly',
+                  'food_not_spicy',
+                  'money_price',
+                  'health_stomach',
+                }.contains(phrase.id),
+              )
+              .map(
+                (phrase) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _PhraseChoice(
+                    phrase: phrase,
+                    selected: phrase.id == _selectedId,
+                    appState: widget.appState,
+                    onTap: () => _select(phrase),
+                  ),
+                ),
+              ),
         ] else ...[
           const SizedBox(height: 8),
-          Text('${results.length} ခုတွေ့သည်',
-              style: Theme.of(context).textTheme.labelLarge),
+          Text(
+            '${results.length} ခုတွေ့သည်',
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
           const SizedBox(height: 8),
           if (results.isEmpty)
             const Padding(
               padding: EdgeInsets.all(18),
               child: Text('မတွေ့ပါ။ အခြားစကားလုံးနဲ့ ရှာကြည့်ပါ။'),
             ),
-          ...results.map((phrase) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _PhraseChoice(
-                  phrase: phrase,
-                  selected: phrase.id == _selectedId,
-                  appState: widget.appState,
-                  onTap: () => _select(phrase),
-                ),
-              )),
+          ...results.map(
+            (phrase) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _PhraseChoice(
+                phrase: phrase,
+                selected: phrase.id == _selectedId,
+                appState: widget.appState,
+                onTap: () => _select(phrase),
+              ),
+            ),
+          ),
         ],
       ],
     );
@@ -237,8 +259,10 @@ class _PhraseBoard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text('ပြရန် အသင့်',
-                      style: Theme.of(context).textTheme.labelLarge),
+                  child: Text(
+                    'ပြရန် အသင့်',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ),
                 AnimatedBuilder(
                   animation: appState,
@@ -261,18 +285,21 @@ class _PhraseBoard extends StatelessWidget {
               label: 'ထိုင်းစာကြောင်း: ${phrase.thaiFor(appState.politeStyle)}',
               child: Text(
                 phrase.thaiFor(appState.politeStyle),
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(fontSize: 28, height: 1.5),
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineSmall?.copyWith(fontSize: 28, height: 1.5),
               ),
             ),
             const SizedBox(height: 9),
-            Text(phrase.myanmar,
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              phrase.myanmar,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 5),
-            Text('အသံထွက် - ${phrase.pronunciation}',
-                style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              'အသံထွက် - ${phrase.pronunciation}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             if (phrase.tags.contains('high-risk')) ...[
               const SizedBox(height: 8),
               Text(
@@ -323,10 +350,16 @@ class _PhraseChoice extends StatelessWidget {
       color: selected ? Theme.of(context).colorScheme.secondaryContainer : null,
       child: ListTile(
         onTap: onTap,
-        title: Text(phrase.thaiFor(appState.politeStyle),
-            maxLines: 2, overflow: TextOverflow.ellipsis),
-        subtitle: Text(phrase.myanmar,
-            maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(
+          phrase.thaiFor(appState.politeStyle),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          phrase.myanmar,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         trailing: selected ? const Icon(Icons.check_circle_rounded) : null,
       ),
     );

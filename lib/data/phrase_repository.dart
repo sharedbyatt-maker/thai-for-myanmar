@@ -11,12 +11,14 @@ class PhraseRepository {
   final List<Phrase> phrases;
 
   static Future<PhraseRepository> load(AssetBundle bundle) async {
-    final categoryJson = jsonDecode(
-      await bundle.loadString('assets/data/phrase_categories.json'),
-    ) as List<dynamic>;
-    final phraseJson = jsonDecode(
-      await bundle.loadString('assets/data/phrases.json'),
-    ) as List<dynamic>;
+    final categoryJson =
+        jsonDecode(
+              await bundle.loadString('assets/data/phrase_categories.json'),
+            )
+            as List<dynamic>;
+    final phraseJson =
+        jsonDecode(await bundle.loadString('assets/data/phrases.json'))
+            as List<dynamic>;
     return PhraseRepository(
       categories: categoryJson
           .map((row) => PhraseCategory.fromJson(row as Map<String, dynamic>))

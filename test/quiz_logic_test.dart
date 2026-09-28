@@ -20,8 +20,9 @@ void main() {
       expect(question.options, hasLength(4));
       expect(question.options.map((item) => item.id).toSet(), hasLength(4));
       expect(
-        question.options.where((item) =>
-            QuizLogic.isCorrect(question.phrase, item)),
+        question.options.where(
+          (item) => QuizLogic.isCorrect(question.phrase, item),
+        ),
         hasLength(1),
       );
     }

@@ -34,14 +34,20 @@ class FavoritesScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.favorite_border_rounded,
-                        size: 46,
-                        color: Theme.of(context).colorScheme.primary),
+                    Icon(
+                      Icons.favorite_border_rounded,
+                      size: 46,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     const SizedBox(height: 12),
-                    Text('သိမ်းထားတာ မရှိသေးပါဘူး။',
-                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      'သိမ်းထားတာ မရှိသေးပါဘူး။',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 5),
-                    const Text('စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။'),
+                    const Text(
+                      'စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။',
+                    ),
                   ],
                 ),
               ),

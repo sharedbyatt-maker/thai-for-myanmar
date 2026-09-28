@@ -25,8 +25,10 @@ class SituationsScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
       children: [
-        Text('ဘယ်နေရာမှာ သုံးမလဲ?',
-            style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'ဘယ်နေရာမှာ သုံးမလဲ?',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 5),
         const Text('သက်ဆိုင်တဲ့ အခြေအနေကို ရွေးပြီး စကားစုကို အမြန်ရှာပါ။'),
         const SizedBox(height: 15),
@@ -45,8 +47,7 @@ class SituationsScreen extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final category = categories[index];
-                final phraseCount =
-                    repository.inCategory(category.id).length;
+                final phraseCount = repository.inCategory(category.id).length;
                 return Card(
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
@@ -66,8 +67,10 @@ class SituationsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(category.icon,
-                              style: const TextStyle(fontSize: 25)),
+                          Text(
+                            category.icon,
+                            style: const TextStyle(fontSize: 25),
+                          ),
                           const Spacer(),
                           Text(
                             category.my,
@@ -75,8 +78,10 @@ class SituationsScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                          Text('$phraseCount ခု',
-                              style: Theme.of(context).textTheme.labelSmall),
+                          Text(
+                            '$phraseCount ခု',
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                         ],
                       ),
                     ),

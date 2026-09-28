@@ -59,9 +59,7 @@ class PhraseTile extends StatelessWidget {
                         if (category != null)
                           Text(
                             category.my,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(color: colors.primary),
                           ),
                         const SizedBox(height: 3),

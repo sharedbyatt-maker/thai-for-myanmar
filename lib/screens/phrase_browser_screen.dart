@@ -99,14 +99,21 @@ class _EmptySearch extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.search_off_rounded,
-                size: 44, color: Theme.of(context).colorScheme.outline),
+            Icon(
+              Icons.search_off_rounded,
+              size: 44,
+              color: Theme.of(context).colorScheme.outline,
+            ),
             const SizedBox(height: 12),
-            Text('ဒီစကားစုကို မတွေ့ပါဘူး။',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'ဒီစကားစုကို မတွေ့ပါဘူး။',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 5),
-            const Text('အခြားစကားလုံးနဲ့ ထပ်ရှာကြည့်ပါ။',
-                textAlign: TextAlign.center),
+            const Text(
+              'အခြားစကားလုံးနဲ့ ထပ်ရှာကြည့်ပါ။',
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

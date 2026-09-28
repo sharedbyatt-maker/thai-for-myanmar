@@ -44,11 +44,11 @@ jobs:
         run: python3 tool/validate_content.py
 
       - name: Verify Dart formatting
-        run: dart format --output=none --set-exit-if-changed lib test
+        run: dart format --output=none --set-exit-if-changed lib test integration_test
 
       - name: Export formatted Dart source after a failed check
         if: failure()
-        run: dart format lib test
+        run: dart format lib test integration_test
 
       - name: Keep formatted Dart source for repair
         if: failure()
@@ -58,6 +58,7 @@ jobs:
           path: |
             lib/
             test/
+            integration_test/
           if-no-files-found: error
           retention-days: 3
 
@@ -66,6 +67,15 @@ jobs:
 
       - name: Run unit and widget tests
         run: flutter test --reporter expanded
+
+      - name: Verify a core flow in an Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: flutter test -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
 
       - name: Build Android test APK
         run: flutter build apk --debug
@@ -84,6 +94,7 @@ jobs:
             build/app/outputs/flutter-apk/app-debug.apk
             build/app/outputs/bundle/release/app-release.aab
             build/web
+            pubspec.lock
           if-no-files-found: error
           retention-days: 14
 

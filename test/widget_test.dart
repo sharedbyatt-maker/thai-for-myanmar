@@ -15,8 +15,9 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('home and Quick Speak render at a small, larger-text viewport',
-      (tester) async {
+  testWidgets('home and Quick Speak render at a small, larger-text viewport', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 760);
     tester.view.devicePixelRatio = 1;
     tester.view.platformDispatcher.textScaleFactorTestValue = 1.5;
@@ -49,8 +50,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('dark theme can be selected without blocking navigation',
-      (tester) async {
+  testWidgets('dark theme can be selected without blocking navigation', (
+    tester,
+  ) async {
     final repository = await PhraseRepository.load(rootBundle);
     final appState = AppState();
     await appState.load();

@@ -19,12 +19,16 @@ class QuizLogic {
     final rng = random ?? Random();
     final questions = List<Phrase>.from(phrases)..shuffle(rng);
     final selected = questions.take(min(count, questions.length));
-    return selected.map((phrase) {
-      final distractors = phrases.where((item) => item.id != phrase.id).toList()
-        ..shuffle(rng);
-      final options = <Phrase>[phrase, ...distractors.take(3)]..shuffle(rng);
-      return QuizQuestion(phrase: phrase, options: options);
-    }).toList(growable: false);
+    return selected
+        .map((phrase) {
+          final distractors =
+              phrases.where((item) => item.id != phrase.id).toList()
+                ..shuffle(rng);
+          final options = <Phrase>[phrase, ...distractors.take(3)]
+            ..shuffle(rng);
+          return QuizQuestion(phrase: phrase, options: options);
+        })
+        .toList(growable: false);
   }
 
   static bool isCorrect(Phrase question, Phrase selected) =>

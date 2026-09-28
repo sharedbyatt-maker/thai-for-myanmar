@@ -4,9 +4,11 @@ import 'package:thai_for_myanmar/services/speech_service.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('missing platform TTS plugin returns a safe unavailable result',
-      () async {
-    final result = await SpeechService().speakThai('สวัสดี');
-    expect(result, SpeechResult.unavailable);
-  });
+  test(
+    'missing platform TTS plugin returns a safe unavailable result',
+    () async {
+      final result = await SpeechService().speakThai('สวัสดี');
+      expect(result, SpeechResult.unavailable);
+    },
+  );
 }

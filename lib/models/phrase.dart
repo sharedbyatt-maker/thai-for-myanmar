@@ -77,13 +77,13 @@ class Phrase {
   }
 
   String get searchableText => <String>[
-        thai,
-        if (thaiMale != null) thaiMale!,
-        if (thaiFemale != null) thaiFemale!,
-        myanmar,
-        pronunciation,
-        english,
-        ...keywords,
-        ...tags,
-      ].join(' ');
+    thai,
+    if (thaiMale != null) thaiMale!,
+    if (thaiFemale != null) thaiFemale!,
+    myanmar,
+    pronunciation,
+    english,
+    ...keywords,
+    ...tags,
+  ].join(' ');
 }

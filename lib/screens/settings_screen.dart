@@ -16,8 +16,7 @@ class SettingsScreen extends StatelessWidget {
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Text('အသွင်အပြင်',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('အသွင်အပြင်', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Card(
               child: Column(
@@ -27,9 +26,8 @@ class SettingsScreen extends StatelessWidget {
                     title: const Text('အမှောင်ပုံစံ'),
                     subtitle: const Text('ဖွင့်ထားလျှင် အမှောင်အရောင်သုံးမည်'),
                     value: appState.themePreference == 'dark',
-                    onChanged: (enabled) => appState.setThemePreference(
-                      enabled ? 'dark' : 'light',
-                    ),
+                    onChanged: (enabled) =>
+                        appState.setThemePreference(enabled ? 'dark' : 'light'),
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -46,8 +44,10 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Text('ထိုင်းလို ယဉ်ကျေးစကားအဆုံးသတ်',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'ထိုင်းလို ယဉ်ကျေးစကားအဆုံးသတ်',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Card(
               child: Padding(
@@ -71,8 +71,10 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Text('အသုံးပြုမှုနဲ့ ကိုယ်ရေးအချက်အလက်',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'အသုံးပြုမှုနဲ့ ကိုယ်ရေးအချက်အလက်',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             const Card(
               child: Padding(
@@ -83,8 +85,10 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Text('သင်ခန်းစာစကားစု ${appState.learned.length} ခု • Quiz ${appState.quizCount} ကြိမ်',
-                style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              'သင်ခန်းစာစကားစု ${appState.learned.length} ခု • Quiz ${appState.quizCount} ကြိမ်',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
       ),

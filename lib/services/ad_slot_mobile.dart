@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 const _adsEnabled = bool.fromEnvironment('ENABLE_ADS', defaultValue: false);
-const _productionMode =
-    bool.fromEnvironment('ADMOB_PRODUCTION', defaultValue: false);
+const _productionMode = bool.fromEnvironment(
+  'ADMOB_PRODUCTION',
+  defaultValue: false,
+);
 const _productionBannerId = String.fromEnvironment('ADMOB_ANDROID_BANNER_ID');
 const _testBannerId = 'ca-app-pub-3940256099942544/6300978111';
 
 bool get _canShowAds {
-  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android || !_adsEnabled) {
+  if (kIsWeb ||
+      defaultTargetPlatform != TargetPlatform.android ||
+      !_adsEnabled) {
     return false;
   }
   if (kReleaseMode) return _productionMode && _productionBannerId.isNotEmpty;

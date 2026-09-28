@@ -25,7 +25,9 @@ class PhraseDetailScreen extends StatelessWidget {
     );
     if (result == SpeechResult.unavailable && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။')),
+        const SnackBar(
+          content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။'),
+        ),
       );
     }
   }
@@ -49,16 +51,19 @@ class PhraseDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.translate_rounded,
-                    size: 40, color: colorScheme.primary),
+                Icon(
+                  Icons.translate_rounded,
+                  size: 40,
+                  color: colorScheme.primary,
+                ),
                 const SizedBox(height: 24),
                 Text(
                   phrase.thaiFor(appState.politeStyle),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontSize: 34, height: 1.55),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontSize: 34,
+                    height: 1.55,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -85,9 +90,14 @@ class PhraseDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final category = repository.categoryFor(phrase.categoryId);
     final isEmergency = phrase.tags.contains('emergency');
-    final isSensitive = phrase.tags.contains('high-risk') ||
-        const {'health', 'hospital', 'pharmacy', 'documents'}
-            .any(phrase.tags.contains);
+    final isSensitive =
+        phrase.tags.contains('high-risk') ||
+        const {
+          'health',
+          'hospital',
+          'pharmacy',
+          'documents',
+        }.any(phrase.tags.contains);
     return Scaffold(
       appBar: AppBar(
         title: Text(category?.my ?? 'စကားစု'),
@@ -129,33 +139,42 @@ class PhraseDetailScreen extends StatelessWidget {
                 children: [
                   Text(
                     phrase.thaiFor(appState.politeStyle),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(fontSize: 30),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall?.copyWith(fontSize: 30),
                   ),
                   const SizedBox(height: 18),
-                  Text('မြန်မာလို',
-                      style: Theme.of(context).textTheme.labelLarge),
+                  Text(
+                    'မြန်မာလို',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                   const SizedBox(height: 6),
-                  Text(phrase.myanmar,
-                      style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    phrase.myanmar,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   const SizedBox(height: 18),
-                  Text('အသံထွက်အနီးစပ်ဆုံး',
-                      style: Theme.of(context).textTheme.labelLarge),
+                  Text(
+                    'အသံထွက်အနီးစပ်ဆုံး',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                   const SizedBox(height: 6),
-                  Text(phrase.pronunciation,
-                      style: Theme.of(context).textTheme.bodyLarge),
+                  Text(
+                    phrase.pronunciation,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                   const SizedBox(height: 18),
-                  Text(phrase.english,
-                      style: Theme.of(context).textTheme.bodyMedium),
+                  Text(
+                    phrase.english,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   if (phrase.note != null) ...[
                     const SizedBox(height: 16),
                     Text(
                       phrase.note!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ],

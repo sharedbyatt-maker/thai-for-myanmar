@@ -14,18 +14,27 @@ void main() {
     expect(repository.phrases.length, greaterThanOrEqualTo(60));
     expect(repository.categories.length, greaterThanOrEqualTo(30));
     for (final category in repository.categories) {
-      expect(repository.inCategory(category.id), isNotEmpty,
-          reason: '${category.id} should have phrases');
+      expect(
+        repository.inCategory(category.id),
+        isNotEmpty,
+        reason: '${category.id} should have phrases',
+      );
     }
   });
 
   test('offline search finds Myanmar, Thai, and English terms', () {
-    expect(repository.search('ဗိုက်နာ').map((phrase) => phrase.id),
-        contains('health_stomach'));
-    expect(repository.search('ปวดท้อง').map((phrase) => phrase.id),
-        contains('health_stomach'));
-    expect(repository.search('stomachache').map((phrase) => phrase.id),
-        contains('health_stomach'));
+    expect(
+      repository.search('ဗိုက်နာ').map((phrase) => phrase.id),
+      contains('health_stomach'),
+    );
+    expect(
+      repository.search('ปวดท้อง').map((phrase) => phrase.id),
+      contains('health_stomach'),
+    );
+    expect(
+      repository.search('stomachache').map((phrase) => phrase.id),
+      contains('health_stomach'),
+    );
   });
 
   test('search can be scoped to a situation', () {
@@ -35,7 +44,9 @@ void main() {
   });
 
   test('male and female polite Thai variants are selected', () {
-    final phrase = repository.phrases.firstWhere((item) => item.id == 'greet_hello');
+    final phrase = repository.phrases.firstWhere(
+      (item) => item.id == 'greet_hello',
+    );
     expect(phrase.thaiFor('male'), 'สวัสดีครับ');
     expect(phrase.thaiFor('female'), 'สวัสดีค่ะ');
   });
