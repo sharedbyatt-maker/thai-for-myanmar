@@ -35,7 +35,7 @@ void main() {
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
-    await _pumpUi(tester);
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');

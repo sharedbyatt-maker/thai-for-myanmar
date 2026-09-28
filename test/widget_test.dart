@@ -32,7 +32,6 @@ void main() {
 
     final appState = AppState();
     await appState.load();
-    debugPrint('widget-smoke: state loaded');
     await tester.pumpWidget(
       ThaiForMyanmarApp(
         repository: repository,
@@ -40,9 +39,7 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    debugPrint('widget-smoke: app mounted');
     await _pumpUi(tester);
-    debugPrint('widget-smoke: frame pumped');
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
@@ -51,7 +48,11 @@ void main() {
       matching: find.byIcon(Icons.record_voice_over_outlined),
     );
     await tester.tap(quickSpeakDestination);
-    await _pumpUi(tester);
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(
+      tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
+      3,
+    );
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);
@@ -63,7 +64,6 @@ void main() {
     final appState = AppState();
     await appState.load();
     await appState.setThemePreference('dark');
-    debugPrint('dark-theme: state loaded');
     await tester.pumpWidget(
       ThaiForMyanmarApp(
         repository: repository,
@@ -71,9 +71,7 @@ void main() {
         speechService: SpeechService(),
       ),
     );
-    debugPrint('dark-theme: app mounted');
     await _pumpUi(tester);
-    debugPrint('dark-theme: frame pumped');
     expect(find.byType(MainShell), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
