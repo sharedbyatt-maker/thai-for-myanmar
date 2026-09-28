@@ -16,6 +16,8 @@ GitHub Actions builds and keeps:
 - a release-mode AAB for build verification;
 - the generated Android project scaffold.
 
+The latest verified Android run used Flutter stable 3.47.5. Its generated Android template defaults to `compileSdk 36` and `targetSdk 36`, meeting Google Play's current new-app target requirement. The workflow tracks Flutter stable, so confirm the final AAB target API in Play Console before release.
+
 The AAB produced without owner signing material is **not ready for Google Play upload**. Do not distribute a debug-signed or unsigned release as a production app.
 
 ## Owner-controlled items before publishing
@@ -25,6 +27,7 @@ The AAB produced without owner signing material is **not ready for Google Play u
 3. Create an upload key in a secure owner-controlled environment; store its keystore and passwords outside GitHub. Configure protected GitHub/CI secrets only after agreeing to the release process.
 4. Replace the test AdMob app ID in the generated Android manifest and provide the production banner unit ID using the documented `ADMOB_ANDROID_BANNER_ID` define. Keep ads disabled until this is done and the privacy/consent flow has been reviewed.
 5. Publish a privacy policy URL and complete Data Safety declarations based on enabled SDKs.
-6. Create a Play Console internal testing release, upload the owner-signed AAB, and complete any Play review and target API requirements shown by the Console.
+6. Create a Play Console internal testing release, upload the owner-signed AAB, and target Android 16 (API 36) or higher for new-app submissions and updates under the current policy (effective August 31, 2026).
+7. If this is a personal developer account created after November 13, 2023, complete Google's required closed test with at least 12 opted-in testers for 14 continuous days before applying for production access.
 
 Never commit `.jks`, `.keystore`, key properties, passwords, Play credentials, or production AdMob IDs. Google Play account ownership and final policy/store acceptance remain with the owner.
