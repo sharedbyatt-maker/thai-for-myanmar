@@ -81,8 +81,9 @@ jobs:
       - name: Resolve packages
         run: flutter pub get
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v5
+      - name: Restore Gradle dependencies
+        id: gradle_cache
+        uses: actions/cache/restore@v5
         with:
           path: |
             ~/.gradle/caches
@@ -106,8 +107,38 @@ jobs:
             echo "/dev/kvm is not available; emulator will use software acceleration."
           fi
 
-      - name: Build Android test APK before emulator startup
+      - name: Build Android review APK before emulator startup
+        id: android_review_apk
         run: flutter build apk --debug
+
+      - name: Preserve the review APK
+        run: |
+          mkdir -p build/review-artifacts
+          cp build/app/outputs/flutter-apk/app-debug.apk build/review-artifacts/app-debug.apk
+
+      - name: Build Android instrumentation test APK before emulator startup
+        run: cd android && ./gradlew app:assembleAndroidTest
+
+      - name: Build integration-test app before emulator startup
+        id: android_integration_apk
+        run: cd android && ./gradlew app:assembleDebug -Ptarget=integration_test/app_flow_test.dart
+
+      - name: Stop Gradle daemons and free emulator resources
+        if: steps.android_integration_apk.outcome == 'success'
+        run: |
+          ./android/gradlew --stop
+          sudo rm -rf /usr/share/swift /usr/local/share/powershell
+          df -h /
+          free -h
+
+      - name: Save Gradle dependencies after the integration APK build
+        if: steps.android_integration_apk.outcome == 'success'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle*', 'pubspec.lock') }}
 
       - name: Verify a core flow in an Android emulator
         id: android_core_flow
@@ -118,11 +149,14 @@ jobs:
           target: google_apis
           arch: x86_64
           cores: 4
-          disk-size: 4096M
+          disk-size: 2048M
           emulator-boot-timeout: 300
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
           disable-animations: true
-          script: flutter test -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
+          script: flutter test --no-pub -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
+
+      - name: Build Android review APK
+        run: flutter build apk --debug
 
       - name: Build release-mode Android App Bundle
         run: flutter build appbundle --release
@@ -132,7 +166,7 @@ jobs:
         with:
           name: thai-for-myanmar-android-builds
           path: |
-            build/app/outputs/flutter-apk/app-debug.apk
+            build/review-artifacts/app-debug.apk
             build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 14
