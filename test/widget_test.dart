@@ -25,9 +25,12 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
 
+    debugPrint('widget-smoke: loading repository');
     final repository = await PhraseRepository.load(rootBundle);
+    debugPrint('widget-smoke: repository loaded');
     final appState = AppState();
     await appState.load();
+    debugPrint('widget-smoke: state loaded');
     await tester.pumpWidget(
       ThaiForMyanmarApp(
         repository: repository,
@@ -35,7 +38,9 @@ void main() {
         speechService: SpeechService(),
       ),
     );
+    debugPrint('widget-smoke: app mounted');
     await _pumpUi(tester);
+    debugPrint('widget-smoke: frame pumped');
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
@@ -53,10 +58,13 @@ void main() {
   testWidgets('dark theme can be selected without blocking navigation', (
     tester,
   ) async {
+    debugPrint('dark-theme: loading repository');
     final repository = await PhraseRepository.load(rootBundle);
+    debugPrint('dark-theme: repository loaded');
     final appState = AppState();
     await appState.load();
     await appState.setThemePreference('dark');
+    debugPrint('dark-theme: state loaded');
     await tester.pumpWidget(
       ThaiForMyanmarApp(
         repository: repository,
@@ -64,7 +72,9 @@ void main() {
         speechService: SpeechService(),
       ),
     );
+    debugPrint('dark-theme: app mounted');
     await _pumpUi(tester);
+    debugPrint('dark-theme: frame pumped');
     expect(find.byType(MainShell), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
