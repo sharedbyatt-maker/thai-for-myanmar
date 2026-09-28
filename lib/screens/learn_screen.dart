@@ -30,7 +30,7 @@ class LearnScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 5),
-        Text('နှုတ်ဆက်စကားကနေ နေ့စဉ်အသုံးအနှုန်းအထိ။'),
+        const Text('နှုတ်ဆက်စကားကနေ နေ့စဉ်အသုံးအနှုန်းအထိ။'),
         const SizedBox(height: 14),
         ...categories.map(
           (category) => Padding(

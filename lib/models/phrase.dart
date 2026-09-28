@@ -78,8 +78,8 @@ class Phrase {
 
   String get searchableText => <String>[
     thai,
-    if (thaiMale != null) thaiMale!,
-    if (thaiFemale != null) thaiFemale!,
+    ?thaiMale,
+    ?thaiFemale,
     myanmar,
     pronunciation,
     english,

@@ -73,7 +73,7 @@ class _PhraseBrowserScreenState extends State<PhraseBrowserScreen> {
                 : ListView.separated(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                     itemCount: phrases.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (context, index) => PhraseTile(
                       phrase: phrases[index],
                       repository: widget.repository,
