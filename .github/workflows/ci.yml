@@ -82,7 +82,6 @@ jobs:
         run: flutter pub get
 
       - name: Restore Gradle dependencies
-        id: gradle_cache
         uses: actions/cache/restore@v5
         with:
           path: |
@@ -130,15 +129,6 @@ jobs:
           sudo rm -rf /usr/share/swift /usr/local/share/powershell
           df -h /
           free -h
-
-      - name: Save Gradle dependencies after the integration APK build
-        if: steps.android_integration_apk.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle*', 'pubspec.lock') }}
 
       - name: Verify a core flow in an Android emulator
         id: android_core_flow
@@ -190,6 +180,16 @@ jobs:
           path: ci-diagnostics/
           if-no-files-found: warn
           retention-days: 7
+
+      - name: Save Gradle dependencies for the next run
+        if: always() && steps.android_review_apk.outcome == 'success'
+        continue-on-error: true
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle*', 'pubspec.lock') }}
 
   web:
     name: Build and verify Web Preview
