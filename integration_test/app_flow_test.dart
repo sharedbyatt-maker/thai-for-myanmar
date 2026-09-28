@@ -11,8 +11,9 @@ import 'package:thai_for_myanmar/services/speech_service.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Android Quick Speak searches, displays, and saves a phrase',
-      (tester) async {
+  testWidgets('Android Quick Speak searches, displays, and saves a phrase', (
+    tester,
+  ) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.clear();
     final repository = await PhraseRepository.load(rootBundle);
