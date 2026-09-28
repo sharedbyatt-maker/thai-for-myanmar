@@ -1,0 +1,27 @@
+name: thai_for_myanmar
+description: Practical offline Thai for Myanmar speakers in Thailand.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_tts: ^4.2.5
+  google_mobile_ads: ^7.0.0
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/phrase_categories.json
+    - assets/data/phrases.json

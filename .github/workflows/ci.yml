@@ -1,0 +1,153 @@
+name: Flutter verification
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Flutter, content, Android, and Web
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java for Android builds
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter stable
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate missing Flutter platform scaffolding
+        run: flutter create . --platforms=android,web --org=com.sharedbyatt --project-name=thai_for_myanmar
+
+      - name: Apply safe Android defaults
+        run: python3 tool/configure_android.py
+
+      - name: Resolve packages
+        run: flutter pub get
+
+      - name: Validate content dataset
+        run: python3 tool/validate_content.py
+
+      - name: Verify Dart formatting
+        run: dart format --output=none --set-exit-if-changed lib test integration_test
+
+      - name: Analyze Dart source
+        run: flutter analyze --fatal-infos
+
+      - name: Run unit tests
+        timeout-minutes: 8
+        run: >-
+          flutter test
+          test/app_state_test.dart
+          test/phrase_repository_test.dart
+          test/quiz_logic_test.dart
+          test/speech_service_test.dart
+          --reporter expanded
+
+      - name: Run widget tests
+        timeout-minutes: 5
+        run: flutter test test/widget_test.dart --reporter expanded
+
+      - name: Free unused runner toolchains for emulator space
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost
+          df -h /
+
+      - name: Enable Linux hardware acceleration for Android emulator
+        run: |
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            ls -l /dev/kvm
+          else
+            echo "/dev/kvm is not available; emulator will use software acceleration."
+          fi
+
+      - name: Verify a core flow in an Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          cores: 4
+          disk-size: 4096M
+          emulator-boot-timeout: 300
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
+          disable-animations: true
+          script: flutter test -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
+
+      - name: Build Android test APK
+        run: flutter build apk --debug
+
+      - name: Build release-mode Android App Bundle
+        run: flutter build appbundle --release
+
+      - name: Build browser preview
+        run: flutter build web --release --base-href /
+
+      - name: Keep review builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-v1-builds
+          path: |
+            build/app/outputs/flutter-apk/app-debug.apk
+            build/app/outputs/bundle/release/app-release.aab
+            build/web
+            pubspec.lock
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Keep Web bundle for static preview deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-web-preview
+          path: build/web
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Keep generated Android project scaffold
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-android-scaffold
+          path: android/
+          if-no-files-found: error
+          retention-days: 14
+
+  publish_web_preview:
+    name: Publish verified Web Preview bundle
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download the Web build from the passing verification job
+        uses: actions/download-artifact@v4
+        with:
+          name: thai-for-myanmar-web-preview
+          path: web-bundle
+
+      - name: Publish static bundle to the dedicated preview branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: web-preview
+          publish_dir: web-bundle
+          commit_message: 'chore: publish verified Web Preview'
