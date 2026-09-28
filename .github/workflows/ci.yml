@@ -190,7 +190,7 @@ jobs:
 
       - name: Start ChromeDriver
         run: |
-          chromedriver --port=4444 > "$RUNNER_TEMP/chromedriver.log" 2>&1 &
+          chromedriver --verbose --log-path="$RUNNER_TEMP/chromedriver.log" --port=4444 > /dev/null 2>&1 &
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:4444/status > /dev/null; then
               exit 0
@@ -202,7 +202,13 @@ jobs:
 
       - name: Verify Quick Speak in Chrome
         timeout-minutes: 12
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_flow_test.dart -d chrome --web-browser-flag=--window-size=420,900
+        run: >-
+          flutter drive
+          --driver=test_driver/integration_test.dart
+          --target=integration_test/app_flow_test.dart
+          -d chrome
+          --web-browser-flag=--headless
+          --web-browser-flag=--window-size=420,900
 
       - name: Build release Web Preview
         run: flutter build web --release --base-href /
