@@ -47,7 +47,12 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
   }
 
   void _select(Phrase phrase) {
-    setState(() => _selectedId = phrase.id);
+    FocusManager.instance.primaryFocus?.unfocus();
+    _controller.clear();
+    setState(() {
+      _query = '';
+      _selectedId = phrase.id;
+    });
     widget.appState.remember(phrase.id);
     widget.appState.markLearned(phrase.id);
   }
@@ -154,7 +159,7 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
           ),
         ),
         const SizedBox(height: 14),
-        if (selected != null)
+        if (selected != null && _query.trim().isEmpty)
           _PhraseBoard(
             phrase: selected,
             appState: widget.appState,

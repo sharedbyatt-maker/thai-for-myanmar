@@ -42,10 +42,16 @@ void main() {
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
     await _pumpUi(tester);
-    expect(find.text('ဗိုက်နာနေပါတယ်။'), findsWidgets);
+    expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
 
-    await tester.tap(find.text('ဗိုက်နာနေပါတယ်။').last);
-    await _pumpUi(tester);
+    final stomachResult = find.ancestor(
+      of: find.text('ဗိုက်နာနေပါတယ်။'),
+      matching: find.byType(ListTile),
+    );
+    expect(stomachResult, findsOneWidget);
+    await tester.tap(stomachResult);
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
     expect(find.text('ปวดท้องค่ะ'), findsWidgets);
     expect(find.textContaining('အသံထွက်'), findsWidgets);
 
