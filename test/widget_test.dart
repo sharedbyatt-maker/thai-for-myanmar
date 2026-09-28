@@ -49,10 +49,32 @@ void main() {
     );
     await tester.tap(quickSpeakDestination);
     await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
     expect(
       tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
       3,
     );
+    final quickSpeakCount = find
+        .byWidgetPredicate(
+          (widget) => widget.runtimeType.toString() == 'QuickSpeakScreen',
+          skipOffstage: false,
+        )
+        .evaluate()
+        .length;
+    final emergencyTitleCount = find.text('အရေးပေါ်စကားစု').evaluate().length;
+    if (emergencyTitleCount == 0) {
+      final renderedText = tester
+          .widgetList<Text>(find.byType(Text, skipOffstage: false))
+          .map((text) => text.data ?? text.textSpan?.toPlainText())
+          .whereType<String>()
+          .take(35)
+          .toList();
+      print(
+        'Quick Speak diagnostic: screen=$quickSpeakCount, text=$renderedText',
+      );
+    }
+    expect(quickSpeakCount, 1);
+    expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
     expect(tester.takeException(), isNull);

@@ -36,6 +36,7 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
     await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
