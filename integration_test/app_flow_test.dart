@@ -16,7 +16,7 @@ void main() {
     repository = await PhraseRepository.load(rootBundle);
   });
 
-  testWidgets('Android Quick Speak searches, displays, and saves a phrase', (
+  testWidgets('Quick Speak searches, displays, and saves a phrase', (
     tester,
   ) async {
     final preferences = await SharedPreferences.getInstance();
