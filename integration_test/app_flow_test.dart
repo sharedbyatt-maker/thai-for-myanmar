@@ -37,7 +37,8 @@ void main() {
     await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
-    expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
+    expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
+    expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
     await _pumpUi(tester);

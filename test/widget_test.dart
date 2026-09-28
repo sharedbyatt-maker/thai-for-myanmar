@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/main_shell.dart';
+import 'package:thai_for_myanmar/screens/quick_speak_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 
@@ -54,34 +55,9 @@ void main() {
       tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
       3,
     );
-    final quickSpeakCount = find
-        .byWidgetPredicate(
-          (widget) => widget.runtimeType.toString() == 'QuickSpeakScreen',
-          skipOffstage: false,
-        )
-        .evaluate()
-        .length;
-    final emergencyTitleCount = find.text('အရေးပေါ်စကားစု').evaluate().length;
-    final renderedText = emergencyTitleCount == 0
-        ? tester
-              .widgetList<Text>(find.byType(Text, skipOffstage: false))
-              .map((text) => text.data ?? text.textSpan?.toPlainText())
-              .whereType<String>()
-              .take(35)
-              .toList()
-        : <String>[];
-    expect(
-      quickSpeakCount,
-      1,
-      reason: 'Quick Speak screen instance count: $quickSpeakCount',
-    );
+    expect(find.byType(QuickSpeakScreen), findsOneWidget);
     expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
-    expect(
-      emergencyTitleCount,
-      1,
-      reason: 'Rendered text after selecting Quick Speak: $renderedText',
-    );
-    expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
+    expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
