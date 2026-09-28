@@ -145,9 +145,6 @@ jobs:
           disable-animations: true
           script: flutter test --no-pub -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
 
-      - name: Build Android review APK
-        run: flutter build apk --debug
-
       - name: Build release-mode Android App Bundle
         run: flutter build appbundle --release
 
