@@ -4,12 +4,12 @@ Practical, offline-first Thai for Myanmar speakers living, working, studying, or
 
 ## V1 snapshot
 
-- **87 phrase records across 35 categories**, with Thai text, Myanmar meaning, Myanmar-readable pronunciation, English meaning, keywords, and situation tags.
+- **500 phrase records across 35 categories**, with Thai text, Myanmar meaning, Myanmar-readable pronunciation, English meaning, keywords, and situation tags.
 - Home, Learn, Situations, Quick Speak, Search, Favorites, Quiz, Light/Dark/System theme, and persisted local progress.
 - Bundled lessons, search, favorites, quiz, and progress work without an account or network connection after install.
 - Thai speech uses the current device/browser TTS engine when available; failures are handled without blocking the app.
 - AdMob support is centralized and **disabled by default**. Debug test ads can be enabled explicitly. No production identifiers are included.
-- Structural dataset validation passes. Language quality still needs review by Myanmar and Thai speakers before a broad public launch, especially for high-risk workplace, medical, police, and document phrases.
+- Content and structural validation pass, and an editorial pass checked meaning alignment, natural question phrasing, gendered Thai particles, and Myanmar-readable pronunciation. Independent fluent Thai–Myanmar review is still needed before broad public release, particularly for high-risk workplace, medical, police, immigration, and employment phrases.
 
 ## Run and build
 
@@ -46,4 +46,4 @@ Ads are off unless `ENABLE_ADS=true` is passed at build time. A debug build uses
 - [Android / Google Play release checklist](docs/ANDROID_RELEASE.md)
 - [Draft store listing and screenshots](docs/STORE_LISTING.md)
 
-The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build. Only a passing `main` build publishes assets to the `web-preview` branch; the Render static site can serve that branch without rebuilding Flutter.
+The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build. A passing `main` build publishes the verified Web bundle to GitHub Pages. Before the first deployment, enable Pages for this repository and select **GitHub Actions** under Settings → Pages → Build and deployment. The deployment job adjusts Flutter’s base path for the repository URL.
