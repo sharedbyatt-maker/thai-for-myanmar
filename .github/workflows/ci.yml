@@ -12,30 +12,18 @@ permissions:
 
 jobs:
   verify:
-    name: Verify Flutter, content, Android, and Web
+    name: Verify source, content, and Flutter tests
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 20
     steps:
       - name: Check out source
         uses: actions/checkout@v4
-
-      - name: Set up Java for Android builds
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '17'
 
       - name: Set up Flutter stable
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
-
-      - name: Generate missing Flutter platform scaffolding
-        run: flutter create . --platforms=android,web --org=com.sharedbyatt --project-name=thai_for_myanmar
-
-      - name: Apply safe Android defaults
-        run: python3 tool/configure_android.py
 
       - name: Resolve packages
         run: flutter pub get
@@ -44,7 +32,7 @@ jobs:
         run: python3 tool/validate_content.py
 
       - name: Verify Dart formatting
-        run: dart format --output=none --set-exit-if-changed lib test integration_test
+        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
 
       - name: Analyze Dart source
         run: flutter analyze --fatal-infos
@@ -63,6 +51,46 @@ jobs:
         timeout-minutes: 5
         run: flutter test test/widget_test.dart --reporter expanded
 
+  android:
+    name: Build and verify Android
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java for Android builds
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter stable
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android platform scaffolding
+        run: flutter create . --platforms=android --org=com.sharedbyatt --project-name=thai_for_myanmar
+
+      - name: Apply safe Android defaults
+        run: python3 tool/configure_android.py
+
+      - name: Resolve packages
+        run: flutter pub get
+
+      - name: Restore Gradle dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle*', 'pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Free unused runner toolchains for emulator space
         run: |
           df -h /
@@ -78,41 +106,147 @@ jobs:
             echo "/dev/kvm is not available; emulator will use software acceleration."
           fi
 
+      - name: Build Android review APK before emulator startup
+        id: android_review_apk
+        run: flutter build apk --debug
+
+      - name: Preserve the review APK
+        run: |
+          mkdir -p build/review-artifacts
+          cp build/app/outputs/flutter-apk/app-debug.apk build/review-artifacts/app-debug.apk
+
+      - name: Build Android instrumentation test APK before emulator startup
+        run: cd android && ./gradlew app:assembleAndroidTest
+
+      - name: Build integration-test app before emulator startup
+        id: android_integration_apk
+        run: cd android && ./gradlew app:assembleDebug -Ptarget=integration_test/app_flow_test.dart
+
+      - name: Stop Gradle daemons and free emulator resources
+        if: steps.android_integration_apk.outcome == 'success'
+        run: |
+          ./android/gradlew --stop
+          sudo rm -rf /usr/share/swift /usr/local/share/powershell
+          df -h /
+          free -h
+
       - name: Verify a core flow in an Android emulator
+        id: android_core_flow
+        timeout-minutes: 15
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           target: google_apis
           arch: x86_64
           cores: 4
-          disk-size: 4096M
+          disk-size: 2048M
           emulator-boot-timeout: 300
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
           disable-animations: true
-          script: flutter test -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
-
-      - name: Build Android test APK
-        run: flutter build apk --debug
+          script: flutter test --no-pub -d emulator-5554 integration_test/app_flow_test.dart --reporter expanded
 
       - name: Build release-mode Android App Bundle
         run: flutter build appbundle --release
 
-      - name: Build browser preview
-        run: flutter build web --release --base-href /
-
-      - name: Keep review builds
+      - name: Keep Android review builds
         uses: actions/upload-artifact@v4
         with:
-          name: thai-for-myanmar-v1-builds
+          name: thai-for-myanmar-android-builds
           path: |
-            build/app/outputs/flutter-apk/app-debug.apk
+            build/review-artifacts/app-debug.apk
             build/app/outputs/bundle/release/app-release.aab
-            build/web
-            pubspec.lock
           if-no-files-found: error
           retention-days: 14
 
-      - name: Keep Web bundle for static preview deployment
+      - name: Capture Android emulator diagnostics after failure
+        if: failure() && steps.android_core_flow.outcome == 'failure'
+        timeout-minutes: 2
+        run: |
+          mkdir -p ci-diagnostics
+          timeout 15s adb devices -l > ci-diagnostics/adb-devices.txt 2>&1 || true
+          timeout 20s adb -s emulator-5554 logcat -d -t 3000 > ci-diagnostics/android-logcat.txt 2>&1 || true
+          free -h > ci-diagnostics/host-memory.txt 2>&1 || true
+          df -h / > ci-diagnostics/host-disk.txt 2>&1 || true
+          ps -eo pid,comm,%cpu,%mem,rss --sort=-rss | head -20 > ci-diagnostics/host-processes.txt 2>&1 || true
+
+      - name: Keep Android emulator diagnostics
+        if: failure() && steps.android_core_flow.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-android-failure-diagnostics
+          path: ci-diagnostics/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Save Gradle dependencies for the next run
+        if: always() && steps.android_review_apk.outcome == 'success'
+        continue-on-error: true
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle*', 'pubspec.lock') }}
+
+  web:
+    name: Build and verify Web Preview
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter stable
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Web platform scaffolding
+        run: flutter create . --platforms=web --org=com.sharedbyatt --project-name=thai_for_myanmar
+
+      - name: Resolve packages
+        run: flutter pub get
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_BUILD="$(google-chrome --product-version | cut -d. -f1-3)"
+          echo "Installing ChromeDriver matching Chrome $CHROME_BUILD"
+          npx --yes @puppeteer/browsers install "chromedriver@$CHROME_BUILD"
+          CHROMEDRIVER_BIN="$(find "$GITHUB_WORKSPACE/chromedriver" "$RUNNER_TEMP" "$HOME/.cache/puppeteer" -type f -name chromedriver -perm -u+x -print -quit 2>/dev/null)"
+          if [ -z "$CHROMEDRIVER_BIN" ]; then
+            echo "ChromeDriver installation did not produce an executable." >&2
+            exit 1
+          fi
+          echo "$(dirname "$CHROMEDRIVER_BIN")" >> "$GITHUB_PATH"
+
+      - name: Start ChromeDriver
+        run: |
+          chromedriver --verbose --log-path="$RUNNER_TEMP/chromedriver.log" --port=4444 > /dev/null 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4444/status > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/chromedriver.log"
+          exit 1
+
+      - name: Verify Quick Speak in Chrome
+        timeout-minutes: 12
+        run: >-
+          flutter drive
+          --driver=test_driver/integration_test.dart
+          --target=integration_test/app_flow_test.dart
+          -d web-server
+          --web-browser-flag=--headless
+          --web-browser-flag=--window-size=420,900
+
+      - name: Build release Web Preview
+        run: flutter build web --release --base-href /
+
+      - name: Keep verified Web bundle
         uses: actions/upload-artifact@v4
         with:
           name: thai-for-myanmar-web-preview
@@ -120,18 +254,25 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Keep generated Android project scaffold
+      - name: Capture browser diagnostics after failure
+        if: failure()
+        run: |
+          mkdir -p ci-diagnostics
+          cp "$RUNNER_TEMP/chromedriver.log" ci-diagnostics/chromedriver.log 2>/dev/null || true
+
+      - name: Keep browser diagnostics
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: thai-for-myanmar-android-scaffold
-          path: android/
-          if-no-files-found: error
-          retention-days: 14
+          name: thai-for-myanmar-web-failure-diagnostics
+          path: ci-diagnostics/
+          if-no-files-found: warn
+          retention-days: 7
 
   publish_web_preview:
     name: Publish verified Web Preview bundle
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: verify
+    needs: [verify, android, web]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
