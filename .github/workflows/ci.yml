@@ -50,6 +50,7 @@ jobs:
         run: flutter analyze --fatal-infos
 
       - name: Run unit and widget tests
+        timeout-minutes: 12
         run: flutter test --reporter expanded
 
       - name: Verify a core flow in an Android emulator
