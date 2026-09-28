@@ -46,6 +46,21 @@ jobs:
       - name: Verify Dart formatting
         run: dart format --output=none --set-exit-if-changed lib test
 
+      - name: Export formatted Dart source after a failed check
+        if: failure()
+        run: dart format lib test
+
+      - name: Keep formatted Dart source for repair
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-formatted-source
+          path: |
+            lib/
+            test/
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Analyze Dart source
         run: flutter analyze --fatal-infos
 

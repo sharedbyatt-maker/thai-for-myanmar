@@ -38,11 +38,11 @@ void main() {
     expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
-    final quickSpeakLabel = find.descendant(
+    final quickSpeakDestination = find.descendant(
       of: find.byType(NavigationBar),
-      matching: find.text('အမြန်ပြော'),
+      matching: find.byIcon(Icons.record_voice_over_outlined),
     );
-    await tester.tap(quickSpeakLabel);
+    await tester.tap(quickSpeakDestination);
     await tester.pumpAndSettle();
     expect(find.text('အရေးပေါ်စကားစု'), findsOneWidget);
     expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
