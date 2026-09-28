@@ -63,6 +63,12 @@ jobs:
         timeout-minutes: 5
         run: flutter test test/widget_test.dart --reporter expanded
 
+      - name: Free unused runner toolchains for emulator space
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost
+          df -h /
+
       - name: Verify a core flow in an Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
