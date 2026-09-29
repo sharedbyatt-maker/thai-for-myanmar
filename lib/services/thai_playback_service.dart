@@ -30,6 +30,8 @@ class ThaiPlaybackService extends ChangeNotifier {
   final ThaiAudioCatalog _catalog;
   final ThaiAudioAssetPlayer _assetPlayer;
 
+  SpeechService get speechService => _speechService;
+
   ThaiPlaybackState _state = ThaiPlaybackState.idle;
   String? _activePhraseId;
   String? _activeStyle;
@@ -82,6 +84,10 @@ class ThaiPlaybackService extends ChangeNotifier {
       ),
     );
     if (requestId != _requestId) return ThaiPlaybackResult.cancelled;
+    if (speechResult == SpeechResult.cancelled) {
+      _publish(ThaiPlaybackState.idle, null, null);
+      return ThaiPlaybackResult.cancelled;
+    }
     if (speechResult == SpeechResult.spoken) {
       _publish(ThaiPlaybackState.idle, null, null);
       return ThaiPlaybackResult.spoken;

@@ -48,14 +48,17 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
     final result = await service.playThai(widget.phrase, politeStyle);
     if (result == ThaiPlaybackResult.unavailable && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'အသံဖွင့်၍မရပါ။ ထိုင်းစာကြောင်းကို ပြသပြီး အကူအညီတောင်းနိုင်ပါတယ်။',
+        SnackBar(
+          content: const Text(
+            'ဒီစက် သို့မဟုတ် ဘရောက်ဇာမှာ ထိုင်းအသံ မရရှိပါ။ နောက်မှ ထပ်စမ်းနိုင်ပါတယ်။',
           ),
+          action: SnackBarAction(label: 'ထပ်စမ်းရန်', onPressed: _retry),
         ),
       );
     }
   }
+
+  void _retry() => unawaited(_toggle(widget.appState.politeStyle));
 
   @override
   Widget build(BuildContext context) {

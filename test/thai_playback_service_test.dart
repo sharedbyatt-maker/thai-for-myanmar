@@ -178,6 +178,39 @@ void main() {
       expect(service.state, ThaiPlaybackState.idle);
     });
 
+    test('switching phrases cancels the previous system TTS request', () async {
+      const nextPhrase = Phrase(
+        id: 'greet_thanks',
+        categoryId: 'greetings',
+        thai: 'ขอบคุณครับ / ขอบคุณค่ะ',
+        thaiMale: 'ขอบคุณครับ',
+        thaiFemale: 'ขอบคุณค่ะ',
+        myanmar: 'ကျေးဇူးတင်ပါတယ်။',
+        pronunciation: 'ခေါပ်ခွန်',
+        english: 'Thank you.',
+        keywords: [],
+        tags: [],
+      );
+      final speechEngine = FakeSpeechEngine(holdFirstSpeech: true);
+      final service = _service(
+        FakeThaiAudioAssetPlayer(),
+        speechEngine,
+        ThaiAudioCatalog.empty(),
+      );
+
+      final first = service.playThai(phrase, 'female');
+      while (speechEngine.spokenTexts.isEmpty) {
+        await Future<void>.delayed(Duration.zero);
+      }
+      final second = service.playThai(nextPhrase, 'male');
+
+      expect(await first, ThaiPlaybackResult.cancelled);
+      expect(await second, ThaiPlaybackResult.spoken);
+      expect(speechEngine.spokenTexts, ['สวัสดีค่ะ', 'ขอบคุณครับ']);
+      expect(speechEngine.stopCalls, greaterThan(1));
+      expect(service.state, ThaiPlaybackState.idle);
+    });
+
     test('stop while idle does not call platform audio players', () async {
       final player = FakeThaiAudioAssetPlayer();
       final speechEngine = FakeSpeechEngine();
@@ -288,10 +321,13 @@ class FakeSpeechEngine implements SpeechEngine {
     this.voices = const [
       {'name': 'Thai voice', 'locale': 'th-TH'},
     ],
+    this.holdFirstSpeech = false,
   });
 
   final dynamic voices;
+  final bool holdFirstSpeech;
   final List<String> spokenTexts = [];
+  final _firstSpeechRelease = Completer<void>();
   int stopCalls = 0;
   void Function()? _startHandler;
   void Function()? _completionHandler;
@@ -315,6 +351,9 @@ class FakeSpeechEngine implements SpeechEngine {
   Future<dynamic> speak(String text) async {
     spokenTexts.add(text);
     _startHandler?.call();
+    if (holdFirstSpeech && spokenTexts.length == 1) {
+      await _firstSpeechRelease.future;
+    }
     _completionHandler?.call();
     return 1;
   }
@@ -322,6 +361,11 @@ class FakeSpeechEngine implements SpeechEngine {
   @override
   Future<dynamic> stop() async {
     stopCalls++;
+    if (holdFirstSpeech &&
+        spokenTexts.isNotEmpty &&
+        !_firstSpeechRelease.isCompleted) {
+      _firstSpeechRelease.complete();
+    }
     return 1;
   }
 
