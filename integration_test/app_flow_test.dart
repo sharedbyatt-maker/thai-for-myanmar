@@ -38,7 +38,13 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
     expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
-    expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsAtLeastNWidgets(1));
+    final emergencyHelp = repository.phrases.singleWhere(
+      (phrase) => phrase.id == 'emergency_help',
+    );
+    expect(
+      find.text(emergencyHelp.thaiFor(state.politeStyle)),
+      findsAtLeastNWidgets(1),
+    );
 
     await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
     await _pumpUi(tester);
