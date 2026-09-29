@@ -66,6 +66,26 @@ HIGH_RISK_CATEGORIES = {
 REQUIRED_PHRASE_FIELDS = ("id", "categoryId", "thai", "my", "pronunciation", "en")
 OPTIONAL_PHRASE_FIELDS = ("thaiMale", "thaiFemale", "note")
 
+# Guard the exact semantic distinctions found during the second-pass review.
+# These narrow checks prevent known omissions; they do not certify language quality.
+REVIEWED_CONTENT_INVARIANTS = {
+    "restaurant_water_no_ice": {
+        "thai": "ไม่ใส่น้ำแข็ง",
+        "my": "ရေခဲမပါ",
+        "en": "without ice",
+    },
+    "health_allergy": {
+        "thai": "บางชนิด",
+        "my": "ဆေးတချို့",
+        "en": "some medicines",
+    },
+    "health_food_allergy": {
+        "thai": "บางอย่าง",
+        "my": "အစားအစာတချို့",
+        "en": "some foods",
+    },
+}
+
 
 def normalized(value: str) -> str:
     value = unicodedata.normalize("NFC", value)
@@ -124,10 +144,30 @@ def main() -> int:
     if len(category_ids) != len(category_set):
         fail("duplicate category IDs found")
         errors += 1
+    if category_set != REQUIRED_CATEGORIES:
+        unexpected = category_set - REQUIRED_CATEGORIES
+        if unexpected:
+            fail(f"unexpected categories: {', '.join(sorted(unexpected))}")
+            errors += 1
     missing_categories = REQUIRED_CATEGORIES - category_set
     if missing_categories:
         fail(f"required categories missing: {', '.join(sorted(missing_categories))}")
         errors += 1
+
+    phrase_by_id = {
+        phrase.get("id"): phrase for phrase in phrases if isinstance(phrase, dict)
+    }
+    for phrase_id, expected_fields in REVIEWED_CONTENT_INVARIANTS.items():
+        phrase = phrase_by_id.get(phrase_id)
+        if phrase is None:
+            fail(f"reviewed content record is missing: {phrase_id}")
+            errors += 1
+            continue
+        for field, marker in expected_fields.items():
+            value = phrase.get(field)
+            if not isinstance(value, str) or normalized(marker) not in normalized(value):
+                fail(f"{phrase_id} {field} must preserve {marker!r}")
+                errors += 1
 
     seen_ids = set()
     used_categories = set()
@@ -166,6 +206,15 @@ def main() -> int:
             fail(f"duplicate phrase ID: {phrase_id}")
             errors += 1
         seen_ids.add(phrase_id)
+
+        reading = phrase.get("pronunciation")
+        if isinstance(reading, str):
+            if re.search(r"[\u0e00-\u0e7f]", reading):
+                fail(f"{phrase_id} pronunciation contains Thai-script characters")
+                errors += 1
+            if " / " in reading and reading.count(" / ") != 1:
+                fail(f"{phrase_id} has ambiguous pronunciation variants")
+                errors += 1
 
         category_id = phrase.get("categoryId")
         if not isinstance(category_id, str) or category_id not in category_set:
@@ -224,6 +273,20 @@ def main() -> int:
         if has_male != has_female:
             fail(f"{phrase_id} must provide both Thai polite variants or neither")
             errors += 1
+        if has_male and isinstance(reading, str):
+            parts = reading.split(" / ")
+            if len(parts) != 2 or not all(parts):
+                fail(f"{phrase_id} needs full male/female pronunciation readings")
+                errors += 1
+            elif phrase_id != "emergency_help":
+                if not parts[0].endswith("ခရပ်"):
+                    fail(f"{phrase_id} male pronunciation omits polite particle")
+                    errors += 1
+                female = phrase.get("thaiFemale", "")
+                ending = "ခ" if female.endswith("คะ") else "ခါ့"
+                if not parts[1].endswith(ending):
+                    fail(f"{phrase_id} female pronunciation particle is inconsistent")
+                    errors += 1
         if has_male and isinstance(phrase.get("thaiMale"), str):
             # A polite particle can naturally close the first clause in a
             # multi-clause phrase, as in emergency requests.

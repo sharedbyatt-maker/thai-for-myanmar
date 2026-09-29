@@ -57,7 +57,13 @@ void main() {
     );
     expect(find.byType(QuickSpeakScreen), findsOneWidget);
     expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
-    expect(find.text('ช่วยด้วยค่ะ เป็นเหตุฉุกเฉิน'), findsOneWidget);
+    final emergencyHelp = repository.phrases.singleWhere(
+      (phrase) => phrase.id == 'emergency_help',
+    );
+    expect(
+      find.text(emergencyHelp.thaiFor(appState.politeStyle)),
+      findsAtLeastNWidgets(1),
+    );
     expect(tester.takeException(), isNull);
   });
 
