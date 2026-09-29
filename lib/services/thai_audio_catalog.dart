@@ -116,7 +116,8 @@ class ThaiAudioCatalog {
   }
 
   static bool _isSafeMp3Path(String path) {
-    if (!path.startsWith('audio/thai/') ||
+    if (path.split('/').length != 3 ||
+        !path.startsWith('audio/thai/') ||
         path.contains('\\') ||
         path.contains('//') ||
         path.split('/').any((part) => part == '.' || part == '..') ||

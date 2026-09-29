@@ -33,8 +33,8 @@ def safe_asset_path(raw_path: object) -> Path:
     path = PurePosixPath(raw_path)
     if (
         path.as_posix() != raw_path
-        or
-        path.is_absolute()
+        or len(path.parts) != 3
+        or path.is_absolute()
         or path.suffix.lower() != ".mp3"
         or path.parts[:2] != ("audio", "thai")
         or any(part in {"", ".", ".."} for part in path.parts)

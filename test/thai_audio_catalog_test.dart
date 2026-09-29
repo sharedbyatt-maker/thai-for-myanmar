@@ -129,10 +129,22 @@ void main() {
           },
         ],
       };
+      final nested = {
+        'schemaVersion': 1,
+        'entries': [
+          {
+            'phraseId': phrase.id,
+            'form': 'male',
+            'thai': phrase.thaiMale,
+            'asset': 'audio/thai/category/hello.mp3',
+          },
+        ],
+      };
 
       expect(() => ThaiAudioCatalog.fromJson(duplicate), throwsFormatException);
       expect(() => ThaiAudioCatalog.fromJson(remote), throwsFormatException);
       expect(() => ThaiAudioCatalog.fromJson(traversal), throwsFormatException);
+      expect(() => ThaiAudioCatalog.fromJson(nested), throwsFormatException);
     });
   });
 }
