@@ -26,3 +26,8 @@ Pronunciation is an approximate reading aid written for Myanmar speakers, not a 
 ## High-risk phrases
 
 Hospital, emergency, police, immigration, document, workplace, and employment phrases help users communicate. They do not provide diagnosis, legal rights advice, contract interpretation, or emergency dispatch. For important matters, ask a qualified interpreter or professional. Emergency Quick Speak remains immediately available and is never covered by an ad.
+
+## Burmese speaker variants
+
+When the Burmese meaning uses a speaker-gendered first-person pronoun, show both `ကျွန်တော်` and `ကျွန်မ` options where the Thai variants distinguish the speaker. The slash in the meaning field marks alternatives; it is not spoken. Prefer a natural gender-neutral construction when one is clearer, and keep these alternatives provisional until a fluent Burmese reviewer confirms them.
+

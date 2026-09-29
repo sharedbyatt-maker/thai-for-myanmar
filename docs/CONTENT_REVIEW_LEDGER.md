@@ -533,3 +533,22 @@ A second AI-assisted, record-by-record check covered all 500 records, including 
 Thai lexical spot checks used Longdo entries drawing on NECTEC Lexitron for `น้ำเปล่า`, `น้ำแข็ง`, `ฉุกเฉิน`, `งาน`, `เงิน`, and `แพ้ยา`, plus the Rural Doctor Foundation discussion of how colloquial `แพ้ยา` can be used broadly and needs clarification. Links: [น้ำเปล่า](https://dict.longdo.com/search/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B9%80%E0%B8%9B%E0%B8%A5%E0%B9%88%E0%B8%B2), [น้ำแข็ง](https://dict.longdo.com/search/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B9%81%E0%B8%82%E0%B9%87%E0%B8%87), [ฉุกเฉิน](https://dict.longdo.com/search/%E0%B8%89%E0%B8%B8%E0%B8%81%E0%B9%80%E0%B8%89%E0%B8%B4%E0%B8%99), [งาน](https://dict.longdo.com/search/%E0%B8%87%E0%B8%B2%E0%B8%99), [เงิน](https://dict.longdo.com/search/%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99), [แพ้ยา](https://dict.longdo.com/search/%E0%B9%81%E0%B8%9E%E0%B9%89%E0%B8%A2%E0%B8%B2), [Rural Doctor Foundation article](https://www.doctor.or.th/article/detail/4362).
 
 These references check Thai word meanings and selected ambiguities; they do not validate every sentence's naturalness or certify the Myanmar readings. Thai tone and vowel detail remain approximate in Myanmar script. No independent fluent Thai–Myanmar reviewer has signed off on all 500 records.
+
+## Additional source-backed follow-up: Burmese speaker pronouns (2026-09-29)
+
+A corpus-wide check across all 500 records found six entries where the Thai female form uses `ฉัน` but the Myanmar meaning explicitly uses the masculine first-person `ကျွန်တော်` form. A further police phrase translated “my phone is missing” without expressing ownership. The seven Myanmar fields below now show both speaker-gender options or restore the first-person possessive:
+
+| ID | Focused correction |
+|---|---|
+| `daily_contact` | Added the corresponding feminine form alongside the masculine “call me” form. |
+| `time_my_turn` | Added the corresponding feminine first-person form. |
+| `transport_wrong_destination` | Added the feminine first-person form used in the Thai variant. |
+| `boss_leave_status` | Added a female-speaker option for “my leave request.” |
+| `boss_duties_today` | Added a female-speaker option for “my duties.” |
+| `emergency_location` | Added a female-speaker option for “I am at …”. |
+| `police_lost_phone` | Restored “my” and represented male/female Burmese first-person options. |
+
+The Northern Illinois University SEASite beginner Burmese vocabulary list explicitly distinguishes `ကျွန်တော်` (“I,” spoken by a male) from `ကျွန်မ` (“I,” spoken by a female): [Burmese Lesson 1 vocabulary](https://seasite.niu.edu/Burmese/Beginning/Blesson_1/nwords.htm). The slash notation follows the existing paired form in `number_phone_digits`. This source verifies the pronoun distinction, not complete-sentence naturalness. Confidence is **medium** for this focused alignment correction; the Burmese phrasing and the remaining corpus still need native review.
+
+This pass changed seven `my` fields. Thai, English, and pronunciation fields were not changed. Four of the seven records carry the existing `high-risk` tag. The source checks remain lexical/phonological spot checks and do not externally validate all 500 Thai sentences, Myanmar translations, or readings. No independent fluent Thai–Myanmar reviewer has signed off on the corpus.
+
