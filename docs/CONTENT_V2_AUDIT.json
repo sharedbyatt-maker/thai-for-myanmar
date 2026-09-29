@@ -162,6 +162,24 @@
       "family": "Longdo / NECTEC Lexitron and Royal Institute",
       "url": "https://dict.longdo.com/search/%E0%B8%A5%E0%B9%88%E0%B8%A7%E0%B8%87%E0%B9%80%E0%B8%A7%E0%B8%A5%E0%B8%B2",
       "scope": "Lexical meaning of ล่วงเวลา as overtime only."
+    },
+    {
+      "id": "longdo_report_to_official",
+      "family": "Longdo / NECTEC Lexitron and Royal Institute",
+      "url": "https://dict.longdo.com/search/%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1",
+      "scope": "Defines แจ้งความ as reporting/informing and specifically notifying an official about an incident; lexical evidence for report-related police wording only, not full-sentence or procedure validation."
+    },
+    {
+      "id": "longdo_incident_report",
+      "family": "Longdo / NECTEC Lexitron",
+      "url": "https://dict.longdo.com/search/%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B9%80%E0%B8%AB%E0%B8%95%E0%B8%B8",
+      "scope": "Defines แจ้งเหตุ as informing/notifying someone of an incident; lexical evidence for the accident-report phrase only, not full-sentence or procedure validation."
+    },
+    {
+      "id": "mfa_thai_passport_loss_guidance",
+      "family": "Department of Consular Affairs, Ministry of Foreign Affairs, Thailand",
+      "url": "https://consular.mfa.go.th/th/album-video/%E0%B8%9E%E0%B8%B2%E0%B8%AA%E0%B8%9B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%95%E0%B8%AB%E0%B8%B2%E0%B8%A2-%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1-%E0%B8%82%E0%B8%AD%E0%B8%97%E0%B8%B3%E0%B9%80%E0%B8%A5%E0%B9%88%E0%B8%A1%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88%E0%B9%84%E0%B8%94%E0%B9%89?cate=5f478ad8e3439863bd2eff39",
+      "scope": "The official page dated 17 Apr 2567 says a Thai passport can be replaced after loss without reporting to police. Contextual caveat only; it is not Myanmar-passport/foreign-worker procedure and does not validate the learner sentence."
     }
   ],
   "records": [
@@ -9859,7 +9877,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "longdo_report_to_official"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -9903,7 +9922,7 @@
         "niu_spoken_thai_conversation"
       ],
       "confidence": "MEDIUM",
-      "remaining_concern": null
+      "remaining_concern": "The phrase requests a copy of a daily police record. The local record/document terminology is not independently confirmed: the official Pattani police FAQ appeared in search results, but the page returned 403 and was not counted as an inspected source."
     },
     {
       "id": "police_need_interpreter",
@@ -18432,7 +18451,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "longdo_incident_report"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18470,10 +18490,11 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "mfa_thai_passport_loss_guidance"
       ],
       "confidence": "MEDIUM",
-      "remaining_concern": null
+      "remaining_concern": "This sentence only says the passport is missing; it does not instruct the learner to report or not report it. Thai consular replacement guidance applies to Thai passports and may not apply to a Myanmar passport or foreign-worker process."
     },
     {
       "id": "police_nearest_station",
@@ -18549,7 +18570,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "longdo_report_to_official"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
