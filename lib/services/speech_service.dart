@@ -44,7 +44,7 @@ class SpeechService {
   Map<String, Object?> get diagnosticSnapshot {
     final engine = _engine;
     final engineDetails = engine is SpeechEngineDiagnosticSource
-        ? engine.diagnosticDetails
+        ? (engine as SpeechEngineDiagnosticSource).diagnosticDetails
         : const <String, Object?>{};
     return {
       ...engineDetails,

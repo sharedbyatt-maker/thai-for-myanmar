@@ -146,7 +146,7 @@ void main() {
 
     test('waits for a late Thai voice after voiceschanged', () async {
       final engine = EventAwareFakeSpeechEngine(voices: const []);
-      engine.onVoiceChange = (_, __) async {
+      engine.onVoiceChange = (_, _) async {
         engine.voices = const [
           {'name': 'Late Thai voice', 'locale': 'th-TH'},
         ];
