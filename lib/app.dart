@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'data/phrase_repository.dart';
 import 'screens/main_shell.dart';
+import 'screens/speech_diagnostics_screen.dart';
 import 'services/app_state.dart';
 import 'services/thai_playback_service.dart';
 import 'theme/app_theme.dart';
@@ -20,6 +21,7 @@ class ThaiForMyanmarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showSpeechDiagnostics = Uri.base.queryParameters['tts-debug'] == '1';
     return AnimatedBuilder(
       animation: appState,
       builder: (context, _) {
@@ -34,11 +36,15 @@ class ThaiForMyanmarApp extends StatelessWidget {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: mode,
-          home: MainShell(
-            repository: repository,
-            appState: appState,
-            playbackService: playbackService,
-          ),
+          home: showSpeechDiagnostics
+              ? SpeechDiagnosticsScreen(
+                  speechService: playbackService.speechService,
+                )
+              : MainShell(
+                  repository: repository,
+                  appState: appState,
+                  playbackService: playbackService,
+                ),
         );
       },
     );

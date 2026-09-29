@@ -61,6 +61,54 @@ void main() {
     expect(playbackService.state, ThaiPlaybackState.idle);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('unavailable TTS explains the device limit and can retry', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final appState = AppState();
+    await appState.load();
+    final speechEngine = NoThaiSpeechEngine();
+    final assetPlayer = WaitingThaiAssetPlayer()..releaseInitialStop();
+    final playbackService = ThaiPlaybackService(
+      speechService: SpeechService(
+        engine: speechEngine,
+        voiceLookupWindow: Duration.zero,
+      ),
+      catalog: ThaiAudioCatalog.empty(),
+      assetPlayer: assetPlayer,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: ThaiPlaybackButton(
+              phrase: _phrase,
+              appState: appState,
+              playbackService: playbackService,
+              label: 'အသံထွက်',
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('အသံထွက်'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text(
+        'ဒီစက် သို့မဟုတ် ဘရောက်ဇာမှာ ထိုင်းအသံ မရရှိပါ။ နောက်မှ ထပ်စမ်းနိုင်ပါတယ်။',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('ထပ်စမ်းရန်'), findsOneWidget);
+
+    await tester.tap(find.text('ထပ်စမ်းရန်'));
+    await tester.pumpAndSettle();
+    expect(speechEngine.voiceLookups, greaterThanOrEqualTo(2));
+    expect(tester.takeException(), isNull);
+  });
 }
 
 const _phrase = Phrase(
@@ -138,6 +186,43 @@ class NoopSpeechEngine implements SpeechEngine {
 
   @override
   Future<dynamic> speak(String text) async => 1;
+
+  @override
+  Future<dynamic> stop() async => 1;
+
+  @override
+  void setStartHandler(void Function() handler) {}
+
+  @override
+  void setCompletionHandler(void Function() handler) {}
+
+  @override
+  void setErrorHandler(void Function(dynamic error) handler) {}
+}
+
+class NoThaiSpeechEngine implements SpeechEngine {
+  int voiceLookups = 0;
+
+  @override
+  Future<dynamic> getVoices() async {
+    voiceLookups++;
+    return const <Map<String, String>>[];
+  }
+
+  @override
+  Future<dynamic> setLanguage(String language) async => 0;
+
+  @override
+  Future<dynamic> setVoice(Map<String, String> voice) async => 0;
+
+  @override
+  Future<dynamic> setSpeechRate(double rate) async => 1;
+
+  @override
+  Future<dynamic> awaitSpeakCompletion(bool awaitCompletion) async => 1;
+
+  @override
+  Future<dynamic> speak(String text) async => 0;
 
   @override
   Future<dynamic> stop() async => 1;
