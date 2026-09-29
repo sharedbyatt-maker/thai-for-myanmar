@@ -47,4 +47,4 @@ Ads are off unless `ENABLE_ADS=true` is passed at build time. A debug build uses
 - [Android / Google Play release checklist](docs/ANDROID_RELEASE.md)
 - [Draft store listing and screenshots](docs/STORE_LISTING.md)
 
-The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build, and retains the verified Web bundle as a build artifact. GitHub Pages publication was retired in PR #4. The owner Web Preview is deployed separately as a free Render static site; CI verifies the bundle but does not currently publish it to Render automatically.
+The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build, and retains the verified Web bundle as a build artifact. GitHub Pages publication was retired in PR #4. The owner Web Preview is a free Render static site linked to `main`; Render is configured to auto-deploy commits pushed to that branch. GitHub Actions verifies the Web bundle and retains it as an artifact, but does not deploy to Render. Check Render's deployment status when confirming the live preview.
