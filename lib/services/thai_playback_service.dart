@@ -91,6 +91,10 @@ class ThaiPlaybackService extends ChangeNotifier {
   }
 
   Future<void> stop() async {
+    if (_state != ThaiPlaybackState.loading &&
+        _state != ThaiPlaybackState.playing) {
+      return;
+    }
     ++_requestId;
     _publish(ThaiPlaybackState.idle, null, null);
     await _stopPlayers();

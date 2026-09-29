@@ -177,6 +177,17 @@ void main() {
       expect(await result, ThaiPlaybackResult.cancelled);
       expect(service.state, ThaiPlaybackState.idle);
     });
+
+    test('stop while idle does not call platform audio players', () async {
+      final player = FakeThaiAudioAssetPlayer();
+      final speechEngine = FakeSpeechEngine();
+      final service = _service(player, speechEngine, ThaiAudioCatalog.empty());
+
+      await service.stop();
+
+      expect(player.stopCalls, 0);
+      expect(speechEngine.stopCalls, 0);
+    });
   });
 }
 
@@ -281,6 +292,7 @@ class FakeSpeechEngine implements SpeechEngine {
 
   final dynamic voices;
   final List<String> spokenTexts = [];
+  int stopCalls = 0;
   void Function()? _startHandler;
   void Function()? _completionHandler;
 
@@ -308,7 +320,10 @@ class FakeSpeechEngine implements SpeechEngine {
   }
 
   @override
-  Future<dynamic> stop() async => 1;
+  Future<dynamic> stop() async {
+    stopCalls++;
+    return 1;
+  }
 
   @override
   void setStartHandler(void Function() handler) => _startHandler = handler;
