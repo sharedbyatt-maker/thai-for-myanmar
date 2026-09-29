@@ -64,7 +64,7 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
     if (result == SpeechResult.unavailable && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။'),
+          content: Text('ဒီစက်မှာ အသုံးပြုနိုင်တဲ့ ထိုင်းအသံမရှိပါ။ စကားစုကို ထိုင်းစကားပြောသူထံ ပြပေးပါ။'),
         ),
       );
     }
