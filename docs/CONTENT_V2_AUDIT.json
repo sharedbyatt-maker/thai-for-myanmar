@@ -7,14 +7,14 @@
   "high_risk_records": 191,
   "confidence_counts": {
     "HIGH": 0,
-    "MEDIUM": 498,
-    "LOW / AMBIGUOUS": 2
+    "MEDIUM": 500,
+    "LOW / AMBIGUOUS": 0
   },
   "changed_field_counts": {
     "thai": 0,
     "thaiMale": 0,
     "thaiFemale": 0,
-    "my": 7,
+    "my": 8,
     "pronunciation": 4,
     "en": 0
   },
@@ -186,6 +186,12 @@
       "family": "Thailand Ministry of Public Health, Bureau of Health Administration (hosted by Medical Council of Thailand)",
       "url": "https://tmc.or.th/news_file/ManualUsingFourLanguages.pdf",
       "scope": "A 2014 Thai-English-Myanmar-Cambodian health-service manual from the Ministry of Public Health's Bureau of Health Administration. Provenance is listed by the official Medical Council-hosted PDF; selected exact health terms were checked in a searchable Scribd-hosted text reproduction of the same manual because the official PDF's later pages intermittently returned 403/503. Supports lexical/meaning comparisons for selected common expressions, allergy, fever, rash, and breathing difficulty only. The extracted text renders some Burmese in legacy encoding. It does not validate complete learner sentences, speaker-gender variants, Myanmar-script readings, food-allergy wording, medical advice, or the full corpus."
+    },
+    {
+      "id": "sbs_burmese_food_allergy",
+      "family": "SBS Burmese-language editorial content",
+      "url": "https://www.sbs.com.au/language/burmese/my/podcast-episode/food-dietary-and-allergy/x512n2tg7",
+      "scope": "Contemporary Burmese usage for describing people allergic to some foods (အစားတချို့နဲ့ ဓာတ်မတည့်); supports a lexical/phrase-pattern comparison only, not the full learner sentence or medical guidance."
     }
   ],
   "records": [
@@ -2200,8 +2206,8 @@
         "niu_spoken_thai_conversation",
         "moph_four_language_health_manual"
       ],
-      "confidence": "LOW / AMBIGUOUS",
-      "remaining_concern": "Generic phrase does not name the medicine or symptoms. The existing Burmese note directs the speaker to give exact details to a health worker and confirm understanding."
+      "confidence": "MEDIUM",
+      "remaining_concern": "This is a generic opening statement and does not identify the exact medicine or reaction. The Myanmar note directs the learner to provide details to a health worker and confirm understanding; source checks support the generic allergy wording, not a complete clinical history or full-sentence human certification."
     },
     {
       "id": "hospital_interpreter",
@@ -17700,7 +17706,7 @@
         "thai": "ผมแพ้อาหารบางอย่างครับ / ฉันแพ้อาหารบางอย่างค่ะ",
         "thaiMale": "ผมแพ้อาหารบางอย่างครับ",
         "thaiFemale": "ฉันแพ้อาหารบางอย่างค่ะ",
-        "my": "အစားအစာတချို့နဲ့ မတည့်ပါဘူး။",
+        "my": "အစားအစာတချို့နဲ့ ဓာတ်မတည့်ပါဘူး။",
         "pronunciation": "ဖုမ် ဖဲ အာဟန် ဘာင်ယာင် ခရပ် / ချန် ဖဲ အာဟန် ဘာင်ယာင် ခါ့",
         "en": "I am allergic to some foods."
       },
@@ -17708,20 +17714,21 @@
         "thai": false,
         "thaiMale": false,
         "thaiFemale": false,
-        "my": false,
+        "my": true,
         "pronunciation": false,
         "en": false
       },
       "source_checks": [
-        "siriraj_food_allergy",
         "longdo_food_allergy",
         "nectec_tone_standard",
-        "niu_thai_tone_chart",
+        "niu_spoken_thai_conversation",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_thai_tone_chart",
+        "sbs_burmese_food_allergy",
+        "siriraj_food_allergy"
       ],
-      "confidence": "LOW / AMBIGUOUS",
-      "remaining_concern": "Generic phrase does not name the food. The learner must state the exact food; no ingredient-specific translation is claimed."
+      "confidence": "MEDIUM",
+      "remaining_concern": "This is a generic opening statement and does not identify the exact food or reaction. The Myanmar note directs the learner to name both; source checks support selected word/use choices, not a complete clinical history or full-sentence human certification."
     },
     {
       "id": "hospital_explain_result",
@@ -19894,6 +19901,10 @@
     {
       "name": "Thai grammar/register source checks",
       "scope": "NIU SEASite Thai-language profile and Spoken Thai teaching material were mapped to matching records for pronouns, pro-drop, negation, questions, polite particles, and short/long conversational forms. These illustrate grammar/register patterns but do not validate every full phrase."
+    },
+    {
+      "name": "Focused allergy-language follow-up",
+      "scope": "Source-checked the generic drug and food allergy openings, clarified the Burmese food-allergy wording, and added a note to state the exact food and symptoms. Both entries are MEDIUM because the wording is supported while the cards remain intentionally nonspecific; complete clinical histories and independent fluent Thai–Myanmar sentence review are outside these checks."
     }
   ]
 }
