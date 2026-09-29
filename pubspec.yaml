@@ -24,6 +24,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/thai/
     - assets/data/phrase_categories.json
     - assets/data/phrases.json
     - assets/data/thai_audio_manifest.json
