@@ -42,8 +42,9 @@ class SpeechService {
 
   /// This snapshot is only shown by the explicit `?tts-debug=1` route.
   Map<String, Object?> get diagnosticSnapshot {
-    final engineDetails = _engine is SpeechEngineDiagnosticSource
-        ? _engine.diagnosticDetails
+    final engine = _engine;
+    final engineDetails = engine is SpeechEngineDiagnosticSource
+        ? engine.diagnosticDetails
         : const <String, Object?>{};
     return {
       ...engineDetails,
