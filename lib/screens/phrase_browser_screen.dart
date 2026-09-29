@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
 
 class PhraseBrowserScreen extends StatefulWidget {
   const PhraseBrowserScreen({
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     required this.title,
     this.categoryId,
     super.key,
@@ -17,7 +17,7 @@ class PhraseBrowserScreen extends StatefulWidget {
 
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
   final String title;
   final String? categoryId;
 
@@ -78,7 +78,7 @@ class _PhraseBrowserScreenState extends State<PhraseBrowserScreen> {
                       phrase: phrases[index],
                       repository: widget.repository,
                       appState: widget.appState,
-                      speechService: widget.speechService,
+                      playbackService: widget.playbackService,
                     ),
                   ),
           ),

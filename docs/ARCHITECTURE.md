@@ -7,7 +7,8 @@ This is one Flutter application with bundled JSON content and local-only user st
 ```text
 assets/data/*.json -> PhraseRepository -> Home / Learn / Situations / Speak / Quiz
                                   AppState -> device-local preferences
-                                  SpeechService -> Android or browser Thai TTS
+                           ThaiPlaybackService -> verified bundled Thai audio when mapped
+                                               -> SpeechService -> verified Android/browser Thai TTS fallback
                                   AdBannerSlot -> Android only, opt-in
 ```
 
@@ -19,13 +20,16 @@ assets/data/*.json -> PhraseRepository -> Home / Learn / Situations / Speak / Qu
 | `lib/models/phrase.dart` | Typed phrase and category records. |
 | `lib/data/phrase_repository.dart` | Offline search and category lookup. |
 | `lib/services/app_state.dart` | Favorites, recent phrases, learned IDs, theme, polite form, and quiz count. |
-| `lib/services/speech_service.dart` | Thai TTS with a safe unavailable result. |
+| `lib/services/thai_playback_service.dart` | Asset-first Thai playback with exact phrase/form/text matching and safe TTS fallback. |
+| `lib/services/thai_audio_catalog.dart` | Loads the versioned mapping from phrase/form/text to bundled audio assets. |
+| `lib/services/speech_service.dart` | Thai-only system TTS fallback with a safe unavailable result. |
 | `lib/services/ad_slot*.dart` | Conditional Android banner support and a Web no-op. |
 | `lib/screens/` | Navigation destinations and phrase flows. |
 | `assets/data/` | Versioned phrase and category datasets. |
 | `tool/validate_content.py` | CI content structure and reference validation. |
+| `tool/validate_audio_manifest.py` | Validates audio mappings, exact Thai text, asset paths, coverage, and orphaned files. |
 | `tool/configure_android.py` | Applies package name, test AdMob app ID, label, and launcher icon to generated Android scaffolding. |
-| `.github/workflows/ci.yml` | CI and verified Web Preview bundle publication. |
+| `.github/workflows/ci.yml` | CI verification and retained Android/Web build artifacts. |
 
 ## Local setup
 
@@ -53,4 +57,4 @@ Edit `assets/data/phrases.json` and/or `phrase_categories.json`, then run `pytho
 
 ## CI behavior
 
-Pull requests and `main` pushes run formatting, static analysis, Flutter tests, content validation, Android debug APK and release-mode AAB builds, and a release Web build. A separate job publishes the verified Web bundle to `web-preview` only after the full `main` verification job passes. Build artifacts include the APK, AAB, Web bundle, and generated Android scaffold for owner review.
+Pull requests and `main` pushes run formatting, static analysis, Flutter tests, content and audio-manifest validation, Android debug APK and release-mode AAB builds, and a release Web build. Build artifacts include the APK, AAB, Web bundle, and generated Android scaffold for owner review. GitHub Pages publication was removed in PR #4. The existing owner Web Preview is a free Render static site linked to `main` and configured to auto-deploy main commits. Render handles that deployment separately from GitHub Actions; this workflow verifies and retains the Web bundle but does not deploy to Render. Check the Render service and latest deploy to confirm live preview state.

@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
+  audioplayers: ^6.8.0
   flutter:
     sdk: flutter
   flutter_tts: ^4.2.5
@@ -23,5 +24,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/thai/
     - assets/data/phrase_categories.json
     - assets/data/phrases.json
+    - assets/data/thai_audio_manifest.json

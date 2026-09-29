@@ -4,14 +4,14 @@ import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../services/ad_slot.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     required this.onSelectTab,
     required this.onOpenPhrase,
     super.key,
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
   final ValueChanged<int> onSelectTab;
   final ValueChanged<String> onOpenPhrase;
 
@@ -80,7 +80,7 @@ class HomeScreen extends StatelessWidget {
           phrase: daily,
           repository: repository,
           appState: appState,
-          speechService: speechService,
+          playbackService: playbackService,
         ),
         const SizedBox(height: 18),
         _SectionTitle(
@@ -166,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                     phrase: recentPhrase,
                     repository: repository,
                     appState: appState,
-                    speechService: speechService,
+                    playbackService: playbackService,
                   ),
                 ],
               ),

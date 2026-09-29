@@ -31,6 +31,9 @@ jobs:
       - name: Validate content dataset
         run: python3 tool/validate_content.py
 
+      - name: Validate Thai audio catalog
+        run: python3 tool/validate_audio_manifest.py
+
       - name: Verify Dart formatting
         run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
 
@@ -45,11 +48,17 @@ jobs:
           test/phrase_repository_test.dart
           test/quiz_logic_test.dart
           test/speech_service_test.dart
+          test/thai_audio_catalog_test.dart
+          test/thai_playback_service_test.dart
           --reporter expanded
 
       - name: Run widget tests
         timeout-minutes: 5
         run: flutter test test/widget_test.dart --reporter expanded
+
+      - name: Verify Thai playback button states
+        timeout-minutes: 5
+        run: flutter test test/thai_playback_button_test.dart --reporter expanded
 
   android:
     name: Build and verify Android

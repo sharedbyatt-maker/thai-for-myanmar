@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
 import '../screens/phrase_detail_screen.dart';
 
 class PhraseTile extends StatelessWidget {
@@ -11,14 +11,14 @@ class PhraseTile extends StatelessWidget {
     required this.phrase,
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     super.key,
   });
 
   final Phrase phrase;
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
 
   void _open(BuildContext context) {
     appState.remember(phrase.id);
@@ -29,7 +29,7 @@ class PhraseTile extends StatelessWidget {
           phrase: phrase,
           repository: repository,
           appState: appState,
-          speechService: speechService,
+          playbackService: playbackService,
         ),
       ),
     );

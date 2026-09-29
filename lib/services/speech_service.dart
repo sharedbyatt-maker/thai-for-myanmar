@@ -31,11 +31,11 @@ class SpeechService {
   final Duration _speechTimeout;
   Future<void> _queue = Future<void>.value();
 
-  Future<SpeechResult> speakThai(String text) {
+  Future<SpeechResult> speakThai(String text, {void Function()? onStarted}) {
     final result = Completer<SpeechResult>();
     _queue = _queue.then((_) async {
       try {
-        result.complete(await _speakThaiNow(text));
+        result.complete(await _speakThaiNow(text, onStarted: onStarted));
       } catch (_) {
         result.complete(SpeechResult.unavailable);
       }
@@ -43,7 +43,10 @@ class SpeechService {
     return result.future;
   }
 
-  Future<SpeechResult> _speakThaiNow(String text) async {
+  Future<SpeechResult> _speakThaiNow(
+    String text, {
+    void Function()? onStarted,
+  }) async {
     if (text.trim().isEmpty) return SpeechResult.unavailable;
 
     final voice = await _findThaiVoice();
@@ -71,6 +74,7 @@ class SpeechService {
     final outcome = Completer<SpeechResult>();
     _engine.setStartHandler(() {
       didStart = true;
+      onStarted?.call();
     });
     _engine.setCompletionHandler(() {
       if (!outcome.isCompleted) {

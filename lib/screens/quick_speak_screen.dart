@@ -1,21 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
+import '../widgets/thai_playback_button.dart';
 
 class QuickSpeakScreen extends StatefulWidget {
   const QuickSpeakScreen({
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     super.key,
   });
 
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
 
   @override
   State<QuickSpeakScreen> createState() => _QuickSpeakScreenState();
@@ -47,6 +50,7 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
   }
 
   void _select(Phrase phrase) {
+    unawaited(widget.playbackService.stop());
     FocusManager.instance.primaryFocus?.unfocus();
     _controller.clear();
     setState(() {
@@ -55,21 +59,6 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
     });
     widget.appState.remember(phrase.id);
     widget.appState.markLearned(phrase.id);
-  }
-
-  Future<void> _speak(Phrase phrase) async {
-    final result = await widget.speechService.speakThai(
-      phrase.thaiFor(widget.appState.politeStyle),
-    );
-    if (result == SpeechResult.unavailable && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'ဒီစက်မှာ အသုံးပြုနိုင်တဲ့ ထိုင်းအသံမရှိပါ။ စကားစုကို ထိုင်းစကားပြောသူထံ ပြပေးပါ။',
-          ),
-        ),
-      );
-    }
   }
 
   void _showToSpeaker(Phrase phrase) {
@@ -111,10 +100,11 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
-                FilledButton.icon(
-                  onPressed: () => _speak(phrase),
-                  icon: const Icon(Icons.volume_up_rounded),
-                  label: const Text('ထိုင်းအသံ နားထောင်ရန်'),
+                ThaiPlaybackButton(
+                  phrase: phrase,
+                  appState: widget.appState,
+                  playbackService: widget.playbackService,
+                  label: 'ထိုင်းအသံ နားထောင်ရန်',
                 ),
                 const SizedBox(height: 16),
               ],
@@ -165,7 +155,7 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
           _PhraseBoard(
             phrase: selected,
             appState: widget.appState,
-            onSpeak: () => _speak(selected),
+            playbackService: widget.playbackService,
             onShow: () => _showToSpeaker(selected),
           ),
         if (_query.trim().isEmpty) ...[
@@ -245,13 +235,13 @@ class _PhraseBoard extends StatelessWidget {
   const _PhraseBoard({
     required this.phrase,
     required this.appState,
-    required this.onSpeak,
+    required this.playbackService,
     required this.onShow,
   });
 
   final Phrase phrase;
   final AppState appState;
-  final VoidCallback onSpeak;
+  final ThaiPlaybackService playbackService;
   final VoidCallback onShow;
 
   @override
@@ -319,10 +309,11 @@ class _PhraseBoard extends StatelessWidget {
               spacing: 9,
               runSpacing: 8,
               children: [
-                FilledButton.icon(
-                  onPressed: onSpeak,
-                  icon: const Icon(Icons.volume_up_rounded),
-                  label: const Text('အသံထွက်'),
+                ThaiPlaybackButton(
+                  phrase: phrase,
+                  appState: appState,
+                  playbackService: playbackService,
+                  label: 'အသံထွက်',
                 ),
                 OutlinedButton.icon(
                   onPressed: onShow,
