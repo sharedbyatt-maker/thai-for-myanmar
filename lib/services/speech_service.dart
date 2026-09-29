@@ -49,21 +49,23 @@ class SpeechService {
     final voice = await _findThaiVoice();
     if (voice == null) return SpeechResult.unavailable;
 
-    final languageResult = await _engine.setLanguage('th-TH');
+    final languageResult = await _engine
+        .setLanguage('th-TH')
+        .timeout(_speechTimeout);
     if (!_operationDidNotFail(languageResult)) {
       return SpeechResult.unavailable;
     }
 
-    final voiceResult = await _engine.setVoice(voice);
+    final voiceResult = await _engine.setVoice(voice).timeout(_speechTimeout);
     if (!_operationDidNotFail(voiceResult)) {
       return SpeechResult.unavailable;
     }
 
-    await _engine.setSpeechRate(0.43);
+    await _engine.setSpeechRate(0.43).timeout(_speechTimeout);
     // On Web, flutter_tts returns null as soon as the utterance is queued when
     // completion waiting is disabled. We use its start/end/error callbacks
     // instead of treating that queue acknowledgement as proof of speech.
-    await _engine.awaitSpeakCompletion(false);
+    await _engine.awaitSpeakCompletion(false).timeout(_speechTimeout);
 
     var didStart = false;
     final outcome = Completer<SpeechResult>();
@@ -84,7 +86,7 @@ class SpeechService {
     });
 
     try {
-      final speakResult = await _engine.speak(text);
+      final speakResult = await _engine.speak(text).timeout(_speechTimeout);
       if (_operationExplicitlyFailed(speakResult)) {
         return SpeechResult.unavailable;
       }
@@ -110,7 +112,9 @@ class SpeechService {
     final attempts = lookupWindow.inMilliseconds ~/ 100 + 1;
 
     for (var attempt = 0; attempt < attempts; attempt++) {
-      final voices = _voiceMaps(await _engine.getVoices());
+      final voices = _voiceMaps(
+        await _engine.getVoices().timeout(_speechTimeout),
+      );
       final thaiVoices = voices.where(_isThaiVoice).toList();
       if (thaiVoices.isNotEmpty) {
         thaiVoices.sort((a, b) {
