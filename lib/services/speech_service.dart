@@ -79,16 +79,21 @@ class SpeechService {
       final cancellation = _SpeechCancellation();
       _activeCancellation = cancellation;
       try {
+        final speechResult = await _speakThaiNow(
+          text,
+          cancellation: cancellation,
+          onStarted: onStarted,
+        );
         result.complete(
-          await _speakThaiNow(
-            text,
-            cancellation: cancellation,
-            onStarted: onStarted,
-          ),
+          generation == _generation ? speechResult : SpeechResult.cancelled,
         );
       } catch (_) {
         _lastFailureReason = 'speech_service_error';
-        result.complete(SpeechResult.unavailable);
+        result.complete(
+          generation == _generation
+              ? SpeechResult.unavailable
+              : SpeechResult.cancelled,
+        );
       } finally {
         if (identical(_activeCancellation, cancellation)) {
           _activeCancellation = null;

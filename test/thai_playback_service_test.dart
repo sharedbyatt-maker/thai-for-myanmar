@@ -207,6 +207,7 @@ void main() {
       expect(await first, ThaiPlaybackResult.cancelled);
       expect(await second, ThaiPlaybackResult.spoken);
       expect(speechEngine.spokenTexts, ['สวัสดีค่ะ', 'ขอบคุณครับ']);
+      expect(speechEngine.stopCalls, greaterThan(1));
       expect(service.state, ThaiPlaybackState.idle);
     });
 
@@ -360,7 +361,9 @@ class FakeSpeechEngine implements SpeechEngine {
   @override
   Future<dynamic> stop() async {
     stopCalls++;
-    if (holdFirstSpeech && !_firstSpeechRelease.isCompleted) {
+    if (holdFirstSpeech &&
+        spokenTexts.isNotEmpty &&
+        !_firstSpeechRelease.isCompleted) {
       _firstSpeechRelease.complete();
     }
     return 1;
