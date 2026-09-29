@@ -185,7 +185,7 @@
       "id": "moph_four_language_health_manual",
       "family": "Thailand Ministry of Public Health, Bureau of Health Administration (hosted by Medical Council of Thailand)",
       "url": "https://tmc.or.th/news_file/ManualUsingFourLanguages.pdf",
-      "scope": "A 2014 Thai-English-Myanmar-Cambodian health-service manual. The accessible opening table supports selected common Burmese greetings, thanks, apology, and how-are-you meanings; the hello line is extracted in legacy Burmese encoding. It does not validate speaker-gender variants, complete corpus phrases, learner readings, or medical-section rows whose pages were not retrievable in this review."
+      "scope": "A 2014 Thai-English-Myanmar-Cambodian health-service manual from the Ministry of Public Health's Bureau of Health Administration. Provenance is listed by the official Medical Council-hosted PDF; selected exact health terms were checked in a searchable Scribd-hosted text reproduction of the same manual because the official PDF's later pages intermittently returned 403/503. Supports lexical/meaning comparisons for selected common expressions, allergy, fever, rash, and breathing difficulty only. The extracted text renders some Burmese in legacy encoding. It does not validate complete learner sentences, speaker-gender variants, Myanmar-script readings, food-allergy wording, medical advice, or the full corpus."
     }
   ],
   "records": [
@@ -2197,7 +2197,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "LOW / AMBIGUOUS",
       "remaining_concern": "Generic phrase does not name the medicine or symptoms. The existing Burmese note directs the speaker to give exact details to a health worker and confirm understanding."
@@ -8908,7 +8909,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -17560,7 +17562,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -17598,7 +17601,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
