@@ -509,7 +509,7 @@ The table records fields changed in the first correction pass compared with the 
 
 Summary: 500 records, 35 categories; 491 records changed. Field change counts: thai=14, thaiMale=11, thaiFemale=10, my=15, pronunciation=491, en=5.
 
-Unresolved review flags: `greet_sorry` combines apology and attention-getting; `health_allergy` does not identify the specific drug; `health_food_allergy` does not identify the food. In a real medical context the learner must identify the substance with a qualified interpreter or clinician. Thai tone fidelity and Myanmar learner comprehensibility require independent fluent Thai–Myanmar review.
+Remaining review concerns after the later source checks: greet_sorry is context-flexible; it can apologize or politely get someone's attention, and context affects interpretation. health_allergy does not name the medicine or symptoms, and health_food_allergy does not name the food. Both allergy records remain LOW / AMBIGUOUS in the record-level audit. Their broad wording must be supplemented with the exact substance and details through a qualified health worker or interpreter. Thai tone fidelity and Myanmar learner comprehensibility still require independent fluent Thai–Myanmar review.
 
 ## Follow-up review (2026-09-29)
 
@@ -559,3 +559,18 @@ A corpus-wide consistency check applied the existing reading conventions in [CON
 The Longdo entry, including its Royal Institute dictionary section, distinguishes question-particle ไหม from ไหม้ (“burn”): [Longdo ไหม / ไหม้](https://dict.longdo.com/search/%E0%B9%84%E0%B8%AB%E0%B8%A1). The NECTEC Thai language standard describes Thai's five tones and explains that tone is determined by more than tone marks alone, including initial consonant and syllable ending: [NECTEC Thai Language standard](https://www.nectec.or.th/it-standards/thaistd.pdf). These references support lexical distinction and the caution about tone representation; the four changes are project-convention consistency and a completeness repair, not evidence that every Myanmar-script reading is phonetically exact or human-verified.
 
 This pass changed four pronunciation fields. No Thai, Myanmar meaning, or English fields changed in this pass. The review remains provisional; no independent fluent Thai–Myanmar reviewer has verified every reading or all 500 complete records.
+## Record-level V2 audit snapshot (2026-09-29)
+
+[CONTENT_V2_AUDIT.json](CONTENT_V2_AUDIT.json) contains one entry for each of the 500 records, compared with the user-provided starting main SHA. Each row retains original and proposed-final Thai, male/female Thai forms, Myanmar meaning, Myanmar-script reading, English context, field-level change flags, high-risk status, source-check IDs, confidence, and a remaining concern where one was identified. The snapshot reports 35 categories and 191 high-risk records.
+
+For this V2 branch relative to starting main, field counts are: Thai text 0; Thai male form 0; Thai female form 0; Myanmar meaning 7; Myanmar-script pronunciation 4; English 0. The seven Myanmar fields align Burmese speaker pronouns/ownership; the four pronunciation fields repair three readings inconsistent with the documented ไม่/ไหม convention and one omitted ได้ไหม sequence. No phrases or categories were added.
+
+The added research resolves the context note for greet_sorry: Longdo's NECTEC and Royal Institute entries describe ขอโทษ as a polite apology/response to an offense, and the entry also lists “excuse me”: [Longdo ขอโทษ](https://dict.longdo.com/search/%E0%B8%82%E0%B8%AD%E0%B9%82%E0%B8%97%E0%B8%A9). The phrase remains unchanged and MEDIUM confidence because the expression is context-flexible.
+
+For health_allergy, the Longdo/NECTEC entry defines แพ้ยา as being allergic: [Longdo แพ้ยา](https://dict.longdo.com/search/%E0%B9%81%E0%B8%9E%E0%B9%89%E0%B8%A2%E0%B8%B2). A Rural Doctor Foundation article explains that colloquial use can be broad and advises asking which medicine and what symptoms occurred: [Rural Doctor Foundation: แพ้ยา](https://www.doctor.or.th/article/detail/4362). The existing Myanmar note asks the speaker to provide exact details to a health worker and confirm understanding. This supports keeping the phrase as a general communication prompt; it does not make the card medical advice.
+
+For health_food_allergy, a Siriraj Hospital / Mahidol University health page describes food allergy and gives examples of foods: [Siriraj Hospital: food allergy](https://si.mahidol.ac.th/th/healthdetail.asp?aid=977). The phrase remains generic (“some foods”) and does not identify an ingredient. The exact food must be stated in context.
+
+For employment and overtime vocabulary, the Ministry of Labour's Thai page uses terms such as ค่าจ้าง, การทำงานล่วงเวลา, ค่าล่วงเวลา, and วันหยุด: [Ministry of Labour: employee rights](https://www.mol.go.th/employee/%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B8%95%E0%B8%B2%E0%B8%A1%E0%B8%81%E0%B8%8E%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99). This checks terminology only and does not validate a learner's legal rights or the full phrases.
+
+The record-level snapshot assigns 498 MEDIUM and 2 LOW / AMBIGUOUS; it assigns no HIGH ratings because the complete corpus has no independent fluent Thai–Myanmar sign-off. External source checks attach only to relevant terms, pronouns, or reading conventions and do not cover every full sentence. The complete language and pronunciation corpus remains PROVISIONAL.
