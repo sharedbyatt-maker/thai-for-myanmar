@@ -4,7 +4,7 @@
 
 The bundled dataset contains **500 phrase records across 35 categories**. This continuation added 198 practical phrases to the existing 302-record corpus without changing its category structure. Coverage includes daily situations as well as workplace, factory, supervisor, salary, overtime, leave, medical, pharmacy, emergency, police, and document conversations.
 
-The additions received a structured editorial pass for Thai–Myanmar–English meaning alignment, natural conversational wording, polite particles, and Myanmar-readable pronunciation. No independent fluent Thai–Myanmar reviewer has signed off on the corpus. The validator confirms structure and integrity, not language fluency or pronunciation accuracy. A fluent bilingual review remains necessary before broad public release, with particular care for high-risk phrases. Phrases are for communication only, not medical, legal, immigration, or employment advice.
+The user rejected the previous corpus on language quality. A further AI-assisted correction pass has reviewed the Thai, Myanmar meaning, English context, and Myanmar reading aid across all 500 records. This remains **provisional learner material**: no independent fluent Thai–Myanmar reviewer has signed off. The validator confirms structure and several known failure patterns, not naturalness, fluency, or pronunciation accuracy. A fluent bilingual review is necessary before broad public release, with particular care for high-risk phrases. Phrases are for communication only, not medical, legal, immigration, or employment advice.
 
 ## Phrase fields
 
@@ -21,7 +21,7 @@ Each phrase has a stable lowercase ID, a category ID, Thai display text, Myanmar
 
 ## Pronunciation note
 
-Pronunciation is an approximate reading aid written for Myanmar speakers, not a formal phonetic transcription. Thai tones and some consonants cannot be represented exactly this way. Device TTS is provided as another aid where an installed Thai voice is available.
+Pronunciation is an approximate reading aid written for Myanmar speakers, not a formal phonetic transcription. A single slash separates the **complete male and female readings** in the same order as `thaiMale` and `thaiFemale`. Spaces separate spoken syllables or short word groups. The polite question particle `คะ` is shown as `ခ` (short kha); statement `ค่ะ` as `ခါ့` (falling kha); `ครับ` as `ခရပ်`. The distinct Thai words `ไม่` (negation) and `ไหม` (question) are approximated as `မိုင့်` and `မိုင်`. `งาน` (work, /ŋaːn/) and `เงิน` (money, /ŋɤn/) use `ငါန်` and `ငွန်း` respectively. These distinctions are teaching cues, not exact phonetics. Thai has five lexical tones and vowels/consonants that Myanmar script alone cannot reliably encode. Learners should listen to a Thai speaker or device TTS where available. Do not use this reading aid as the only source for a critical conversation.
 
 ## High-risk phrases
 
