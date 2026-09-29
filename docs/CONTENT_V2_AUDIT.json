@@ -180,6 +180,12 @@
       "family": "Department of Consular Affairs, Ministry of Foreign Affairs, Thailand",
       "url": "https://consular.mfa.go.th/th/album-video/%E0%B8%9E%E0%B8%B2%E0%B8%AA%E0%B8%9B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%95%E0%B8%AB%E0%B8%B2%E0%B8%A2-%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1-%E0%B8%82%E0%B8%AD%E0%B8%97%E0%B8%B3%E0%B9%80%E0%B8%A5%E0%B9%88%E0%B8%A1%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88%E0%B9%84%E0%B8%94%E0%B9%89?cate=5f478ad8e3439863bd2eff39",
       "scope": "The official page dated 17 Apr 2567 says a Thai passport can be replaced after loss without reporting to police. Contextual caveat only; it is not Myanmar-passport/foreign-worker procedure and does not validate the learner sentence."
+    },
+    {
+      "id": "moph_four_language_health_manual",
+      "family": "Thailand Ministry of Public Health, Bureau of Health Administration (hosted by Medical Council of Thailand)",
+      "url": "https://tmc.or.th/news_file/ManualUsingFourLanguages.pdf",
+      "scope": "A 2014 Thai-English-Myanmar-Cambodian health-service manual. The accessible opening table supports selected common Burmese greetings, thanks, apology, and how-are-you meanings; the hello line is extracted in legacy Burmese encoding. It does not validate speaker-gender variants, complete corpus phrases, learner readings, or medical-section rows whose pages were not retrievable in this review."
     }
   ],
   "records": [
@@ -216,7 +222,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -254,7 +261,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -293,10 +301,11 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
-      "remaining_concern": "The same Thai expression can serve as apology or polite 'excuse me'; context determines which use is intended."
+      "remaining_concern": "The same Thai expression can serve as apology or polite 'excuse me'; context determines which use is intended. The MOPH phrase manual supports the apology sense only; it does not validate the Burmese `ခွင့်ပြုပါ` option for “excuse me” or its context."
     },
     {
       "id": "greet_no_problem",
@@ -12081,7 +12090,8 @@
         "nectec_tone_standard",
         "niu_thai_tone_chart",
         "niu_thai_language_profile",
-        "niu_spoken_thai_conversation"
+        "niu_spoken_thai_conversation",
+        "moph_four_language_health_manual"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
