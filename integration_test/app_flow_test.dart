@@ -7,6 +7,8 @@ import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
+import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
+import 'package:thai_for_myanmar/services/thai_playback_service.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +30,7 @@ void main() {
       ThaiForMyanmarApp(
         repository: repository,
         appState: state,
-        speechService: SpeechService(),
+        playbackService: _playbackService(),
       ),
     );
     await _pumpUi(tester);
@@ -73,4 +75,26 @@ void main() {
 
 Future<void> _pumpUi(WidgetTester tester) async {
   await tester.pump();
+}
+
+ThaiPlaybackService _playbackService() => ThaiPlaybackService(
+  speechService: SpeechService(),
+  catalog: ThaiAudioCatalog.empty(),
+  assetPlayer: _NoopAssetPlayer(),
+);
+
+class _NoopAssetPlayer implements ThaiAudioAssetPlayer {
+  @override
+  Future<void> play(
+    String assetPath, {
+    required void Function() onStarted,
+  }) async {
+    onStarted();
+  }
+
+  @override
+  Future<void> stop() async {}
+
+  @override
+  Future<void> dispose() async {}
 }

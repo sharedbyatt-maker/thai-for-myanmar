@@ -87,7 +87,8 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
                 : playing
                 ? 'အသံရပ်ရန်'
                 : widget.label;
-            final onPressed = () => unawaited(_toggle(politeStyle));
+            void onPressed() => unawaited(_toggle(politeStyle));
+
             if (widget.outlined) {
               return OutlinedButton.icon(
                 onPressed: onPressed,
