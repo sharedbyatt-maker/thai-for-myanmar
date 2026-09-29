@@ -345,14 +345,21 @@ class SpeechService {
   Future<T> _waitOrCancel<T>(
     Future<T> operation,
     _SpeechCancellation cancellation,
-  ) {
+  ) async {
     if (cancellation.isCancelled) {
-      return Future<T>.error(const _SpeechCancelled());
+      throw const _SpeechCancelled();
     }
-    return Future.any<T>([
-      operation,
-      cancellation.future.then<T>((_) => throw const _SpeechCancelled()),
-    ]);
+    try {
+      final result = await Future.any<T>([
+        operation,
+        cancellation.future.then<T>((_) => throw const _SpeechCancelled()),
+      ]);
+      if (cancellation.isCancelled) throw const _SpeechCancelled();
+      return result;
+    } catch (error, stackTrace) {
+      if (cancellation.isCancelled) throw const _SpeechCancelled();
+      Error.throwWithStackTrace(error, stackTrace);
+    }
   }
 }
 
