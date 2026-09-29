@@ -70,18 +70,18 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
               widget.phrase.id,
               politeStyle,
             );
-            final loading = active &&
+            final loading =
+                active &&
                 widget.playbackService.state == ThaiPlaybackState.loading;
-            final playing = active &&
+            final playing =
+                active &&
                 widget.playbackService.state == ThaiPlaybackState.playing;
             final icon = loading
                 ? const SizedBox.square(
                     dimension: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : Icon(
-                    playing ? Icons.stop_rounded : Icons.volume_up_rounded,
-                  );
+                : Icon(playing ? Icons.stop_rounded : Icons.volume_up_rounded);
             final label = loading
                 ? 'ဖွင့်နေသည်'
                 : playing

@@ -35,23 +35,7 @@ jobs:
         run: python3 tool/validate_audio_manifest.py
 
       - name: Verify Dart formatting
-        id: dart_format_check
         run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
-
-      - name: Create formatter patch for this CI attempt
-        if: failure() && steps.dart_format_check.outcome == 'failure'
-        run: |
-          dart format lib test integration_test test_driver
-          git diff --binary > formatter.patch
-
-      - name: Upload formatter patch for this CI attempt
-        if: failure() && steps.dart_format_check.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dart-format-patch
-          path: formatter.patch
-          if-no-files-found: error
-          retention-days: 1
 
       - name: Analyze Dart source
         run: flutter analyze --fatal-infos

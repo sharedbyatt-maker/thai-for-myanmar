@@ -21,68 +21,83 @@ void main() {
   );
 
   group('ThaiPlaybackService', () {
-    test('plays exact male and female assets before asking system TTS', () async {
-      final player = FakeThaiAudioAssetPlayer();
-      final speechEngine = FakeSpeechEngine();
-      final service = _service(
-        player,
-        speechEngine,
-        _catalog(
-          phrase,
-          maleAsset: 'audio/thai/greet_hello_male.mp3',
-          femaleAsset: 'audio/thai/greet_hello_female.mp3',
-        ),
-      );
+    test(
+      'plays exact male and female assets before asking system TTS',
+      () async {
+        final player = FakeThaiAudioAssetPlayer();
+        final speechEngine = FakeSpeechEngine();
+        final service = _service(
+          player,
+          speechEngine,
+          _catalog(
+            phrase,
+            maleAsset: 'audio/thai/greet_hello_male.mp3',
+            femaleAsset: 'audio/thai/greet_hello_female.mp3',
+          ),
+        );
 
-      expect(
-        await service.playThai(phrase, 'male'),
-        ThaiPlaybackResult.audioAsset,
-      );
-      expect(
-        await service.playThai(phrase, 'female'),
-        ThaiPlaybackResult.audioAsset,
-      );
-      expect(player.paths, [
-        'audio/thai/greet_hello_male.mp3',
-        'audio/thai/greet_hello_female.mp3',
-      ]);
-      expect(speechEngine.spokenTexts, isEmpty);
-    });
+        expect(
+          await service.playThai(phrase, 'male'),
+          ThaiPlaybackResult.audioAsset,
+        );
+        expect(
+          await service.playThai(phrase, 'female'),
+          ThaiPlaybackResult.audioAsset,
+        );
+        expect(player.paths, [
+          'audio/thai/greet_hello_male.mp3',
+          'audio/thai/greet_hello_female.mp3',
+        ]);
+        expect(speechEngine.spokenTexts, isEmpty);
+      },
+    );
 
-    test('missing mapping falls back to the selected Thai system voice', () async {
-      final player = FakeThaiAudioAssetPlayer();
-      final speechEngine = FakeSpeechEngine();
-      final service = _service(
-        player,
-        speechEngine,
-        ThaiAudioCatalog.empty(),
-      );
+    test(
+      'missing mapping falls back to the selected Thai system voice',
+      () async {
+        final player = FakeThaiAudioAssetPlayer();
+        final speechEngine = FakeSpeechEngine();
+        final service = _service(
+          player,
+          speechEngine,
+          ThaiAudioCatalog.empty(),
+        );
 
-      expect(await service.playThai(phrase, 'female'), ThaiPlaybackResult.spoken);
-      expect(player.paths, isEmpty);
-      expect(speechEngine.spokenTexts, ['สวัสดีค่ะ']);
-    });
+        expect(
+          await service.playThai(phrase, 'female'),
+          ThaiPlaybackResult.spoken,
+        );
+        expect(player.paths, isEmpty);
+        expect(speechEngine.spokenTexts, ['สวัสดีค่ะ']);
+      },
+    );
 
-    test('stale text is skipped rather than playing a mismatched asset', () async {
-      final player = FakeThaiAudioAssetPlayer();
-      final speechEngine = FakeSpeechEngine();
-      final catalog = ThaiAudioCatalog.fromJson({
-        'schemaVersion': 1,
-        'entries': [
-          {
-            'phraseId': phrase.id,
-            'form': 'male',
-            'thai': 'สวัสดีครับครับ',
-            'asset': 'audio/thai/greet_hello_stale.mp3',
-          },
-        ],
-      });
-      final service = _service(player, speechEngine, catalog);
+    test(
+      'stale text is skipped rather than playing a mismatched asset',
+      () async {
+        final player = FakeThaiAudioAssetPlayer();
+        final speechEngine = FakeSpeechEngine();
+        final catalog = ThaiAudioCatalog.fromJson({
+          'schemaVersion': 1,
+          'entries': [
+            {
+              'phraseId': phrase.id,
+              'form': 'male',
+              'thai': 'สวัสดีครับครับ',
+              'asset': 'audio/thai/greet_hello_stale.mp3',
+            },
+          ],
+        });
+        final service = _service(player, speechEngine, catalog);
 
-      expect(await service.playThai(phrase, 'male'), ThaiPlaybackResult.spoken);
-      expect(player.paths, isEmpty);
-      expect(speechEngine.spokenTexts, ['สวัสดีครับ']);
-    });
+        expect(
+          await service.playThai(phrase, 'male'),
+          ThaiPlaybackResult.spoken,
+        );
+        expect(player.paths, isEmpty);
+        expect(speechEngine.spokenTexts, ['สวัสดีครับ']);
+      },
+    );
 
     test('playback errors use the safe Thai TTS fallback', () async {
       final player = FakeThaiAudioAssetPlayer(fail: true);
@@ -100,15 +115,13 @@ void main() {
 
     test('never uses an unrelated system voice when no audio exists', () async {
       final player = FakeThaiAudioAssetPlayer();
-      final speechEngine = FakeSpeechEngine(voices: const [
-        {'name': 'English voice', 'locale': 'en-US'},
-        {'name': 'Spanish voice', 'locale': 'es-ES'},
-      ]);
-      final service = _service(
-        player,
-        speechEngine,
-        ThaiAudioCatalog.empty(),
+      final speechEngine = FakeSpeechEngine(
+        voices: const [
+          {'name': 'English voice', 'locale': 'en-US'},
+          {'name': 'Spanish voice', 'locale': 'es-ES'},
+        ],
       );
+      final service = _service(player, speechEngine, ThaiAudioCatalog.empty());
 
       expect(
         await service.playThai(phrase, 'female'),
@@ -219,7 +232,10 @@ class FakeThaiAudioAssetPlayer implements ThaiAudioAssetPlayer {
   int stopCalls = 0;
 
   @override
-  Future<void> play(String assetPath, {required void Function() onStarted}) async {
+  Future<void> play(
+    String assetPath, {
+    required void Function() onStarted,
+  }) async {
     paths.add(assetPath);
     final signal = Completer<void>();
     _playSignals.add(signal);

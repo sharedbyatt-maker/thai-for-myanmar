@@ -95,7 +95,10 @@ class WaitingThaiAssetPlayer implements ThaiAudioAssetPlayer {
   void releaseInitialStop() => _initialStop.complete();
 
   @override
-  Future<void> play(String assetPath, {required void Function() onStarted}) async {
+  Future<void> play(
+    String assetPath, {
+    required void Function() onStarted,
+  }) async {
     _playback = Completer<void>();
     onStarted();
     await _playback!.future;

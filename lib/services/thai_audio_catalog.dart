@@ -38,13 +38,17 @@ class ThaiAudioCatalog {
     }
     final rawEntries = json['entries'];
     if (rawEntries is! List) {
-      throw const FormatException('Thai audio manifest entries must be a list.');
+      throw const FormatException(
+        'Thai audio manifest entries must be a list.',
+      );
     }
 
     final entries = <(String, ThaiAudioForm), ThaiAudioEntry>{};
     for (final raw in rawEntries) {
       if (raw is! Map) {
-        throw const FormatException('Thai audio manifest entry must be an object.');
+        throw const FormatException(
+          'Thai audio manifest entry must be an object.',
+        );
       }
       final value = Map<String, dynamic>.from(raw);
       final phraseId = value['phraseId'];
@@ -58,11 +62,15 @@ class ThaiAudioCatalog {
         throw const FormatException('Thai audio text must be non-empty.');
       }
       if (assetPath is! String || !_isSafeMp3Path(assetPath)) {
-        throw const FormatException('Thai audio asset must be a bundled MP3 path.');
+        throw const FormatException(
+          'Thai audio asset must be a bundled MP3 path.',
+        );
       }
       final form = ThaiAudioForm.values.where((item) => item.name == rawForm);
       if (form.isEmpty) {
-        throw const FormatException('Thai audio form must be shared, male, or female.');
+        throw const FormatException(
+          'Thai audio form must be shared, male, or female.',
+        );
       }
       final entry = ThaiAudioEntry(
         phraseId: phraseId,

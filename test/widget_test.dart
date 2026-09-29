@@ -100,7 +100,10 @@ ThaiPlaybackService _playbackService() => ThaiPlaybackService(
 
 class _NoopAssetPlayer implements ThaiAudioAssetPlayer {
   @override
-  Future<void> play(String assetPath, {required void Function() onStarted}) async {
+  Future<void> play(
+    String assetPath, {
+    required void Function() onStarted,
+  }) async {
     onStarted();
   }
 

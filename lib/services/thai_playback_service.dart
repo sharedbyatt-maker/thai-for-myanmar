@@ -151,7 +151,10 @@ class AudioPlayersThaiAssetPlayer implements ThaiAudioAssetPlayer {
   _PendingAssetPlayback? _pending;
 
   @override
-  Future<void> play(String assetPath, {required void Function() onStarted}) async {
+  Future<void> play(
+    String assetPath, {
+    required void Function() onStarted,
+  }) async {
     await stop();
     final pending = _PendingAssetPlayback();
     _pending = pending;
@@ -236,7 +239,10 @@ class _PendingAssetPlayback {
   void throwIfFailed() {
     final playbackError = error;
     if (playbackError != null) {
-      Error.throwWithStackTrace(playbackError, stackTrace ?? StackTrace.current);
+      Error.throwWithStackTrace(
+        playbackError,
+        stackTrace ?? StackTrace.current,
+      );
     }
   }
 }

@@ -132,10 +132,7 @@ void main() {
 
       expect(() => ThaiAudioCatalog.fromJson(duplicate), throwsFormatException);
       expect(() => ThaiAudioCatalog.fromJson(remote), throwsFormatException);
-      expect(
-        () => ThaiAudioCatalog.fromJson(traversal),
-        throwsFormatException,
-      );
+      expect(() => ThaiAudioCatalog.fromJson(traversal), throwsFormatException);
     });
   });
 }
