@@ -26,7 +26,9 @@ class PhraseDetailScreen extends StatelessWidget {
     if (result == SpeechResult.unavailable && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('ဒီစက်မှာ ထိုင်းအသံဖတ်စနစ် မရနိုင်သေးပါ။'),
+          content: Text(
+            'ဒီစက်မှာ အသုံးပြုနိုင်တဲ့ ထိုင်းအသံမရှိပါ။ စကားစုကို ထိုင်းစကားပြောသူထံ ပြပေးပါ။',
+          ),
         ),
       );
     }
