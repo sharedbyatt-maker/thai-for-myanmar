@@ -31,6 +31,9 @@ jobs:
       - name: Validate content dataset
         run: python3 tool/validate_content.py
 
+      - name: Show Dart formatter output for TTS files
+        run: dart format --output=show lib/services/speech_service.dart test/speech_service_test.dart
+
       - name: Verify Dart formatting
         run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
 
