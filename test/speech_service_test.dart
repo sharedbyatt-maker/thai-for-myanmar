@@ -10,7 +10,6 @@ void main() {
       () async {
         final service = SpeechService(voiceLookupWindow: Duration.zero);
         expect(await service.speakThai('สวัสดี'), SpeechResult.unavailable);
-
       },
     );
 
@@ -30,7 +29,6 @@ void main() {
         expect(engine.languageRequests, isEmpty);
         expect(engine.selectedVoices, isEmpty);
         expect(engine.spokenTexts, isEmpty);
-
       },
     );
 
@@ -56,7 +54,6 @@ void main() {
         expect(engine.speechRates, [0.43]);
         expect(engine.awaitCompletionRequests, [false]);
         expect(engine.spokenTexts, ['สวัสดีค่ะ']);
-
       },
     );
 
@@ -71,7 +68,6 @@ void main() {
 
         expect(await _service(engine).speakThai('ครับ'), SpeechResult.spoken);
         expect(engine.selectedVoices.single['locale'], 'th');
-
       },
     );
 
@@ -106,7 +102,6 @@ void main() {
           SpeechResult.unavailable,
         );
         expect(engine.spokenTexts, isEmpty);
-
       },
     );
 
@@ -129,7 +124,6 @@ void main() {
           ).speakThai('สวัสดี'),
           SpeechResult.unavailable,
         );
-
       },
     );
 

@@ -119,7 +119,9 @@ class SpeechService {
           final localeOrder = _localeRank(aLocale).compareTo(
             _localeRank(bLocale),
           );
-          return localeOrder != 0 ? localeOrder : a['name']!.compareTo(b['name']!);
+          return localeOrder != 0
+              ? localeOrder
+              : a['name']!.compareTo(b['name']!);
         });
         return thaiVoices.first;
       }
