@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 
@@ -105,6 +107,25 @@ void main() {
       },
     );
 
+    test('times out a hung speech dispatch', () async {
+      final engine = FakeSpeechEngine(
+        voices: const [
+          {'name': 'Thai voice', 'locale': 'th-TH'},
+        ],
+        hangSpeakCall: true,
+        emitStart: false,
+        emitCompletion: false,
+      );
+
+      expect(
+        await _service(
+          engine,
+          speechTimeout: const Duration(milliseconds: 5),
+        ).speakThai('สวัสดี'),
+        SpeechResult.unavailable,
+      );
+    });
+
     test(
       'a null browser queue result is not success without speech callbacks',
       () async {
@@ -172,6 +193,7 @@ class FakeSpeechEngine implements SpeechEngine {
     this.emitStart = true,
     this.emitCompletion = true,
     this.emitError = false,
+    this.hangSpeakCall = false,
   });
 
   final dynamic voices;
@@ -181,6 +203,7 @@ class FakeSpeechEngine implements SpeechEngine {
   final bool emitStart;
   final bool emitCompletion;
   final bool emitError;
+  final bool hangSpeakCall;
 
   final languageRequests = <String>[];
   final selectedVoices = <Map<String, String>>[];
@@ -221,6 +244,7 @@ class FakeSpeechEngine implements SpeechEngine {
   @override
   Future<dynamic> speak(String text) async {
     spokenTexts.add(text);
+    if (hangSpeakCall) return Completer<dynamic>().future;
     if (emitStart) _startHandler?.call();
     if (emitError) {
       _errorHandler?.call(StateError('TTS error'));
