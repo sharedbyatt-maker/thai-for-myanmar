@@ -510,3 +510,26 @@ The high-risk column marks workplace, employment, health, emergency, police, and
 Summary: 500 records, 35 categories; 491 records changed. Field change counts: thai=14, thaiMale=11, thaiFemale=10, my=15, pronunciation=491, en=5.
 
 Unresolved review flags: `greet_sorry` combines apology and attention-getting; `health_allergy` does not identify the specific drug; `health_food_allergy` does not identify the food. In a real medical context the learner must identify the substance with a qualified interpreter or clinician. Thai tone fidelity and Myanmar learner comprehensibility require independent fluent Thai–Myanmar review.
+
+## Follow-up review (2026-09-29)
+
+A second AI-assisted, record-by-record check covered all 500 records, including Thai wording and politeness, English/Myanmar meaning alignment, learner readings, categories, and the high-risk workplace, health, emergency, police, and document groups. It is not independent bilingual certification.
+
+### Corrections in this pass
+
+- `restaurant_water_no_ice`: retained the ID and made the Thai request explicitly say “without ice”; aligned the Myanmar meaning, learner reading, English text, and search terms.
+- `health_allergy`: changed the Thai and translations to say “some medicines,” avoiding an implication that every medicine causes an allergy. The phrase still does not name the medicine.
+- `health_food_allergy`: aligned the English field to “some foods,” matching the deliberately nonspecific Thai `บางอย่าง` and Myanmar meaning.
+
+### Disposition of earlier flags
+
+- `greet_sorry` retains the useful generic `ขอโทษ` expression for apology or getting attention; its context-dependent use remains a limitation.
+- `health_allergy` remains generic and the existing note tells the learner to give the exact medicine and details to a health worker and confirm understanding.
+- `health_food_allergy` remains generic (“some foods”); it does not claim a specific ingredient. The app's high-risk caution remains in place.
+- These cards help communicate only; they are not medical, legal, immigration, or employment advice.
+
+### Reference checks and limits
+
+Thai lexical spot checks used Longdo entries drawing on NECTEC Lexitron for `น้ำเปล่า`, `น้ำแข็ง`, `ฉุกเฉิน`, `งาน`, `เงิน`, and `แพ้ยา`, plus the Rural Doctor Foundation discussion of how colloquial `แพ้ยา` can be used broadly and needs clarification. Links: [น้ำเปล่า](https://dict.longdo.com/search/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B9%80%E0%B8%9B%E0%B8%A5%E0%B9%88%E0%B8%B2), [น้ำแข็ง](https://dict.longdo.com/search/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B9%81%E0%B8%82%E0%B9%87%E0%B8%87), [ฉุกเฉิน](https://dict.longdo.com/search/%E0%B8%89%E0%B8%B8%E0%B8%81%E0%B9%80%E0%B8%89%E0%B8%B4%E0%B8%99), [งาน](https://dict.longdo.com/search/%E0%B8%87%E0%B8%B2%E0%B8%99), [เงิน](https://dict.longdo.com/search/%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99), [แพ้ยา](https://dict.longdo.com/search/%E0%B9%81%E0%B8%9E%E0%B9%89%E0%B8%A2%E0%B8%B2), [Rural Doctor Foundation article](https://www.doctor.or.th/article/detail/4362).
+
+These references check Thai word meanings and selected ambiguities; they do not validate every sentence's naturalness or certify the Myanmar readings. Thai tone and vowel detail remain approximate in Myanmar script. No independent fluent Thai–Myanmar reviewer has signed off on all 500 records.
