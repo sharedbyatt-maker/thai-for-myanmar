@@ -3,36 +3,22 @@ import 'package:flutter/material.dart';
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
+import '../widgets/thai_playback_button.dart';
 
 class PhraseDetailScreen extends StatelessWidget {
   const PhraseDetailScreen({
     required this.phrase,
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     super.key,
   });
 
   final Phrase phrase;
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
-
-  Future<void> _speak(BuildContext context) async {
-    final result = await speechService.speakThai(
-      phrase.thaiFor(appState.politeStyle),
-    );
-    if (result == SpeechResult.unavailable && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'ဒီစက်မှာ အသုံးပြုနိုင်တဲ့ ထိုင်းအသံမရှိပါ။ စကားစုကို ထိုင်းစကားပြောသူထံ ပြပေးပါ။',
-          ),
-        ),
-      );
-    }
-  }
+  final ThaiPlaybackService playbackService;
 
   void _showToSpeaker(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -74,10 +60,11 @@ class PhraseDetailScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
-                FilledButton.icon(
-                  onPressed: () => _speak(context),
-                  icon: const Icon(Icons.volume_up_rounded),
-                  label: const Text('ထိုင်းအသံ နားထောင်ရန်'),
+                ThaiPlaybackButton(
+                  phrase: phrase,
+                  appState: appState,
+                  playbackService: playbackService,
+                  label: 'ထိုင်းအသံ နားထောင်ရန်',
                 ),
                 const SizedBox(height: 16),
               ],
@@ -191,10 +178,11 @@ class PhraseDetailScreen extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 20),
-          FilledButton.icon(
-            onPressed: () => _speak(context),
-            icon: const Icon(Icons.volume_up_rounded),
-            label: const Text('ထိုင်းအသံ နားထောင်ရန်'),
+          ThaiPlaybackButton(
+            phrase: phrase,
+            appState: appState,
+            playbackService: playbackService,
+            label: 'ထိုင်းအသံ နားထောင်ရန်',
           ),
           const SizedBox(height: 10),
           OutlinedButton.icon(

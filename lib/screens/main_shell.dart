@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
-import '../services/speech_service.dart';
+import '../services/thai_playback_service.dart';
 import 'favorites_screen.dart';
 import 'home_screen.dart';
 import 'learn_screen.dart';
@@ -17,13 +19,13 @@ class MainShell extends StatefulWidget {
   const MainShell({
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     super.key,
   });
 
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -42,6 +44,7 @@ class _MainShellState extends State<MainShell> {
   ];
 
   void _selectTab(int index) {
+    if (index != _selectedIndex) unawaited(widget.playbackService.stop());
     setState(() {
       _selectedIndex = index;
       _visitedTabs.add(index);
@@ -54,43 +57,47 @@ class _MainShellState extends State<MainShell> {
     );
     final phrase = matching.isEmpty ? null : matching.first;
     if (phrase == null) return;
+    unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => PhraseDetailScreen(
           phrase: phrase,
           repository: widget.repository,
           appState: widget.appState,
-          speechService: widget.speechService,
+          playbackService: widget.playbackService,
         ),
       ),
     );
   }
 
   void _openSearch() {
+    unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => SearchScreen(
           repository: widget.repository,
           appState: widget.appState,
-          speechService: widget.speechService,
+          playbackService: widget.playbackService,
         ),
       ),
     );
   }
 
   void _openFavorites() {
+    unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => FavoritesScreen(
           repository: widget.repository,
           appState: widget.appState,
-          speechService: widget.speechService,
+          playbackService: widget.playbackService,
         ),
       ),
     );
   }
 
   void _openSettings() {
+    unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => SettingsScreen(appState: widget.appState),
@@ -104,24 +111,24 @@ class _MainShellState extends State<MainShell> {
       HomeScreen(
         repository: widget.repository,
         appState: widget.appState,
-        speechService: widget.speechService,
+        playbackService: widget.playbackService,
         onSelectTab: _selectTab,
         onOpenPhrase: _openPhrase,
       ),
       LearnScreen(
         repository: widget.repository,
         appState: widget.appState,
-        speechService: widget.speechService,
+        playbackService: widget.playbackService,
       ),
       SituationsScreen(
         repository: widget.repository,
         appState: widget.appState,
-        speechService: widget.speechService,
+        playbackService: widget.playbackService,
       ),
       QuickSpeakScreen(
         repository: widget.repository,
         appState: widget.appState,
-        speechService: widget.speechService,
+        playbackService: widget.playbackService,
       ),
       QuizScreen(repository: widget.repository, appState: widget.appState),
     ];

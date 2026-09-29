@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'data/phrase_repository.dart';
 import 'screens/main_shell.dart';
 import 'services/app_state.dart';
-import 'services/speech_service.dart';
+import 'services/thai_playback_service.dart';
 import 'theme/app_theme.dart';
 
 class ThaiForMyanmarApp extends StatelessWidget {
   const ThaiForMyanmarApp({
     required this.repository,
     required this.appState,
-    required this.speechService,
+    required this.playbackService,
     super.key,
   });
 
   final PhraseRepository repository;
   final AppState appState;
-  final SpeechService speechService;
+  final ThaiPlaybackService playbackService;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class ThaiForMyanmarApp extends StatelessWidget {
           home: MainShell(
             repository: repository,
             appState: appState,
-            speechService: speechService,
+            playbackService: playbackService,
           ),
         );
       },

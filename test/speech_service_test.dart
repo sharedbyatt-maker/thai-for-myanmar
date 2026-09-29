@@ -59,6 +59,23 @@ void main() {
       },
     );
 
+    test('reports the start of verified Thai speech to playback UI', () async {
+      final engine = FakeSpeechEngine(
+        voices: const [
+          {'name': 'Thai voice', 'locale': 'th-TH'},
+        ],
+      );
+      var starts = 0;
+
+      final result = await _service(engine).speakThai(
+        'สวัสดีค่ะ',
+        onStarted: () => starts++,
+      );
+
+      expect(result, SpeechResult.spoken);
+      expect(starts, 1);
+    });
+
     test(
       'accepts a Thai-only locale when the platform omits the region',
       () async {
