@@ -2,7 +2,7 @@
 
 Baseline: `1b0205de408048f792815d26dd19199b9f40a70f`. Each of the 500 IDs below was inspected in category order against the Thai text, Myanmar meaning, English context, and the Myanmar reading aid. This is an AI-assisted text review and revision ledger, **not a fluent bilingual human sign-off**. The reading aid remains approximate, especially for Thai tones. A bilingual reviewer must check every row before broad release.
 
-The high-risk column marks workplace, employment, health, emergency, police, and document categories for a second focused pass. A field absent from “Changed” retained its original spelling after this pass, not a certification of correctness.
+The table records fields changed in the first correction pass compared with the baseline. The high-risk column marks workplace, employment, health, emergency, police, and document categories for follow-up review; corrections from the second pass are listed after the table. A field absent from “Changed” was unchanged in the first pass, not a certification of correctness.
 
 | # | ID | Category | Changed | High risk |
 |---:|---|---|---|---|
