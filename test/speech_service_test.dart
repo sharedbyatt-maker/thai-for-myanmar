@@ -144,10 +144,7 @@ void main() {
     test('empty text does not invoke the speech engine', () async {
       final engine = FakeSpeechEngine();
 
-      expect(
-        await _service(engine).speakThai('  '),
-        SpeechResult.unavailable,
-      );
+      expect(await _service(engine).speakThai('  '), SpeechResult.unavailable);
       expect(engine.spokenTexts, isEmpty);
     });
   });
