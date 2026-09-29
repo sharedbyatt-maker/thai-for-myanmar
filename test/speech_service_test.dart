@@ -5,62 +5,75 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('SpeechService', () {
-    test('missing platform TTS plugin returns a safe unavailable result', () async {
-      expect(
-        await SpeechService(voiceLookupWindow: Duration.zero)
-            .speakThai('สวัสดี'),
-        SpeechResult.unavailable,
-      );
-    });
+    test(
+      'missing platform TTS plugin returns a safe unavailable result',
+      () async {
+        final service = SpeechService(voiceLookupWindow: Duration.zero);
+        expect(await service.speakThai('สวัสดี'), SpeechResult.unavailable);
 
-    test('rejects unrelated voices instead of using a default fallback', () async {
-      final engine = FakeSpeechEngine(
-        voices: const [
-          {'name': 'English voice', 'locale': 'en-US'},
-          {'name': 'Spanish voice', 'locale': 'es-ES'},
-        ],
-      );
+      },
+    );
 
-      final result = await _service(engine).speakThai('สวัสดี');
+    test(
+      'rejects unrelated voices instead of using a default fallback',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {'name': 'English voice', 'locale': 'en-US'},
+            {'name': 'Spanish voice', 'locale': 'es-ES'},
+          ],
+        );
 
-      expect(result, SpeechResult.unavailable);
-      expect(engine.languageRequests, isEmpty);
-      expect(engine.selectedVoices, isEmpty);
-      expect(engine.spokenTexts, isEmpty);
-    });
+        final result = await _service(engine).speakThai('สวัสดี');
 
-    test('selects a Thai voice explicitly and reports only completed speech', () async {
-      final engine = FakeSpeechEngine(
-        voices: const [
-          {'name': 'Thai generic', 'locale': 'th'},
+        expect(result, SpeechResult.unavailable);
+        expect(engine.languageRequests, isEmpty);
+        expect(engine.selectedVoices, isEmpty);
+        expect(engine.spokenTexts, isEmpty);
+
+      },
+    );
+
+    test(
+      'selects a Thai voice explicitly and reports only completed speech',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {'name': 'Thai generic', 'locale': 'th'},
+            {'name': 'Thai Thailand', 'locale': 'th-TH'},
+            {'name': 'Spanish voice', 'locale': 'es-ES'},
+          ],
+          voiceResult: null,
+        );
+
+        final result = await _service(engine).speakThai('สวัสดีค่ะ');
+
+        expect(result, SpeechResult.spoken);
+        expect(engine.languageRequests, ['th-TH']);
+        expect(engine.selectedVoices, [
           {'name': 'Thai Thailand', 'locale': 'th-TH'},
-          {'name': 'Spanish voice', 'locale': 'es-ES'},
-        ],
-        voiceResult: null,
-      );
+        ]);
+        expect(engine.speechRates, [0.43]);
+        expect(engine.awaitCompletionRequests, [false]);
+        expect(engine.spokenTexts, ['สวัสดีค่ะ']);
 
-      final result = await _service(engine).speakThai('สวัสดีค่ะ');
+      },
+    );
 
-      expect(result, SpeechResult.spoken);
-      expect(engine.languageRequests, ['th-TH']);
-      expect(engine.selectedVoices, [
-        {'name': 'Thai Thailand', 'locale': 'th-TH'},
-      ]);
-      expect(engine.speechRates, [0.43]);
-      expect(engine.awaitCompletionRequests, [false]);
-      expect(engine.spokenTexts, ['สวัสดีค่ะ']);
-    });
+    test(
+      'accepts a Thai-only locale when the platform omits the region',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {'name': 'Thai voice', 'locale': 'th'},
+          ],
+        );
 
-    test('accepts a Thai-only locale when the platform omits the region', () async {
-      final engine = FakeSpeechEngine(
-        voices: const [
-          {'name': 'Thai voice', 'locale': 'th'},
-        ],
-      );
+        expect(await _service(engine).speakThai('ครับ'), SpeechResult.spoken);
+        expect(engine.selectedVoices.single['locale'], 'th');
 
-      expect(await _service(engine).speakThai('ครับ'), SpeechResult.spoken);
-      expect(engine.selectedVoices.single['locale'], 'th');
-    });
+      },
+    );
 
     test('does not speak when setLanguage reports failure', () async {
       final engine = FakeSpeechEngine(
@@ -78,39 +91,47 @@ void main() {
       expect(engine.spokenTexts, isEmpty);
     });
 
-    test('does not speak when the platform rejects explicit voice selection', () async {
-      final engine = FakeSpeechEngine(
-        voices: const [
-          {'name': 'Thai voice', 'locale': 'th-TH'},
-        ],
-        voiceResult: 0,
-      );
+    test(
+      'does not speak when the platform rejects explicit voice selection',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {'name': 'Thai voice', 'locale': 'th-TH'},
+          ],
+          voiceResult: 0,
+        );
 
-      expect(
-        await _service(engine).speakThai('สวัสดี'),
-        SpeechResult.unavailable,
-      );
-      expect(engine.spokenTexts, isEmpty);
-    });
+        expect(
+          await _service(engine).speakThai('สวัสดี'),
+          SpeechResult.unavailable,
+        );
+        expect(engine.spokenTexts, isEmpty);
 
-    test('a null browser queue result is not success without speech callbacks', () async {
-      final engine = FakeSpeechEngine(
-        voices: const [
-          {'name': 'Thai voice', 'locale': 'th-TH'},
-        ],
-        speakResult: null,
-        emitStart: false,
-        emitCompletion: false,
-      );
+      },
+    );
 
-      expect(
-        await _service(
-          engine,
-          speechTimeout: const Duration(milliseconds: 5),
-        ).speakThai('สวัสดี'),
-        SpeechResult.unavailable,
-      );
-    });
+    test(
+      'a null browser queue result is not success without speech callbacks',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {'name': 'Thai voice', 'locale': 'th-TH'},
+          ],
+          speakResult: null,
+          emitStart: false,
+          emitCompletion: false,
+        );
+
+        expect(
+          await _service(
+            engine,
+            speechTimeout: const Duration(milliseconds: 5),
+          ).speakThai('สวัสดี'),
+          SpeechResult.unavailable,
+        );
+
+      },
+    );
 
     test('speech engine errors return unavailable', () async {
       final engine = FakeSpeechEngine(
