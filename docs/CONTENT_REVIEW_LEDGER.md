@@ -552,3 +552,10 @@ The Northern Illinois University SEASite beginner Burmese vocabulary list explic
 
 This pass changed seven `my` fields. Thai, English, and pronunciation fields were not changed. Four of the seven records carry the existing `high-risk` tag. The source checks remain lexical/phonological spot checks and do not externally validate all 500 Thai sentences, Myanmar translations, or readings. No independent fluent Thai–Myanmar reviewer has signed off on the corpus.
 
+## Additional source-backed follow-up: Thai reading consistency (2026-09-29)
+
+A corpus-wide consistency check applied the existing reading conventions in [CONTENT_GUIDE.md](CONTENT_GUIDE.md): ไม่ is rendered မိုင့်, and the question particle ไหม is rendered မိုင်. Among the 500 records, 43 contain ไม่, 189 use the question particle ไหม (excluding the separate word ไหม้, “burn”), and 151 contain ได้. The audit found three readings that rendered ไม่ as မိုင် (greet_no_problem, street_no_chili, and street_sauce_not_spicy) and one reading that omitted ได้ไหม (pharmacy_expiry_date). The four Myanmar-script readings now follow the project convention and include the missing syllables.
+
+The Longdo entry, including its Royal Institute dictionary section, distinguishes question-particle ไหม from ไหม้ (“burn”): [Longdo ไหม / ไหม้](https://dict.longdo.com/search/%E0%B9%84%E0%B8%AB%E0%B8%A1). The NECTEC Thai language standard describes Thai's five tones and explains that tone is determined by more than tone marks alone, including initial consonant and syllable ending: [NECTEC Thai Language standard](https://www.nectec.or.th/it-standards/thaistd.pdf). These references support lexical distinction and the caution about tone representation; the four changes are project-convention consistency and a completeness repair, not evidence that every Myanmar-script reading is phonetically exact or human-verified.
+
+This pass changed four pronunciation fields. No Thai, Myanmar meaning, or English fields changed in this pass. The review remains provisional; no independent fluent Thai–Myanmar reviewer has verified every reading or all 500 complete records.
