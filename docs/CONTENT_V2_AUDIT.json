@@ -126,6 +126,12 @@
       "family": "Northern Illinois University SEASite Burmese learning resource",
       "url": "https://seasite.niu.edu/Burmese/Beginning/Blesson_1/nwords.htm",
       "scope": "Distinguishes first-person pronouns ကျွန်တော် and ကျွန်မ; does not verify complete Burmese sentence naturalness."
+    },
+    {
+      "id": "ministry_labour_terminology",
+      "family": "Ministry of Labour, Thailand",
+      "url": "https://www.mol.go.th/employee/%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B8%95%E0%B8%B2%E0%B8%A1%E0%B8%81%E0%B8%8E%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99",
+      "scope": "Official Thai employment/overtime terminology (ค่าจ้าง, การทำงานล่วงเวลา, ค่าล่วงเวลา, วันหยุด); lexical/context check only, not advice or confirmation of a learner phrase."
     }
   ],
   "records": [
@@ -2626,7 +2632,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -2663,7 +2670,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -2700,7 +2708,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -2739,7 +2748,8 @@
         "longdo_question_particle",
         "content_guide",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -2775,7 +2785,8 @@
       },
       "source_checks": [
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -4272,7 +4283,8 @@
       },
       "source_checks": [
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -10478,7 +10490,8 @@
         "longdo_no",
         "content_guide",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -10595,7 +10608,8 @@
         "content_guide",
         "longdo_get",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -10632,7 +10646,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -10965,7 +10980,8 @@
       },
       "source_checks": [
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -12498,7 +12514,8 @@
         "longdo_question_particle",
         "content_guide",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18033,7 +18050,8 @@
         "longdo_question_particle",
         "content_guide",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18151,7 +18169,8 @@
         "longdo_question_particle",
         "content_guide",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18299,7 +18318,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18336,7 +18356,8 @@
       "source_checks": [
         "longdo_money",
         "nectec_tone_standard",
-        "niu_thai_tone_chart"
+        "niu_thai_tone_chart",
+        "ministry_labour_terminology"
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
@@ -18787,6 +18808,30 @@
       ],
       "confidence": "MEDIUM",
       "remaining_concern": null
+    }
+  ],
+  "source_corpus_snapshot_sha": "b5108f5426cbb6dc26346c8a88014f5919d80bdc",
+  "review_status": "PROVISIONAL",
+  "corpus_wide_checks": [
+    {
+      "name": "Full record review",
+      "scope": "All 500 records received an AI-assisted field-by-field review; all 191 high-risk records also received a focused pass. This is not bilingual human certification."
+    },
+    {
+      "name": "Myanmar speaker pronouns",
+      "scope": "Seven Myanmar meaning fields aligned to the Thai male/female first-person variants; NIU Burmese vocabulary source checks the pronoun distinction."
+    },
+    {
+      "name": "Thai pronunciation consistency",
+      "scope": "Checked 43 rows containing ไม่, 189 with interrogative ไหม, and 151 with ได้. Corrected three convention mismatches for ไม่ and one omitted ได้ไหม reading."
+    },
+    {
+      "name": "Common lexical source checks",
+      "scope": "Longdo/NECTEC Lexitron entries checked for selected recurring words; source checks attach to matching records and cover the word/component only."
+    },
+    {
+      "name": "High-risk terminology",
+      "scope": "Ministry of Labour source checked for employment/overtime terminology; health sources checked for allergy wording limits. These references do not provide medical, legal, immigration, or employment advice."
     }
   ]
 }
