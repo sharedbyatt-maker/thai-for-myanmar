@@ -234,8 +234,9 @@ class SpeechService {
           thaiVoices.sort((a, b) {
             final aLocale = _normalizeLocale(a['locale']!);
             final bLocale = _normalizeLocale(b['locale']!);
-            final localeOrder = _localeRank(aLocale)
-                .compareTo(_localeRank(bLocale));
+            final localeOrder = _localeRank(
+              aLocale,
+            ).compareTo(_localeRank(bLocale));
             return localeOrder != 0
                 ? localeOrder
                 : a['name']!.compareTo(b['name']!);

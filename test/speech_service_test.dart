@@ -67,8 +67,9 @@ void main() {
       );
       var starts = 0;
 
-      final result = await _service(engine)
-          .speakThai('สวัสดีค่ะ', onStarted: () => starts++);
+      final result = await _service(
+        engine,
+      ).speakThai('สวัสดีค่ะ', onStarted: () => starts++);
 
       expect(result, SpeechResult.spoken);
       expect(starts, 1);
