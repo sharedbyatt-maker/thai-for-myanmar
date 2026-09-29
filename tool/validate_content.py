@@ -66,6 +66,26 @@ HIGH_RISK_CATEGORIES = {
 REQUIRED_PHRASE_FIELDS = ("id", "categoryId", "thai", "my", "pronunciation", "en")
 OPTIONAL_PHRASE_FIELDS = ("thaiMale", "thaiFemale", "note")
 
+# Guard the exact semantic distinctions found during the second-pass review.
+# These narrow checks prevent known omissions; they do not certify language quality.
+REVIEWED_CONTENT_INVARIANTS = {
+    "restaurant_water_no_ice": {
+        "thai": "ไม่ใส่น้ำแข็ง",
+        "my": "ရေခဲမပါ",
+        "en": "without ice",
+    },
+    "health_allergy": {
+        "thai": "บางชนิด",
+        "my": "ဆေးတချို့",
+        "en": "some medicines",
+    },
+    "health_food_allergy": {
+        "thai": "บางอย่าง",
+        "my": "အစားအစာတချို့",
+        "en": "some foods",
+    },
+}
+
 
 def normalized(value: str) -> str:
     value = unicodedata.normalize("NFC", value)
@@ -133,6 +153,21 @@ def main() -> int:
     if missing_categories:
         fail(f"required categories missing: {', '.join(sorted(missing_categories))}")
         errors += 1
+
+    phrase_by_id = {
+        phrase.get("id"): phrase for phrase in phrases if isinstance(phrase, dict)
+    }
+    for phrase_id, expected_fields in REVIEWED_CONTENT_INVARIANTS.items():
+        phrase = phrase_by_id.get(phrase_id)
+        if phrase is None:
+            fail(f"reviewed content record is missing: {phrase_id}")
+            errors += 1
+            continue
+        for field, marker in expected_fields.items():
+            value = phrase.get(field)
+            if not isinstance(value, str) or normalized(marker) not in normalized(value):
+                fail(f"{phrase_id} {field} must preserve {marker!r}")
+                errors += 1
 
     seen_ids = set()
     used_categories = set()
