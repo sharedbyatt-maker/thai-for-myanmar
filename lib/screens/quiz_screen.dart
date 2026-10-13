@@ -1,203 +1,188 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
-import '../models/phrase.dart';
-import '../quiz/quiz_logic.dart';
+import '../learning/learning_progress.dart';
+import '../learning/sentence_chunks.dart';
+import '../learning/study_catalog.dart';
 import '../services/app_state.dart';
+import '../services/thai_playback_service.dart';
+import 'study_session_screen.dart';
+
+String modeLabel(LearningMode mode) => switch (mode) {
+  LearningMode.flashcard => 'စာကတ်',
+  LearningMode.meaning => 'အဓိပ္ပာယ်ရွေး',
+  LearningMode.reverseMeaning => 'မြန်မာ → ထိုင်း',
+  LearningMode.listening => 'နားထောင်ပြီးရွေး',
+  LearningMode.matching => 'အတွဲချိတ်',
+  LearningMode.sentence => 'စာကြောင်းစီ',
+};
+
+String filterLabel(ReviewFilter filter) => switch (filter) {
+  ReviewFilter.due => 'ဒီနေ့ပြန်လေ့ကျင့်ရန်',
+  ReviewFilter.fresh => 'အသစ်သင်ရန်',
+  ReviewFilter.difficult => 'ခက်တဲ့စကားစု',
+  ReviewFilter.favorites => 'သိမ်းထားတာ',
+  ReviewFilter.all => 'အားလုံး',
+};
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
     required this.repository,
     required this.appState,
+    required this.playbackService,
     super.key,
   });
-
   final PhraseRepository repository;
   final AppState appState;
+  final ThaiPlaybackService playbackService;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  late List<QuizQuestion> _questions;
-  int _index = 0;
-  int _score = 0;
-  Phrase? _selected;
-  bool _myanmarToThai = false;
-  bool _complete = false;
+  LearningMode _mode = LearningMode.flashcard;
+  ReviewFilter _filter = ReviewFilter.due;
+  String _category = '';
 
   @override
-  void initState() {
-    super.initState();
-    _questions = QuizLogic.createQuestions(widget.repository.phrases);
-  }
-
-  void _start() {
-    setState(() {
-      _questions = QuizLogic.createQuestions(widget.repository.phrases);
-      _index = 0;
-      _score = 0;
-      _selected = null;
-      _complete = false;
-    });
-  }
-
-  void _answer(Phrase option) {
-    if (_selected != null) return;
-    setState(() {
-      _selected = option;
-      if (QuizLogic.isCorrect(_questions[_index].phrase, option)) _score++;
-    });
-  }
-
-  void _next() {
-    if (_index + 1 == _questions.length) {
-      setState(() => _complete = true);
-      widget.appState.recordQuizCompletion();
-      return;
-    }
-    setState(() {
-      _index++;
-      _selected = null;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_questions.isEmpty) {
-      return const Center(child: Text('Quiz အတွက် စကားစု မလုံလောက်သေးပါ။'));
-    }
-    if (_complete) return _buildComplete(context);
-    final question = _questions[_index];
-    final prompt = _myanmarToThai
-        ? question.phrase.myanmar
-        : question.phrase.thaiFor(widget.appState.politeStyle);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
-      children: [
-        Wrap(
-          spacing: 8,
-          children: [
-            ChoiceChip(
-              label: const Text('ထိုင်း → မြန်မာ'),
-              selected: !_myanmarToThai,
-              onSelected: (_) => setState(() => _myanmarToThai = false),
-            ),
-            ChoiceChip(
-              label: const Text('မြန်မာ → ထိုင်း'),
-              selected: _myanmarToThai,
-              onSelected: (_) => setState(() => _myanmarToThai = true),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-        LinearProgressIndicator(value: (_index + 1) / _questions.length),
-        const SizedBox(height: 9),
-        Text('မေးခွန်း ${_index + 1} / ${_questions.length} • မှန် $_score ခု'),
-        const SizedBox(height: 22),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Text(
-                  _myanmarToThai
-                      ? 'ထိုင်းလို ဘယ်လိုပြောမလဲ?'
-                      : 'မြန်မာလို ဘာအဓိပ္ပာယ်လဲ?',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  prompt,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineSmall?.copyWith(fontSize: 28),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        ...question.options.map((option) {
-          final isSelected = _selected?.id == option.id;
-          final isAnswer = question.phrase.id == option.id;
-          final answered = _selected != null;
-          final background = !answered
-              ? null
-              : isAnswer
-              ? Theme.of(context).colorScheme.primaryContainer
-              : isSelected
-              ? Theme.of(context).colorScheme.errorContainer
-              : null;
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 9),
-            child: Card(
-              color: background,
-              child: ListTile(
-                title: Text(
-                  _myanmarToThai
-                      ? option.thaiFor(widget.appState.politeStyle)
-                      : option.myanmar,
-                ),
-                trailing: answered && isAnswer
-                    ? const Icon(Icons.check_circle_rounded)
-                    : null,
-                onTap: () => _answer(option),
-              ),
-            ),
-          );
-        }),
-        if (_selected != null) ...[
-          const SizedBox(height: 4),
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: widget.appState,
+    builder: (context, _) {
+      final source = widget.repository.phrases
+          .where(
+            (p) =>
+                (_category.isEmpty || p.categoryId == _category) &&
+                (_mode != LearningMode.sentence ||
+                    sentenceChunks(p, widget.appState.politeStyle) != null),
+          )
+          .toList();
+      final selected = StudyCatalog.select(
+        source,
+        widget.appState.learning,
+        _mode,
+        _filter,
+        widget.appState.favorites,
+        DateTime.now(),
+        limit: _mode == LearningMode.matching ? 4 : 10,
+      );
+      return ListView(
+        padding: const EdgeInsets.all(18),
+        children: [
           Text(
-            QuizLogic.isCorrect(question.phrase, _selected!)
-                ? 'မှန်ပါတယ်။'
-                : 'အဖြေမှန်က ${_myanmarToThai ? question.phrase.thaiFor(widget.appState.politeStyle) : question.phrase.myanmar} ပါ။',
-            style: Theme.of(context).textTheme.titleMedium,
+            'ကိုယ့်အတွက် လေ့ကျင့်ခန်း',
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const SizedBox(height: 10),
-          FilledButton(
-            onPressed: _next,
-            child: Text(
-              _index + 1 == _questions.length ? 'ရလဒ်ကြည့်ရန်' : 'နောက်တစ်ခု',
+          const SizedBox(height: 8),
+          const Text(
+            'ပုံစံနဲ့ စကားစုကို အရင်ရွေးပြီး လေ့ကျင့်ပါ။ ရလဒ်အလိုက် နောက်တစ်ခါ ပြန်မေးပေးမယ်။',
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: LearningMode.values
+                .map(
+                  (mode) => ChoiceChip(
+                    label: Text(modeLabel(mode)),
+                    selected: _mode == mode,
+                    onSelected: (_) => setState(() => _mode = mode),
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField<String>(
+            initialValue: _category,
+            isExpanded: true,
+            decoration: const InputDecoration(labelText: 'အကြောင်းအရာ'),
+            items: [
+              const DropdownMenuItem(
+                value: '',
+                child: Text('အကြောင်းအရာအားလုံး'),
+              ),
+              ...widget.repository.categories.map(
+                (c) => DropdownMenuItem(
+                  value: c.id,
+                  child: Text('${c.icon} ${c.my}'),
+                ),
+              ),
+            ],
+            onChanged: (value) => setState(() => _category = value ?? ''),
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: ReviewFilter.values
+                .map(
+                  (filter) => ChoiceChip(
+                    label: Text(filterLabel(filter)),
+                    selected: _filter == filter,
+                    onSelected: (_) => setState(() => _filter = filter),
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 22),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    '${selected.length} စကားစုနဲ့ လေ့ကျင့်မယ်',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  if (_mode == LearningMode.flashcard)
+                    const Text(
+                      'အဓိပ္ပာယ်ကို ဖော်ကြည့်ပြီး ကိုယ်မှတ်မိမှုကို အမှန်အတိုင်း ရွေးပါ။',
+                    ),
+                  if (_mode == LearningMode.listening)
+                    const Text(
+                      'ထိုင်းအသံရတဲ့စက်မှာ နားထောင်ပြီး မြန်မာအဖြေရွေးပါ။ အသံမရရင် အမှတ်မပေးဘဲ စာကတ်ပုံစံကို ပြောင်းနိုင်ပါတယ်။',
+                    ),
+                  if (_mode == LearningMode.sentence)
+                    const Text(
+                      'စစ်ထားတဲ့ စာကြောင်းအပိုင်းတွေကို စီပါ။ ဒီပုံစံက ထိုင်းစာ စဖတ်နေသူအတွက်ပါ။',
+                    ),
+                  if (selected.isEmpty)
+                    const Text(
+                      'ဒီရွေးချယ်မှုအတွက် စကားစုမရှိသေးပါ။ အခြားအကြောင်းအရာ သို့မဟုတ် အားလုံးကို ရွေးပါ။',
+                    ),
+                  const SizedBox(height: 16),
+                  FilledButton.icon(
+                    onPressed: selected.isEmpty
+                        ? null
+                        : () {
+                            unawaited(widget.playbackService.stop());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => StudySessionScreen(
+                                  repository: widget.repository,
+                                  appState: widget.appState,
+                                  playbackService: widget.playbackService,
+                                  phrases: selected,
+                                  mode: _mode,
+                                  title: modeLabel(_mode),
+                                ),
+                              ),
+                            );
+                          },
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text('စလေ့ကျင့်မယ်'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-      ],
-    );
-  }
-
-  Widget _buildComplete(BuildContext context) {
-    final percent = (_score * 100 / _questions.length).round();
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.emoji_events_rounded,
-              size: 56,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'လေ့ကျင့်ခန်း ပြီးပါပြီ',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text('မှန်ကန်မှု $percent%  •  $_score / ${_questions.length} ခု'),
-            const SizedBox(height: 20),
-            FilledButton.icon(
-              onPressed: _start,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('ထပ်လေ့ကျင့်မယ်'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }

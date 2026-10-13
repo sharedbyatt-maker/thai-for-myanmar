@@ -27,6 +27,14 @@ def main() -> int:
     manifest_text = manifest_text.replace('android:label="thai_for_myanmar"',
                                           'android:label="Thai for Myanmar"')
     manifest_text = manifest_text.replace(OLD_PACKAGE, APP_PACKAGE)
+    if 'android.intent.action.TTS_SERVICE' not in manifest_text:
+        tts_intent = ('<intent><action android:name="android.intent.action.TTS_SERVICE" />'
+                      '</intent>')
+        if '</queries>' in manifest_text:
+            manifest_text = manifest_text.replace('</queries>', tts_intent + '\n</queries>', 1)
+        else:
+            manifest_text = manifest_text.replace('</manifest>',
+                '<queries>' + tts_intent + '</queries>\n</manifest>', 1)
     manifest_text = re.sub(
         r'android:icon="[^"]+"', 'android:icon="@drawable/ic_thai_myanmar"',
         manifest_text,

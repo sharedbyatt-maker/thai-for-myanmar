@@ -14,6 +14,7 @@ import 'quiz_screen.dart';
 import 'search_screen.dart';
 import 'settings_screen.dart';
 import 'situations_screen.dart';
+import 'learning_progress_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({
@@ -31,9 +32,29 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   final Set<int> _visitedTabs = <int>{0};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      unawaited(widget.playbackService.stop());
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(widget.playbackService.stop());
+    super.dispose();
+  }
 
   static const _titles = <String>[
     'ထိုင်းစကား လက်တွေ့သုံး',
@@ -57,6 +78,8 @@ class _MainShellState extends State<MainShell> {
     );
     final phrase = matching.isEmpty ? null : matching.first;
     if (phrase == null) return;
+    unawaited(widget.appState.remember(phrase.id));
+    unawaited(widget.appState.markLearned(phrase.id));
     unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -105,6 +128,19 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
+  void _openProgress() {
+    unawaited(widget.playbackService.stop());
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => LearningProgressScreen(
+          repository: widget.repository,
+          appState: widget.appState,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = <Widget>[
@@ -114,6 +150,7 @@ class _MainShellState extends State<MainShell> {
         playbackService: widget.playbackService,
         onSelectTab: _selectTab,
         onOpenPhrase: _openPhrase,
+        onOpenProgress: _openProgress,
       ),
       LearnScreen(
         repository: widget.repository,
@@ -130,7 +167,11 @@ class _MainShellState extends State<MainShell> {
         appState: widget.appState,
         playbackService: widget.playbackService,
       ),
-      QuizScreen(repository: widget.repository, appState: widget.appState),
+      QuizScreen(
+        repository: widget.repository,
+        appState: widget.appState,
+        playbackService: widget.playbackService,
+      ),
     ];
 
     return Scaffold(

@@ -18,6 +18,46 @@ void main() {
     repository = await PhraseRepository.load(rootBundle);
   });
 
+  testWidgets('guided lesson completes and restores local learning progress', (
+    tester,
+  ) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      ThaiForMyanmarApp(
+        repository: repository,
+        appState: state,
+        playbackService: _playbackService(),
+      ),
+    );
+    await _pumpUi(tester);
+    await tester.tap(find.byIcon(Icons.menu_book_outlined));
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.ensureVisible(find.text('စသင်မယ်'));
+    await tester.tap(find.text('စသင်မယ်'));
+    await tester.pump(const Duration(milliseconds: 500));
+    for (var index = 0; index < 5; index++) {
+      await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pump();
+      await tester.ensureVisible(find.text('မှတ်မိတယ်'));
+      await tester.tap(find.text('မှတ်မိတယ်'));
+      await tester.pump();
+    }
+    expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsOneWidget);
+    expect(state.learning.totalReviews, 5);
+    expect(state.learning.completedSessions, 1);
+    expect(state.learning.completedLessons, hasLength(1));
+    // Await a queued settings save to drain the preceding review snapshots.
+    await state.setDailyGoal(10);
+    final restored = AppState();
+    await restored.load();
+    expect(restored.learning.totalReviews, 5);
+    expect(restored.learning.completedLessons, state.learning.completedLessons);
+  });
+
   testWidgets('Quick Speak searches, displays, and saves a phrase', (
     tester,
   ) async {

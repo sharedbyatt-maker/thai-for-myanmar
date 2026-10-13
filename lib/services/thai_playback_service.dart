@@ -11,6 +11,10 @@ enum ThaiPlaybackState { idle, loading, playing, unavailable }
 
 enum ThaiPlaybackResult { audioAsset, spoken, unavailable, cancelled }
 
+abstract interface class ThaiAudioVolumeControl {
+  Future<void> setVolume(double volume);
+}
+
 abstract interface class ThaiAudioAssetPlayer {
   Future<void> play(String assetPath, {required void Function() onStarted});
   Future<void> stop();
@@ -39,6 +43,19 @@ class ThaiPlaybackService extends ChangeNotifier {
   bool _disposed = false;
 
   ThaiPlaybackState get state => _state;
+
+  Future<void> setVolume(double volume) async {
+    if (!volume.isFinite) return;
+    final bounded = volume.clamp(0.0, 1.0);
+    _speechService.volume = bounded;
+    if (_assetPlayer case final ThaiAudioVolumeControl player) {
+      try {
+        await player.setVolume(bounded).timeout(const Duration(seconds: 2));
+      } catch (_) {
+        // Volume support is optional; normal playback still works.
+      }
+    }
+  }
 
   bool isActiveFor(String phraseId, String politeStyle) =>
       (_state == ThaiPlaybackState.loading ||
@@ -153,12 +170,16 @@ class ThaiPlaybackService extends ChangeNotifier {
   }
 }
 
-class AudioPlayersThaiAssetPlayer implements ThaiAudioAssetPlayer {
+class AudioPlayersThaiAssetPlayer
+    implements ThaiAudioAssetPlayer, ThaiAudioVolumeControl {
   AudioPlayersThaiAssetPlayer({AudioPlayer? player})
     : _player = player ?? AudioPlayer();
 
   final AudioPlayer _player;
   _PendingAssetPlayback? _pending;
+
+  @override
+  Future<void> setVolume(double volume) => _player.setVolume(volume);
 
   @override
   Future<void> play(

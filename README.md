@@ -6,6 +6,7 @@ Practical, offline-first Thai for Myanmar speakers living, working, studying, or
 
 - **500 phrase records across 35 categories**, with Thai text, Myanmar meaning, Myanmar-readable pronunciation, English meaning, keywords, and situation tags.
 - Home, Learn, Situations, Quick Speak, Search, Favorites, Quiz, Light/Dark/System theme, and persisted local progress.
+- Guided five-phrase lessons, flashcards, meaning/listening questions, matching, sentence-piece practice, due/new/difficult/favorite filters, daily goals, streaks, and seven-day learning history. Listening earns no progress when Thai audio is unavailable.
 - Bundled lessons, search, favorites, quiz, and progress work without an account or network connection after install.
 - Thai playback is asset-first when a verified phrase recording exists, with verified Thai-only device/browser TTS as the fallback. A non-Thai default voice is never used. The controlled audio catalog is currently empty, so cross-device identical pronunciation is not yet claimed.
 - AdMob support is centralized and **disabled by default**. Debug test ads can be enabled explicitly. No production identifiers are included.
@@ -40,6 +41,8 @@ Ads are off unless `ENABLE_ADS=true` is passed at build time. A debug build uses
 ## Source and release guide
 
 - [Architecture and local development](docs/ARCHITECTURE.md)
+- [Learning modes, local progress, and audio preparation](docs/LEARNING_UPGRADE.md)
+- [Third-party licenses and feature provenance](THIRD_PARTY_NOTICES.md)
 - [Phrase content and validation](docs/CONTENT_GUIDE.md)
 - [Web and Android differences](docs/PLATFORM_NOTES.md)
 - [Thai audio architecture and source review](docs/AUDIO_ARCHITECTURE.md)

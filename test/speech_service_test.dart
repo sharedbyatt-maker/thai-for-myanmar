@@ -8,6 +8,27 @@ void main() {
 
   group('SpeechService', () {
     test(
+      'prefers an installed local Thai voice over a network Thai voice',
+      () async {
+        final engine = FakeSpeechEngine(
+          voices: const [
+            {
+              'name': 'A network',
+              'locale': 'th-TH',
+              'network_required': 'true',
+            },
+            {
+              'name': 'Z offline',
+              'locale': 'th-TH',
+              'network_required': 'false',
+            },
+          ],
+        );
+        expect(await _service(engine).speakThai('สวัสดี'), SpeechResult.spoken);
+        expect(engine.selectedVoices.single['name'], 'Z offline');
+      },
+    );
+    test(
       'missing platform TTS plugin returns a safe unavailable result',
       () async {
         final service = SpeechService(voiceLookupWindow: Duration.zero);

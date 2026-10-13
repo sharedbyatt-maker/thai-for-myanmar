@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../learning/learning_progress.dart';
 
 class AppState extends ChangeNotifier {
   static const _favoritesKey = 'thai_for_myanmar.favorites.v1';
@@ -8,6 +12,8 @@ class AppState extends ChangeNotifier {
   static const _themeKey = 'thai_for_myanmar.theme.v1';
   static const _politeKey = 'thai_for_myanmar.polite.v1';
   static const _quizKey = 'thai_for_myanmar.quiz_count.v1';
+  static const _learningKey = 'thai_for_myanmar.learning.v1';
+  static const _volumeKey = 'thai_for_myanmar.audio_volume.v1';
 
   SharedPreferences? _preferences;
   final Set<String> _favorites = <String>{};
@@ -16,6 +22,9 @@ class AppState extends ChangeNotifier {
   String _themePreference = 'system';
   String _politeStyle = 'female';
   int _quizCount = 0;
+  LearningProgress _learning = LearningProgress();
+  double _audioVolume = 1;
+  Future<void> _learningWrites = Future<void>.value();
 
   Set<String> get favorites => Set<String>.unmodifiable(_favorites);
   Set<String> get learned => Set<String>.unmodifiable(_learned);
@@ -23,6 +32,8 @@ class AppState extends ChangeNotifier {
   String get themePreference => _themePreference;
   String get politeStyle => _politeStyle;
   int get quizCount => _quizCount;
+  LearningProgress get learning => _learning;
+  double get audioVolume => _audioVolume;
 
   Future<void> load() async {
     try {
@@ -39,6 +50,17 @@ class AppState extends ChangeNotifier {
       _themePreference = _preferences!.getString(_themeKey) ?? 'system';
       _politeStyle = _preferences!.getString(_politeKey) ?? 'female';
       _quizCount = _preferences!.getInt(_quizKey) ?? 0;
+      _audioVolume = (_preferences!.getDouble(_volumeKey) ?? 1).clamp(0.0, 1.0);
+      try {
+        final saved = _preferences!.getString(_learningKey);
+        if (saved != null) {
+          _learning = LearningProgress.fromJson(
+            jsonDecode(saved) as Map<String, dynamic>,
+          );
+        }
+      } catch (_) {
+        _learning = LearningProgress();
+      }
     } catch (_) {
       // Keep the bundled learning experience usable if local storage is unavailable.
       _preferences = null;
@@ -72,21 +94,86 @@ class AppState extends ChangeNotifier {
   Future<void> setThemePreference(String value) async {
     if (!const {'system', 'light', 'dark'}.contains(value)) return;
     _themePreference = value;
-    await _preferences?.setString(_themeKey, value);
+    await _saveValue(() async {
+      await _preferences?.setString(_themeKey, value);
+    });
     notifyListeners();
   }
 
   Future<void> setPoliteStyle(String value) async {
     if (!const {'male', 'female'}.contains(value)) return;
     _politeStyle = value;
-    await _preferences?.setString(_politeKey, value);
+    await _saveValue(() async {
+      await _preferences?.setString(_politeKey, value);
+    });
     notifyListeners();
   }
 
   Future<void> recordQuizCompletion() async {
     _quizCount += 1;
-    await _preferences?.setInt(_quizKey, _quizCount);
+    await _saveValue(() async {
+      await _preferences?.setInt(_quizKey, _quizCount);
+    });
     notifyListeners();
+  }
+
+  Future<void> recordReview(
+    String phraseId,
+    LearningMode mode,
+    int quality, {
+    DateTime? now,
+  }) async {
+    _learning.record(phraseId, mode, quality, now ?? DateTime.now());
+    _learned.add(phraseId);
+    notifyListeners();
+    await _persistLearning();
+    await _saveStringList(_learnedKey, _learned.toList()..sort());
+  }
+
+  Future<void> finishStudySession({String? lessonId}) async {
+    _learning.finishSession(lessonId: lessonId);
+    notifyListeners();
+    await _persistLearning();
+  }
+
+  Future<void> setDailyGoal(int goal) async {
+    if (!const {5, 10, 20}.contains(goal)) return;
+    _learning.dailyGoal = goal;
+    notifyListeners();
+    await _persistLearning();
+  }
+
+  Future<void> completeOnboarding() async {
+    _learning.onboardingComplete = true;
+    notifyListeners();
+    await _persistLearning();
+  }
+
+  Future<void> setAudioVolume(double volume) async {
+    if (!volume.isFinite) return;
+    _audioVolume = volume.clamp(0.0, 1.0);
+    notifyListeners();
+    await _saveValue(() async {
+      await _preferences?.setDouble(_volumeKey, _audioVolume);
+    });
+  }
+
+  Future<void> _persistLearning() {
+    final snapshot = jsonEncode(_learning.toJson());
+    _learningWrites = _learningWrites.then(
+      (_) => _saveValue(() async {
+        await _preferences?.setString(_learningKey, snapshot);
+      }),
+    );
+    return _learningWrites;
+  }
+
+  Future<void> _saveValue(Future<void> Function() write) async {
+    try {
+      await write();
+    } catch (_) {
+      // A failed write never prevents the current session or a UI update.
+    }
   }
 
   Future<void> _saveStringList(String key, List<String> value) async {
