@@ -67,6 +67,7 @@ class HomeScreen extends StatelessWidget {
         ),
       );
     }
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
       children: [

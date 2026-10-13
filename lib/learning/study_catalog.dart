@@ -35,16 +35,16 @@ class StudyCatalog {
     DateTime now, {
     int limit = 5,
   }) {
-    final reviewedDue = repository.phrases.where((phrase) {
-      final card = progress.cardFor(phrase.id, LearningMode.flashcard);
-      return card != null && !card.due.isAfter(dateOnly(now));
-    }).toList()
-      ..sort((a, b) {
-        final left = progress.cardFor(a.id, LearningMode.flashcard)!;
-        final right = progress.cardFor(b.id, LearningMode.flashcard)!;
-        final comparison = left.due.compareTo(right.due);
-        return comparison != 0 ? comparison : a.id.compareTo(b.id);
-      });
+    final reviewedDue =
+        repository.phrases.where((phrase) {
+          final card = progress.cardFor(phrase.id, LearningMode.flashcard);
+          return card != null && !card.due.isAfter(dateOnly(now));
+        }).toList()..sort((a, b) {
+          final left = progress.cardFor(a.id, LearningMode.flashcard)!;
+          final right = progress.cardFor(b.id, LearningMode.flashcard)!;
+          final comparison = left.due.compareTo(right.due);
+          return comparison != 0 ? comparison : a.id.compareTo(b.id);
+        });
     final selected = reviewedDue.take(limit).toList();
     final reviewCount = selected.length;
     for (final phrase in repository.phrases) {

@@ -306,7 +306,9 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     Text(
                       _phrase.pronunciation,
                       style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 12),
@@ -319,7 +321,8 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                           : Theme.of(context).textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
-                  if (_showPronunciation && !flashcard &&
+                  if (_showPronunciation &&
+                      !flashcard &&
                       (!sentence || _answered)) ...[
                     const SizedBox(height: 12),
                     Text(

@@ -95,6 +95,10 @@ void main() {
   testWidgets('home starts a five-card session without extra mode selection', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(420, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     final state = AppState();
     await state.load();
     await tester.pumpWidget(
@@ -131,7 +135,10 @@ void main() {
         ),
       ),
     );
-    await tester.ensureVisible(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
+    await tester.scrollUntilVisible(
+      find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'),
+      180,
+    );
     await tester.tap(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
     await tester.pumpAndSettle();
     expect(find.byType(PhraseIssueScreen), findsOneWidget);

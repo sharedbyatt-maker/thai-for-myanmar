@@ -43,7 +43,9 @@ class SituationsScreen extends StatelessWidget {
                 crossAxisCount: columns,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                mainAxisExtent: 116,
+                mainAxisExtent: MediaQuery.textScalerOf(
+                  context,
+                ).scale(130).clamp(130.0, 210.0),
               ),
               itemBuilder: (context, index) {
                 final category = categories[index];
