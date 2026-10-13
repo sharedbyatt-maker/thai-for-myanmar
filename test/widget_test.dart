@@ -111,6 +111,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(PhraseIssueScreen), findsOneWidget);
     await tester.enterText(find.byType(TextField), 'အသံထွက်ကို စစ်ပေးပါ');
+    await tester.pump();
+    final saveButton = find.widgetWithText(FilledButton, 'စက်ထဲ သိမ်းရန်');
+    expect(tester.widget<FilledButton>(saveButton).onPressed, isNotNull);
     await tester.ensureVisible(find.text('စက်ထဲ သိမ်းရန်'));
     await tester.tap(find.text('စက်ထဲ သိမ်းရန်'));
     await tester.pump(const Duration(milliseconds: 100));
