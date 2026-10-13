@@ -9,6 +9,17 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late PhraseRepository repository;
   setUpAll(() async => repository = await PhraseRepository.load(rootBundle));
+
+  test(
+    'the adapted scheduler license is included in the application bundle',
+    () async {
+      final license = await rootBundle.loadString(
+        'third_party/licenses/pouple_tim_mit.txt',
+      );
+      expect(license, contains('Copyright (c) 2026 Timousss'));
+      expect(license, contains('MIT License'));
+    },
+  );
   test('lessons cover every phrase once in groups of at most five', () {
     final lessons = StudyCatalog.lessons(repository);
     final ids = lessons.expand((l) => l.phrases).map((p) => p.id).toList();

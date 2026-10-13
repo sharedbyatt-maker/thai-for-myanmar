@@ -7,6 +7,7 @@
 reviewed at commit `e55fe3ccfd5228d977f2c6b6fe0e86ed379375a8`.
 Copyright (c) 2026 Timousss. MIT License.
 The complete license is retained in `third_party/licenses/pouple_tim_mit.txt`.
+It is also bundled as a Flutter asset in distributed Android/Web builds.
 
 Adaptations include input validation, independent learning-mode records, safe
 deserialization and calendar-date scheduling across daylight-saving changes.

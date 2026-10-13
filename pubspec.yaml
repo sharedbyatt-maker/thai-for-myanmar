@@ -25,6 +25,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - third_party/licenses/pouple_tim_mit.txt
     - assets/audio/thai/
     - assets/data/phrase_categories.json
     - assets/data/phrases.json
