@@ -106,6 +106,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   void _next() {
+    if (_finished || !_answered) return;
     unawaited(widget.playbackService.stop());
     if (_index + 1 == widget.phrases.length) {
       _finish();
@@ -115,6 +116,14 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
         _prepareQuestion();
       });
     }
+  }
+
+  void _rateFlashcard(int quality) {
+    if (_finished || !_revealed) return;
+    _revealed = false;
+    _answered = true;
+    _record(_phrase, quality);
+    _next();
   }
 
   void _finish() {
@@ -129,6 +138,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   Future<void> _listen() async {
+    if (_finished || widget.phrases.isEmpty) return;
     if (widget.appState.audioVolume == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -143,14 +153,15 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
       await widget.playbackService.stop();
       return;
     }
-    final phraseId = _phrase.id;
+    final phrase = _phrase;
+    final phraseId = phrase.id;
     setState(() {
       _audioBusy = true;
       _audioUnavailable = false;
     });
     await widget.playbackService.setVolume(widget.appState.audioVolume);
-    if (!mounted) return;
-    final result = await widget.playbackService.playThai(_phrase, _politeStyle);
+    if (!mounted || _finished || _phrase.id != phraseId) return;
+    final result = await widget.playbackService.playThai(phrase, _politeStyle);
     if (!mounted || _finished || _phrase.id != phraseId) return;
     setState(() {
       _audioBusy = false;
@@ -372,24 +383,15 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
               runSpacing: 8,
               children: [
                 OutlinedButton(
-                  onPressed: () {
-                    _record(_phrase, 2);
-                    _next();
-                  },
+                  onPressed: () => _rateFlashcard(2),
                   child: const Text('ပြန်လေ့ကျင့်မယ်'),
                 ),
                 FilledButton.tonal(
-                  onPressed: () {
-                    _record(_phrase, 4);
-                    _next();
-                  },
+                  onPressed: () => _rateFlashcard(4),
                   child: const Text('မှတ်မိတယ်'),
                 ),
                 FilledButton(
-                  onPressed: () {
-                    _record(_phrase, 5);
-                    _next();
-                  },
+                  onPressed: () => _rateFlashcard(5),
                   child: const Text('လွယ်ပါတယ်'),
                 ),
               ],

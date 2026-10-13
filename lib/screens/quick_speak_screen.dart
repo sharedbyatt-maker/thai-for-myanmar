@@ -27,6 +27,7 @@ class QuickSpeakScreen extends StatefulWidget {
 class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
   final _controller = TextEditingController();
   String _query = '';
+  int _resultLimit = 20;
   String? _selectedId;
 
   @override
@@ -134,7 +135,10 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
         const SizedBox(height: 14),
         TextField(
           controller: _controller,
-          onChanged: (value) => setState(() => _query = value),
+          onChanged: (value) => setState(() {
+            _query = value;
+            _resultLimit = 20;
+          }),
           decoration: InputDecoration(
             hintText: 'ဥပမာ - ဗိုက်နာ၊ လစာ၊ ဆေးရုံ',
             prefixIcon: const Icon(Icons.search_rounded),
@@ -214,17 +218,25 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
               padding: EdgeInsets.all(18),
               child: Text('မတွေ့ပါ။ အခြားစကားလုံးနဲ့ ရှာကြည့်ပါ။'),
             ),
-          ...results.map(
-            (phrase) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _PhraseChoice(
-                phrase: phrase,
-                selected: phrase.id == _selectedId,
-                appState: widget.appState,
-                onTap: () => _select(phrase),
+          ...results
+              .take(_resultLimit)
+              .map(
+                (phrase) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _PhraseChoice(
+                    phrase: phrase,
+                    selected: phrase.id == _selectedId,
+                    appState: widget.appState,
+                    onTap: () => _select(phrase),
+                  ),
+                ),
               ),
+          if (results.length > _resultLimit)
+            TextButton.icon(
+              onPressed: () => setState(() => _resultLimit += 20),
+              icon: const Icon(Icons.expand_more),
+              label: const Text('ကျန်တဲ့စကားစုတွေ ထပ်ကြည့်မယ်'),
             ),
-          ),
         ],
       ],
     );

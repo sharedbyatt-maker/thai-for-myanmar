@@ -15,7 +15,11 @@ void main() {
   late PhraseRepository repository;
   setUpAll(() async => repository = await PhraseRepository.load(rootBundle));
   setUp(() => SharedPreferences.setMockInitialValues({}));
-  Future<AppState> setup(WidgetTester tester, LearningMode mode) async {
+  Future<AppState> setup(
+    WidgetTester tester,
+    LearningMode mode, {
+    int count = 1,
+  }) async {
     final state = AppState();
     await state.load();
     final playback = ThaiPlaybackService(
@@ -30,7 +34,7 @@ void main() {
           repository: repository,
           appState: state,
           playbackService: playback,
-          phrases: [repository.phrases.first],
+          phrases: repository.phrases.take(count).toList(),
           mode: mode,
           title: 'လေ့ကျင့်ရန်',
           lessonId: 'test:hello',
@@ -67,6 +71,22 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('စာကတ်နဲ့ လေ့ကျင့်မယ်'), findsOneWidget);
     expect(state.learning.totalReviews, 0);
+    expect(state.learning.completedSessions, 0);
+  });
+
+  testWidgets('repeated taps cannot grade an unseen flashcard', (tester) async {
+    final state = await setup(tester, LearningMode.flashcard, count: 2);
+    await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+    await tester.pump();
+    final button = find.ancestor(
+      of: find.text('မှတ်မိတယ်'),
+      matching: find.byType(FilledButton),
+    );
+    final tap = tester.widget<FilledButton>(button).onPressed!;
+    tap();
+    tap();
+    await tester.pump();
+    expect(state.learning.totalReviews, 1);
     expect(state.learning.completedSessions, 0);
   });
   testWidgets('study fits landscape with enlarged text', (tester) async {
