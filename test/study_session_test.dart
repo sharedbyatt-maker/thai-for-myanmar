@@ -23,7 +23,10 @@ void main() {
     final state = AppState();
     await state.load();
     final playback = ThaiPlaybackService(
-      speechService: SpeechService(voiceLookupWindow: Duration.zero),
+      speechService: SpeechService(
+        engine: _UnavailableEngine(),
+        voiceLookupWindow: Duration.zero,
+      ),
       catalog: ThaiAudioCatalog.empty(),
       assetPlayer: _NoopPlayer(),
     );
@@ -112,4 +115,27 @@ class _NoopPlayer implements ThaiAudioAssetPlayer {
   Future<void> stop() async {}
   @override
   Future<void> dispose() async {}
+}
+
+class _UnavailableEngine implements SpeechEngine {
+  @override
+  Future<dynamic> getVoices() async => const [];
+  @override
+  Future<dynamic> setLanguage(String language) async => 1;
+  @override
+  Future<dynamic> setVoice(Map<String, String> voice) async => 1;
+  @override
+  Future<dynamic> setSpeechRate(double rate) async => 1;
+  @override
+  Future<dynamic> awaitSpeakCompletion(bool awaitCompletion) async => 1;
+  @override
+  Future<dynamic> speak(String text) async => 1;
+  @override
+  Future<dynamic> stop() async => 1;
+  @override
+  void setStartHandler(void Function() handler) {}
+  @override
+  void setCompletionHandler(void Function() handler) {}
+  @override
+  void setErrorHandler(void Function(dynamic error) handler) {}
 }
