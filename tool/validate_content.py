@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES_PATH = ROOT / "assets/data/phrase_categories.json"
 PHRASES_PATH = ROOT / "assets/data/phrases.json"
-EXPECTED_PHRASES = 500
+EXPECTED_PHRASES = 502
 REQUIRED_CATEGORIES = {
     "greetings",
     "introductions",

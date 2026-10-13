@@ -123,7 +123,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     unawaited(widget.playbackService.stop());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => SettingsScreen(appState: widget.appState),
+        builder: (_) => SettingsScreen(
+          appState: widget.appState,
+          repository: widget.repository,
+          playbackService: widget.playbackService,
+        ),
       ),
     );
   }

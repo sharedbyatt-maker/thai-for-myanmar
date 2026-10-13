@@ -53,8 +53,8 @@ def main() -> int:
     phrases = read_json(PHRASES_PATH)
     categories = read_json(CATEGORIES_PATH)
     manifest = read_json(MANIFEST_PATH)
-    if len(phrases) != 500:
-        fail(f"expected exactly 500 phrases; found {len(phrases)}")
+    if len(phrases) != 502:
+        fail(f"expected exactly 502 phrases; found {len(phrases)}")
     if len(categories) != 35:
         fail(f"expected exactly 35 categories; found {len(categories)}")
     if not isinstance(manifest, dict) or manifest.get("schemaVersion") != 1:

@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../services/app_state.dart';
+import '../data/phrase_repository.dart';
+import '../services/thai_playback_service.dart';
+import 'phrase_issue_screen.dart';
+import 'speech_setup_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({required this.appState, super.key});
+  const SettingsScreen({
+    required this.appState,
+    required this.repository,
+    required this.playbackService,
+    super.key,
+  });
 
   final AppState appState;
+  final PhraseRepository repository;
+  final ThaiPlaybackService playbackService;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +87,21 @@ class SettingsScreen extends StatelessWidget {
             const Text(
               'နောက်ဖွင့်မယ့်အသံအတွက် သုံးမယ်။ စက်ရဲ့ အသံအတိုးအကျယ်ကိုလည်း စစ်ပါ။',
             ),
+            ListTile(
+              leading: const Icon(Icons.hearing_rounded),
+              title: const Text('ထိုင်းအသံ စမ်းရန် / ပြင်ဆင်နည်း'),
+              subtitle: const Text('စက်မှာ အသံထွက်မထွက် စစ်ပြီး Thai voice ထည့်နည်းကြည့်ရန်'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => SpeechSetupScreen(
+                    repository: repository,
+                    appState: appState,
+                    playbackService: playbackService,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             Text(
               'ထိုင်းလို ယဉ်ကျေးစကားအဆုံးသတ်',
@@ -104,6 +130,18 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(Icons.report_outlined),
+              title: const Text('သိမ်းထားသော အမှားထောက်ပြချက်များ'),
+              subtitle: Text('${appState.phraseIssues.length} ခု • Copy လုပ်ပြီး developer ဆီ ပို့နိုင်သည်'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => SavedPhraseIssuesScreen(appState: appState),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             Text(
               'အသုံးပြုမှုနဲ့ ကိုယ်ရေးအချက်အလက်',
               style: Theme.of(context).textTheme.titleLarge,
@@ -113,7 +151,7 @@ class SettingsScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'သင်ခန်းစာ၊ ရှာဖွေမှု၊ စကားစုသိမ်းခြင်းနဲ့ လေ့လာမှုမှတ်တမ်းတွေကို ဒီစက်ထဲမှာသာ သိမ်းပါတယ်။ V1 မှာ အကောင့်ဖွင့်စရာမလိုပါ။ Web Preview မှာလည်း browser ရဲ့ local storage ကို သုံးပါတယ်။\n\nထိုင်းစာကြောင်းတွေကို နေ့စဉ်ဆက်သွယ်ရေးအတွက် ပြင်ဆင်ထားပါတယ်။ ကျန်းမာရေး၊ ဥပဒေ၊ အလုပ်စာချုပ်လို အရေးကြီးကိစ္စတွေမှာ စကားပြန် သို့မဟုတ် ကျွမ်းကျင်သူနဲ့ အတည်ပြုပါ။',
+                  'သင်ခန်းစာ၊ ရှာဖွေမှု၊ စကားစုသိမ်းခြင်း၊ လေ့လာမှုမှတ်တမ်းနဲ့ အမှားထောက်ပြချက်တွေကို ဒီစက်ထဲမှာသာ သိမ်းပါတယ်။ အမှားထောက်ပြချက်ကို Copy လုပ်ပြီး ပို့မှသာ အခြားသူဆီ ရောက်ပါတယ်။ V1 မှာ အကောင့်ဖွင့်စရာမလိုပါ။ Web Preview မှာလည်း browser ရဲ့ local storage ကို သုံးပါတယ်။\n\nထိုင်းစာကြောင်းတွေကို နေ့စဉ်ဆက်သွယ်ရေးအတွက် ပြင်ဆင်ထားပါတယ်။ ကျန်းမာရေး၊ ဥပဒေ၊ အလုပ်စာချုပ်လို အရေးကြီးကိစ္စတွေမှာ စကားပြန် သို့မဟုတ် ကျွမ်းကျင်သူနဲ့ အတည်ပြုပါ။',
                 ),
               ),
             ),

@@ -8768,5 +8768,29 @@
       "work",
       "high-risk"
     ]
+  },
+  {
+    "id": "apartment_elevator_available",
+    "categoryId": "apartment_landlord",
+    "thai": "มีลิฟต์ไหมครับ / มีลิฟต์ไหมคะ",
+    "thaiMale": "มีลิฟต์ไหมครับ",
+    "thaiFemale": "มีลิฟต์ไหมคะ",
+    "my": "ဓာတ်လှေကား ရှိပါသလား။",
+    "pronunciation": "မီး လစ်ဖ် မိုင် ခရပ် / မီး လစ်ဖ် မိုင် ခ",
+    "en": "Is there an elevator?",
+    "keywords": ["ဓာတ်လှေကား", "လှေကား", "လစ်ဖ်"],
+    "tags": ["housing", "apartment"]
+  },
+  {
+    "id": "phone_call_back",
+    "categoryId": "phone_sim",
+    "thai": "ช่วยโทรกลับมาได้ไหมครับ / ช่วยโทรกลับมาได้ไหมคะ",
+    "thaiMale": "ช่วยโทรกลับมาได้ไหมครับ",
+    "thaiFemale": "ช่วยโทรกลับมาได้ไหมคะ",
+    "my": "ပြန်ဖုန်းဆက်ပေးလို့ရမလား။",
+    "pronunciation": "ချွိုင်း ထိုး ကလပ် မာ ဒိုင် မိုင် ခရပ် / ချွိုင်း ထိုး ကလပ် မာ ဒိုင် မိုင် ခ",
+    "en": "Could you call me back?",
+    "keywords": ["ပြန်ဆက်", "ဖုန်းဆက်", "ပြန်ဖုန်းဆက်"],
+    "tags": ["phone", "daily"]
   }
 ]

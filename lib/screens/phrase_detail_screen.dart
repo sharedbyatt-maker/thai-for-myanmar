@@ -5,6 +5,7 @@ import '../models/phrase.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/thai_playback_button.dart';
+import 'phrase_issue_screen.dart';
 
 class PhraseDetailScreen extends StatelessWidget {
   const PhraseDetailScreen({
@@ -189,6 +190,20 @@ class PhraseDetailScreen extends StatelessWidget {
             onPressed: () => _showToSpeaker(context),
             icon: const Icon(Icons.open_in_full_rounded),
             label: const Text('ထိုင်းလူမျိုးကို ပြရန်'),
+          ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => PhraseIssueScreen(
+                  phrase: phrase,
+                  appState: appState,
+                ),
+              ),
+            ),
+            icon: const Icon(Icons.report_outlined),
+            label: const Text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'),
           ),
         ],
       ),

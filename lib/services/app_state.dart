@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../learning/learning_progress.dart';
+import '../models/phrase_issue.dart';
 
 class AppState extends ChangeNotifier {
   static const _favoritesKey = 'thai_for_myanmar.favorites.v1';
@@ -14,6 +15,7 @@ class AppState extends ChangeNotifier {
   static const _quizKey = 'thai_for_myanmar.quiz_count.v1';
   static const _learningKey = 'thai_for_myanmar.learning.v1';
   static const _volumeKey = 'thai_for_myanmar.audio_volume.v1';
+  static const _issuesKey = 'thai_for_myanmar.phrase_issues.v1';
 
   SharedPreferences? _preferences;
   final Set<String> _favorites = <String>{};
@@ -24,6 +26,8 @@ class AppState extends ChangeNotifier {
   int _quizCount = 0;
   LearningProgress _learning = LearningProgress();
   double _audioVolume = 1;
+  final List<PhraseIssue> _issues = [];
+  Future<void> _issueWrites = Future<void>.value();
   Future<void> _learningWrites = Future<void>.value();
 
   Set<String> get favorites => Set<String>.unmodifiable(_favorites);
@@ -34,6 +38,7 @@ class AppState extends ChangeNotifier {
   int get quizCount => _quizCount;
   LearningProgress get learning => _learning;
   double get audioVolume => _audioVolume;
+  List<PhraseIssue> get phraseIssues => List.unmodifiable(_issues);
 
   Future<void> load() async {
     try {
@@ -51,6 +56,19 @@ class AppState extends ChangeNotifier {
       _politeStyle = _preferences!.getString(_politeKey) ?? 'female';
       _quizCount = _preferences!.getInt(_quizKey) ?? 0;
       _audioVolume = (_preferences!.getDouble(_volumeKey) ?? 1).clamp(0.0, 1.0);
+      _issues.clear();
+      try {
+        final savedIssues = _preferences!.getString(_issuesKey);
+        if (savedIssues != null) {
+          final rows = jsonDecode(savedIssues) as List<dynamic>;
+          for (final row in rows.take(100)) {
+            final issue = PhraseIssue.tryParse(row);
+            if (issue != null) _issues.add(issue);
+          }
+        }
+      } catch (_) {
+        _issues.clear();
+      }
       try {
         final saved = _preferences!.getString(_learningKey);
         if (saved != null) {
@@ -156,6 +174,69 @@ class AppState extends ChangeNotifier {
     await _saveValue(() async {
       await _preferences?.setDouble(_volumeKey, _audioVolume);
     });
+  }
+
+  Future<bool> savePhraseIssue({
+    required String phraseId,
+    required String thai,
+    required String myanmar,
+    required String description,
+  }) {
+    final trimmed = description.trim();
+    if (trimmed.isEmpty || trimmed.length > 1000 || phraseId.isEmpty) {
+      return Future<bool>.value(false);
+    }
+    final issue = PhraseIssue(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      phraseId: phraseId,
+      thai: thai,
+      myanmar: myanmar,
+      description: trimmed,
+      createdAt: DateTime.now(),
+    );
+    final result = _issueWrites.then((_) async {
+      if (_issues.length >= 100 || _preferences == null) return false;
+      final next = [issue, ..._issues];
+      try {
+        final saved = await _preferences!.setString(
+          _issuesKey,
+          jsonEncode(next.map((row) => row.toJson()).toList()),
+        );
+        if (!saved) return false;
+        _issues
+          ..clear()
+          ..addAll(next);
+        notifyListeners();
+        return true;
+      } catch (_) {
+        return false;
+      }
+    });
+    _issueWrites = result.then<void>((_) {});
+    return result;
+  }
+
+  Future<bool> removePhraseIssue(String id) {
+    final result = _issueWrites.then((_) async {
+      final next = _issues.where((row) => row.id != id).toList();
+      if (next.length == _issues.length || _preferences == null) return false;
+      try {
+        final saved = await _preferences!.setString(
+          _issuesKey,
+          jsonEncode(next.map((row) => row.toJson()).toList()),
+        );
+        if (!saved) return false;
+        _issues
+          ..clear()
+          ..addAll(next);
+        notifyListeners();
+        return true;
+      } catch (_) {
+        return false;
+      }
+    });
+    _issueWrites = result.then<void>((_) {});
+    return result;
   }
 
   Future<void> _persistLearning() {
