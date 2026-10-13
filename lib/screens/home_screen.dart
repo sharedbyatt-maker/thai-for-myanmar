@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
+import '../learning/learning_progress.dart';
+import '../learning/study_catalog.dart';
 import '../models/phrase.dart';
 import '../services/ad_slot.dart';
 import '../services/app_state.dart';
@@ -8,6 +10,7 @@ import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
 import '../widgets/learning_dashboard.dart';
 import 'phrase_browser_screen.dart';
+import 'study_session_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -43,16 +46,37 @@ class HomeScreen extends StatelessWidget {
         .where((category) => category.kind != 'learn')
         .take(4)
         .toList();
+    void openToday() {
+      final plan = StudyCatalog.todayPlan(
+        repository,
+        appState.learning,
+        DateTime.now(),
+      );
+      if (plan.phrases.isEmpty) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => StudySessionScreen(
+            repository: repository,
+            appState: appState,
+            playbackService: playbackService,
+            phrases: plan.phrases,
+            mode: LearningMode.flashcard,
+            title: 'ဒီနေ့ ၅ ခု',
+          ),
+        ),
+      );
+    }
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
       children: [
         Text(
-          'ထိုင်းမှာ နေ့တိုင်းသုံးနိုင်တဲ့စကား',
+          'နေ့တိုင်း ၅ ခုစီ၊\nဖြည်းဖြည်း တတ်လာမယ်',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 6),
         Text(
-          'မြန်မာလိုနားလည်၊ ထိုင်းလိုလက်တွေ့ပြောပါ။',
+          'မြန်မာလိုနားလည်ပြီး အသံထွက်စာနဲ့ တွဲလေ့လာပါ။',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -94,7 +118,8 @@ class HomeScreen extends StatelessWidget {
         ),
         LearningDashboard(
           appState: appState,
-          onPractice: () => onSelectTab(4),
+          plan: StudyCatalog.todayPlan(repository, appState.learning, now),
+          onPractice: openToday,
           onProgress: onOpenProgress,
         ),
         const SizedBox(height: 18),

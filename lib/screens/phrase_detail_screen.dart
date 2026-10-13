@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
+import '../learning/learning_progress.dart';
 import '../models/phrase.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/thai_playback_button.dart';
 import 'phrase_issue_screen.dart';
+import 'study_session_screen.dart';
 
 class PhraseDetailScreen extends StatelessWidget {
   const PhraseDetailScreen({
@@ -128,20 +130,13 @@ class PhraseDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    phrase.thaiFor(appState.politeStyle),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineSmall?.copyWith(fontSize: 30),
-                  ),
-                  const SizedBox(height: 18),
-                  Text(
-                    'မြန်မာလို',
+                    'မြန်မာလို ပြောချင်တာ',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 6),
                   Text(
                     phrase.myanmar,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 18),
                   Text(
@@ -151,7 +146,19 @@ class PhraseDetailScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     phrase.pronunciation,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const Divider(height: 32),
+                  Text(
+                    'ထိုင်းစာ',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    phrase.thaiFor(appState.politeStyle),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 18),
                   Text(
@@ -184,6 +191,29 @@ class PhraseDetailScreen extends StatelessWidget {
             appState: appState,
             playbackService: playbackService,
             label: 'ထိုင်းအသံ နားထောင်ရန်',
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'အသံထွက်စာက အနီးစပ်ဆုံး လမ်းညွှန်သာဖြစ်ပါတယ်။ အသံမရရင် ဆက်တင်က ထိုင်းအသံ စမ်းရန်ကို ဖွင့်ကြည့်ပါ။',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 14),
+          FilledButton.tonalIcon(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => StudySessionScreen(
+                  repository: repository,
+                  appState: appState,
+                  playbackService: playbackService,
+                  phrases: [phrase],
+                  mode: LearningMode.flashcard,
+                  title: 'ဒီစကားစုကို လေ့ကျင့်ရန်',
+                ),
+              ),
+            ),
+            icon: const Icon(Icons.school_outlined),
+            label: const Text('ဒီစကားစုကို လေ့ကျင့်မယ်'),
           ),
           const SizedBox(height: 10),
           OutlinedButton.icon(
