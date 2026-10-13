@@ -90,7 +90,9 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.hearing_rounded),
               title: const Text('ထိုင်းအသံ စမ်းရန် / ပြင်ဆင်နည်း'),
-              subtitle: const Text('စက်မှာ အသံထွက်မထွက် စစ်ပြီး Thai voice ထည့်နည်းကြည့်ရန်'),
+              subtitle: const Text(
+                'စက်မှာ အသံထွက်မထွက် စစ်ပြီး Thai voice ထည့်နည်းကြည့်ရန်',
+              ),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute<void>(
@@ -133,7 +135,9 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.report_outlined),
               title: const Text('သိမ်းထားသော အမှားထောက်ပြချက်များ'),
-              subtitle: Text('${appState.phraseIssues.length} ခု • Copy လုပ်ပြီး developer ဆီ ပို့နိုင်သည်'),
+              subtitle: Text(
+                '${appState.phraseIssues.length} ခု • Copy လုပ်ပြီး developer ဆီ ပို့နိုင်သည်',
+              ),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute<void>(

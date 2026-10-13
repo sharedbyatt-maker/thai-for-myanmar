@@ -66,7 +66,9 @@ class _SpeechSetupScreenState extends State<SpeechSetupScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Text('“မင်္ဂလာပါ” ကို ထိုင်းလို အသံထွက် စမ်းဖတ်ပါမယ်။ စက်ရဲ့ volume ကို ဖွင့်ထားပါ။'),
+          const Text(
+            '“မင်္ဂလာပါ” ကို ထိုင်းလို အသံထွက် စမ်းဖတ်ပါမယ်။ စက်ရဲ့ volume ကို ဖွင့်ထားပါ။',
+          ),
           const SizedBox(height: 16),
           FilledButton.icon(
             onPressed: _busy ? null : _test,
@@ -80,7 +82,9 @@ class _SpeechSetupScreenState extends State<SpeechSetupScreen> {
           const SizedBox(height: 8),
           Text(instructions),
           const SizedBox(height: 12),
-          const Text('Thai voice ရှိတယ်ဆိုရင်တောင် အသံအရည်အသွေးက ဖုန်းနဲ့ voice engine အလိုက် ကွာနိုင်ပါတယ်။ အသံမရှိသေးရင် စကားစုစာသားကို ပြနိုင်ပါတယ်။'),
+          const Text(
+            'Thai voice ရှိတယ်ဆိုရင်တောင် အသံအရည်အသွေးက ဖုန်းနဲ့ voice engine အလိုက် ကွာနိုင်ပါတယ်။ အသံမရှိသေးရင် စကားစုစာသားကို ပြနိုင်ပါတယ်။',
+          ),
         ],
       ),
     );

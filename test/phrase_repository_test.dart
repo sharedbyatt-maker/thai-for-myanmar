@@ -52,12 +52,12 @@ void main() {
   });
 
   test('new everyday phrases appear in their situation and search', () {
-    final elevator = repository.inCategory('apartment_landlord').singleWhere(
-      (phrase) => phrase.id == 'apartment_elevator_available',
-    );
-    final callback = repository.inCategory('phone_sim').singleWhere(
-      (phrase) => phrase.id == 'phone_call_back',
-    );
+    final elevator = repository
+        .inCategory('apartment_landlord')
+        .singleWhere((phrase) => phrase.id == 'apartment_elevator_available');
+    final callback = repository
+        .inCategory('phone_sim')
+        .singleWhere((phrase) => phrase.id == 'phone_call_back');
     expect(elevator.thaiFor('female'), 'มีลิฟต์ไหมคะ');
     expect(callback.thaiFor('male'), 'ช่วยโทรกลับมาได้ไหมครับ');
     expect(

@@ -6,7 +6,11 @@ import '../models/phrase_issue.dart';
 import '../services/app_state.dart';
 
 class PhraseIssueScreen extends StatefulWidget {
-  const PhraseIssueScreen({required this.phrase, required this.appState, super.key});
+  const PhraseIssueScreen({
+    required this.phrase,
+    required this.appState,
+    super.key,
+  });
 
   final Phrase phrase;
   final AppState appState;
@@ -51,7 +55,11 @@ class _PhraseIssueScreenState extends State<PhraseIssueScreen> {
     });
     if (!succeeded) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('စက်ထဲမှာ မသိမ်းနိုင်ပါ။ နေရာလွတ်/သိမ်းဆည်းမှုကို စစ်ပြီး ပြန်စမ်းပါ။')),
+        const SnackBar(
+          content: Text(
+            'စက်ထဲမှာ မသိမ်းနိုင်ပါ။ နေရာလွတ်/သိမ်းဆည်းမှုကို စစ်ပြီး ပြန်စမ်းပါ။',
+          ),
+        ),
       );
     }
   }
@@ -61,7 +69,11 @@ class _PhraseIssueScreenState extends State<PhraseIssueScreen> {
       await Clipboard.setData(ClipboardData(text: _saved!.shareText));
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Copy လုပ်ပြီးပါပြီ။ သင်ရွေးတဲ့ chat/email ထဲ paste လုပ်ပြီး ပို့ပါ။')),
+        const SnackBar(
+          content: Text(
+            'Copy လုပ်ပြီးပါပြီ။ သင်ရွေးတဲ့ chat/email ထဲ paste လုပ်ပြီး ပို့ပါ။',
+          ),
+        ),
       );
     } catch (_) {
       if (!mounted) return;
@@ -78,7 +90,10 @@ class _PhraseIssueScreenState extends State<PhraseIssueScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text(widget.phrase.myanmar, style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            widget.phrase.myanmar,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           SelectableText(widget.phrase.thaiFor(widget.appState.politeStyle)),
           const SizedBox(height: 8),
@@ -95,7 +110,9 @@ class _PhraseIssueScreenState extends State<PhraseIssueScreen> {
             const SizedBox(height: 8),
             Text('သိမ်းထားသည့်အချိန်: ${saved.createdAt.toLocal()}'),
           ] else ...[
-            const Text('ထိုင်းစာ၊ မြန်မာအဓိပ္ပာယ် သို့မဟုတ် အသံထွက် ဘာမှားနေလဲ ရေးပါ။'),
+            const Text(
+              'ထိုင်းစာ၊ မြန်မာအဓိပ္ပာယ် သို့မဟုတ် အသံထွက် ဘာမှားနေလဲ ရေးပါ။',
+            ),
             const SizedBox(height: 12),
             TextField(
               controller: _controller,
@@ -107,11 +124,15 @@ class _PhraseIssueScreenState extends State<PhraseIssueScreen> {
               ),
             ),
             FilledButton(
-              onPressed: _saving || _controller.text.trim().isEmpty ? null : _save,
+              onPressed: _saving || _controller.text.trim().isEmpty
+                  ? null
+                  : _save,
               child: Text(_saving ? 'သိမ်းနေသည်…' : 'စက်ထဲ သိမ်းရန်'),
             ),
             const SizedBox(height: 12),
-            const Text('စက်ထဲမှာပဲ သိမ်းပါတယ်။ Copy လုပ်ပြီး သင်ရွေးတဲ့ chat/email မှ developer ဆီ ပို့နိုင်ပါတယ်။'),
+            const Text(
+              'စက်ထဲမှာပဲ သိမ်းပါတယ်။ Copy လုပ်ပြီး သင်ရွေးတဲ့ chat/email မှ developer ဆီ ပို့နိုင်ပါတယ်။',
+            ),
           ],
         ],
       ),
@@ -133,7 +154,9 @@ class SavedPhraseIssuesScreen extends StatelessWidget {
         builder: (context, _) {
           final issues = appState.phraseIssues;
           if (issues.isEmpty) {
-            return const Center(child: Text('သိမ်းထားသော အမှားထောက်ပြချက် မရှိသေးပါ။'));
+            return const Center(
+              child: Text('သိမ်းထားသော အမှားထောက်ပြချက် မရှိသေးပါ။'),
+            );
           }
           return ListView.builder(
             padding: const EdgeInsets.all(12),
@@ -150,10 +173,16 @@ class SavedPhraseIssuesScreen extends StatelessWidget {
                     onSelected: (action) async {
                       if (action == 'copy') {
                         try {
-                          await Clipboard.setData(ClipboardData(text: issue.shareText));
+                          await Clipboard.setData(
+                            ClipboardData(text: issue.shareText),
+                          );
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Copy လုပ်ပြီးပါပြီ။ chat/email ထဲ paste လုပ်ပြီး ပို့ပါ။')),
+                            const SnackBar(
+                              content: Text(
+                                'Copy လုပ်ပြီးပါပြီ။ chat/email ထဲ paste လုပ်ပြီး ပို့ပါ။',
+                              ),
+                            ),
                           );
                         } catch (_) {
                           if (!context.mounted) return;
@@ -162,10 +191,18 @@ class SavedPhraseIssuesScreen extends StatelessWidget {
                           );
                         }
                       } else if (action == 'delete') {
-                        final removed = await appState.removePhraseIssue(issue.id);
+                        final removed = await appState.removePhraseIssue(
+                          issue.id,
+                        );
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(removed ? 'ဖျက်ပြီးပါပြီ။' : 'ဖျက်မရပါ။ ထပ်စမ်းပါ။')),
+                          SnackBar(
+                            content: Text(
+                              removed
+                                  ? 'ဖျက်ပြီးပါပြီ။'
+                                  : 'ဖျက်မရပါ။ ထပ်စမ်းပါ။',
+                            ),
+                          ),
                         );
                       }
                     },

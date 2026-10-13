@@ -113,6 +113,7 @@ void main() {
     await tester.enterText(find.byType(TextField), 'အသံထွက်ကို စစ်ပေးပါ');
     await tester.ensureVisible(find.text('စက်ထဲ သိမ်းရန်'));
     await tester.tap(find.text('စက်ထဲ သိမ်းရန်'));
+    await tester.pump(const Duration(milliseconds: 100));
     await tester.pumpAndSettle();
     expect(state.phraseIssues, hasLength(1));
     expect(find.textContaining('Developer ဆီ မပို့ရသေးပါ'), findsOneWidget);

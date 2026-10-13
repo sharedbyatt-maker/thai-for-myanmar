@@ -196,10 +196,8 @@ class PhraseDetailScreen extends StatelessWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (_) => PhraseIssueScreen(
-                  phrase: phrase,
-                  appState: appState,
-                ),
+                builder: (_) =>
+                    PhraseIssueScreen(phrase: phrase, appState: appState),
               ),
             ),
             icon: const Icon(Icons.report_outlined),
