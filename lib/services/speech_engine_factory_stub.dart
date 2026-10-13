@@ -4,7 +4,7 @@ import 'speech_engine.dart';
 
 SpeechEngine createPlatformSpeechEngine() => _FlutterTtsSpeechEngine();
 
-class _FlutterTtsSpeechEngine implements SpeechEngine {
+class _FlutterTtsSpeechEngine implements SpeechEngine, SpeechVolumeControl {
   _FlutterTtsSpeechEngine() : _tts = FlutterTts();
 
   final FlutterTts _tts;
@@ -20,6 +20,9 @@ class _FlutterTtsSpeechEngine implements SpeechEngine {
 
   @override
   Future<dynamic> setSpeechRate(double rate) => _tts.setSpeechRate(rate);
+
+  @override
+  Future<dynamic> setVolume(double volume) => _tts.setVolume(volume);
 
   @override
   Future<dynamic> awaitSpeakCompletion(bool awaitCompletion) =>

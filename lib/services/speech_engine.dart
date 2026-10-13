@@ -24,3 +24,8 @@ abstract interface class SpeechVoiceChangeAware {
 abstract interface class SpeechEngineDiagnosticSource {
   Map<String, Object?> get diagnosticDetails;
 }
+
+/// Optional so unsupported engines and test adapters remain usable.
+abstract interface class SpeechVolumeControl {
+  Future<dynamic> setVolume(double volume);
+}

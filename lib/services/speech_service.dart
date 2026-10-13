@@ -30,6 +30,7 @@ class SpeechService {
   late final Duration _voiceLookupWindow;
   Future<void> _queue = Future<void>.value();
   int _generation = 0;
+  double volume = 1;
   _SpeechCancellation? _activeCancellation;
 
   List<Map<String, String>> _lastVoices = const [];
@@ -145,6 +146,12 @@ class SpeechService {
       );
 
       var didStart = false;
+      if (_engine case final SpeechVolumeControl volumeControl) {
+        await _waitOrCancel(
+          volumeControl.setVolume(volume).timeout(_speechTimeout),
+          cancellation,
+        );
+      }
       final outcome = Completer<SpeechResult>();
       _engine.setStartHandler(() {
         didStart = true;
@@ -238,6 +245,10 @@ class SpeechService {
         _lastThaiVoices = thaiVoices;
         if (thaiVoices.isNotEmpty) {
           thaiVoices.sort((a, b) {
+            final offlineOrder = _voiceNetworkRank(
+              a,
+            ).compareTo(_voiceNetworkRank(b));
+            if (offlineOrder != 0) return offlineOrder;
             final aLocale = _normalizeLocale(a['locale']!);
             final bLocale = _normalizeLocale(b['locale']!);
             final localeOrder = _localeRank(
@@ -299,6 +310,9 @@ class SpeechService {
       final locale = rawVoice['locale']?.toString().trim() ?? '';
       if (name.isEmpty || locale.isEmpty) continue;
       voices.add({'name': name, 'locale': locale});
+      for (final key in ['network_required', 'localService']) {
+        if (rawVoice[key] != null) voices.last[key] = rawVoice[key].toString();
+      }
     }
     return voices;
   }
@@ -319,6 +333,14 @@ class SpeechService {
   int _localeRank(String locale) {
     if (locale == 'th-th') return 0;
     if (locale == 'th') return 2;
+    return 1;
+  }
+
+  int _voiceNetworkRank(Map<String, String> voice) {
+    final network = voice['network_required']?.toLowerCase();
+    final local = voice['localService']?.toLowerCase();
+    if (network == 'false' || local == 'true') return 0;
+    if (network == 'true' || local == 'false') return 2;
     return 1;
   }
 

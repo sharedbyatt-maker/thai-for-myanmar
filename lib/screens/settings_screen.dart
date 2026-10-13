@@ -45,6 +45,39 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
+              'တစ်နေ့ သင်ယူမှုရည်မှန်းချက်',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [5, 10, 20]
+                  .map(
+                    (goal) => ChoiceChip(
+                      label: Text('$goal ခု'),
+                      selected: appState.learning.dailyGoal == goal,
+                      onSelected: (_) => appState.setDailyGoal(goal),
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'ထိုင်းအသံ အတိုးအကျယ်',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Slider(
+              value: appState.audioVolume,
+              divisions: 10,
+              label: '${(appState.audioVolume * 100).round()}%',
+              onChanged: appState.setAudioVolume,
+            ),
+            const Text(
+              'နောက်ဖွင့်မယ့်အသံအတွက် သုံးမယ်။ စက်ရဲ့ အသံအတိုးအကျယ်ကိုလည်း စစ်ပါ။',
+            ),
+            const SizedBox(height: 20),
+            Text(
               'ထိုင်းလို ယဉ်ကျေးစကားအဆုံးသတ်',
               style: Theme.of(context).textTheme.titleLarge,
             ),

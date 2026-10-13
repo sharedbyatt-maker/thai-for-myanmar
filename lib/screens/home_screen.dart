@@ -6,6 +6,8 @@ import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
+import '../widgets/learning_dashboard.dart';
+import 'phrase_browser_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -14,6 +16,7 @@ class HomeScreen extends StatelessWidget {
     required this.playbackService,
     required this.onSelectTab,
     required this.onOpenPhrase,
+    required this.onOpenProgress,
     super.key,
   });
 
@@ -22,13 +25,20 @@ class HomeScreen extends StatelessWidget {
   final ThaiPlaybackService playbackService;
   final ValueChanged<int> onSelectTab;
   final ValueChanged<String> onOpenPhrase;
+  final VoidCallback onOpenProgress;
 
   @override
   Widget build(BuildContext context) {
-    final daily = repository.phrases.firstWhere(
-      (phrase) => phrase.id == 'question_slowly',
-      orElse: () => repository.phrases.first,
-    );
+    final now = DateTime.now();
+    final dayIndex = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+    ).difference(DateTime.utc(2026)).inDays;
+    final everyday = repository.phrases
+        .where((p) => !p.tags.contains('high-risk'))
+        .toList();
+    final daily = everyday[dayIndex % everyday.length];
     final popular = repository.categories
         .where((category) => category.kind != 'learn')
         .take(4)
@@ -48,13 +58,53 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
+        AnimatedBuilder(
+          animation: appState,
+          builder: (context, _) => appState.learning.onboardingComplete
+              ? const SizedBox.shrink()
+              : Padding(
+                  padding: const EdgeInsets.only(bottom: 18),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'စလေ့လာမယ့်သူအတွက်',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            '၁။ လေ့လာမှာ ၅ စကားစုစီ သင်ပါ။\n၂။ လေ့ကျင့်မှာ မှတ်မိသလား စမ်းပါ။\n၃။ မှားတဲ့စကားစုကို နောက်နေ့ ပြန်လေ့ကျင့်ပါ။',
+                          ),
+                          const SizedBox(height: 12),
+                          FilledButton(
+                            onPressed: () {
+                              appState.completeOnboarding();
+                              onSelectTab(1);
+                            },
+                            child: const Text('စလေ့လာမယ်'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+        ),
+        LearningDashboard(
+          appState: appState,
+          onPractice: () => onSelectTab(4),
+          onProgress: onOpenProgress,
+        ),
+        const SizedBox(height: 18),
         Row(
           children: [
             Expanded(
               child: _ActionCard(
                 icon: Icons.record_voice_over_rounded,
                 title: 'အမြန်ပြော',
-                subtitle: 'စကားစုရှу',
+                subtitle: 'စကားစုရှာရန်',
                 onTap: () => onSelectTab(3),
               ),
             ),
@@ -96,7 +146,18 @@ class HomeScreen extends StatelessWidget {
             return ActionChip(
               avatar: Text(category.icon),
               label: Text(category.my),
-              onPressed: () => onSelectTab(2),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => PhraseBrowserScreen(
+                    repository: repository,
+                    appState: appState,
+                    playbackService: playbackService,
+                    title: category.my,
+                    categoryId: category.id,
+                  ),
+                ),
+              ),
             );
           }).toList(),
         ),

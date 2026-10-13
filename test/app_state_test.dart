@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 
 void main() {
@@ -8,6 +9,36 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
+
+  test(
+    'learning state persists without replacing existing favorites',
+    () async {
+      final state = AppState();
+      await state.load();
+      await state.toggleFavorite('greet_hello');
+      await state.recordReview(
+        'greet_hello',
+        LearningMode.meaning,
+        5,
+        now: DateTime(2026, 10, 13),
+      );
+      await state.setDailyGoal(20);
+      await state.setAudioVolume(0.4);
+      await state.completeOnboarding();
+      await state.finishStudySession(lessonId: 'greetings:greet_hello');
+      final restored = AppState();
+      await restored.load();
+      expect(restored.isFavorite('greet_hello'), isTrue);
+      expect(restored.learning.totalReviews, 1);
+      expect(
+        restored.learning.completedLessons,
+        contains('greetings:greet_hello'),
+      );
+      expect(restored.learning.dailyGoal, 20);
+      expect(restored.learning.onboardingComplete, isTrue);
+      expect(restored.audioVolume, 0.4);
+    },
+  );
 
   test(
     'favorites, learned phrases, theme, and quiz count persist locally',

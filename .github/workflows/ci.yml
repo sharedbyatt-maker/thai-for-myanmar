@@ -50,11 +50,13 @@ jobs:
           test/speech_service_test.dart
           test/thai_audio_catalog_test.dart
           test/thai_playback_service_test.dart
+          test/learning_progress_test.dart
+          test/study_catalog_test.dart
           --reporter expanded
 
       - name: Run widget tests
         timeout-minutes: 5
-        run: flutter test test/widget_test.dart --reporter expanded
+        run: flutter test test/widget_test.dart test/study_session_test.dart --reporter expanded
 
       - name: Verify Thai playback button states
         timeout-minutes: 5

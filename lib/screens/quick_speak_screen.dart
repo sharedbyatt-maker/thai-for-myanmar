@@ -117,7 +117,7 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final results = widget.repository.search(_query).take(12).toList();
+    final results = widget.repository.search(_query);
     final emergency = widget.repository.inCategory('emergency');
     final selected = _selectedPhrase;
     return ListView(

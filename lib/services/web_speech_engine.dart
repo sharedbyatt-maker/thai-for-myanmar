@@ -11,7 +11,8 @@ class WebSpeechEngine
     implements
         SpeechEngine,
         SpeechVoiceChangeAware,
-        SpeechEngineDiagnosticSource {
+        SpeechEngineDiagnosticSource,
+        SpeechVolumeControl {
   web.SpeechSynthesis? get _synthesis {
     try {
       return web.window.speechSynthesis;
@@ -25,6 +26,7 @@ class WebSpeechEngine
   void Function(dynamic error) _errorHandler = (_) {};
   web.SpeechSynthesisVoice? _selectedVoice;
   double _rate = 1;
+  double _volume = 1;
   String? _lastVoiceSignature;
   int _voicesChangedEvents = 0;
   String _lastError = '';
@@ -54,7 +56,13 @@ class WebSpeechEngine
   Future<dynamic> getVoices() async {
     final voices = _readVoices();
     final voiceData = voices
-        .map((voice) => {'name': voice.name, 'locale': voice.lang})
+        .map(
+          (voice) => {
+            'name': voice.name,
+            'locale': voice.lang,
+            'localService': voice.localService.toString(),
+          },
+        )
         .toList(growable: false);
     _lastVoiceSignature = _signature(voiceData);
     return voiceData;
@@ -171,6 +179,13 @@ class WebSpeechEngine
   Future<dynamic> awaitSpeakCompletion(bool awaitCompletion) async => 1;
 
   @override
+  Future<dynamic> setVolume(double volume) async {
+    if (!volume.isFinite) return 0;
+    _volume = volume.clamp(0.0, 1.0);
+    return 1;
+  }
+
+  @override
   Future<dynamic> speak(String text) async {
     final synthesis = _synthesis;
     final selected = _selectedVoice;
@@ -196,6 +211,7 @@ class WebSpeechEngine
         ..voice = currentVoice.first
         ..lang = currentVoice.first.lang
         ..rate = _rate
+        ..volume = _volume
         ..onstart = ((web.Event _) => _startHandler()).toJS
         ..onend = ((web.Event _) => _completionHandler()).toJS
         ..onerror = ((web.Event _) {
