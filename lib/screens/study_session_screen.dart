@@ -129,6 +129,16 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   Future<void> _listen() async {
+    if (widget.appState.audioVolume == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'ဆက်တင်မှာ ထိုင်းအသံ အတိုးအကျယ်ကို မြှင့်ပြီးမှ စမ်းပါ။',
+          ),
+        ),
+      );
+      return;
+    }
     if (_audioBusy) {
       await widget.playbackService.stop();
       return;

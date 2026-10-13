@@ -116,8 +116,9 @@ class LearningProgress {
       result._completedLessons.addAll(lessons.whereType<String>());
     }
     final goal = json['dailyGoal'];
-    if (goal is int && const {5, 10, 20}.contains(goal))
+    if (goal is int && const {5, 10, 20}.contains(goal)) {
       result.dailyGoal = goal;
+    }
     int nonNegative(String key) {
       final value = json[key];
       return value is int && value >= 0 ? value : 0;
