@@ -74,9 +74,12 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
             .where((item) => item.id != _phrase.id)
             .toList()
           ..shuffle();
-    final seen = <String>{_phrase.myanmar};
+    String label(Phrase phrase) => widget.mode == LearningMode.reverseMeaning
+        ? phrase.thaiFor(_politeStyle)
+        : phrase.myanmar;
+    final seen = <String>{label(_phrase)};
     final distractors = candidates
-        .where((item) => seen.add(item.myanmar))
+        .where((item) => seen.add(label(item)))
         .take(3);
     _options = [_phrase, ...distractors]..shuffle();
     final chunks = sentenceChunks(_phrase, _politeStyle) ?? [];
@@ -132,6 +135,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     unawaited(widget.playbackService.stop());
     unawaited(widget.appState.finishStudySession(lessonId: widget.lessonId));
     if (widget.mode == LearningMode.meaning ||
+        widget.mode == LearningMode.reverseMeaning ||
         widget.mode == LearningMode.listening) {
       unawaited(widget.appState.recordQuizCompletion());
     }
@@ -267,6 +271,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
 
   Widget _question(BuildContext context) {
     final listening = widget.mode == LearningMode.listening;
+    final reverse = widget.mode == LearningMode.reverseMeaning;
     final flashcard = widget.mode == LearningMode.flashcard;
     final sentence = widget.mode == LearningMode.sentence;
     final thai = _phrase.thaiFor(_politeStyle);
@@ -290,11 +295,13 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                       ? 'စာကြောင်းအပိုင်းတွေကို အစီအစဉ်တကျ စီပါ'
                       : flashcard
                       ? 'နားထောင်၊ မှတ်မိသလား စမ်းကြည့်ပါ'
+                      : reverse
+                      ? 'ထိုင်းအဖြေကို ရွေးပါ'
                       : 'မြန်မာအဓိပ္ပာယ်ကို ရွေးပါ',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 18),
-                if (!listening || _answered) ...[
+                if ((!listening && !reverse) || _answered) ...[
                   if (!sentence || _answered)
                     Text(
                       thai,
@@ -309,7 +316,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     ),
                   ],
                 ],
-                if (sentence)
+                if (sentence || (reverse && !_answered))
                   Text(
                     _phrase.myanmar,
                     style: Theme.of(context).textTheme.titleLarge,
@@ -321,7 +328,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     icon: Icon(_audioBusy ? Icons.stop : Icons.headphones),
                     label: Text(_audioBusy ? 'ရပ်ရန်' : 'အသံနားထောင်ရန်'),
                   )
-                else
+                else if (!reverse || _answered)
                   ThaiPlaybackButton(
                     phrase: _phrase,
                     appState: widget.appState,
@@ -413,7 +420,12 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     ? Theme.of(context).colorScheme.errorContainer
                     : null,
                 child: ListTile(
-                  title: Text(option.myanmar),
+                  title: Text(
+                    reverse ? option.thaiFor(_politeStyle) : option.myanmar,
+                  ),
+                  subtitle: reverse && _showPronunciation
+                      ? Text(option.pronunciation)
+                      : null,
                   trailing: _answered && correct
                       ? const Icon(Icons.check_circle)
                       : null,

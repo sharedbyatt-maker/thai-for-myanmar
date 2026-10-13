@@ -77,6 +77,27 @@ void main() {
     expect(state.learning.completedSessions, 0);
   });
 
+  testWidgets('reverse meaning practice grades the selected Thai answer', (
+    tester,
+  ) async {
+    final state = await setup(tester, LearningMode.reverseMeaning);
+    expect(find.text(repository.phrases.first.myanmar), findsOneWidget);
+    expect(find.text('ထိုင်းအသံ နားထောင်ရန်'), findsNothing);
+    final answer = find.text(
+      repository.phrases.first.thaiFor(state.politeStyle),
+    );
+    await tester.ensureVisible(answer);
+    await tester.tap(answer);
+    await tester.pump();
+    expect(
+      state.learning
+          .cardFor(repository.phrases.first.id, LearningMode.reverseMeaning)!
+          .lastQuality,
+      5,
+    );
+    expect(state.learning.totalReviews, 1);
+  });
+
   testWidgets('repeated taps cannot grade an unseen flashcard', (tester) async {
     final state = await setup(tester, LearningMode.flashcard, count: 2);
     await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));

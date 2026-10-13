@@ -1,6 +1,13 @@
 import 'review_card.dart';
 
-enum LearningMode { flashcard, meaning, listening, matching, sentence }
+enum LearningMode {
+  flashcard,
+  meaning,
+  reverseMeaning,
+  listening,
+  matching,
+  sentence,
+}
 
 enum ReviewFilter { due, fresh, difficult, favorites, all }
 

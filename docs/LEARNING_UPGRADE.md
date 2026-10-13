@@ -14,6 +14,9 @@ phrases. It does not add accounts, cloud databases, subscriptions or analytics.
 - Practice offers flashcards, Thai-to-Myanmar meaning questions, listening
   questions, matching and sentence-piece ordering. Category and due/new/
   difficult/favorite/all filters can be selected before starting.
+- Myanmar-to-Thai meaning practice is also retained, with its own review track.
+  Direction is chosen before the session and cannot reveal an answer by being
+  switched midway through a question.
 - Listening questions never reveal Thai text or pronunciation before an answer.
   Answers stay disabled until verified audio finishes. Missing audio earns no
   grade or progress; learners can retry or switch to flashcards.

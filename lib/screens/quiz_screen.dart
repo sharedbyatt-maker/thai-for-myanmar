@@ -13,6 +13,7 @@ import 'study_session_screen.dart';
 String modeLabel(LearningMode mode) => switch (mode) {
   LearningMode.flashcard => 'စာကတ်',
   LearningMode.meaning => 'အဓိပ္ပာယ်ရွေး',
+  LearningMode.reverseMeaning => 'မြန်မာ → ထိုင်း',
   LearningMode.listening => 'နားထောင်ပြီးရွေး',
   LearningMode.matching => 'အတွဲချိတ်',
   LearningMode.sentence => 'စာကြောင်းစီ',
