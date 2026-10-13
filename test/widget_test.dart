@@ -6,6 +6,10 @@ import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/main_shell.dart';
 import 'package:thai_for_myanmar/screens/quick_speak_screen.dart';
+import 'package:thai_for_myanmar/screens/phrase_detail_screen.dart';
+import 'package:thai_for_myanmar/screens/phrase_issue_screen.dart';
+import 'package:thai_for_myanmar/screens/settings_screen.dart';
+import 'package:thai_for_myanmar/screens/speech_setup_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
@@ -84,6 +88,67 @@ void main() {
     );
     await _pumpUi(tester);
     expect(find.byType(MainShell), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a phrase correction is saved and clearly marked unsent', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PhraseDetailScreen(
+          phrase: repository.phrases.firstWhere((p) => p.id == 'greet_hello'),
+          repository: repository,
+          appState: state,
+          playbackService: _playbackService(),
+        ),
+      ),
+    );
+    await tester.ensureVisible(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
+    await tester.tap(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
+    await tester.pumpAndSettle();
+    expect(find.byType(PhraseIssueScreen), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'အသံထွက်ကို စစ်ပေးပါ');
+    await tester.pump();
+    final saveButton = find.widgetWithText(FilledButton, 'စက်ထဲ သိမ်းရန်');
+    expect(tester.widget<FilledButton>(saveButton).onPressed, isNotNull);
+    await tester.ensureVisible(find.text('စက်ထဲ သိမ်းရန်'));
+    await tester.tap(find.text('စက်ထဲ သိမ်းရန်'));
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pumpAndSettle();
+    expect(state.phraseIssues, hasLength(1));
+    expect(find.textContaining('Developer ဆီ မပို့ရသေးပါ'), findsOneWidget);
+    expect(find.text('အမှားထောက်ပြချက် Copy လုပ်ရန်'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('voice test and saved correction list are visible in Settings', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SettingsScreen(
+          appState: state,
+          repository: repository,
+          playbackService: _playbackService(),
+        ),
+      ),
+    );
+    await tester.ensureVisible(find.text('ထိုင်းအသံ စမ်းရန် / ပြင်ဆင်နည်း'));
+    await tester.tap(find.text('ထိုင်းအသံ စမ်းရန် / ပြင်ဆင်နည်း'));
+    await tester.pumpAndSettle();
+    expect(find.byType(SpeechSetupScreen), findsOneWidget);
+    expect(find.text('ထိုင်းအသံ စမ်းရန်'), findsWidgets);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('သိမ်းထားသော အမှားထောက်ပြချက်များ'));
+    await tester.tap(find.text('သိမ်းထားသော အမှားထောက်ပြချက်များ'));
+    await tester.pumpAndSettle();
+    expect(find.byType(SavedPhraseIssuesScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

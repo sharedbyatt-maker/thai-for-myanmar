@@ -75,4 +75,44 @@ void main() {
       expect(state.recent, isNot(contains('phrase_0')));
     },
   );
+
+  test('phrase issues are saved locally and can be removed', () async {
+    final state = AppState();
+    await state.load();
+    expect(
+      await state.savePhraseIssue(
+        phraseId: 'greet_hello',
+        thai: 'สวัสดีค่ะ',
+        myanmar: 'မင်္ဂလာပါ။',
+        description: '  အသံထွက်ကို စစ်ပေးပါ  ',
+      ),
+      isTrue,
+    );
+    final restored = AppState();
+    await restored.load();
+    expect(restored.phraseIssues, hasLength(1));
+    final issue = restored.phraseIssues.single;
+    expect(issue.description, 'အသံထွက်ကို စစ်ပေးပါ');
+    expect(issue.shareText, contains('Phrase ID: greet_hello'));
+    expect(issue.shareText, contains('စစ်ပေးပါ'));
+    expect(await restored.removePhraseIssue(issue.id), isTrue);
+    final again = AppState();
+    await again.load();
+    expect(again.phraseIssues, isEmpty);
+  });
+
+  test('empty issues cannot be saved or shown as submitted', () async {
+    final state = AppState();
+    await state.load();
+    expect(
+      await state.savePhraseIssue(
+        phraseId: 'greet_hello',
+        thai: 'สวัสดีค่ะ',
+        myanmar: 'မင်္ဂလာပါ။',
+        description: '   ',
+      ),
+      isFalse,
+    );
+    expect(state.phraseIssues, isEmpty);
+  });
 }
