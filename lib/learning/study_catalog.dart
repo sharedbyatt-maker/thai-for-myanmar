@@ -3,6 +3,7 @@ import 'dart:math';
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import 'learning_progress.dart';
+import 'review_card.dart';
 
 class StudyLesson {
   const StudyLesson({
@@ -17,7 +18,47 @@ class StudyLesson {
   final List<Phrase> phrases;
 }
 
+class TodayStudyPlan {
+  const TodayStudyPlan({required this.phrases, required this.reviewCount});
+
+  final List<Phrase> phrases;
+  final int reviewCount;
+  int get newCount => phrases.length - reviewCount;
+}
+
 class StudyCatalog {
+  /// A small, predictable deck: overdue flashcards first, then new everyday
+  /// phrases in lesson order. Unreviewed cards are not counted as overdue.
+  static TodayStudyPlan todayPlan(
+    PhraseRepository repository,
+    LearningProgress progress,
+    DateTime now, {
+    int limit = 5,
+  }) {
+    final reviewedDue =
+        repository.phrases.where((phrase) {
+          final card = progress.cardFor(phrase.id, LearningMode.flashcard);
+          return card != null && !card.due.isAfter(dateOnly(now));
+        }).toList()..sort((a, b) {
+          final left = progress.cardFor(a.id, LearningMode.flashcard)!;
+          final right = progress.cardFor(b.id, LearningMode.flashcard)!;
+          final comparison = left.due.compareTo(right.due);
+          return comparison != 0 ? comparison : a.id.compareTo(b.id);
+        });
+    final selected = reviewedDue.take(limit).toList();
+    final reviewCount = selected.length;
+    for (final phrase in repository.phrases) {
+      if (selected.length >= limit) break;
+      if (phrase.tags.contains('high-risk') ||
+          phrase.tags.contains('emergency') ||
+          progress.cardFor(phrase.id, LearningMode.flashcard) != null) {
+        continue;
+      }
+      selected.add(phrase);
+    }
+    return TodayStudyPlan(phrases: selected, reviewCount: reviewCount);
+  }
+
   static List<StudyLesson> lessons(PhraseRepository repository) {
     final result = <StudyLesson>[];
     for (final category in repository.categories) {

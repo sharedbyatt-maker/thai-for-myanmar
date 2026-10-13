@@ -77,6 +77,47 @@ void main() {
       [phrase.id],
     );
   });
+  test(
+    'today deck prioritizes real due reviews and fills with safe new cards',
+    () {
+      final now = DateTime(2026, 10, 13);
+      final progress = LearningProgress();
+      final due = repository.phrases.last;
+      final later = repository.phrases.first;
+      progress.record(
+        due.id,
+        LearningMode.flashcard,
+        2,
+        DateTime(2026, 10, 12),
+      );
+      progress.record(later.id, LearningMode.flashcard, 5, now);
+
+      final plan = StudyCatalog.todayPlan(repository, progress, now);
+      expect(plan.phrases, hasLength(5));
+      expect(plan.phrases.first.id, due.id);
+      expect(plan.reviewCount, 1);
+      expect(plan.newCount, 4);
+      expect(
+        plan.phrases.map((phrase) => phrase.id),
+        isNot(contains(later.id)),
+      );
+      expect(plan.phrases.map((phrase) => phrase.id).toSet(), hasLength(5));
+      expect(
+        plan.phrases
+            .skip(1)
+            .every(
+              (phrase) =>
+                  !phrase.tags.contains('high-risk') &&
+                  !phrase.tags.contains('emergency'),
+            ),
+        isTrue,
+      );
+      expect(
+        StudyCatalog.todayPlan(repository, progress, now, limit: 0).phrases,
+        isEmpty,
+      );
+    },
+  );
   test('chunks reconstruct the exact Thai phrase in both polite forms', () {
     for (final style in ['male', 'female']) {
       var count = 0;

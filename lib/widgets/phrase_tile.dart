@@ -50,7 +50,7 @@ class PhraseTile extends StatelessWidget {
                 child: Semantics(
                   button: true,
                   label:
-                      '${phrase.thaiFor(appState.politeStyle)}. ${phrase.myanmar}',
+                      '${phrase.myanmar}. အသံထွက်အနီးစပ်ဆုံး ${phrase.pronunciation}. ${phrase.thaiFor(appState.politeStyle)}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () => _open(context),
@@ -67,15 +67,24 @@ class PhraseTile extends StatelessWidget {
                             ),
                           const SizedBox(height: 3),
                           Text(
-                            phrase.thaiFor(appState.politeStyle),
+                            phrase.myanmar,
                             style: Theme.of(context).textTheme.titleMedium,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            phrase.myanmar,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            'အသံထွက်အနီးစပ်ဆုံး • ${phrase.pronunciation}',
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: colors.primary),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            phrase.thaiFor(appState.politeStyle),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: colors.onSurfaceVariant),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

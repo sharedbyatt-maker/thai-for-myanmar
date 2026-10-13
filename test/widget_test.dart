@@ -10,6 +10,7 @@ import 'package:thai_for_myanmar/screens/phrase_detail_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_issue_screen.dart';
 import 'package:thai_for_myanmar/screens/settings_screen.dart';
 import 'package:thai_for_myanmar/screens/speech_setup_screen.dart';
+import 'package:thai_for_myanmar/screens/study_session_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
@@ -91,6 +92,34 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('home starts a five-card session without extra mode selection', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(420, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      ThaiForMyanmarApp(
+        repository: repository,
+        appState: state,
+        playbackService: _playbackService(),
+      ),
+    );
+    await _pumpUi(tester);
+    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.pumpAndSettle();
+    final session = tester.widget<StudySessionScreen>(
+      find.byType(StudySessionScreen),
+    );
+    expect(session.phrases, hasLength(5));
+    expect(find.text(session.phrases.first.pronunciation), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('a phrase correction is saved and clearly marked unsent', (
     tester,
   ) async {
@@ -106,7 +135,10 @@ void main() {
         ),
       ),
     );
-    await tester.ensureVisible(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
+    await tester.scrollUntilVisible(
+      find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'),
+      180,
+    );
     await tester.tap(find.text('ဒီစကားစုမှာ အမှားထောက်ပြရန်'));
     await tester.pumpAndSettle();
     expect(find.byType(PhraseIssueScreen), findsOneWidget);
@@ -121,6 +153,32 @@ void main() {
     expect(state.phraseIssues, hasLength(1));
     expect(find.textContaining('Developer ဆီ မပို့ရသေးပါ'), findsOneWidget);
     expect(find.text('အမှားထောက်ပြချက် Copy လုပ်ရန်'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a phrase detail opens practice for that exact phrase', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    final phrase = repository.phrases.first;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PhraseDetailScreen(
+          phrase: phrase,
+          repository: repository,
+          appState: state,
+          playbackService: _playbackService(),
+        ),
+      ),
+    );
+    await tester.ensureVisible(find.text('ဒီစကားစုကို လေ့ကျင့်မယ်'));
+    await tester.tap(find.text('ဒီစကားစုကို လေ့ကျင့်မယ်'));
+    await tester.pumpAndSettle();
+    final session = tester.widget<StudySessionScreen>(
+      find.byType(StudySessionScreen),
+    );
+    expect(session.phrases.map((item) => item.id), [phrase.id]);
     expect(tester.takeException(), isNull);
   });
 

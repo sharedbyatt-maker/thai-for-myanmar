@@ -302,13 +302,28 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                 ),
                 const SizedBox(height: 18),
                 if ((!listening && !reverse) || _answered) ...[
+                  if (flashcard && _showPronunciation) ...[
+                    Text(
+                      _phrase.pronunciation,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   if (!sentence || _answered)
                     Text(
                       thai,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: flashcard
+                          ? Theme.of(context).textTheme.titleLarge
+                          : Theme.of(context).textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
-                  if (_showPronunciation && (!sentence || _answered)) ...[
+                  if (_showPronunciation &&
+                      !flashcard &&
+                      (!sentence || _answered)) ...[
                     const SizedBox(height: 12),
                     Text(
                       'အသံထွက်အနီးစပ်ဆုံး — ${_phrase.pronunciation}',
