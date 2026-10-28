@@ -96,6 +96,32 @@ class KokoroEngine:
         self.styles = load_styles(self.folder / "onnx")
 
     def synthesize(self, text, speaker, speed):
+        try:
+            return self._synthesize(text, speaker, speed)
+        except ValueError:
+            raise
+        except Exception as error:
+            # The shared batch writer deliberately hides cloud credential errors.
+            # Convert local engine failures to safe, actionable ValueErrors so it
+            # does not replace CPU/ONNX errors with an unrelated cloud message.
+            import traceback
+            traceback.print_exc()
+            detail = str(error).replace("\n", " ")[:500]
+            if isinstance(error, MemoryError) or any(
+                part in detail.lower() for part in ("bad_alloc", "out of memory", "failed to allocate")
+            ):
+                raise ValueError(
+                    "Local CPU engine ran out of memory. Close Studio and other large apps, "
+                    "restart the launcher, then run All with the same voice/speed. "
+                    "Completed cached files will be reused."
+                ) from None
+            raise ValueError(
+                f"Local Thai engine failed ({type(error).__name__}): {detail}. "
+                "No cloud setup is needed. Restart Studio and retry with the same settings; "
+                "if it repeats, copy this full error message."
+            ) from None
+
+    def _synthesize(self, text, speaker, speed):
         import numpy as np
         import lameenc
         from kokoro_thai.onnx_infer import synth_phonemes, count_tokens
