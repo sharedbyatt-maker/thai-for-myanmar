@@ -1,3 +1,5 @@
+> Current pack status: all 990 selected forms now have bundled generated MP3s. See [Bundled audio](BUNDLED_AUDIO.md) for coverage, provenance and pending review. The research snapshot and zero-coverage figures below are historical, from before this import.
+
 # Thai audio architecture and source review
 
 Research snapshot: 2026-09-29.
