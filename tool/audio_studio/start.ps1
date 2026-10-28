@@ -34,9 +34,18 @@ try {
         & $UvExe venv --python 3.11 --managed-python $Venv
         if ($LASTEXITCODE -ne 0) { throw 'Python setup failed. Check your internet connection and rerun.' }
     }
-    Write-Host '[3/3] Checking audio packages...'
-    & $UvExe pip install --python $Python --only-binary :all: -r (Join-Path $PSScriptRoot 'requirements.txt')
-    if ($LASTEXITCODE -ne 0) { throw 'Package setup failed. Check the message above and rerun.' }
+    $Requirements = Join-Path $PSScriptRoot 'requirements.txt'
+    $RequirementsHash = (Get-FileHash $Requirements -Algorithm SHA256).Hash
+    $ReadyFile = Join-Path $RuntimeRoot 'packages-ready.txt'
+    $PackagesReady = (Test-Path $ReadyFile) -and ((Get-Content -LiteralPath $ReadyFile -Raw).Trim() -eq $RequirementsHash)
+    if (-not $PackagesReady) {
+        Write-Host '[3/3] Installing audio packages (first launch or package update)...'
+        & $UvExe pip install --python $Python --only-binary :all: -r $Requirements
+        if ($LASTEXITCODE -ne 0) { throw 'Package setup failed. Check the message above and rerun.' }
+        Set-Content -LiteralPath $ReadyFile -Value $RequirementsHash -Encoding ASCII
+    } else {
+        Write-Host '[3/3] Audio packages already installed. No package download needed.'
+    }
     Write-Host 'Opening Thai Audio Studio in your default browser...'
     Set-Location -LiteralPath $StudioRoot
     & $Python (Join-Path $PSScriptRoot 'server.py')
