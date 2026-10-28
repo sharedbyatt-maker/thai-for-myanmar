@@ -36,6 +36,7 @@ void main() {
       await tester.pumpAndSettle();
       final width =
           tester.view.physicalSize.width / tester.view.devicePixelRatio;
+      expect([390, 1280], contains(width.round()));
       expect(
         find.byType(width >= 1000 ? NavigationRail : NavigationBar),
         findsOneWidget,

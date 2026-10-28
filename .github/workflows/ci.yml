@@ -259,7 +259,7 @@ jobs:
               --target=integration_test/app_flow_test.dart \
               -d web-server \
               --web-browser-flag=--headless \
-              --web-browser-flag=--window-size=$width,900 || exit 1
+              --browser-dimension=${width}x900@1 || exit 1
           done
 
       - name: Keep mobile and desktop UI review screenshots
