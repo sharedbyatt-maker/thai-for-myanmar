@@ -9,16 +9,19 @@ class PoliteStylePicker extends StatelessWidget {
   const PoliteStylePicker({
     required this.appState,
     required this.playbackService,
+    this.initiallyExpanded = false,
     super.key,
   });
   final AppState appState;
   final ThaiPlaybackService playbackService;
+  final bool initiallyExpanded;
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: appState,
     builder: (context, _) => Card(
       child: ExpansionTile(
+        initiallyExpanded: initiallyExpanded,
         shape: const Border(),
         collapsedShape: const Border(),
         leading: const Icon(Icons.voice_chat_outlined),

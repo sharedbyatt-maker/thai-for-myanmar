@@ -33,41 +33,43 @@ class FavoritesScreen extends StatelessWidget {
                 .toList();
             if (phrases.isEmpty) {
               return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.favorite_border_rounded,
-                        size: 46,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'သိမ်းထားတာ မရှိသေးပါဘူး။',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 5),
-                      const Text(
-                        'စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။',
-                      ),
-                      const SizedBox(height: 20),
-                      FilledButton.icon(
-                        icon: const Icon(Icons.search_rounded),
-                        label: const Text('စကားစု ရှာကြည့်မယ်'),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (_) => SearchScreen(
-                              repository: repository,
-                              appState: appState,
-                              playbackService: playbackService,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.favorite_border_rounded,
+                          size: 46,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'သိမ်းထားတာ မရှိသေးပါဘူး။',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 5),
+                        const Text(
+                          'စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။',
+                        ),
+                        const SizedBox(height: 20),
+                        FilledButton.icon(
+                          icon: const Icon(Icons.search_rounded),
+                          label: const Text('စကားစု ရှာကြည့်မယ်'),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) => SearchScreen(
+                                repository: repository,
+                                appState: appState,
+                                playbackService: playbackService,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );

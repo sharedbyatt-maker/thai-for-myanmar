@@ -93,6 +93,7 @@ class _PhraseBrowserScreenState extends State<PhraseBrowserScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: PoliteStylePicker(
+                                initiallyExpanded: true,
                                 appState: widget.appState,
                                 playbackService: widget.playbackService,
                               ),
@@ -110,6 +111,8 @@ class _PhraseBrowserScreenState extends State<PhraseBrowserScreen> {
                 child: phrases.isEmpty
                     ? const _EmptySearch()
                     : ListView.separated(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                         itemCount: phrases.length,
                         separatorBuilder: (_, _) => const SizedBox(height: 8),
@@ -135,27 +138,29 @@ class _EmptySearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search_off_rounded,
-              size: 44,
-              color: Theme.of(context).colorScheme.outline,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'ဒီစကားစုကို မတွေ့ပါဘူး။',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'အခြားစကားလုံးနဲ့ ထပ်ရှာကြည့်ပါ။',
-              textAlign: TextAlign.center,
-            ),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.search_off_rounded,
+                size: 44,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'ဒီစကားစုကို မတွေ့ပါဘူး။',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'အခြားစကားလုံးနဲ့ ထပ်ရှာကြည့်ပါ။',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -156,6 +156,39 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('search remains usable with large text and the mobile keyboard', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 760);
+    tester.view.devicePixelRatio = 1;
+    tester.view.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetViewInsets);
+    addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      ThaiForMyanmarApp(
+        repository: repository,
+        appState: state,
+        playbackService: _playbackService(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-search')));
+    await tester.pumpAndSettle();
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.enterText(find.byType(TextField), 'no-match-123');
+    await tester.pumpAndSettle();
+    expect(find.text('ဒီစကားစုကို မတွေ့ပါဘူး။'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.byTooltip('ဖျက်ရန်'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ThaiPlaybackButton), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('dark theme can be selected without blocking navigation', (
     tester,
   ) async {
@@ -191,7 +224,8 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.scrollUntilVisible(find.text('အခု စလေ့ကျင့်မယ်'), 250);
+    await tester.pumpAndSettle();
     await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
