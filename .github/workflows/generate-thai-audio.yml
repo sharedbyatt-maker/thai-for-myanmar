@@ -1,0 +1,96 @@
+name: Generate Thai audio ZIP
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'all = every phrase; sample = first five phrases'
+        type: choice
+        options: [all, sample]
+        default: all
+      generate:
+        description: 'Generate audio using Google Cloud (may incur charges). Unchecked = free plan only.'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: thai-audio-generation
+  cancel-in-progress: false
+
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test generator without cloud requests
+        run: python -m unittest discover -s tool/tests -p 'test_generate_thai_audio.py' -v
+      - name: Validate source content
+        run: python tool/validate_content.py
+      - name: Prepare generation plan (no credentials)
+        env:
+          AUDIO_SCOPE: ${{ inputs.scope }}
+        run: python tool/generate_thai_audio.py --scope "$AUDIO_SCOPE" --output build/thai-audio-plan
+      - name: Restore verified generation checkpoints
+        if: inputs.generate
+        uses: actions/cache/restore@v4
+        with:
+          path: build/thai-audio-cache
+          key: thai-audio-v1-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            thai-audio-v1-${{ github.ref_name }}-
+      - name: Install generation dependencies
+        if: inputs.generate
+        run: |
+          python -m pip install -r tool/requirements-audio.txt
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+      - name: Generate and decode-check MP3 files
+        if: inputs.generate
+        env:
+          GOOGLE_TTS_CREDENTIALS_JSON: ${{ secrets.GOOGLE_TTS_CREDENTIALS_JSON }}
+          AUDIO_SCOPE: ${{ inputs.scope }}
+        run: python tool/generate_thai_audio.py --scope "$AUDIO_SCOPE" --generate
+      - name: Validate proposed app manifest in an isolated copy
+        if: inputs.generate && success()
+        run: |
+          mkdir -p build/audio-validation/tool build/audio-validation/assets/data
+          cp tool/validate_audio_manifest.py build/audio-validation/tool/
+          cp assets/data/phrases.json assets/data/phrase_categories.json build/audio-validation/assets/data/
+          cp -R build/thai-audio/assets/. build/audio-validation/assets/
+          python build/audio-validation/tool/validate_audio_manifest.py
+      - name: Save checkpoints even after partial failure
+        if: always() && inputs.generate
+        uses: actions/cache/save@v4
+        with:
+          path: build/thai-audio-cache
+          key: thai-audio-v1-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Downloadable audio review ZIP
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-audio-${{ inputs.scope }}-${{ github.run_id }}
+          path: |
+            build/thai-audio/
+            build/thai-audio-plan/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Show next steps
+        if: always()
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          ## Thai audio review bundle
+          Download the artifact ZIP below. Unchecked Generate produces a plan only.
+          For audio runs, open `generation-report.json`: only `status: complete` means every requested form is ready.
+          On failure, a partial ZIP and verified cache may be available. Rerun to reuse matching files while the cache remains available.
+          Human Thai listening review is pending. This workflow never commits audio or changes the live app.
+          See `docs/ONE_CLICK_AUDIO.md` for setup and import instructions.
+          SUMMARY
