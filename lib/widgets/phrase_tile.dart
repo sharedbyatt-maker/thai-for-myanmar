@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'thai_playback_button.dart';
+
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../services/app_state.dart';
@@ -69,24 +71,18 @@ class PhraseTile extends StatelessWidget {
                           Text(
                             phrase.myanmar,
                             style: Theme.of(context).textTheme.titleMedium,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'အသံထွက်အနီးစပ်ဆုံး • ${phrase.pronunciation}',
+                            phrase.thaiFor(appState.politeStyle),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: colors.primary),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            phrase.thaiFor(appState.politeStyle),
+                            'အသံထွက်အနီးစပ်ဆုံး • ${phrase.pronunciation}',
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: colors.onSurfaceVariant),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -94,23 +90,35 @@ class PhraseTile extends StatelessWidget {
                   ),
                 ),
               ),
-              AnimatedBuilder(
-                animation: appState,
-                builder: (context, _) {
-                  final favorite = appState.isFavorite(phrase.id);
-                  return IconButton(
-                    tooltip: favorite
-                        ? 'သိမ်းထားမှု ဖြုတ်ရန်'
-                        : 'အကြိုက်ဆုံးအဖြစ် သိမ်းရန်',
-                    onPressed: () => appState.toggleFavorite(phrase.id),
-                    icon: Icon(
-                      favorite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      color: favorite ? colors.error : null,
-                    ),
-                  );
-                },
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ThaiPlaybackButton(
+                    phrase: phrase,
+                    appState: appState,
+                    playbackService: playbackService,
+                    label: 'ထိုင်းအသံ နားထောင်ရန်',
+                    compact: true,
+                  ),
+                  AnimatedBuilder(
+                    animation: appState,
+                    builder: (context, _) {
+                      final favorite = appState.isFavorite(phrase.id);
+                      return IconButton(
+                        tooltip: favorite
+                            ? 'သိမ်းထားမှု ဖြုတ်ရန်'
+                            : 'အကြိုက်ဆုံးအဖြစ် သိမ်းရန်',
+                        onPressed: () => appState.toggleFavorite(phrase.id),
+                        icon: Icon(
+                          favorite
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
+                          color: favorite ? colors.error : null,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

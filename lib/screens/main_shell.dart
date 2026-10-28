@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
+import '../widgets/content_frame.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'favorites_screen.dart';
@@ -155,6 +156,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         onSelectTab: _selectTab,
         onOpenPhrase: _openPhrase,
         onOpenProgress: _openProgress,
+        onSearch: _openSearch,
+        onFavorites: _openFavorites,
       ),
       LearnScreen(
         repository: widget.repository,
@@ -178,6 +181,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       ),
     ];
 
+    final wide =
+        MediaQuery.sizeOf(context).width >= 1000 &&
+        MediaQuery.textScalerOf(context).scale(14) <= 20;
+    final content = ContentFrame(
+      child: IndexedStack(
+        index: _selectedIndex,
+        children: List<Widget>.generate(
+          pages.length,
+          (index) => _visitedTabs.contains(index)
+              ? pages[index]
+              : const SizedBox.shrink(),
+        ),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_selectedIndex]),
@@ -202,52 +219,88 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       ),
       body: SafeArea(
         top: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 960),
-            child: IndexedStack(
-              index: _selectedIndex,
-              children: List<Widget>.generate(
-                pages.length,
-                (index) => _visitedTabs.contains(index)
-                    ? pages[index]
-                    : const SizedBox.shrink(),
-              ),
+        child: wide
+            ? Row(
+                children: [
+                  NavigationRail(
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: _selectTab,
+                    labelType: NavigationRailLabelType.all,
+                    leading: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Icon(
+                        Icons.translate_rounded,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 32,
+                      ),
+                    ),
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Icon(Icons.home_outlined),
+                        selectedIcon: Icon(Icons.home_rounded),
+                        label: Text('ပင်မ'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.menu_book_outlined),
+                        selectedIcon: Icon(Icons.menu_book_rounded),
+                        label: Text('လေ့လာ'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.place_outlined),
+                        selectedIcon: Icon(Icons.place_rounded),
+                        label: Text('အခြေအနေ'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.record_voice_over_outlined),
+                        selectedIcon: Icon(Icons.record_voice_over_rounded),
+                        label: Text('အမြန်ပြော'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.quiz_outlined),
+                        selectedIcon: Icon(Icons.quiz_rounded),
+                        label: Text('လေ့ကျင့်'),
+                      ),
+                    ],
+                  ),
+                  const VerticalDivider(width: 1),
+                  Expanded(child: content),
+                ],
+              )
+            : content,
+      ),
+      bottomNavigationBar: wide
+          ? null
+          : NavigationBar(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: _selectTab,
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  selectedIcon: Icon(Icons.home_rounded),
+                  label: 'ပင်မ',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.menu_book_outlined),
+                  selectedIcon: Icon(Icons.menu_book_rounded),
+                  label: 'လေ့လာ',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.place_outlined),
+                  selectedIcon: Icon(Icons.place_rounded),
+                  label: 'အခြေအနေ',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.record_voice_over_outlined),
+                  selectedIcon: Icon(Icons.record_voice_over_rounded),
+                  label: 'အမြန်ပြော',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.quiz_outlined),
+                  selectedIcon: Icon(Icons.quiz_rounded),
+                  label: 'လေ့ကျင့်',
+                ),
+              ],
             ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _selectTab,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'ပင်မ',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            selectedIcon: Icon(Icons.menu_book_rounded),
-            label: 'လေ့လာ',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.place_outlined),
-            selectedIcon: Icon(Icons.place_rounded),
-            label: 'အခြေအနေ',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.record_voice_over_outlined),
-            selectedIcon: Icon(Icons.record_voice_over_rounded),
-            label: 'အမြန်ပြော',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.quiz_outlined),
-            selectedIcon: Icon(Icons.quiz_rounded),
-            label: 'လေ့ကျင့်',
-          ),
-        ],
-      ),
     );
   }
 }

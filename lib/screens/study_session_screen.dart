@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../widgets/content_frame.dart';
+
 import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
 import '../learning/sentence_chunks.dart';
@@ -251,17 +253,21 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
             ),
           ],
         ),
-        body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 760),
-              child: widget.phrases.isEmpty
-                  ? const Center(child: Text('ဒီပုံစံအတွက် စကားစု မရှိသေးပါ။'))
-                  : _finished
-                  ? _summary(context)
-                  : widget.mode == LearningMode.matching
-                  ? _matching(context)
-                  : _question(context),
+        body: ContentFrame(
+          child: SafeArea(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: widget.phrases.isEmpty
+                    ? const Center(
+                        child: Text('ဒီပုံစံအတွက် စကားစု မရှိသေးပါ။'),
+                      )
+                    : _finished
+                    ? _summary(context)
+                    : widget.mode == LearningMode.matching
+                    ? _matching(context)
+                    : _question(context),
+              ),
             ),
           ),
         ),

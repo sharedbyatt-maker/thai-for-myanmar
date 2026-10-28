@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,12 +12,46 @@ import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   late PhraseRepository repository;
 
   setUpAll(() async {
     repository = await PhraseRepository.load(rootBundle);
   });
+
+  if (kIsWeb) {
+    testWidgets('responsive home and direct search render in Chrome', (
+      tester,
+    ) async {
+      final state = AppState();
+      await state.load();
+      await state.setThemePreference('light');
+      await tester.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repository,
+          appState: state,
+          playbackService: _playbackService(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final width =
+          tester.view.physicalSize.width / tester.view.devicePixelRatio;
+      expect([390, 1280], contains(width.round()));
+      expect(
+        find.byType(width >= 1000 ? NavigationRail : NavigationBar),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await binding.takeScreenshot('${width.round()}-home');
+      await tester.tap(find.byKey(const ValueKey('home-search')));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
+      await tester.pumpAndSettle();
+      expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await binding.takeScreenshot('${width.round()}-search');
+    });
+  }
 
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
@@ -36,13 +71,16 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pump(const Duration(milliseconds: 500));
     await tester.ensureVisible(find.text('စသင်မယ်'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('စသင်မယ်'));
     await tester.pump(const Duration(milliseconds: 500));
     for (var index = 0; index < 5; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
       await tester.pump();
       await tester.ensureVisible(find.text('မှတ်မိတယ်'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('မှတ်မိတယ်'));
       await tester.pump();
     }
