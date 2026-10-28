@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/content_frame.dart';
+
 import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
+import '../widgets/polite_style_picker.dart';
 
 class PhraseBrowserScreen extends StatefulWidget {
   const PhraseBrowserScreen({
@@ -43,46 +46,84 @@ class _PhraseBrowserScreenState extends State<PhraseBrowserScreen> {
     );
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) => setState(() => _query = value),
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                hintText: 'မြန်မာ၊ ထိုင်း၊ အင်္ဂလိပ်လို ရှာရန်',
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: 'ဖျက်ရန်',
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() => _query = '');
-                        },
-                        icon: const Icon(Icons.close_rounded),
+      body: ContentFrame(
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) => setState(() => _query = value),
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                  decoration: InputDecoration(
+                    hintText: 'မြန်မာ၊ ထိုင်း၊ အင်္ဂလိပ်လို ရှာရန်',
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _query.isEmpty
+                        ? null
+                        : IconButton(
+                            tooltip: 'ဖျက်ရန်',
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _query = '');
+                            },
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${phrases.length} ခုတွေ့သည်',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => showModalBottomSheet<void>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (_) => SafeArea(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: PoliteStylePicker(
+                                appState: widget.appState,
+                                playbackService: widget.playbackService,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      icon: const Icon(Icons.voice_chat_outlined),
+                      label: const Text('ပြောသူပုံစံ'),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: phrases.isEmpty
+                    ? const _EmptySearch()
+                    : ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                        itemCount: phrases.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
+                        itemBuilder: (context, index) => PhraseTile(
+                          phrase: phrases[index],
+                          repository: widget.repository,
+                          appState: widget.appState,
+                          playbackService: widget.playbackService,
+                        ),
                       ),
               ),
-            ),
+            ],
           ),
-          Expanded(
-            child: phrases.isEmpty
-                ? const _EmptySearch()
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                    itemCount: phrases.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) => PhraseTile(
-                      phrase: phrases[index],
-                      repository: widget.repository,
-                      appState: widget.appState,
-                      playbackService: widget.playbackService,
-                    ),
-                  ),
-          ),
-        ],
+        ),
       ),
     );
   }

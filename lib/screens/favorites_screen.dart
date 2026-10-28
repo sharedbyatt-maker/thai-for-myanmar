@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/content_frame.dart';
+
 import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
+import 'search_screen.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({
@@ -21,50 +24,67 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('သိမ်းထားသော စကားစုများ')),
-      body: AnimatedBuilder(
-        animation: appState,
-        builder: (context, _) {
-          final phrases = repository.phrases
-              .where((phrase) => appState.isFavorite(phrase.id))
-              .toList();
-          if (phrases.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.favorite_border_rounded,
-                      size: 46,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'သိမ်းထားတာ မရှိသေးပါဘူး။',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 5),
-                    const Text(
-                      'စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။',
-                    ),
-                  ],
+      body: ContentFrame(
+        child: AnimatedBuilder(
+          animation: appState,
+          builder: (context, _) {
+            final phrases = repository.phrases
+                .where((phrase) => appState.isFavorite(phrase.id))
+                .toList();
+            if (phrases.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.favorite_border_rounded,
+                        size: 46,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'သိမ်းထားတာ မရှိသေးပါဘူး။',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        'စကားစုဘေးက နှလုံးပုံကိုနှိပ်ပြီး သိမ်းထားနိုင်ပါတယ်။',
+                      ),
+                      const SizedBox(height: 20),
+                      FilledButton.icon(
+                        icon: const Icon(Icons.search_rounded),
+                        label: const Text('စကားစု ရှာကြည့်မယ်'),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (_) => SearchScreen(
+                              repository: repository,
+                              appState: appState,
+                              playbackService: playbackService,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: phrases.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
+              itemBuilder: (context, index) => PhraseTile(
+                phrase: phrases[index],
+                repository: repository,
+                appState: appState,
+                playbackService: playbackService,
               ),
             );
-          }
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: phrases.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (context, index) => PhraseTile(
-              phrase: phrases[index],
-              repository: repository,
-              appState: appState,
-              playbackService: playbackService,
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }

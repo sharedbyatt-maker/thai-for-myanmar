@@ -250,15 +250,26 @@ jobs:
           cat "$RUNNER_TEMP/chromedriver.log"
           exit 1
 
-      - name: Verify Quick Speak in Chrome
-        timeout-minutes: 12
-        run: >-
-          flutter drive
-          --driver=test_driver/integration_test.dart
-          --target=integration_test/app_flow_test.dart
-          -d web-server
-          --web-browser-flag=--headless
-          --web-browser-flag=--window-size=420,900
+      - name: Verify core flows and responsive UI in mobile and desktop Chrome
+        timeout-minutes: 16
+        run: |
+          for width in 390 1280; do
+            flutter drive \
+              --driver=test_driver/integration_test.dart \
+              --target=integration_test/app_flow_test.dart \
+              -d web-server \
+              --web-browser-flag=--headless \
+              --web-browser-flag=--window-size=$width,900 || exit 1
+          done
+
+      - name: Keep mobile and desktop UI review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thai-for-myanmar-ui-review
+          path: build/ui-review/
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Build release Web Preview
         run: flutter build web --release --base-href /

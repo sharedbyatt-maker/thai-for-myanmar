@@ -9,6 +9,7 @@ import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
 import '../widgets/learning_dashboard.dart';
+import '../widgets/polite_style_picker.dart';
 import 'phrase_browser_screen.dart';
 import 'study_session_screen.dart';
 
@@ -20,6 +21,8 @@ class HomeScreen extends StatelessWidget {
     required this.onSelectTab,
     required this.onOpenPhrase,
     required this.onOpenProgress,
+    required this.onSearch,
+    required this.onFavorites,
     super.key,
   });
 
@@ -29,6 +32,8 @@ class HomeScreen extends StatelessWidget {
   final ValueChanged<int> onSelectTab;
   final ValueChanged<String> onOpenPhrase;
   final VoidCallback onOpenProgress;
+  final VoidCallback onSearch;
+  final VoidCallback onFavorites;
 
   @override
   Widget build(BuildContext context) {
@@ -71,81 +76,114 @@ class HomeScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
       children: [
-        Text(
-          'နေ့တိုင်း ၅ ခုစီ၊\nဖြည်းဖြည်း တတ်လာမယ်',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'မြန်မာလိုနားလည်ပြီး အသံထွက်စာနဲ့ တွဲလေ့လာပါ။',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+        Container(
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(24),
           ),
-        ),
-        const SizedBox(height: 18),
-        AnimatedBuilder(
-          animation: appState,
-          builder: (context, _) => appState.learning.onboardingComplete
-              ? const SizedBox.shrink()
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: 18),
-                  child: Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'THAI FOR MYANMAR',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'နေ့တိုင်းသုံးဖို့၊\nယုံကြည်မှုရှိရှိ ပြောဖို့',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'စကားစုရှာ၊ အသံနားထောင်၊ နည်းနည်းစီ လေ့ကျင့်ပါ။',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  height: 1.6,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Semantics(
+                button: true,
+                child: Material(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  child: InkWell(
+                    key: const ValueKey('home-search'),
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: onSearch,
                     child: Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
                         children: [
-                          Text(
-                            'စလေ့လာမယ့်သူအတွက်',
-                            style: Theme.of(context).textTheme.titleLarge,
+                          Icon(
+                            Icons.search_rounded,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            '၁။ လေ့လာမှာ ၅ စကားစုစီ သင်ပါ။\n၂။ လေ့ကျင့်မှာ မှတ်မိသလား စမ်းပါ။\n၃။ မှားတဲ့စကားစုကို နောက်နေ့ ပြန်လေ့ကျင့်ပါ။',
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'ဘာပြောချင်လဲ? ရှာကြည့်ပါ',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
                           ),
-                          const SizedBox(height: 12),
-                          FilledButton(
-                            onPressed: () {
-                              appState.completeOnboarding();
-                              onSelectTab(1);
-                            },
-                            child: const Text('စလေ့လာမယ်'),
-                          ),
+                          const Icon(Icons.arrow_forward_rounded, size: 20),
                         ],
                       ),
                     ),
                   ),
                 ),
+              ),
+            ],
+          ),
         ),
-        LearningDashboard(
-          appState: appState,
-          plan: StudyCatalog.todayPlan(repository, appState.learning, now),
-          onPractice: openToday,
-          onProgress: onOpenProgress,
-        ),
-        const SizedBox(height: 18),
-        Row(
-          children: [
-            Expanded(
-              child: _ActionCard(
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final wide =
+                constraints.maxWidth >= 360 &&
+                MediaQuery.textScalerOf(context).scale(14) < 20;
+            final actions = [
+              _ActionCard(
                 icon: Icons.record_voice_over_rounded,
                 title: 'အမြန်ပြော',
-                subtitle: 'စကားစုရှာရန်',
+                subtitle: 'ထိုင်းလို ပြပြီး နားထောင်ပါ',
                 onTap: () => onSelectTab(3),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ActionCard(
-                icon: Icons.menu_book_rounded,
-                title: 'ဆက်လေ့လာ',
-                subtitle: '${appState.learned.length} ခု ကြည့်ပြီး',
-                onTap: () => onSelectTab(1),
+              _ActionCard(
+                icon: Icons.favorite_border_rounded,
+                title: 'သိမ်းထားတာ',
+                subtitle: 'လိုတဲ့စကား ပြန်ရှာပါ',
+                onTap: onFavorites,
               ),
-            ),
-          ],
+            ];
+            return wide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: actions[0]),
+                      const SizedBox(width: 12),
+                      Expanded(child: actions[1]),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      actions[0],
+                      const SizedBox(height: 10),
+                      actions[1],
+                    ],
+                  );
+          },
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 16),
+        PoliteStylePicker(appState: appState, playbackService: playbackService),
+        const SizedBox(height: 24),
         _SectionTitle(
           title: 'ဒီနေ့သုံးကြည့်ပါ',
           actionLabel: 'အသေးစိတ်',
@@ -158,7 +196,40 @@ class HomeScreen extends StatelessWidget {
           appState: appState,
           playbackService: playbackService,
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 24),
+        LearningDashboard(
+          appState: appState,
+          plan: StudyCatalog.todayPlan(repository, appState.learning, now),
+          onPractice: openToday,
+          onProgress: onOpenProgress,
+        ),
+        const SizedBox(height: 16),
+        AnimatedBuilder(
+          animation: appState,
+          builder: (context, _) => appState.learning.onboardingComplete
+              ? const SizedBox.shrink()
+              : Card(
+                  child: ExpansionTile(
+                    title: const Text('စလေ့လာမယ့်သူအတွက်'),
+                    leading: const Icon(Icons.lightbulb_outline_rounded),
+                    childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                    children: [
+                      const Text(
+                        '၁။ လေ့လာမှာ ၅ စကားစုစီ သင်ပါ။\n၂။ လေ့ကျင့်မှာ မှတ်မိသလား စမ်းပါ။\n၃။ မှားတဲ့စကားစုကို နောက်နေ့ ပြန်လေ့ကျင့်ပါ။',
+                      ),
+                      const SizedBox(height: 12),
+                      FilledButton(
+                        onPressed: () {
+                          appState.completeOnboarding();
+                          onSelectTab(1);
+                        },
+                        child: const Text('စလေ့လာမယ်'),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+        const SizedBox(height: 24),
         _SectionTitle(
           title: 'လူသုံးများတဲ့ အခြေအနေများ',
           actionLabel: 'အားလုံးကြည့်ရန်',
@@ -283,7 +354,7 @@ class _ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
@@ -322,7 +393,12 @@ class _SectionTitle extends StatelessWidget {
         Expanded(
           child: Text(title, style: Theme.of(context).textTheme.titleLarge),
         ),
-        TextButton(onPressed: onAction, child: Text(actionLabel)),
+        Flexible(
+          child: TextButton(
+            onPressed: onAction,
+            child: Text(actionLabel, textAlign: TextAlign.end),
+          ),
+        ),
       ],
     );
   }

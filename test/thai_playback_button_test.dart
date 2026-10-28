@@ -13,54 +13,71 @@ import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('button shows loading and playing states and can stop', (
-    tester,
-  ) async {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
-    final appState = AppState();
-    await appState.load();
-    final player = WaitingThaiAssetPlayer();
-    final playbackService = ThaiPlaybackService(
-      speechService: SpeechService(
-        engine: NoopSpeechEngine(),
-        voiceLookupWindow: Duration.zero,
-      ),
-      catalog: _catalog(),
-      assetPlayer: player,
-    );
+  for (final compact in [false, true]) {
+    testWidgets(
+      'button compact=$compact shows loading and playing states and can stop',
+      (tester) async {
+        SharedPreferences.setMockInitialValues(<String, Object>{});
+        final appState = AppState();
+        await appState.load();
+        final player = WaitingThaiAssetPlayer();
+        final playbackService = ThaiPlaybackService(
+          speechService: SpeechService(
+            engine: NoopSpeechEngine(),
+            voiceLookupWindow: Duration.zero,
+          ),
+          catalog: _catalog(),
+          assetPlayer: player,
+        );
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: ThaiPlaybackButton(
-              phrase: _phrase,
-              appState: appState,
-              playbackService: playbackService,
-              label: 'အသံထွက်',
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: ThaiPlaybackButton(
+                  phrase: _phrase,
+                  appState: appState,
+                  playbackService: playbackService,
+                  label: 'အသံထွက်',
+                  compact: compact,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+
+        await tester.tap(
+          compact ? find.byTooltip('အသံထွက်') : find.text('အသံထွက်'),
+        );
+        await tester.pump();
+        expect(
+          compact ? find.byTooltip('ဖွင့်နေသည်') : find.text('ဖွင့်နေသည်'),
+          findsOneWidget,
+        );
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        player.releaseInitialStop();
+        await tester.pump();
+        await tester.pump();
+        expect(
+          compact ? find.byTooltip('အသံရပ်ရန်') : find.text('အသံရပ်ရန်'),
+          findsOneWidget,
+        );
+        expect(find.byIcon(Icons.stop_rounded), findsOneWidget);
+
+        await tester.tap(
+          compact ? find.byTooltip('အသံရပ်ရန်') : find.text('အသံရပ်ရန်'),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          compact ? find.byTooltip('အသံထွက်') : find.text('အသံထွက်'),
+          findsOneWidget,
+        );
+        expect(playbackService.state, ThaiPlaybackState.idle);
+        expect(tester.takeException(), isNull);
+      },
     );
-
-    await tester.tap(find.text('အသံထွက်'));
-    await tester.pump();
-    expect(find.text('ဖွင့်နေသည်'), findsOneWidget);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    player.releaseInitialStop();
-    await tester.pump();
-    await tester.pump();
-    expect(find.text('အသံရပ်ရန်'), findsOneWidget);
-    expect(find.byIcon(Icons.stop_rounded), findsOneWidget);
-
-    await tester.tap(find.text('အသံရပ်ရန်'));
-    await tester.pumpAndSettle();
-    expect(find.text('အသံထွက်'), findsOneWidget);
-    expect(playbackService.state, ThaiPlaybackState.idle);
-    expect(tester.takeException(), isNull);
-  });
+  }
 
   testWidgets('unavailable TTS explains the device limit and can retry', (
     tester,

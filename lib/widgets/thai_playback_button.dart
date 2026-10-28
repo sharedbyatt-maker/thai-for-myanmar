@@ -13,6 +13,7 @@ class ThaiPlaybackButton extends StatefulWidget {
     required this.playbackService,
     required this.label,
     this.outlined = false,
+    this.compact = false,
     super.key,
   });
 
@@ -21,12 +22,14 @@ class ThaiPlaybackButton extends StatefulWidget {
   final ThaiPlaybackService playbackService;
   final String label;
   final bool outlined;
+  final bool compact;
 
   @override
   State<ThaiPlaybackButton> createState() => _ThaiPlaybackButtonState();
 }
 
 class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
+  String? _failedStyle;
   @override
   void dispose() {
     if (widget.playbackService.isActiveFor(
@@ -45,10 +48,12 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
       return;
     }
 
+    setState(() => _failedStyle = null);
     await service.setVolume(widget.appState.audioVolume);
     if (!mounted) return;
     final result = await service.playThai(widget.phrase, politeStyle);
     if (result == ThaiPlaybackResult.unavailable && mounted) {
+      setState(() => _failedStyle = politeStyle);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
@@ -81,12 +86,24 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
             final playing =
                 active &&
                 widget.playbackService.state == ThaiPlaybackState.playing;
+            final failed = _failedStyle == politeStyle && !active;
             final icon = loading
-                ? const SizedBox.square(
+                ? SizedBox.square(
                     dimension: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: widget.compact || widget.outlined
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onPrimary,
+                    ),
                   )
-                : Icon(playing ? Icons.stop_rounded : Icons.volume_up_rounded);
+                : Icon(
+                    playing
+                        ? Icons.stop_rounded
+                        : failed
+                        ? Icons.refresh_rounded
+                        : Icons.volume_up_rounded,
+                  );
             final label = loading
                 ? 'ဖွင့်နေသည်'
                 : playing
@@ -94,6 +111,14 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
                 : widget.label;
             void onPressed() => unawaited(_toggle(politeStyle));
 
+            if (widget.compact) {
+              return IconButton.filledTonal(
+                tooltip: failed ? 'အသံမရပါ • ထပ်စမ်းရန်' : label,
+                onPressed: onPressed,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                icon: icon,
+              );
+            }
             if (widget.outlined) {
               return OutlinedButton.icon(
                 onPressed: onPressed,

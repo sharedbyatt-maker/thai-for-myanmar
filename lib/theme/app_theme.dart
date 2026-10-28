@@ -1,27 +1,71 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  static const contentWidth = 840.0;
+  static const pagePadding = 20.0;
+  static const radius = 20.0;
   static ThemeData light() => _create(Brightness.light);
   static ThemeData dark() => _create(Brightness.dark);
 
   static ThemeData _create(Brightness brightness) {
     const seed = Color(0xFF167D75);
-    final scheme = ColorScheme.fromSeed(
+    final generated = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: brightness,
     );
+    final scheme = brightness == Brightness.light
+        ? generated.copyWith(
+            primaryContainer: const Color(0xFFE3F1E9),
+            onPrimaryContainer: const Color(0xFF123C32),
+          )
+        : generated;
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: brightness == Brightness.light
-          ? const Color(0xFFF7F8F7)
+          ? const Color(0xFFF5F7F5)
           : const Color(0xFF111817),
       appBarTheme: AppBarTheme(
         backgroundColor: brightness == Brightness.light
-            ? const Color(0xFFF7F8F7)
+            ? const Color(0xFFF5F7F5)
             : const Color(0xFF111817),
         foregroundColor: scheme.onSurface,
         centerTitle: false,
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(
+          color: scheme.onSurface,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          height: 1.6,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 52),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(48, 52),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        side: BorderSide(color: scheme.outlineVariant),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: scheme.primary,
+        linearTrackColor: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
       ),
       cardTheme: CardThemeData(
         color: brightness == Brightness.light
@@ -66,9 +110,9 @@ class AppTheme {
         }),
       ),
       textTheme: const TextTheme(
-        headlineSmall: TextStyle(fontWeight: FontWeight.w800, height: 1.28),
-        titleLarge: TextStyle(fontWeight: FontWeight.w700, height: 1.3),
-        titleMedium: TextStyle(fontWeight: FontWeight.w700, height: 1.35),
+        headlineSmall: TextStyle(fontWeight: FontWeight.w800, height: 1.6),
+        titleLarge: TextStyle(fontWeight: FontWeight.w700, height: 1.6),
+        titleMedium: TextStyle(fontWeight: FontWeight.w700, height: 1.6),
         bodyLarge: TextStyle(height: 1.55),
         bodyMedium: TextStyle(height: 1.5),
       ),
