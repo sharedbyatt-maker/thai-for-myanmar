@@ -9,6 +9,7 @@ import unittest
 import urllib.error
 import urllib.request
 import zipfile
+from unittest.mock import patch
 
 STUDIO_PATH = Path(__file__).resolve().parents[1] / "audio_studio"
 sys.path.insert(0, str(STUDIO_PATH))
@@ -128,6 +129,15 @@ class StudioTests(unittest.TestCase):
             self.assertNotIn("..", Path(name).parts)
             self.assertEqual(len(digest), 64)
         self.assertIn("onnx/decoder_fp32.onnx", engine.LOCK["files"])
+
+    def test_local_engine_errors_keep_diagnostics_without_cloud_setup_message(self):
+        local = engine.KokoroEngine(self.root / "model")
+        with patch.object(local, "_synthesize", side_effect=RuntimeError("test ONNX failure")):
+            with self.assertRaisesRegex(ValueError, "Local Thai engine failed.*test ONNX failure"):
+                local.synthesize("สวัสดีครับ", 9, 1.0)
+        with patch.object(local, "_synthesize", side_effect=MemoryError("bad_alloc")):
+            with self.assertRaisesRegex(ValueError, "ran out of memory"):
+                local.synthesize("สวัสดีครับ", 9, 1.0)
 
 
 if __name__ == "__main__":
