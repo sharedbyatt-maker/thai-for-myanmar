@@ -13,7 +13,7 @@ No Google account, card, API key or Google Cloud project is needed. If you alrea
 
 ## What runs where?
 
-The browser is a local control panel. Downloads happen on first setup; text synthesis runs on the computer's CPU using Thai Kokoro ONNX. No synthesis API or paid cloud service is called. Once the required model and dependencies are cached, Thai generation does not need network access. Dependency checks at launcher startup may still contact PyPI. No GPU is required. Windows x64 is supported by the launcher; Windows ARM/32-bit and macOS launchers are not included.
+The browser is a local control panel. Downloads happen on first setup; text synthesis runs on the computer's CPU using Thai Kokoro ONNX. No synthesis API or paid cloud service is called. Once the required model and dependencies are cached, Thai generation does not need network access. The launcher skips package installation when the requirements hash matches the last successful setup. No GPU is required. Windows x64 is supported by the launcher; Windows ARM/32-bit and macOS launchers are not included.
 
 This is a **local web view**, not a hosted website. A public static page cannot run this Python engine by itself. Do not put this server on Render or a public network: it intentionally binds only to loopback and uses a random session token and same-origin checks. Do not forward its port or share its private launch URL. There are no analytics, CDN scripts or remote fonts in the UI.
 
