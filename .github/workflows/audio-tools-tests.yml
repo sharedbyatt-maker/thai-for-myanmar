@@ -6,6 +6,9 @@ on:
       - 'tool/generate_thai_audio.py'
       - 'tool/tests/test_generate_thai_audio.py'
       - 'tool/requirements-audio.txt'
+      - 'tool/audio_studio/**'
+      - 'tool/tests/test_audio_studio.py'
+      - 'Start_Audio_Studio.bat'
       - '.github/workflows/*audio*.yml'
   push:
     branches: [main]
@@ -13,6 +16,9 @@ on:
       - 'tool/generate_thai_audio.py'
       - 'tool/tests/test_generate_thai_audio.py'
       - 'assets/data/phrases.json'
+      - 'tool/audio_studio/**'
+      - 'tool/tests/test_audio_studio.py'
+      - 'Start_Audio_Studio.bat'
   workflow_dispatch:
 
 permissions:
@@ -31,3 +37,5 @@ jobs:
         run: python -m unittest discover -s tool/tests -p 'test_generate_thai_audio.py' -v
       - name: Plan all phrases without credentials or billable requests
         run: python tool/generate_thai_audio.py
+      - name: Test local studio HTTP API and batch behavior without model downloads
+        run: python -m unittest discover -s tool/tests -p 'test_audio_studio.py' -v

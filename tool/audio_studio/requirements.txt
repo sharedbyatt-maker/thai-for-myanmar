@@ -1,0 +1,15 @@
+# Python 3.11; keep tltk's sklearn 1.2 dependency compatible with NumPy/SciPy.
+numpy==1.26.4
+onnxruntime==1.20.1
+pythainlp==5.4.0
+tltk==1.11
+scikit-learn==1.2.2
+scipy==1.12.0
+gensim==4.3.3
+pandas==2.2.3
+matplotlib==3.9.2
+nltk==3.9.1
+sklearn-crfsuite==0.5.0
+lameenc==1.9.0
+miniaudio==1.71
+requests>=2.32.4,<3
