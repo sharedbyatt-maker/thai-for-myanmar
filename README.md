@@ -53,3 +53,9 @@ Ads are off unless `ENABLE_ADS=true` is passed at build time. A debug build uses
 - [Draft store listing and screenshots](docs/STORE_LISTING.md)
 
 The `main` branch is the stable source. GitHub Actions validates content, formatting, analysis, tests, Android APK/AAB builds, and the Web build, and retains the verified Web bundle as a build artifact. GitHub Pages publication was retired in PR #4. The owner Web Preview is a free Render static site linked to `main`; Render is configured to auto-deploy commits pushed to that branch. GitHub Actions verifies the Web bundle and retains it as an artifact, but does not deploy to Render. Check Render's deployment status when confirming the live preview.
+
+## No-card Thai Audio Studio (Windows)
+
+Download/extract this repository ZIP and double-click **Start_Audio_Studio.bat**. It prepares a private Python environment and opens a local browser UI for Thai Kokoro voice previews, the nine-file sample, all 990 phrase/form MP3s, progress/stop controls, and ZIP download. First setup downloads Python/packages and about 332 MB of verified model files. No Google account, card or synthesis API key is required. The app audio manifest is unchanged until the generated pack is reviewed and imported.
+
+See [Local Audio Studio setup and limitations](docs/LOCAL_AUDIO_STUDIO.md). Windows launcher execution still needs native Windows verification; the real CPU engine and nine-file MP3 pack have been tested on Linux.
