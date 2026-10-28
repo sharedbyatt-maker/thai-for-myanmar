@@ -71,13 +71,16 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pump(const Duration(milliseconds: 500));
     await tester.ensureVisible(find.text('စသင်မယ်'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('စသင်မယ်'));
     await tester.pump(const Duration(milliseconds: 500));
     for (var index = 0; index < 5; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
       await tester.pump();
       await tester.ensureVisible(find.text('မှတ်မိတယ်'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('မှတ်မိတယ်'));
       await tester.pump();
     }
