@@ -47,8 +47,11 @@ After review, copy the ZIP's `assets/` into a new app branch, run the existing c
 - **No browser opens:** copy the private URL printed in the launcher into Chrome/Edge.
 - **Download fails:** check internet, then rerun. Completed verified model files are reused. No key or card will fix a blocked download.
 - **Installation error / missing wheel:** copy the final error message. Do not install compilers or change machine security settings just to work around it.
+- **`_middle_term_computer` / filename or extension too long:** use the updated launcher. It creates Python and packages under the short `%LOCALAPPDATA%\TFAudio` directory instead of a nested repository path. Download the updated source ZIP, extract it to a new folder, and run its launcher; it provisions a fresh runtime automatically. You do not need to delete the old folder or edit Windows registry settings. Existing jobs/models in the old extracted folder remain there. To keep those downloads, replace just `tool/audio_studio/start.ps1` in your original folder with the updated file and launch again.
 - **Microsoft runtime DLL error:** ONNX may require the official Microsoft Visual C++ x64 Redistributable on some Windows machines. The launcher does not install system components automatically; share the exact error before proceeding.
 - **App still uses old TTS:** expected until reviewed MP3s and the new manifest are imported into the app and rebuilt.
+
+The Windows runtime is stored in `%LOCALAPPDATA%\TFAudio` (separate from the extracted project folder) to avoid native DLL path-length failures. It is reused across extracted copies. Native dependency imports are checked before the browser opens. The old project-local runtime is left untouched; no existing audio or user files are deleted by this fix.
 
 ## Developer checks
 
