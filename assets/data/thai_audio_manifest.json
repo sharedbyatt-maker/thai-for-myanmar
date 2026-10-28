@@ -1,4 +1,5945 @@
 {
   "schemaVersion": 1,
-  "entries": []
+  "entries": [
+    {
+      "phraseId": "greet_hello",
+      "form": "male",
+      "thai": "สวัสดีครับ",
+      "asset": "audio/thai/greet_hello_male_2c7b55ff55a1e707.mp3"
+    },
+    {
+      "phraseId": "greet_hello",
+      "form": "female",
+      "thai": "สวัสดีค่ะ",
+      "asset": "audio/thai/greet_hello_female_789433d1ae2c10bb.mp3"
+    },
+    {
+      "phraseId": "greet_thanks",
+      "form": "male",
+      "thai": "ขอบคุณครับ",
+      "asset": "audio/thai/greet_thanks_male_ccba9a4ee909bbe6.mp3"
+    },
+    {
+      "phraseId": "greet_thanks",
+      "form": "female",
+      "thai": "ขอบคุณค่ะ",
+      "asset": "audio/thai/greet_thanks_female_2955369a6dab072f.mp3"
+    },
+    {
+      "phraseId": "greet_sorry",
+      "form": "male",
+      "thai": "ขอโทษครับ",
+      "asset": "audio/thai/greet_sorry_male_e6f9a37d2ea343ae.mp3"
+    },
+    {
+      "phraseId": "greet_sorry",
+      "form": "female",
+      "thai": "ขอโทษค่ะ",
+      "asset": "audio/thai/greet_sorry_female_65a26017906d46c1.mp3"
+    },
+    {
+      "phraseId": "greet_no_problem",
+      "form": "shared",
+      "thai": "ไม่เป็นไร",
+      "asset": "audio/thai/greet_no_problem_shared_c5b97fce164d25ce.mp3"
+    },
+    {
+      "phraseId": "intro_name",
+      "form": "male",
+      "thai": "ผมชื่อ…ครับ",
+      "asset": "audio/thai/intro_name_male_ae01da3f4207bb46.mp3"
+    },
+    {
+      "phraseId": "intro_name",
+      "form": "female",
+      "thai": "ฉันชื่อ…ค่ะ",
+      "asset": "audio/thai/intro_name_female_f9fc2cd5a70cdd04.mp3"
+    },
+    {
+      "phraseId": "intro_myanmar",
+      "form": "male",
+      "thai": "ผมมาจากเมียนมาครับ",
+      "asset": "audio/thai/intro_myanmar_male_7757b5b1b22e97ba.mp3"
+    },
+    {
+      "phraseId": "intro_myanmar",
+      "form": "female",
+      "thai": "ฉันมาจากเมียนมาค่ะ",
+      "asset": "audio/thai/intro_myanmar_female_f75defad8b425ae8.mp3"
+    },
+    {
+      "phraseId": "numbers_one",
+      "form": "shared",
+      "thai": "หนึ่ง",
+      "asset": "audio/thai/numbers_one_shared_c7cb8bc09149d490.mp3"
+    },
+    {
+      "phraseId": "numbers_two",
+      "form": "shared",
+      "thai": "สอง",
+      "asset": "audio/thai/numbers_two_shared_ae9b27d7e5aeee78.mp3"
+    },
+    {
+      "phraseId": "numbers_three",
+      "form": "shared",
+      "thai": "สาม",
+      "asset": "audio/thai/numbers_three_shared_7b9c8bc71609a9ba.mp3"
+    },
+    {
+      "phraseId": "numbers_how_many",
+      "form": "male",
+      "thai": "กี่อันครับ",
+      "asset": "audio/thai/numbers_how_many_male_0a7bccc7f64a81c8.mp3"
+    },
+    {
+      "phraseId": "numbers_how_many",
+      "form": "female",
+      "thai": "กี่อันคะ",
+      "asset": "audio/thai/numbers_how_many_female_a6a6820c1a9d2c34.mp3"
+    },
+    {
+      "phraseId": "money_price",
+      "form": "male",
+      "thai": "อันนี้ราคาเท่าไหร่ครับ",
+      "asset": "audio/thai/money_price_male_1b6fe3f8fcf1921d.mp3"
+    },
+    {
+      "phraseId": "money_price",
+      "form": "female",
+      "thai": "อันนี้ราคาเท่าไหร่คะ",
+      "asset": "audio/thai/money_price_female_e993dfff58ffc904.mp3"
+    },
+    {
+      "phraseId": "money_expensive",
+      "form": "male",
+      "thai": "แพงไปหน่อยครับ",
+      "asset": "audio/thai/money_expensive_male_8510b202985e00d5.mp3"
+    },
+    {
+      "phraseId": "money_expensive",
+      "form": "female",
+      "thai": "แพงไปหน่อยค่ะ",
+      "asset": "audio/thai/money_expensive_female_4b9c3e069d5eeff5.mp3"
+    },
+    {
+      "phraseId": "money_discount",
+      "form": "male",
+      "thai": "ลดได้ไหมครับ",
+      "asset": "audio/thai/money_discount_male_b684218c821b5f9e.mp3"
+    },
+    {
+      "phraseId": "money_discount",
+      "form": "female",
+      "thai": "ลดได้ไหมคะ",
+      "asset": "audio/thai/money_discount_female_42bb44b1d1e17d2e.mp3"
+    },
+    {
+      "phraseId": "money_cash",
+      "form": "male",
+      "thai": "จ่ายเงินสดครับ",
+      "asset": "audio/thai/money_cash_male_1231dd6f7056488b.mp3"
+    },
+    {
+      "phraseId": "money_cash",
+      "form": "female",
+      "thai": "จ่ายเงินสดค่ะ",
+      "asset": "audio/thai/money_cash_female_1002c99ad1ed9cc1.mp3"
+    },
+    {
+      "phraseId": "money_card",
+      "form": "male",
+      "thai": "จ่ายด้วยบัตรได้ไหมครับ",
+      "asset": "audio/thai/money_card_male_079eac2edf4274ba.mp3"
+    },
+    {
+      "phraseId": "money_card",
+      "form": "female",
+      "thai": "จ่ายด้วยบัตรได้ไหมคะ",
+      "asset": "audio/thai/money_card_female_51f1e4d3f28e5906.mp3"
+    },
+    {
+      "phraseId": "time_now",
+      "form": "male",
+      "thai": "ตอนนี้กี่โมงครับ",
+      "asset": "audio/thai/time_now_male_b9aa4273c59b1b87.mp3"
+    },
+    {
+      "phraseId": "time_now",
+      "form": "female",
+      "thai": "ตอนนี้กี่โมงคะ",
+      "asset": "audio/thai/time_now_female_be8b2d9905a764aa.mp3"
+    },
+    {
+      "phraseId": "time_open",
+      "form": "male",
+      "thai": "เปิดกี่โมงครับ",
+      "asset": "audio/thai/time_open_male_bf1a96d865658134.mp3"
+    },
+    {
+      "phraseId": "time_open",
+      "form": "female",
+      "thai": "เปิดกี่โมงคะ",
+      "asset": "audio/thai/time_open_female_68998459f8e2238c.mp3"
+    },
+    {
+      "phraseId": "time_wait",
+      "form": "male",
+      "thai": "รอสักครู่นะครับ",
+      "asset": "audio/thai/time_wait_male_8b05285e49c85a22.mp3"
+    },
+    {
+      "phraseId": "time_wait",
+      "form": "female",
+      "thai": "รอสักครู่นะคะ",
+      "asset": "audio/thai/time_wait_female_6c6fe9cb907e7cfb.mp3"
+    },
+    {
+      "phraseId": "date_today",
+      "form": "male",
+      "thai": "วันนี้วันอะไรครับ",
+      "asset": "audio/thai/date_today_male_3e25ecbe4b751965.mp3"
+    },
+    {
+      "phraseId": "date_today",
+      "form": "female",
+      "thai": "วันนี้วันอะไรคะ",
+      "asset": "audio/thai/date_today_female_65152291bede6ed5.mp3"
+    },
+    {
+      "phraseId": "date_tomorrow",
+      "form": "male",
+      "thai": "พรุ่งนี้ต้องมาทำงานไหมครับ",
+      "asset": "audio/thai/date_tomorrow_male_05f313bb48a5c63b.mp3"
+    },
+    {
+      "phraseId": "date_tomorrow",
+      "form": "female",
+      "thai": "พรุ่งนี้ต้องมาทำงานไหมคะ",
+      "asset": "audio/thai/date_tomorrow_female_4bb7b537fb8b6f30.mp3"
+    },
+    {
+      "phraseId": "question_where",
+      "form": "male",
+      "thai": "…อยู่ที่ไหนครับ",
+      "asset": "audio/thai/question_where_male_0e540587c4d92c5d.mp3"
+    },
+    {
+      "phraseId": "question_where",
+      "form": "female",
+      "thai": "…อยู่ที่ไหนคะ",
+      "asset": "audio/thai/question_where_female_1dafcc542f44cde4.mp3"
+    },
+    {
+      "phraseId": "question_understand",
+      "form": "male",
+      "thai": "ไม่เข้าใจครับ",
+      "asset": "audio/thai/question_understand_male_bbbeb8be73471cfe.mp3"
+    },
+    {
+      "phraseId": "question_understand",
+      "form": "female",
+      "thai": "ไม่เข้าใจค่ะ",
+      "asset": "audio/thai/question_understand_female_dfa4eda880ad9ac4.mp3"
+    },
+    {
+      "phraseId": "question_slowly",
+      "form": "male",
+      "thai": "พูดช้าๆ ได้ไหมครับ",
+      "asset": "audio/thai/question_slowly_male_4086eb1ec0e72c84.mp3"
+    },
+    {
+      "phraseId": "question_slowly",
+      "form": "female",
+      "thai": "พูดช้าๆ ได้ไหมคะ",
+      "asset": "audio/thai/question_slowly_female_3e4a8b7c77fd4771.mp3"
+    },
+    {
+      "phraseId": "food_not_spicy",
+      "form": "male",
+      "thai": "ขอแบบไม่เผ็ดครับ",
+      "asset": "audio/thai/food_not_spicy_male_4882507382380463.mp3"
+    },
+    {
+      "phraseId": "food_not_spicy",
+      "form": "female",
+      "thai": "ขอแบบไม่เผ็ดค่ะ",
+      "asset": "audio/thai/food_not_spicy_female_5acf5d8f88251f57.mp3"
+    },
+    {
+      "phraseId": "food_no_pork",
+      "form": "male",
+      "thai": "ไม่ใส่หมูครับ",
+      "asset": "audio/thai/food_no_pork_male_b0ead68b33f0a1be.mp3"
+    },
+    {
+      "phraseId": "food_no_pork",
+      "form": "female",
+      "thai": "ไม่ใส่หมูค่ะ",
+      "asset": "audio/thai/food_no_pork_female_bfd2394624864b38.mp3"
+    },
+    {
+      "phraseId": "food_water",
+      "form": "male",
+      "thai": "ขอน้ำเปล่าหนึ่งขวดครับ",
+      "asset": "audio/thai/food_water_male_50750c30878dfd0c.mp3"
+    },
+    {
+      "phraseId": "food_water",
+      "form": "female",
+      "thai": "ขอน้ำเปล่าหนึ่งขวดค่ะ",
+      "asset": "audio/thai/food_water_female_ae448f9af0de2206.mp3"
+    },
+    {
+      "phraseId": "food_takeaway",
+      "form": "male",
+      "thai": "ใส่กล่องกลับบ้านครับ",
+      "asset": "audio/thai/food_takeaway_male_8a61f310428bf5b0.mp3"
+    },
+    {
+      "phraseId": "food_takeaway",
+      "form": "female",
+      "thai": "ใส่กล่องกลับบ้านค่ะ",
+      "asset": "audio/thai/food_takeaway_female_cc9dd177d6fa6290.mp3"
+    },
+    {
+      "phraseId": "food_bill",
+      "form": "male",
+      "thai": "คิดเงินด้วยครับ",
+      "asset": "audio/thai/food_bill_male_c5ac52a874c2dc05.mp3"
+    },
+    {
+      "phraseId": "food_bill",
+      "form": "female",
+      "thai": "คิดเงินด้วยค่ะ",
+      "asset": "audio/thai/food_bill_female_f9cb38775f371b0c.mp3"
+    },
+    {
+      "phraseId": "shopping_bag",
+      "form": "male",
+      "thai": "ไม่รับถุงครับ",
+      "asset": "audio/thai/shopping_bag_male_214cb394e083f5ec.mp3"
+    },
+    {
+      "phraseId": "shopping_bag",
+      "form": "female",
+      "thai": "ไม่รับถุงค่ะ",
+      "asset": "audio/thai/shopping_bag_female_d619b1b2fe5f2391.mp3"
+    },
+    {
+      "phraseId": "shopping_receipt",
+      "form": "male",
+      "thai": "ขอใบเสร็จด้วยครับ",
+      "asset": "audio/thai/shopping_receipt_male_91d0a84259ae6573.mp3"
+    },
+    {
+      "phraseId": "shopping_receipt",
+      "form": "female",
+      "thai": "ขอใบเสร็จด้วยค่ะ",
+      "asset": "audio/thai/shopping_receipt_female_25d7f89c68929eeb.mp3"
+    },
+    {
+      "phraseId": "shopping_this",
+      "form": "male",
+      "thai": "เอาอันนี้ครับ",
+      "asset": "audio/thai/shopping_this_male_9392dd34248f1460.mp3"
+    },
+    {
+      "phraseId": "shopping_this",
+      "form": "female",
+      "thai": "เอาอันนี้ค่ะ",
+      "asset": "audio/thai/shopping_this_female_650420ab2534535c.mp3"
+    },
+    {
+      "phraseId": "store_topup",
+      "form": "male",
+      "thai": "เติมเงินโทรศัพท์ได้ไหมครับ",
+      "asset": "audio/thai/store_topup_male_232b951b93eb8101.mp3"
+    },
+    {
+      "phraseId": "store_topup",
+      "form": "female",
+      "thai": "เติมเงินโทรศัพท์ได้ไหมคะ",
+      "asset": "audio/thai/store_topup_female_32861712b6fe828a.mp3"
+    },
+    {
+      "phraseId": "transport_go",
+      "form": "male",
+      "thai": "ไป…ได้ไหมครับ",
+      "asset": "audio/thai/transport_go_male_7022ac18958fa999.mp3"
+    },
+    {
+      "phraseId": "transport_go",
+      "form": "female",
+      "thai": "ไป…ได้ไหมคะ",
+      "asset": "audio/thai/transport_go_female_dde1053cb7df2d90.mp3"
+    },
+    {
+      "phraseId": "transport_stop",
+      "form": "male",
+      "thai": "จอดตรงนี้ได้ไหมครับ",
+      "asset": "audio/thai/transport_stop_male_53c18d8c343ae0a8.mp3"
+    },
+    {
+      "phraseId": "transport_stop",
+      "form": "female",
+      "thai": "จอดตรงนี้ได้ไหมคะ",
+      "asset": "audio/thai/transport_stop_female_2e148e8197b01712.mp3"
+    },
+    {
+      "phraseId": "transport_bus",
+      "form": "male",
+      "thai": "รถเมล์ไป…ขึ้นที่ไหนครับ",
+      "asset": "audio/thai/transport_bus_male_b8b61170af04e488.mp3"
+    },
+    {
+      "phraseId": "transport_bus",
+      "form": "female",
+      "thai": "รถเมล์ไป…ขึ้นที่ไหนคะ",
+      "asset": "audio/thai/transport_bus_female_88ab3f0dce4ea9a6.mp3"
+    },
+    {
+      "phraseId": "transport_fare",
+      "form": "male",
+      "thai": "ค่าโดยสารเท่าไหร่ครับ",
+      "asset": "audio/thai/transport_fare_male_56a7408829125ce5.mp3"
+    },
+    {
+      "phraseId": "transport_fare",
+      "form": "female",
+      "thai": "ค่าโดยสารเท่าไหร่คะ",
+      "asset": "audio/thai/transport_fare_female_72f026b67e5685f8.mp3"
+    },
+    {
+      "phraseId": "directions_straight",
+      "form": "male",
+      "thai": "ตรงไปครับ",
+      "asset": "audio/thai/directions_straight_male_6d1ed71eb08d97f2.mp3"
+    },
+    {
+      "phraseId": "directions_straight",
+      "form": "female",
+      "thai": "ตรงไปค่ะ",
+      "asset": "audio/thai/directions_straight_female_e4d00e9d6a516fc9.mp3"
+    },
+    {
+      "phraseId": "directions_left",
+      "form": "male",
+      "thai": "เลี้ยวซ้ายครับ",
+      "asset": "audio/thai/directions_left_male_79b4500c0501c069.mp3"
+    },
+    {
+      "phraseId": "directions_left",
+      "form": "female",
+      "thai": "เลี้ยวซ้ายค่ะ",
+      "asset": "audio/thai/directions_left_female_cf3834d7ea194e81.mp3"
+    },
+    {
+      "phraseId": "directions_right",
+      "form": "male",
+      "thai": "เลี้ยวขวาครับ",
+      "asset": "audio/thai/directions_right_male_54d1750b26180838.mp3"
+    },
+    {
+      "phraseId": "directions_right",
+      "form": "female",
+      "thai": "เลี้ยวขวาค่ะ",
+      "asset": "audio/thai/directions_right_female_bcd27d8ab87a8a82.mp3"
+    },
+    {
+      "phraseId": "work_slowly",
+      "form": "male",
+      "thai": "ช่วยพูดช้าๆ หน่อยครับ",
+      "asset": "audio/thai/work_slowly_male_7951c93bb9165dc7.mp3"
+    },
+    {
+      "phraseId": "work_slowly",
+      "form": "female",
+      "thai": "ช่วยพูดช้าๆ หน่อยค่ะ",
+      "asset": "audio/thai/work_slowly_female_5489b99fb1ed6fd2.mp3"
+    },
+    {
+      "phraseId": "work_again",
+      "form": "male",
+      "thai": "ช่วยอธิบายอีกครั้งได้ไหมครับ",
+      "asset": "audio/thai/work_again_male_0d1ccfcccddc722d.mp3"
+    },
+    {
+      "phraseId": "work_again",
+      "form": "female",
+      "thai": "ช่วยอธิบายอีกครั้งได้ไหมคะ",
+      "asset": "audio/thai/work_again_female_79b844e0234c23d5.mp3"
+    },
+    {
+      "phraseId": "work_finished",
+      "form": "male",
+      "thai": "งานเสร็จแล้วครับ",
+      "asset": "audio/thai/work_finished_male_2d569a6890ba9d59.mp3"
+    },
+    {
+      "phraseId": "work_finished",
+      "form": "female",
+      "thai": "งานเสร็จแล้วค่ะ",
+      "asset": "audio/thai/work_finished_female_7f427aa52735c360.mp3"
+    },
+    {
+      "phraseId": "work_help",
+      "form": "male",
+      "thai": "ช่วยสอนงานให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/work_help_male_e6a7d1898479d70e.mp3"
+    },
+    {
+      "phraseId": "work_help",
+      "form": "female",
+      "thai": "ช่วยสอนงานให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/work_help_female_fd4a27b3f22ef39c.mp3"
+    },
+    {
+      "phraseId": "factory_machine",
+      "form": "male",
+      "thai": "เครื่องจักรเสียครับ",
+      "asset": "audio/thai/factory_machine_male_9cf1e034bc2253ca.mp3"
+    },
+    {
+      "phraseId": "factory_machine",
+      "form": "female",
+      "thai": "เครื่องจักรเสียค่ะ",
+      "asset": "audio/thai/factory_machine_female_ac284099b1be41a4.mp3"
+    },
+    {
+      "phraseId": "factory_safety",
+      "form": "male",
+      "thai": "ต้องใส่อุปกรณ์อะไรบ้างครับ",
+      "asset": "audio/thai/factory_safety_male_0d95c3b47f842418.mp3"
+    },
+    {
+      "phraseId": "factory_safety",
+      "form": "female",
+      "thai": "ต้องใส่อุปกรณ์อะไรบ้างคะ",
+      "asset": "audio/thai/factory_safety_female_98204225ee56e4bd.mp3"
+    },
+    {
+      "phraseId": "factory_gloves",
+      "form": "male",
+      "thai": "ขอถุงมือได้ไหมครับ",
+      "asset": "audio/thai/factory_gloves_male_3b099f0478dd83c9.mp3"
+    },
+    {
+      "phraseId": "factory_gloves",
+      "form": "female",
+      "thai": "ขอถุงมือได้ไหมคะ",
+      "asset": "audio/thai/factory_gloves_female_6f72a292739141ba.mp3"
+    },
+    {
+      "phraseId": "home_water",
+      "form": "male",
+      "thai": "น้ำไม่ไหลครับ",
+      "asset": "audio/thai/home_water_male_16eb52d464172923.mp3"
+    },
+    {
+      "phraseId": "home_water",
+      "form": "female",
+      "thai": "น้ำไม่ไหลค่ะ",
+      "asset": "audio/thai/home_water_female_8427af4f0df4bf3c.mp3"
+    },
+    {
+      "phraseId": "home_rent",
+      "form": "male",
+      "thai": "ค่าเช่าห้องเดือนละเท่าไหร่ครับ",
+      "asset": "audio/thai/home_rent_male_3e6df9588b7153fe.mp3"
+    },
+    {
+      "phraseId": "home_rent",
+      "form": "female",
+      "thai": "ค่าเช่าห้องเดือนละเท่าไหร่คะ",
+      "asset": "audio/thai/home_rent_female_45c7ab68c88b70e7.mp3"
+    },
+    {
+      "phraseId": "home_electricity",
+      "form": "male",
+      "thai": "ค่าไฟคิดอย่างไรครับ",
+      "asset": "audio/thai/home_electricity_male_25bc43abd2591ae8.mp3"
+    },
+    {
+      "phraseId": "home_electricity",
+      "form": "female",
+      "thai": "ค่าไฟคิดอย่างไรคะ",
+      "asset": "audio/thai/home_electricity_female_c94f2d7198788454.mp3"
+    },
+    {
+      "phraseId": "health_stomach",
+      "form": "male",
+      "thai": "ปวดท้องครับ",
+      "asset": "audio/thai/health_stomach_male_8ffa9da548eeb505.mp3"
+    },
+    {
+      "phraseId": "health_stomach",
+      "form": "female",
+      "thai": "ปวดท้องค่ะ",
+      "asset": "audio/thai/health_stomach_female_e747de0c2d9f22bd.mp3"
+    },
+    {
+      "phraseId": "health_headache",
+      "form": "male",
+      "thai": "ปวดหัวครับ",
+      "asset": "audio/thai/health_headache_male_a9b985a7b5b1e2da.mp3"
+    },
+    {
+      "phraseId": "health_headache",
+      "form": "female",
+      "thai": "ปวดหัวค่ะ",
+      "asset": "audio/thai/health_headache_female_42c9e8362cfe47bd.mp3"
+    },
+    {
+      "phraseId": "health_allergy",
+      "form": "male",
+      "thai": "ผมแพ้ยาบางชนิดครับ",
+      "asset": "audio/thai/health_allergy_male_7b0c545ca9c5fe44.mp3"
+    },
+    {
+      "phraseId": "health_allergy",
+      "form": "female",
+      "thai": "ฉันแพ้ยาบางชนิดค่ะ",
+      "asset": "audio/thai/health_allergy_female_c19fb43597136f2e.mp3"
+    },
+    {
+      "phraseId": "hospital_interpreter",
+      "form": "male",
+      "thai": "ขอล่ามภาษาพม่าหน่อยครับ",
+      "asset": "audio/thai/hospital_interpreter_male_e60a8137e2c66c3b.mp3"
+    },
+    {
+      "phraseId": "hospital_interpreter",
+      "form": "female",
+      "thai": "ขอล่ามภาษาพม่าหน่อยค่ะ",
+      "asset": "audio/thai/hospital_interpreter_female_912f57f7571e2ae4.mp3"
+    },
+    {
+      "phraseId": "hospital_registration",
+      "form": "male",
+      "thai": "ต้องลงทะเบียนตรงไหนครับ",
+      "asset": "audio/thai/hospital_registration_male_0e8d7d1ed200a85b.mp3"
+    },
+    {
+      "phraseId": "hospital_registration",
+      "form": "female",
+      "thai": "ต้องลงทะเบียนตรงไหนคะ",
+      "asset": "audio/thai/hospital_registration_female_8847ddac0d3b05c9.mp3"
+    },
+    {
+      "phraseId": "pharmacy_medicine",
+      "form": "male",
+      "thai": "ยานี้กินอย่างไรครับ",
+      "asset": "audio/thai/pharmacy_medicine_male_4cab280f2711e625.mp3"
+    },
+    {
+      "phraseId": "pharmacy_medicine",
+      "form": "female",
+      "thai": "ยานี้กินอย่างไรคะ",
+      "asset": "audio/thai/pharmacy_medicine_female_c4e78367d0b2d072.mp3"
+    },
+    {
+      "phraseId": "pharmacy_painkiller",
+      "form": "male",
+      "thai": "มียาแก้ปวดไหมครับ",
+      "asset": "audio/thai/pharmacy_painkiller_male_98a20bd11a09b87a.mp3"
+    },
+    {
+      "phraseId": "pharmacy_painkiller",
+      "form": "female",
+      "thai": "มียาแก้ปวดไหมคะ",
+      "asset": "audio/thai/pharmacy_painkiller_female_1b8e4f54ede375d4.mp3"
+    },
+    {
+      "phraseId": "emergency_help",
+      "form": "male",
+      "thai": "ช่วยด้วยครับ มีเหตุฉุกเฉิน",
+      "asset": "audio/thai/emergency_help_male_4d26aae2318a3954.mp3"
+    },
+    {
+      "phraseId": "emergency_help",
+      "form": "female",
+      "thai": "ช่วยด้วยค่ะ มีเหตุฉุกเฉิน",
+      "asset": "audio/thai/emergency_help_female_427dffd4b3e88e84.mp3"
+    },
+    {
+      "phraseId": "emergency_interpreter",
+      "form": "male",
+      "thai": "ขอล่ามภาษาพม่าด่วนครับ",
+      "asset": "audio/thai/emergency_interpreter_male_9cf92f5552a811a0.mp3"
+    },
+    {
+      "phraseId": "emergency_interpreter",
+      "form": "female",
+      "thai": "ขอล่ามภาษาพม่าด่วนค่ะ",
+      "asset": "audio/thai/emergency_interpreter_female_a386753998e753fc.mp3"
+    },
+    {
+      "phraseId": "police_interpreter",
+      "form": "male",
+      "thai": "ขอล่ามภาษาพม่าครับ",
+      "asset": "audio/thai/police_interpreter_male_6bbd89b7ee0836b2.mp3"
+    },
+    {
+      "phraseId": "police_interpreter",
+      "form": "female",
+      "thai": "ขอล่ามภาษาพม่าค่ะ",
+      "asset": "audio/thai/police_interpreter_female_3262c7a973eb9620.mp3"
+    },
+    {
+      "phraseId": "immigration_question",
+      "form": "male",
+      "thai": "ขอสอบถามเรื่องเอกสารครับ",
+      "asset": "audio/thai/immigration_question_male_00a97bb71130a642.mp3"
+    },
+    {
+      "phraseId": "immigration_question",
+      "form": "female",
+      "thai": "ขอสอบถามเรื่องเอกสารค่ะ",
+      "asset": "audio/thai/immigration_question_female_8f4919b9e2716f76.mp3"
+    },
+    {
+      "phraseId": "bank_withdraw",
+      "form": "male",
+      "thai": "ถอนเงินได้ที่ไหนครับ",
+      "asset": "audio/thai/bank_withdraw_male_177d03f137935c55.mp3"
+    },
+    {
+      "phraseId": "bank_withdraw",
+      "form": "female",
+      "thai": "ถอนเงินได้ที่ไหนคะ",
+      "asset": "audio/thai/bank_withdraw_female_fa9043647bdf225f.mp3"
+    },
+    {
+      "phraseId": "bank_transfer",
+      "form": "male",
+      "thai": "ต้องการโอนเงินครับ",
+      "asset": "audio/thai/bank_transfer_male_c0f4a472c434ed31.mp3"
+    },
+    {
+      "phraseId": "bank_transfer",
+      "form": "female",
+      "thai": "ต้องการโอนเงินค่ะ",
+      "asset": "audio/thai/bank_transfer_female_d86d1bbec0b0adce.mp3"
+    },
+    {
+      "phraseId": "phone_sim_no_signal",
+      "form": "male",
+      "thai": "ซิมไม่มีสัญญาณครับ",
+      "asset": "audio/thai/phone_sim_no_signal_male_ee5f638f3a3dee49.mp3"
+    },
+    {
+      "phraseId": "phone_sim_no_signal",
+      "form": "female",
+      "thai": "ซิมไม่มีสัญญาณค่ะ",
+      "asset": "audio/thai/phone_sim_no_signal_female_26324ee770baf494.mp3"
+    },
+    {
+      "phraseId": "phone_internet",
+      "form": "male",
+      "thai": "ขอแพ็กเกจอินเทอร์เน็ตครับ",
+      "asset": "audio/thai/phone_internet_male_1fd625ca79076f97.mp3"
+    },
+    {
+      "phraseId": "phone_internet",
+      "form": "female",
+      "thai": "ขอแพ็กเกจอินเทอร์เน็ตค่ะ",
+      "asset": "audio/thai/phone_internet_female_0ccd75d890d9563f.mp3"
+    },
+    {
+      "phraseId": "job_looking",
+      "form": "male",
+      "thai": "กำลังหางานครับ",
+      "asset": "audio/thai/job_looking_male_c2a98c563de927c8.mp3"
+    },
+    {
+      "phraseId": "job_looking",
+      "form": "female",
+      "thai": "กำลังหางานค่ะ",
+      "asset": "audio/thai/job_looking_female_40b53a28cdb77038.mp3"
+    },
+    {
+      "phraseId": "job_vacancy",
+      "form": "male",
+      "thai": "ที่นี่รับสมัครงานไหมครับ",
+      "asset": "audio/thai/job_vacancy_male_61b6088a170df782.mp3"
+    },
+    {
+      "phraseId": "job_vacancy",
+      "form": "female",
+      "thai": "ที่นี่รับสมัครงานไหมคะ",
+      "asset": "audio/thai/job_vacancy_female_6729c59dde037600.mp3"
+    },
+    {
+      "phraseId": "job_experience",
+      "form": "male",
+      "thai": "ผมมีประสบการณ์ทำงานครับ",
+      "asset": "audio/thai/job_experience_male_89267c8017c76175.mp3"
+    },
+    {
+      "phraseId": "job_experience",
+      "form": "female",
+      "thai": "ฉันมีประสบการณ์ทำงานค่ะ",
+      "asset": "audio/thai/job_experience_female_d613b69a529aa4ae.mp3"
+    },
+    {
+      "phraseId": "salary_date",
+      "form": "male",
+      "thai": "เงินเดือนออกวันไหนครับ",
+      "asset": "audio/thai/salary_date_male_0c3b5cbb78d70abc.mp3"
+    },
+    {
+      "phraseId": "salary_date",
+      "form": "female",
+      "thai": "เงินเดือนออกวันไหนคะ",
+      "asset": "audio/thai/salary_date_female_d4decfb3d0600572.mp3"
+    },
+    {
+      "phraseId": "salary_amount",
+      "form": "male",
+      "thai": "เงินเดือนเท่าไหร่ครับ",
+      "asset": "audio/thai/salary_amount_male_21b094c9b01c4b27.mp3"
+    },
+    {
+      "phraseId": "salary_amount",
+      "form": "female",
+      "thai": "เงินเดือนเท่าไหร่คะ",
+      "asset": "audio/thai/salary_amount_female_548a428024ca8f49.mp3"
+    },
+    {
+      "phraseId": "salary_check",
+      "form": "male",
+      "thai": "ขอตรวจสอบรายการเงินเดือนครับ",
+      "asset": "audio/thai/salary_check_male_d2dbaa5f6c2f267b.mp3"
+    },
+    {
+      "phraseId": "salary_check",
+      "form": "female",
+      "thai": "ขอตรวจสอบรายการเงินเดือนค่ะ",
+      "asset": "audio/thai/salary_check_female_8cc7641f241c613a.mp3"
+    },
+    {
+      "phraseId": "overtime_need",
+      "form": "male",
+      "thai": "วันนี้ต้องทำงานล่วงเวลาไหมครับ",
+      "asset": "audio/thai/overtime_need_male_89caef25382477e0.mp3"
+    },
+    {
+      "phraseId": "overtime_need",
+      "form": "female",
+      "thai": "วันนี้ต้องทำงานล่วงเวลาไหมคะ",
+      "asset": "audio/thai/overtime_need_female_a58d426dde83dd4e.mp3"
+    },
+    {
+      "phraseId": "overtime_rate",
+      "form": "male",
+      "thai": "ค่าล่วงเวลาคิดอย่างไรครับ",
+      "asset": "audio/thai/overtime_rate_male_380e15a48f399f27.mp3"
+    },
+    {
+      "phraseId": "overtime_rate",
+      "form": "female",
+      "thai": "ค่าล่วงเวลาคิดอย่างไรคะ",
+      "asset": "audio/thai/overtime_rate_female_ae7883046d0332c7.mp3"
+    },
+    {
+      "phraseId": "leave_sick",
+      "form": "male",
+      "thai": "วันนี้ไม่สบาย ขอหยุดงานครับ",
+      "asset": "audio/thai/leave_sick_male_875337307acc64e0.mp3"
+    },
+    {
+      "phraseId": "leave_sick",
+      "form": "female",
+      "thai": "วันนี้ไม่สบาย ขอหยุดงานค่ะ",
+      "asset": "audio/thai/leave_sick_female_1dc277df81586049.mp3"
+    },
+    {
+      "phraseId": "leave_request",
+      "form": "male",
+      "thai": "ขอลาหยุดหนึ่งวันครับ",
+      "asset": "audio/thai/leave_request_male_81694e4e2eb979d6.mp3"
+    },
+    {
+      "phraseId": "leave_request",
+      "form": "female",
+      "thai": "ขอลาหยุดหนึ่งวันค่ะ",
+      "asset": "audio/thai/leave_request_female_284437c0802c874d.mp3"
+    },
+    {
+      "phraseId": "daily_toilet",
+      "form": "male",
+      "thai": "ห้องน้ำอยู่ที่ไหนครับ",
+      "asset": "audio/thai/daily_toilet_male_55e1b3b3eb2b97ef.mp3"
+    },
+    {
+      "phraseId": "daily_toilet",
+      "form": "female",
+      "thai": "ห้องน้ำอยู่ที่ไหนคะ",
+      "asset": "audio/thai/daily_toilet_female_af033792830762a9.mp3"
+    },
+    {
+      "phraseId": "daily_not_here",
+      "form": "male",
+      "thai": "ผมพูดภาษาไทยได้นิดหน่อยครับ",
+      "asset": "audio/thai/daily_not_here_male_58c2547b54963a07.mp3"
+    },
+    {
+      "phraseId": "daily_not_here",
+      "form": "female",
+      "thai": "ฉันพูดภาษาไทยได้นิดหน่อยค่ะ",
+      "asset": "audio/thai/daily_not_here_female_e3ce16136bcb18d7.mp3"
+    },
+    {
+      "phraseId": "daily_contact",
+      "form": "male",
+      "thai": "ช่วยโทรหาผมได้ไหมครับ",
+      "asset": "audio/thai/daily_contact_male_9e2d4dd44e433aaf.mp3"
+    },
+    {
+      "phraseId": "daily_contact",
+      "form": "female",
+      "thai": "ช่วยโทรหาฉันได้ไหมคะ",
+      "asset": "audio/thai/daily_contact_female_eb68c9b52ebf11e0.mp3"
+    },
+    {
+      "phraseId": "daily_no_thai",
+      "form": "male",
+      "thai": "พูดภาษาเมียนมาได้ไหมครับ",
+      "asset": "audio/thai/daily_no_thai_male_a005ced1139c2d4d.mp3"
+    },
+    {
+      "phraseId": "daily_no_thai",
+      "form": "female",
+      "thai": "พูดภาษาเมียนมาได้ไหมคะ",
+      "asset": "audio/thai/daily_no_thai_female_3dbb7c916dd52f4b.mp3"
+    },
+    {
+      "phraseId": "answer_yes",
+      "form": "male",
+      "thai": "ใช่ครับ",
+      "asset": "audio/thai/answer_yes_male_97dc93a7171d8b16.mp3"
+    },
+    {
+      "phraseId": "answer_yes",
+      "form": "female",
+      "thai": "ใช่ค่ะ",
+      "asset": "audio/thai/answer_yes_female_5dfd7546a023d5bd.mp3"
+    },
+    {
+      "phraseId": "answer_no",
+      "form": "male",
+      "thai": "ไม่ครับ",
+      "asset": "audio/thai/answer_no_male_77ae5f2dfb64d488.mp3"
+    },
+    {
+      "phraseId": "answer_no",
+      "form": "female",
+      "thai": "ไม่ค่ะ",
+      "asset": "audio/thai/answer_no_female_2b5bdb99f09ea918.mp3"
+    },
+    {
+      "phraseId": "answer_not_sure",
+      "form": "male",
+      "thai": "ไม่แน่ใจครับ",
+      "asset": "audio/thai/answer_not_sure_male_f40aad4070b45f39.mp3"
+    },
+    {
+      "phraseId": "answer_not_sure",
+      "form": "female",
+      "thai": "ไม่แน่ใจค่ะ",
+      "asset": "audio/thai/answer_not_sure_female_b42a6a23719bce27.mp3"
+    },
+    {
+      "phraseId": "boss_talk",
+      "form": "male",
+      "thai": "ขอคุยกับหัวหน้าหน่อยครับ",
+      "asset": "audio/thai/boss_talk_male_59d4224deaa90a95.mp3"
+    },
+    {
+      "phraseId": "boss_talk",
+      "form": "female",
+      "thai": "ขอคุยกับหัวหน้าหน่อยค่ะ",
+      "asset": "audio/thai/boss_talk_female_6034e535b6a756be.mp3"
+    },
+    {
+      "phraseId": "restaurant_table",
+      "form": "male",
+      "thai": "มีโต๊ะว่างไหมครับ",
+      "asset": "audio/thai/restaurant_table_male_01e804bc821e4f59.mp3"
+    },
+    {
+      "phraseId": "restaurant_table",
+      "form": "female",
+      "thai": "มีโต๊ะว่างไหมคะ",
+      "asset": "audio/thai/restaurant_table_female_c8f79e86462c77d9.mp3"
+    },
+    {
+      "phraseId": "street_food_fresh",
+      "form": "male",
+      "thai": "ทำใหม่หรือเปล่าครับ",
+      "asset": "audio/thai/street_food_fresh_male_8782473e8b030a8f.mp3"
+    },
+    {
+      "phraseId": "street_food_fresh",
+      "form": "female",
+      "thai": "ทำใหม่หรือเปล่าคะ",
+      "asset": "audio/thai/street_food_fresh_female_14ec5e416471ac61.mp3"
+    },
+    {
+      "phraseId": "taxi_meter",
+      "form": "male",
+      "thai": "ช่วยเปิดมิเตอร์ด้วยครับ",
+      "asset": "audio/thai/taxi_meter_male_575e1f7430e3811c.mp3"
+    },
+    {
+      "phraseId": "taxi_meter",
+      "form": "female",
+      "thai": "ช่วยเปิดมิเตอร์ด้วยค่ะ",
+      "asset": "audio/thai/taxi_meter_female_063c74e298098386.mp3"
+    },
+    {
+      "phraseId": "public_transport_line",
+      "form": "male",
+      "thai": "รถไฟฟ้าสายนี้ไป…ไหมครับ",
+      "asset": "audio/thai/public_transport_line_male_5613773a68585159.mp3"
+    },
+    {
+      "phraseId": "public_transport_line",
+      "form": "female",
+      "thai": "รถไฟฟ้าสายนี้ไป…ไหมคะ",
+      "asset": "audio/thai/public_transport_line_female_9bb59634a4f05459.mp3"
+    },
+    {
+      "phraseId": "apartment_washer",
+      "form": "male",
+      "thai": "ห้องนี้มีเครื่องซักผ้าไหมครับ",
+      "asset": "audio/thai/apartment_washer_male_b6929df1a37e7462.mp3"
+    },
+    {
+      "phraseId": "apartment_washer",
+      "form": "female",
+      "thai": "ห้องนี้มีเครื่องซักผ้าไหมคะ",
+      "asset": "audio/thai/apartment_washer_female_a71e33d59fd6ef2d.mp3"
+    },
+    {
+      "phraseId": "greet_good_morning",
+      "form": "male",
+      "thai": "สวัสดีตอนเช้าครับ",
+      "asset": "audio/thai/greet_good_morning_male_93fa9facd475014e.mp3"
+    },
+    {
+      "phraseId": "greet_good_morning",
+      "form": "female",
+      "thai": "สวัสดีตอนเช้าค่ะ",
+      "asset": "audio/thai/greet_good_morning_female_0e20f3b226e30f1f.mp3"
+    },
+    {
+      "phraseId": "greet_good_evening",
+      "form": "male",
+      "thai": "สวัสดีตอนเย็นครับ",
+      "asset": "audio/thai/greet_good_evening_male_7ba5502f6f3ca817.mp3"
+    },
+    {
+      "phraseId": "greet_good_evening",
+      "form": "female",
+      "thai": "สวัสดีตอนเย็นค่ะ",
+      "asset": "audio/thai/greet_good_evening_female_cc571d80816af92b.mp3"
+    },
+    {
+      "phraseId": "greet_see_you",
+      "form": "male",
+      "thai": "แล้วเจอกันใหม่นะครับ",
+      "asset": "audio/thai/greet_see_you_male_4214bb8c347dc0fb.mp3"
+    },
+    {
+      "phraseId": "greet_see_you",
+      "form": "female",
+      "thai": "แล้วเจอกันใหม่นะคะ",
+      "asset": "audio/thai/greet_see_you_female_f1abd0480533dd67.mp3"
+    },
+    {
+      "phraseId": "intro_nice_to_meet",
+      "form": "male",
+      "thai": "ยินดีที่ได้รู้จักครับ",
+      "asset": "audio/thai/intro_nice_to_meet_male_fdf41e513a052a1d.mp3"
+    },
+    {
+      "phraseId": "intro_nice_to_meet",
+      "form": "female",
+      "thai": "ยินดีที่ได้รู้จักค่ะ",
+      "asset": "audio/thai/intro_nice_to_meet_female_6702ee83474a0683.mp3"
+    },
+    {
+      "phraseId": "intro_live_thailand",
+      "form": "male",
+      "thai": "ตอนนี้อยู่ที่ประเทศไทยครับ",
+      "asset": "audio/thai/intro_live_thailand_male_8e94ad1f67556b45.mp3"
+    },
+    {
+      "phraseId": "intro_live_thailand",
+      "form": "female",
+      "thai": "ตอนนี้อยู่ที่ประเทศไทยค่ะ",
+      "asset": "audio/thai/intro_live_thailand_female_f965282ec0366d5d.mp3"
+    },
+    {
+      "phraseId": "intro_learning_thai",
+      "form": "male",
+      "thai": "กำลังเรียนภาษาไทยอยู่ครับ",
+      "asset": "audio/thai/intro_learning_thai_male_f97bf7db40d90cbc.mp3"
+    },
+    {
+      "phraseId": "intro_learning_thai",
+      "form": "female",
+      "thai": "กำลังเรียนภาษาไทยอยู่ค่ะ",
+      "asset": "audio/thai/intro_learning_thai_female_1bf2d74fde0c4067.mp3"
+    },
+    {
+      "phraseId": "intro_work_thailand",
+      "form": "male",
+      "thai": "มาทำงานที่ประเทศไทยครับ",
+      "asset": "audio/thai/intro_work_thailand_male_92acb04ce4a99a97.mp3"
+    },
+    {
+      "phraseId": "intro_work_thailand",
+      "form": "female",
+      "thai": "มาทำงานที่ประเทศไทยค่ะ",
+      "asset": "audio/thai/intro_work_thailand_female_384aa8efdca3f4c7.mp3"
+    },
+    {
+      "phraseId": "numbers_0",
+      "form": "shared",
+      "thai": "ศูนย์",
+      "asset": "audio/thai/numbers_0_shared_83c8b98df688fffd.mp3"
+    },
+    {
+      "phraseId": "numbers_4",
+      "form": "shared",
+      "thai": "สี่",
+      "asset": "audio/thai/numbers_4_shared_ec576545ad6b963a.mp3"
+    },
+    {
+      "phraseId": "numbers_5",
+      "form": "shared",
+      "thai": "ห้า",
+      "asset": "audio/thai/numbers_5_shared_883b62a506428058.mp3"
+    },
+    {
+      "phraseId": "numbers_6",
+      "form": "shared",
+      "thai": "หก",
+      "asset": "audio/thai/numbers_6_shared_05ecd25f8fa18b3d.mp3"
+    },
+    {
+      "phraseId": "numbers_7",
+      "form": "shared",
+      "thai": "เจ็ด",
+      "asset": "audio/thai/numbers_7_shared_e13df481f302cdc8.mp3"
+    },
+    {
+      "phraseId": "numbers_8",
+      "form": "shared",
+      "thai": "แปด",
+      "asset": "audio/thai/numbers_8_shared_b1adc7f9be9786bc.mp3"
+    },
+    {
+      "phraseId": "numbers_9",
+      "form": "shared",
+      "thai": "เก้า",
+      "asset": "audio/thai/numbers_9_shared_f37f20980612236f.mp3"
+    },
+    {
+      "phraseId": "money_total",
+      "form": "male",
+      "thai": "ทั้งหมดเท่าไหร่ครับ",
+      "asset": "audio/thai/money_total_male_e6427b3b9d922479.mp3"
+    },
+    {
+      "phraseId": "money_total",
+      "form": "female",
+      "thai": "ทั้งหมดเท่าไหร่คะ",
+      "asset": "audio/thai/money_total_female_e505359be02939f4.mp3"
+    },
+    {
+      "phraseId": "money_qr_pay",
+      "form": "male",
+      "thai": "จ่ายด้วยคิวอาร์โค้ดได้ไหมครับ",
+      "asset": "audio/thai/money_qr_pay_male_306a15b071b541c6.mp3"
+    },
+    {
+      "phraseId": "money_qr_pay",
+      "form": "female",
+      "thai": "จ่ายด้วยคิวอาร์โค้ดได้ไหมคะ",
+      "asset": "audio/thai/money_qr_pay_female_c091a2c5fefe5b8c.mp3"
+    },
+    {
+      "phraseId": "money_change",
+      "form": "male",
+      "thai": "มีเงินทอนไหมครับ",
+      "asset": "audio/thai/money_change_male_e70d860768c3656e.mp3"
+    },
+    {
+      "phraseId": "money_change",
+      "form": "female",
+      "thai": "มีเงินทอนไหมคะ",
+      "asset": "audio/thai/money_change_female_8dca624d191e77ca.mp3"
+    },
+    {
+      "phraseId": "money_split_bill",
+      "form": "male",
+      "thai": "ขอแยกบิลได้ไหมครับ",
+      "asset": "audio/thai/money_split_bill_male_1c37ab0ee53da255.mp3"
+    },
+    {
+      "phraseId": "money_split_bill",
+      "form": "female",
+      "thai": "ขอแยกบิลได้ไหมคะ",
+      "asset": "audio/thai/money_split_bill_female_74b5b4bb4848036f.mp3"
+    },
+    {
+      "phraseId": "money_exact_amount",
+      "form": "male",
+      "thai": "ขอจ่ายพอดีได้ไหมครับ",
+      "asset": "audio/thai/money_exact_amount_male_cc0704c12ea94791.mp3"
+    },
+    {
+      "phraseId": "money_exact_amount",
+      "form": "female",
+      "thai": "ขอจ่ายพอดีได้ไหมคะ",
+      "asset": "audio/thai/money_exact_amount_female_35c1852f85d43cb6.mp3"
+    },
+    {
+      "phraseId": "time_closing",
+      "form": "male",
+      "thai": "วันนี้ปิดกี่โมงครับ",
+      "asset": "audio/thai/time_closing_male_ac6050036f1d73ca.mp3"
+    },
+    {
+      "phraseId": "time_closing",
+      "form": "female",
+      "thai": "วันนี้ปิดกี่โมงคะ",
+      "asset": "audio/thai/time_closing_female_1edb7e8a7ed6d62c.mp3"
+    },
+    {
+      "phraseId": "time_wait_how_long",
+      "form": "male",
+      "thai": "ต้องรออีกกี่นาทีครับ",
+      "asset": "audio/thai/time_wait_how_long_male_9778cbccf019cb5c.mp3"
+    },
+    {
+      "phraseId": "time_wait_how_long",
+      "form": "female",
+      "thai": "ต้องรออีกกี่นาทีคะ",
+      "asset": "audio/thai/time_wait_how_long_female_8eafce1d17be0d62.mp3"
+    },
+    {
+      "phraseId": "time_appointment",
+      "form": "male",
+      "thai": "นัดไว้กี่โมงครับ",
+      "asset": "audio/thai/time_appointment_male_bea492cc390c843f.mp3"
+    },
+    {
+      "phraseId": "time_appointment",
+      "form": "female",
+      "thai": "นัดไว้กี่โมงคะ",
+      "asset": "audio/thai/time_appointment_female_76ba26eefe00bcb5.mp3"
+    },
+    {
+      "phraseId": "time_later_today",
+      "form": "male",
+      "thai": "ขอคุยทีหลังได้ไหมครับ",
+      "asset": "audio/thai/time_later_today_male_d756e7ccadafd9e7.mp3"
+    },
+    {
+      "phraseId": "time_later_today",
+      "form": "female",
+      "thai": "ขอคุยทีหลังได้ไหมคะ",
+      "asset": "audio/thai/time_later_today_female_b7c99f917db59f6f.mp3"
+    },
+    {
+      "phraseId": "time_not_convenient",
+      "form": "male",
+      "thai": "ตอนนี้ไม่สะดวก ขอเป็นพรุ่งนี้ได้ไหมครับ",
+      "asset": "audio/thai/time_not_convenient_male_27dd86bcdc1432c2.mp3"
+    },
+    {
+      "phraseId": "time_not_convenient",
+      "form": "female",
+      "thai": "ตอนนี้ไม่สะดวก ขอเป็นพรุ่งนี้ได้ไหมคะ",
+      "asset": "audio/thai/time_not_convenient_female_a053809daa8e4e2b.mp3"
+    },
+    {
+      "phraseId": "date_today_number",
+      "form": "male",
+      "thai": "วันนี้วันที่เท่าไหร่ครับ",
+      "asset": "audio/thai/date_today_number_male_ade4950ebec249f5.mp3"
+    },
+    {
+      "phraseId": "date_today_number",
+      "form": "female",
+      "thai": "วันนี้วันที่เท่าไหร่คะ",
+      "asset": "audio/thai/date_today_number_female_fd9bf2f362b177f5.mp3"
+    },
+    {
+      "phraseId": "date_day_off",
+      "form": "male",
+      "thai": "วันหยุดวันไหนครับ",
+      "asset": "audio/thai/date_day_off_male_013ea7dea564d2b3.mp3"
+    },
+    {
+      "phraseId": "date_day_off",
+      "form": "female",
+      "thai": "วันหยุดวันไหนคะ",
+      "asset": "audio/thai/date_day_off_female_8227dd333d0dd7f2.mp3"
+    },
+    {
+      "phraseId": "date_next_week",
+      "form": "male",
+      "thai": "สัปดาห์หน้าว่างวันไหนครับ",
+      "asset": "audio/thai/date_next_week_male_3373d06495f9e885.mp3"
+    },
+    {
+      "phraseId": "date_next_week",
+      "form": "female",
+      "thai": "สัปดาห์หน้าว่างวันไหนคะ",
+      "asset": "audio/thai/date_next_week_female_269f0e32a90941cb.mp3"
+    },
+    {
+      "phraseId": "date_make_appointment",
+      "form": "male",
+      "thai": "ขอนัดวันที่…ได้ไหมครับ",
+      "asset": "audio/thai/date_make_appointment_male_6d1ef4f33c6c952e.mp3"
+    },
+    {
+      "phraseId": "date_make_appointment",
+      "form": "female",
+      "thai": "ขอนัดวันที่…ได้ไหมคะ",
+      "asset": "audio/thai/date_make_appointment_female_aacfedcb2c63c756.mp3"
+    },
+    {
+      "phraseId": "date_change_appointment",
+      "form": "male",
+      "thai": "ขอเลื่อนนัดได้ไหมครับ",
+      "asset": "audio/thai/date_change_appointment_male_dd6892a8cdb2a0db.mp3"
+    },
+    {
+      "phraseId": "date_change_appointment",
+      "form": "female",
+      "thai": "ขอเลื่อนนัดได้ไหมคะ",
+      "asset": "audio/thai/date_change_appointment_female_044383b31182afb0.mp3"
+    },
+    {
+      "phraseId": "date_open_today",
+      "form": "male",
+      "thai": "วันนี้เปิดไหมครับ",
+      "asset": "audio/thai/date_open_today_male_306add7c851c65dd.mp3"
+    },
+    {
+      "phraseId": "date_open_today",
+      "form": "female",
+      "thai": "วันนี้เปิดไหมคะ",
+      "asset": "audio/thai/date_open_today_female_9fb58faa0ca3556e.mp3"
+    },
+    {
+      "phraseId": "question_who",
+      "form": "male",
+      "thai": "คนนี้คือใครครับ",
+      "asset": "audio/thai/question_who_male_a96882e780876ccb.mp3"
+    },
+    {
+      "phraseId": "question_who",
+      "form": "female",
+      "thai": "คนนี้คือใครคะ",
+      "asset": "audio/thai/question_who_female_52df35c93017d014.mp3"
+    },
+    {
+      "phraseId": "question_how_to",
+      "form": "male",
+      "thai": "ทำอย่างไรครับ",
+      "asset": "audio/thai/question_how_to_male_121388e9d73bda69.mp3"
+    },
+    {
+      "phraseId": "question_how_to",
+      "form": "female",
+      "thai": "ทำอย่างไรคะ",
+      "asset": "audio/thai/question_how_to_female_73539210d23424af.mp3"
+    },
+    {
+      "phraseId": "question_how_long",
+      "form": "male",
+      "thai": "ใช้เวลานานแค่ไหนครับ",
+      "asset": "audio/thai/question_how_long_male_0afd15af532c8267.mp3"
+    },
+    {
+      "phraseId": "question_how_long",
+      "form": "female",
+      "thai": "ใช้เวลานานแค่ไหนคะ",
+      "asset": "audio/thai/question_how_long_female_0fa0d1bb3a894a35.mp3"
+    },
+    {
+      "phraseId": "question_how_far",
+      "form": "male",
+      "thai": "ไกลจากที่นี่ไหมครับ",
+      "asset": "audio/thai/question_how_far_male_3b78108b6298aaa8.mp3"
+    },
+    {
+      "phraseId": "question_how_far",
+      "form": "female",
+      "thai": "ไกลจากที่นี่ไหมคะ",
+      "asset": "audio/thai/question_how_far_female_6fd47efe808a7505.mp3"
+    },
+    {
+      "phraseId": "question_write_down",
+      "form": "male",
+      "thai": "ช่วยเขียนให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/question_write_down_male_4c330a8ef936498b.mp3"
+    },
+    {
+      "phraseId": "question_write_down",
+      "form": "female",
+      "thai": "ช่วยเขียนให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/question_write_down_female_51417e160a168a3a.mp3"
+    },
+    {
+      "phraseId": "question_repeat",
+      "form": "male",
+      "thai": "พูดอีกครั้งได้ไหมครับ",
+      "asset": "audio/thai/question_repeat_male_09bf2c985949ffb5.mp3"
+    },
+    {
+      "phraseId": "question_repeat",
+      "form": "female",
+      "thai": "พูดอีกครั้งได้ไหมคะ",
+      "asset": "audio/thai/question_repeat_female_6549e8bb8262da40.mp3"
+    },
+    {
+      "phraseId": "answer_maybe",
+      "form": "male",
+      "thai": "อาจจะครับ",
+      "asset": "audio/thai/answer_maybe_male_90dbd4e60469262e.mp3"
+    },
+    {
+      "phraseId": "answer_maybe",
+      "form": "female",
+      "thai": "อาจจะค่ะ",
+      "asset": "audio/thai/answer_maybe_female_d8c8d52a01df19a2.mp3"
+    },
+    {
+      "phraseId": "answer_not_yet",
+      "form": "male",
+      "thai": "ยังไม่เสร็จครับ",
+      "asset": "audio/thai/answer_not_yet_male_d4d9ef86baab6204.mp3"
+    },
+    {
+      "phraseId": "answer_not_yet",
+      "form": "female",
+      "thai": "ยังไม่เสร็จค่ะ",
+      "asset": "audio/thai/answer_not_yet_female_fff32059383cb31c.mp3"
+    },
+    {
+      "phraseId": "answer_done",
+      "form": "male",
+      "thai": "เสร็จแล้วครับ",
+      "asset": "audio/thai/answer_done_male_e7daaffc8df94c42.mp3"
+    },
+    {
+      "phraseId": "answer_done",
+      "form": "female",
+      "thai": "เสร็จแล้วค่ะ",
+      "asset": "audio/thai/answer_done_female_fb8ba78b54b58e31.mp3"
+    },
+    {
+      "phraseId": "answer_later",
+      "form": "male",
+      "thai": "เดี๋ยวบอกนะครับ",
+      "asset": "audio/thai/answer_later_male_44bd942758e88c14.mp3"
+    },
+    {
+      "phraseId": "answer_later",
+      "form": "female",
+      "thai": "เดี๋ยวบอกนะคะ",
+      "asset": "audio/thai/answer_later_female_93252c0d824cacd2.mp3"
+    },
+    {
+      "phraseId": "answer_sure",
+      "form": "male",
+      "thai": "แน่ใจครับ",
+      "asset": "audio/thai/answer_sure_male_7b7edc0038ef5169.mp3"
+    },
+    {
+      "phraseId": "answer_sure",
+      "form": "female",
+      "thai": "แน่ใจค่ะ",
+      "asset": "audio/thai/answer_sure_female_30ad1b0cc4561779.mp3"
+    },
+    {
+      "phraseId": "answer_dont_know",
+      "form": "male",
+      "thai": "ไม่ทราบครับ",
+      "asset": "audio/thai/answer_dont_know_male_6becb71f7a34af81.mp3"
+    },
+    {
+      "phraseId": "answer_dont_know",
+      "form": "female",
+      "thai": "ไม่ทราบค่ะ",
+      "asset": "audio/thai/answer_dont_know_female_dcf0f05e6c0444eb.mp3"
+    },
+    {
+      "phraseId": "food_less_spicy",
+      "form": "male",
+      "thai": "เผ็ดน้อยได้ไหมครับ",
+      "asset": "audio/thai/food_less_spicy_male_f3f486bf9e316450.mp3"
+    },
+    {
+      "phraseId": "food_less_spicy",
+      "form": "female",
+      "thai": "เผ็ดน้อยได้ไหมคะ",
+      "asset": "audio/thai/food_less_spicy_female_634cc4c959a482ae.mp3"
+    },
+    {
+      "phraseId": "food_no_sugar",
+      "form": "male",
+      "thai": "ไม่ใส่น้ำตาลครับ",
+      "asset": "audio/thai/food_no_sugar_male_003fb79ed07b1d26.mp3"
+    },
+    {
+      "phraseId": "food_no_sugar",
+      "form": "female",
+      "thai": "ไม่ใส่น้ำตาลค่ะ",
+      "asset": "audio/thai/food_no_sugar_female_713cda17fa12061a.mp3"
+    },
+    {
+      "phraseId": "food_chicken",
+      "form": "male",
+      "thai": "มีเมนูไก่ไหมครับ",
+      "asset": "audio/thai/food_chicken_male_c6e4ebd9feaa5881.mp3"
+    },
+    {
+      "phraseId": "food_chicken",
+      "form": "female",
+      "thai": "มีเมนูไก่ไหมคะ",
+      "asset": "audio/thai/food_chicken_female_acab7106449a20db.mp3"
+    },
+    {
+      "phraseId": "food_one_serving",
+      "form": "male",
+      "thai": "ขอหนึ่งจานครับ",
+      "asset": "audio/thai/food_one_serving_male_6dc3bdb9c226d067.mp3"
+    },
+    {
+      "phraseId": "food_one_serving",
+      "form": "female",
+      "thai": "ขอหนึ่งจานค่ะ",
+      "asset": "audio/thai/food_one_serving_female_2d0989cfc65a7851.mp3"
+    },
+    {
+      "phraseId": "food_sauce_separate",
+      "form": "male",
+      "thai": "ขอน้ำจิ้มแยกได้ไหมครับ",
+      "asset": "audio/thai/food_sauce_separate_male_fa7d3ba1965b4745.mp3"
+    },
+    {
+      "phraseId": "food_sauce_separate",
+      "form": "female",
+      "thai": "ขอน้ำจิ้มแยกได้ไหมคะ",
+      "asset": "audio/thai/food_sauce_separate_female_cc28cc68ec46484c.mp3"
+    },
+    {
+      "phraseId": "shopping_smaller_size",
+      "form": "male",
+      "thai": "มีขนาดเล็กกว่านี้ไหมครับ",
+      "asset": "audio/thai/shopping_smaller_size_male_22ce1f7e97f8a946.mp3"
+    },
+    {
+      "phraseId": "shopping_smaller_size",
+      "form": "female",
+      "thai": "มีขนาดเล็กกว่านี้ไหมคะ",
+      "asset": "audio/thai/shopping_smaller_size_female_b4546e871be11b0e.mp3"
+    },
+    {
+      "phraseId": "shopping_try_on",
+      "form": "male",
+      "thai": "ขอลองได้ไหมครับ",
+      "asset": "audio/thai/shopping_try_on_male_42a9c251c5cd8b76.mp3"
+    },
+    {
+      "phraseId": "shopping_try_on",
+      "form": "female",
+      "thai": "ขอลองได้ไหมคะ",
+      "asset": "audio/thai/shopping_try_on_female_0f47345c69b40c72.mp3"
+    },
+    {
+      "phraseId": "shopping_other_color",
+      "form": "male",
+      "thai": "มีสีอื่นไหมครับ",
+      "asset": "audio/thai/shopping_other_color_male_59d5fb918bbba105.mp3"
+    },
+    {
+      "phraseId": "shopping_other_color",
+      "form": "female",
+      "thai": "มีสีอื่นไหมคะ",
+      "asset": "audio/thai/shopping_other_color_female_3a585af174212f85.mp3"
+    },
+    {
+      "phraseId": "shopping_just_looking",
+      "form": "shared",
+      "thai": "ขอดูก่อนนะ",
+      "asset": "audio/thai/shopping_just_looking_shared_09232600a2c52d3b.mp3"
+    },
+    {
+      "phraseId": "shopping_exchange",
+      "form": "male",
+      "thai": "ขอเปลี่ยนเป็นอันอื่นได้ไหมครับ",
+      "asset": "audio/thai/shopping_exchange_male_47567fd4efea89b6.mp3"
+    },
+    {
+      "phraseId": "shopping_exchange",
+      "form": "female",
+      "thai": "ขอเปลี่ยนเป็นอันอื่นได้ไหมคะ",
+      "asset": "audio/thai/shopping_exchange_female_fde83119cc7ee012.mp3"
+    },
+    {
+      "phraseId": "store_checkout",
+      "form": "male",
+      "thai": "จ่ายเงินตรงไหนครับ",
+      "asset": "audio/thai/store_checkout_male_49ab55d96ab0fe62.mp3"
+    },
+    {
+      "phraseId": "store_checkout",
+      "form": "female",
+      "thai": "จ่ายเงินตรงไหนคะ",
+      "asset": "audio/thai/store_checkout_female_1cb2f0967e77f3c0.mp3"
+    },
+    {
+      "phraseId": "store_heat_food",
+      "form": "male",
+      "thai": "ช่วยอุ่นอาหารให้ได้ไหมครับ",
+      "asset": "audio/thai/store_heat_food_male_b85dc83c89c750d7.mp3"
+    },
+    {
+      "phraseId": "store_heat_food",
+      "form": "female",
+      "thai": "ช่วยอุ่นอาหารให้ได้ไหมคะ",
+      "asset": "audio/thai/store_heat_food_female_018f330474503f0a.mp3"
+    },
+    {
+      "phraseId": "store_pay_bill",
+      "form": "male",
+      "thai": "จ่ายบิลค่าไฟที่นี่ได้ไหมครับ",
+      "asset": "audio/thai/store_pay_bill_male_96c27f4dd65c9aae.mp3"
+    },
+    {
+      "phraseId": "store_pay_bill",
+      "form": "female",
+      "thai": "จ่ายบิลค่าไฟที่นี่ได้ไหมคะ",
+      "asset": "audio/thai/store_pay_bill_female_6e59b96b968cb74f.mp3"
+    },
+    {
+      "phraseId": "store_atm",
+      "form": "male",
+      "thai": "ตู้เอทีเอ็มอยู่ตรงไหนครับ",
+      "asset": "audio/thai/store_atm_male_37e8c8c5d7c1c487.mp3"
+    },
+    {
+      "phraseId": "store_atm",
+      "form": "female",
+      "thai": "ตู้เอทีเอ็มอยู่ตรงไหนคะ",
+      "asset": "audio/thai/store_atm_female_7b7d4f221e5d3da4.mp3"
+    },
+    {
+      "phraseId": "store_data_topup",
+      "form": "male",
+      "thai": "เติมแพ็กเกจอินเทอร์เน็ตได้ไหมครับ",
+      "asset": "audio/thai/store_data_topup_male_91d201156b431248.mp3"
+    },
+    {
+      "phraseId": "store_data_topup",
+      "form": "female",
+      "thai": "เติมแพ็กเกจอินเทอร์เน็ตได้ไหมคะ",
+      "asset": "audio/thai/store_data_topup_female_e7557586cf2b1e80.mp3"
+    },
+    {
+      "phraseId": "store_warm_drink",
+      "form": "male",
+      "thai": "มีน้ำร้อนไหมครับ",
+      "asset": "audio/thai/store_warm_drink_male_846a70a67a9d476f.mp3"
+    },
+    {
+      "phraseId": "store_warm_drink",
+      "form": "female",
+      "thai": "มีน้ำร้อนไหมคะ",
+      "asset": "audio/thai/store_warm_drink_female_5181e3b0ad6b1153.mp3"
+    },
+    {
+      "phraseId": "store_microwave",
+      "form": "male",
+      "thai": "ขอใช้ไมโครเวฟได้ไหมครับ",
+      "asset": "audio/thai/store_microwave_male_dcc4808271f48287.mp3"
+    },
+    {
+      "phraseId": "store_microwave",
+      "form": "female",
+      "thai": "ขอใช้ไมโครเวฟได้ไหมคะ",
+      "asset": "audio/thai/store_microwave_female_b2b44021da16d486.mp3"
+    },
+    {
+      "phraseId": "transport_pickup",
+      "form": "male",
+      "thai": "ช่วยมารับที่…ได้ไหมครับ",
+      "asset": "audio/thai/transport_pickup_male_7aae2acd449207e8.mp3"
+    },
+    {
+      "phraseId": "transport_pickup",
+      "form": "female",
+      "thai": "ช่วยมารับที่…ได้ไหมคะ",
+      "asset": "audio/thai/transport_pickup_female_a33c393691a51153.mp3"
+    },
+    {
+      "phraseId": "transport_dropoff",
+      "form": "male",
+      "thai": "ช่วยส่งที่…ครับ",
+      "asset": "audio/thai/transport_dropoff_male_ad35c6bc8470d893.mp3"
+    },
+    {
+      "phraseId": "transport_dropoff",
+      "form": "female",
+      "thai": "ช่วยส่งที่…ค่ะ",
+      "asset": "audio/thai/transport_dropoff_female_37a371b847906145.mp3"
+    },
+    {
+      "phraseId": "transport_traffic",
+      "form": "male",
+      "thai": "รถติดมากไหมครับ",
+      "asset": "audio/thai/transport_traffic_male_abe67c1ed5dc2ef0.mp3"
+    },
+    {
+      "phraseId": "transport_traffic",
+      "form": "female",
+      "thai": "รถติดมากไหมคะ",
+      "asset": "audio/thai/transport_traffic_female_9c0ccbed56a84703.mp3"
+    },
+    {
+      "phraseId": "transport_wait_here",
+      "form": "male",
+      "thai": "รอตรงนี้ได้ไหมครับ",
+      "asset": "audio/thai/transport_wait_here_male_2fe5af5b6944d9d0.mp3"
+    },
+    {
+      "phraseId": "transport_wait_here",
+      "form": "female",
+      "thai": "รอตรงนี้ได้ไหมคะ",
+      "asset": "audio/thai/transport_wait_here_female_746e5520cfe4991d.mp3"
+    },
+    {
+      "phraseId": "transport_get_off",
+      "form": "male",
+      "thai": "ผมจะลงตรงนี้ครับ",
+      "asset": "audio/thai/transport_get_off_male_1590b0e9f3973065.mp3"
+    },
+    {
+      "phraseId": "transport_get_off",
+      "form": "female",
+      "thai": "ฉันจะลงตรงนี้ค่ะ",
+      "asset": "audio/thai/transport_get_off_female_87c204bef6f39784.mp3"
+    },
+    {
+      "phraseId": "transport_no_toll",
+      "form": "male",
+      "thai": "ไม่ขึ้นทางด่วนได้ไหมครับ",
+      "asset": "audio/thai/transport_no_toll_male_4e9942d9958124f8.mp3"
+    },
+    {
+      "phraseId": "transport_no_toll",
+      "form": "female",
+      "thai": "ไม่ขึ้นทางด่วนได้ไหมคะ",
+      "asset": "audio/thai/transport_no_toll_female_664c0a6012c609eb.mp3"
+    },
+    {
+      "phraseId": "transport_use_map",
+      "form": "male",
+      "thai": "ดูแผนที่นี้ได้ไหมครับ",
+      "asset": "audio/thai/transport_use_map_male_2d97f9d30d54f66d.mp3"
+    },
+    {
+      "phraseId": "transport_use_map",
+      "form": "female",
+      "thai": "ดูแผนที่นี้ได้ไหมคะ",
+      "asset": "audio/thai/transport_use_map_female_dae627e3054e6c3c.mp3"
+    },
+    {
+      "phraseId": "direction_bus_stop",
+      "form": "male",
+      "thai": "ป้ายรถเมล์อยู่ที่ไหนครับ",
+      "asset": "audio/thai/direction_bus_stop_male_fdd56f34a992ad87.mp3"
+    },
+    {
+      "phraseId": "direction_bus_stop",
+      "form": "female",
+      "thai": "ป้ายรถเมล์อยู่ที่ไหนคะ",
+      "asset": "audio/thai/direction_bus_stop_female_210ce47f8072b916.mp3"
+    },
+    {
+      "phraseId": "direction_nearby",
+      "form": "male",
+      "thai": "อยู่ใกล้ๆ นี้ไหมครับ",
+      "asset": "audio/thai/direction_nearby_male_33ea13233a876684.mp3"
+    },
+    {
+      "phraseId": "direction_nearby",
+      "form": "female",
+      "thai": "อยู่ใกล้ๆ นี้ไหมคะ",
+      "asset": "audio/thai/direction_nearby_female_1a892e9203db0851.mp3"
+    },
+    {
+      "phraseId": "direction_walk",
+      "form": "male",
+      "thai": "เดินไปได้ไหมครับ",
+      "asset": "audio/thai/direction_walk_male_4cddd33bac9f3392.mp3"
+    },
+    {
+      "phraseId": "direction_walk",
+      "form": "female",
+      "thai": "เดินไปได้ไหมคะ",
+      "asset": "audio/thai/direction_walk_female_e26d15490442514d.mp3"
+    },
+    {
+      "phraseId": "direction_intersection",
+      "form": "male",
+      "thai": "ถึงสี่แยกแล้วเลี้ยวทางไหนครับ",
+      "asset": "audio/thai/direction_intersection_male_9356a1b5cdd7d6cf.mp3"
+    },
+    {
+      "phraseId": "direction_intersection",
+      "form": "female",
+      "thai": "ถึงสี่แยกแล้วเลี้ยวทางไหนคะ",
+      "asset": "audio/thai/direction_intersection_female_a421c1d53a29c4de.mp3"
+    },
+    {
+      "phraseId": "direction_show_map",
+      "form": "male",
+      "thai": "ช่วยชี้ในแผนที่ให้หน่อยครับ",
+      "asset": "audio/thai/direction_show_map_male_d96898493d2afd75.mp3"
+    },
+    {
+      "phraseId": "direction_show_map",
+      "form": "female",
+      "thai": "ช่วยชี้ในแผนที่ให้หน่อยค่ะ",
+      "asset": "audio/thai/direction_show_map_female_bdc5ee2dc0f53733.mp3"
+    },
+    {
+      "phraseId": "direction_cross_street",
+      "form": "male",
+      "thai": "ต้องข้ามถนนไหมครับ",
+      "asset": "audio/thai/direction_cross_street_male_f0a565f9a07f1b99.mp3"
+    },
+    {
+      "phraseId": "direction_cross_street",
+      "form": "female",
+      "thai": "ต้องข้ามถนนไหมคะ",
+      "asset": "audio/thai/direction_cross_street_female_c9fe65326d595585.mp3"
+    },
+    {
+      "phraseId": "work_clock_in",
+      "form": "male",
+      "thai": "ต้องลงเวลาเข้างานที่ไหนครับ",
+      "asset": "audio/thai/work_clock_in_male_6f3687e545ba3d52.mp3"
+    },
+    {
+      "phraseId": "work_clock_in",
+      "form": "female",
+      "thai": "ต้องลงเวลาเข้างานที่ไหนคะ",
+      "asset": "audio/thai/work_clock_in_female_1faaf9ccdac512b0.mp3"
+    },
+    {
+      "phraseId": "work_break_time",
+      "form": "male",
+      "thai": "พักได้กี่โมงครับ",
+      "asset": "audio/thai/work_break_time_male_a641a85f5171ac8c.mp3"
+    },
+    {
+      "phraseId": "work_break_time",
+      "form": "female",
+      "thai": "พักได้กี่โมงคะ",
+      "asset": "audio/thai/work_break_time_female_9e48e4368eda3a6e.mp3"
+    },
+    {
+      "phraseId": "work_finish_time",
+      "form": "male",
+      "thai": "วันนี้เลิกงานกี่โมงครับ",
+      "asset": "audio/thai/work_finish_time_male_3e2284231bb092aa.mp3"
+    },
+    {
+      "phraseId": "work_finish_time",
+      "form": "female",
+      "thai": "วันนี้เลิกงานกี่โมงคะ",
+      "asset": "audio/thai/work_finish_time_female_b886ef957cb41772.mp3"
+    },
+    {
+      "phraseId": "work_check_my_task",
+      "form": "male",
+      "thai": "ช่วยตรวจงานของผมหน่อยได้ไหมครับ",
+      "asset": "audio/thai/work_check_my_task_male_def38071384cfe56.mp3"
+    },
+    {
+      "phraseId": "work_check_my_task",
+      "form": "female",
+      "thai": "ช่วยตรวจงานของฉันหน่อยได้ไหมคะ",
+      "asset": "audio/thai/work_check_my_task_female_11c9c9b6b680b2b0.mp3"
+    },
+    {
+      "phraseId": "work_where_tool",
+      "form": "male",
+      "thai": "อุปกรณ์ชิ้นนี้เก็บไว้ที่ไหนครับ",
+      "asset": "audio/thai/work_where_tool_male_04c02dbf0ffd7006.mp3"
+    },
+    {
+      "phraseId": "work_where_tool",
+      "form": "female",
+      "thai": "อุปกรณ์ชิ้นนี้เก็บไว้ที่ไหนคะ",
+      "asset": "audio/thai/work_where_tool_female_e1fa0fd399898e74.mp3"
+    },
+    {
+      "phraseId": "work_need_help",
+      "form": "male",
+      "thai": "ขอคนช่วยหน่อยได้ไหมครับ",
+      "asset": "audio/thai/work_need_help_male_90f56bc8e86abb6b.mp3"
+    },
+    {
+      "phraseId": "work_need_help",
+      "form": "female",
+      "thai": "ขอคนช่วยหน่อยได้ไหมคะ",
+      "asset": "audio/thai/work_need_help_female_49d9466816a22c88.mp3"
+    },
+    {
+      "phraseId": "work_repeat_instruction",
+      "form": "male",
+      "thai": "ช่วยอธิบายขั้นตอนอีกครั้งได้ไหมครับ",
+      "asset": "audio/thai/work_repeat_instruction_male_4b6bd8dce22c7e13.mp3"
+    },
+    {
+      "phraseId": "work_repeat_instruction",
+      "form": "female",
+      "thai": "ช่วยอธิบายขั้นตอนอีกครั้งได้ไหมคะ",
+      "asset": "audio/thai/work_repeat_instruction_female_8375fae2b1619bee.mp3"
+    },
+    {
+      "phraseId": "work_where_meeting",
+      "form": "male",
+      "thai": "ประชุมที่ไหนครับ",
+      "asset": "audio/thai/work_where_meeting_male_3647e5c73d7dcc8c.mp3"
+    },
+    {
+      "phraseId": "work_where_meeting",
+      "form": "female",
+      "thai": "ประชุมที่ไหนคะ",
+      "asset": "audio/thai/work_where_meeting_female_b10fb24d9c5e3142.mp3"
+    },
+    {
+      "phraseId": "boss_schedule",
+      "form": "male",
+      "thai": "ขอดูตารางงานได้ไหมครับ",
+      "asset": "audio/thai/boss_schedule_male_db556f70ce60232b.mp3"
+    },
+    {
+      "phraseId": "boss_schedule",
+      "form": "female",
+      "thai": "ขอดูตารางงานได้ไหมคะ",
+      "asset": "audio/thai/boss_schedule_female_5cc60eb25f4bf5fa.mp3"
+    },
+    {
+      "phraseId": "boss_shift_start",
+      "form": "male",
+      "thai": "พรุ่งนี้เริ่มกะกี่โมงครับ",
+      "asset": "audio/thai/boss_shift_start_male_a03c3587d5023fee.mp3"
+    },
+    {
+      "phraseId": "boss_shift_start",
+      "form": "female",
+      "thai": "พรุ่งนี้เริ่มกะกี่โมงคะ",
+      "asset": "audio/thai/boss_shift_start_female_fbd1eed3b619df3b.mp3"
+    },
+    {
+      "phraseId": "boss_report_problem",
+      "form": "male",
+      "thai": "ขอแจ้งปัญหาเรื่องงานครับ",
+      "asset": "audio/thai/boss_report_problem_male_ed8bd756323385aa.mp3"
+    },
+    {
+      "phraseId": "boss_report_problem",
+      "form": "female",
+      "thai": "ขอแจ้งปัญหาเรื่องงานค่ะ",
+      "asset": "audio/thai/boss_report_problem_female_841e237bab644fd4.mp3"
+    },
+    {
+      "phraseId": "boss_write_instruction",
+      "form": "male",
+      "thai": "ช่วยเขียนขั้นตอนการทำงานให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/boss_write_instruction_male_fe3394b73b6d3333.mp3"
+    },
+    {
+      "phraseId": "boss_write_instruction",
+      "form": "female",
+      "thai": "ช่วยเขียนขั้นตอนการทำงานให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/boss_write_instruction_female_712eb657718648ef.mp3"
+    },
+    {
+      "phraseId": "boss_confirm_task",
+      "form": "male",
+      "thai": "งานนี้ให้ผมทำใช่ไหมครับ",
+      "asset": "audio/thai/boss_confirm_task_male_c7c1466720499894.mp3"
+    },
+    {
+      "phraseId": "boss_confirm_task",
+      "form": "female",
+      "thai": "งานนี้ให้ฉันทำใช่ไหมคะ",
+      "asset": "audio/thai/boss_confirm_task_female_1eec8043de575ba0.mp3"
+    },
+    {
+      "phraseId": "boss_contact_person",
+      "form": "male",
+      "thai": "ถ้ามีปัญหาต้องติดต่อใครครับ",
+      "asset": "audio/thai/boss_contact_person_male_c5827bc2e5871e50.mp3"
+    },
+    {
+      "phraseId": "boss_contact_person",
+      "form": "female",
+      "thai": "ถ้ามีปัญหาต้องติดต่อใครคะ",
+      "asset": "audio/thai/boss_contact_person_female_9a86edb47c6e9243.mp3"
+    },
+    {
+      "phraseId": "boss_check_understanding",
+      "form": "male",
+      "thai": "ช่วยดูว่าผมเข้าใจถูกไหมครับ",
+      "asset": "audio/thai/boss_check_understanding_male_2fc73aa93e77e933.mp3"
+    },
+    {
+      "phraseId": "boss_check_understanding",
+      "form": "female",
+      "thai": "ช่วยดูว่าฉันเข้าใจถูกไหมคะ",
+      "asset": "audio/thai/boss_check_understanding_female_26c0713049ba0d37.mp3"
+    },
+    {
+      "phraseId": "factory_line_stopped",
+      "form": "male",
+      "thai": "สายการผลิตหยุดแล้วครับ",
+      "asset": "audio/thai/factory_line_stopped_male_eed0e720d8d36d3b.mp3"
+    },
+    {
+      "phraseId": "factory_line_stopped",
+      "form": "female",
+      "thai": "สายการผลิตหยุดแล้วค่ะ",
+      "asset": "audio/thai/factory_line_stopped_female_a0f5b2f86fc4529b.mp3"
+    },
+    {
+      "phraseId": "factory_machine_sound",
+      "form": "male",
+      "thai": "เครื่องจักรมีเสียงผิดปกติครับ",
+      "asset": "audio/thai/factory_machine_sound_male_3418d6c2189d0ffc.mp3"
+    },
+    {
+      "phraseId": "factory_machine_sound",
+      "form": "female",
+      "thai": "เครื่องจักรมีเสียงผิดปกติค่ะ",
+      "asset": "audio/thai/factory_machine_sound_female_bc90cecb216bdb14.mp3"
+    },
+    {
+      "phraseId": "factory_parts_missing",
+      "form": "male",
+      "thai": "วัตถุดิบไม่พอครับ",
+      "asset": "audio/thai/factory_parts_missing_male_d88b4f6cd76296ef.mp3"
+    },
+    {
+      "phraseId": "factory_parts_missing",
+      "form": "female",
+      "thai": "วัตถุดิบไม่พอค่ะ",
+      "asset": "audio/thai/factory_parts_missing_female_0ff5312cb5d89172.mp3"
+    },
+    {
+      "phraseId": "factory_stop_for_safety",
+      "form": "male",
+      "thai": "ขอหยุดเครื่องก่อนเพื่อความปลอดภัยครับ",
+      "asset": "audio/thai/factory_stop_for_safety_male_077177d750785f70.mp3"
+    },
+    {
+      "phraseId": "factory_stop_for_safety",
+      "form": "female",
+      "thai": "ขอหยุดเครื่องก่อนเพื่อความปลอดภัยค่ะ",
+      "asset": "audio/thai/factory_stop_for_safety_female_0ce4784bf578cc5c.mp3"
+    },
+    {
+      "phraseId": "factory_defective_item",
+      "form": "male",
+      "thai": "ชิ้นงานนี้มีตำหนิครับ",
+      "asset": "audio/thai/factory_defective_item_male_eb6275f8fe78c649.mp3"
+    },
+    {
+      "phraseId": "factory_defective_item",
+      "form": "female",
+      "thai": "ชิ้นงานนี้มีตำหนิค่ะ",
+      "asset": "audio/thai/factory_defective_item_female_b85171e3c315c347.mp3"
+    },
+    {
+      "phraseId": "factory_safety_shoes",
+      "form": "male",
+      "thai": "ต้องใส่รองเท้านิรภัยไหมครับ",
+      "asset": "audio/thai/factory_safety_shoes_male_ec6502a22c992c5f.mp3"
+    },
+    {
+      "phraseId": "factory_safety_shoes",
+      "form": "female",
+      "thai": "ต้องใส่รองเท้านิรภัยไหมคะ",
+      "asset": "audio/thai/factory_safety_shoes_female_f9627811835d9381.mp3"
+    },
+    {
+      "phraseId": "factory_first_aid",
+      "form": "male",
+      "thai": "ชุดปฐมพยาบาลอยู่ที่ไหนครับ",
+      "asset": "audio/thai/factory_first_aid_male_9318e788265935b1.mp3"
+    },
+    {
+      "phraseId": "factory_first_aid",
+      "form": "female",
+      "thai": "ชุดปฐมพยาบาลอยู่ที่ไหนคะ",
+      "asset": "audio/thai/factory_first_aid_female_e10d30e4034f325d.mp3"
+    },
+    {
+      "phraseId": "home_wifi_password",
+      "form": "male",
+      "thai": "ขอรหัสไวไฟได้ไหมครับ",
+      "asset": "audio/thai/home_wifi_password_male_1d1c1b3cccc971b5.mp3"
+    },
+    {
+      "phraseId": "home_wifi_password",
+      "form": "female",
+      "thai": "ขอรหัสไวไฟได้ไหมคะ",
+      "asset": "audio/thai/home_wifi_password_female_1cd5145c133f2474.mp3"
+    },
+    {
+      "phraseId": "home_trash_place",
+      "form": "male",
+      "thai": "ทิ้งขยะตรงไหนครับ",
+      "asset": "audio/thai/home_trash_place_male_4a8c029126c70997.mp3"
+    },
+    {
+      "phraseId": "home_trash_place",
+      "form": "female",
+      "thai": "ทิ้งขยะตรงไหนคะ",
+      "asset": "audio/thai/home_trash_place_female_f81dee8548b1c78d.mp3"
+    },
+    {
+      "phraseId": "home_light_broken",
+      "form": "male",
+      "thai": "ไฟในห้องเสียครับ",
+      "asset": "audio/thai/home_light_broken_male_b58f55f2c4fabda2.mp3"
+    },
+    {
+      "phraseId": "home_light_broken",
+      "form": "female",
+      "thai": "ไฟในห้องเสียค่ะ",
+      "asset": "audio/thai/home_light_broken_female_ac175d51fe667d2d.mp3"
+    },
+    {
+      "phraseId": "home_hot_water",
+      "form": "male",
+      "thai": "มีน้ำอุ่นไหมครับ",
+      "asset": "audio/thai/home_hot_water_male_ae8929217baaa714.mp3"
+    },
+    {
+      "phraseId": "home_hot_water",
+      "form": "female",
+      "thai": "มีน้ำอุ่นไหมคะ",
+      "asset": "audio/thai/home_hot_water_female_5e9b7ff329bbce86.mp3"
+    },
+    {
+      "phraseId": "home_repair_request",
+      "form": "male",
+      "thai": "ช่วยซ่อมก๊อกน้ำให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/home_repair_request_male_57720e4b1ac9ca77.mp3"
+    },
+    {
+      "phraseId": "home_repair_request",
+      "form": "female",
+      "thai": "ช่วยซ่อมก๊อกน้ำให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/home_repair_request_female_454637ded39a4e9b.mp3"
+    },
+    {
+      "phraseId": "home_kitchen",
+      "form": "male",
+      "thai": "ใช้ครัวส่วนกลางได้ไหมครับ",
+      "asset": "audio/thai/home_kitchen_male_f8424a11a37b83a9.mp3"
+    },
+    {
+      "phraseId": "home_kitchen",
+      "form": "female",
+      "thai": "ใช้ครัวส่วนกลางได้ไหมคะ",
+      "asset": "audio/thai/home_kitchen_female_601382d3b07fd03e.mp3"
+    },
+    {
+      "phraseId": "apartment_deposit",
+      "form": "male",
+      "thai": "ต้องจ่ายเงินมัดจำเท่าไหร่ครับ",
+      "asset": "audio/thai/apartment_deposit_male_c168dadd74e38e95.mp3"
+    },
+    {
+      "phraseId": "apartment_deposit",
+      "form": "female",
+      "thai": "ต้องจ่ายเงินมัดจำเท่าไหร่คะ",
+      "asset": "audio/thai/apartment_deposit_female_57e3d818df9d796a.mp3"
+    },
+    {
+      "phraseId": "apartment_contract_copy",
+      "form": "male",
+      "thai": "ขอสัญญาเช่าหนึ่งฉบับได้ไหมครับ",
+      "asset": "audio/thai/apartment_contract_copy_male_187d660f2490cebc.mp3"
+    },
+    {
+      "phraseId": "apartment_contract_copy",
+      "form": "female",
+      "thai": "ขอสัญญาเช่าหนึ่งฉบับได้ไหมคะ",
+      "asset": "audio/thai/apartment_contract_copy_female_1163a121cfe9c1d3.mp3"
+    },
+    {
+      "phraseId": "apartment_return_deposit",
+      "form": "male",
+      "thai": "จะคืนเงินมัดจำวันไหนครับ",
+      "asset": "audio/thai/apartment_return_deposit_male_c2c946e66c5cd71a.mp3"
+    },
+    {
+      "phraseId": "apartment_return_deposit",
+      "form": "female",
+      "thai": "จะคืนเงินมัดจำวันไหนคะ",
+      "asset": "audio/thai/apartment_return_deposit_female_baa8cbb28df7d8fe.mp3"
+    },
+    {
+      "phraseId": "apartment_extra_key",
+      "form": "male",
+      "thai": "ขอกุญแจเพิ่มอีกดอกได้ไหมครับ",
+      "asset": "audio/thai/apartment_extra_key_male_1028b86cd6e0ce5f.mp3"
+    },
+    {
+      "phraseId": "apartment_extra_key",
+      "form": "female",
+      "thai": "ขอกุญแจเพิ่มอีกดอกได้ไหมคะ",
+      "asset": "audio/thai/apartment_extra_key_female_57792b6ebb72f1d2.mp3"
+    },
+    {
+      "phraseId": "apartment_quiet_hours",
+      "form": "male",
+      "thai": "ที่พักมีกำหนดเวลาเงียบไหมครับ",
+      "asset": "audio/thai/apartment_quiet_hours_male_3a25665f09d59b2b.mp3"
+    },
+    {
+      "phraseId": "apartment_quiet_hours",
+      "form": "female",
+      "thai": "ที่พักมีกำหนดเวลาเงียบไหมคะ",
+      "asset": "audio/thai/apartment_quiet_hours_female_768962c54ce442e3.mp3"
+    },
+    {
+      "phraseId": "apartment_payment_method",
+      "form": "male",
+      "thai": "จ่ายค่าเช่าด้วยวิธีไหนครับ",
+      "asset": "audio/thai/apartment_payment_method_male_c5bf0dfdd9eaa39a.mp3"
+    },
+    {
+      "phraseId": "apartment_payment_method",
+      "form": "female",
+      "thai": "จ่ายค่าเช่าด้วยวิธีไหนคะ",
+      "asset": "audio/thai/apartment_payment_method_female_891911f51f47e001.mp3"
+    },
+    {
+      "phraseId": "apartment_notice_move",
+      "form": "male",
+      "thai": "ถ้าจะย้ายออกต้องแจ้งล่วงหน้ากี่วันครับ",
+      "asset": "audio/thai/apartment_notice_move_male_b6372c268d847698.mp3"
+    },
+    {
+      "phraseId": "apartment_notice_move",
+      "form": "female",
+      "thai": "ถ้าจะย้ายออกต้องแจ้งล่วงหน้ากี่วันคะ",
+      "asset": "audio/thai/apartment_notice_move_female_5a531dee6db67871.mp3"
+    },
+    {
+      "phraseId": "restaurant_menu",
+      "form": "male",
+      "thai": "ขอเมนูหน่อยได้ไหมครับ",
+      "asset": "audio/thai/restaurant_menu_male_e72d4b5dd016a7bd.mp3"
+    },
+    {
+      "phraseId": "restaurant_menu",
+      "form": "female",
+      "thai": "ขอเมนูหน่อยได้ไหมคะ",
+      "asset": "audio/thai/restaurant_menu_female_111b17f5f96aa5ce.mp3"
+    },
+    {
+      "phraseId": "restaurant_table_two",
+      "form": "male",
+      "thai": "มีโต๊ะสำหรับสองคนไหมครับ",
+      "asset": "audio/thai/restaurant_table_two_male_b6b9ddadfcae07f5.mp3"
+    },
+    {
+      "phraseId": "restaurant_table_two",
+      "form": "female",
+      "thai": "มีโต๊ะสำหรับสองคนไหมคะ",
+      "asset": "audio/thai/restaurant_table_two_female_e7739a83d32b2955.mp3"
+    },
+    {
+      "phraseId": "restaurant_wait_time",
+      "form": "male",
+      "thai": "ต้องรอนานไหมครับ",
+      "asset": "audio/thai/restaurant_wait_time_male_5d3e852e47b692c2.mp3"
+    },
+    {
+      "phraseId": "restaurant_wait_time",
+      "form": "female",
+      "thai": "ต้องรอนานไหมคะ",
+      "asset": "audio/thai/restaurant_wait_time_female_5bf08ea937d6d8fc.mp3"
+    },
+    {
+      "phraseId": "restaurant_no_seafood",
+      "form": "male",
+      "thai": "ไม่ใส่อาหารทะเลได้ไหมครับ",
+      "asset": "audio/thai/restaurant_no_seafood_male_1a3f14b9d6718ddf.mp3"
+    },
+    {
+      "phraseId": "restaurant_no_seafood",
+      "form": "female",
+      "thai": "ไม่ใส่อาหารทะเลได้ไหมคะ",
+      "asset": "audio/thai/restaurant_no_seafood_female_45d1d0b67491e805.mp3"
+    },
+    {
+      "phraseId": "restaurant_check_bill",
+      "form": "male",
+      "thai": "ขอเช็กบิลด้วยครับ",
+      "asset": "audio/thai/restaurant_check_bill_male_731f08613bdb77f2.mp3"
+    },
+    {
+      "phraseId": "restaurant_check_bill",
+      "form": "female",
+      "thai": "ขอเช็กบิลด้วยค่ะ",
+      "asset": "audio/thai/restaurant_check_bill_female_f49fc3cf20b2e6a1.mp3"
+    },
+    {
+      "phraseId": "restaurant_separate_payment",
+      "form": "male",
+      "thai": "จ่ายแยกกันได้ไหมครับ",
+      "asset": "audio/thai/restaurant_separate_payment_male_30970210d00592f8.mp3"
+    },
+    {
+      "phraseId": "restaurant_separate_payment",
+      "form": "female",
+      "thai": "จ่ายแยกกันได้ไหมคะ",
+      "asset": "audio/thai/restaurant_separate_payment_female_3c47cf6c8c2d2bd4.mp3"
+    },
+    {
+      "phraseId": "restaurant_takeaway",
+      "form": "male",
+      "thai": "ขอใส่กล่องกลับบ้านได้ไหมครับ",
+      "asset": "audio/thai/restaurant_takeaway_male_2eedf7c72cc0ddbf.mp3"
+    },
+    {
+      "phraseId": "restaurant_takeaway",
+      "form": "female",
+      "thai": "ขอใส่กล่องกลับบ้านได้ไหมคะ",
+      "asset": "audio/thai/restaurant_takeaway_female_d413e6e2993e872b.mp3"
+    },
+    {
+      "phraseId": "street_no_chili",
+      "form": "shared",
+      "thai": "ไม่ใส่พริก",
+      "asset": "audio/thai/street_no_chili_shared_d135143b163616e9.mp3"
+    },
+    {
+      "phraseId": "street_less_sweet",
+      "form": "male",
+      "thai": "หวานน้อยได้ไหมครับ",
+      "asset": "audio/thai/street_less_sweet_male_60e142a81b1db468.mp3"
+    },
+    {
+      "phraseId": "street_less_sweet",
+      "form": "female",
+      "thai": "หวานน้อยได้ไหมคะ",
+      "asset": "audio/thai/street_less_sweet_female_248e009bb485d399.mp3"
+    },
+    {
+      "phraseId": "street_no_onion",
+      "form": "male",
+      "thai": "ไม่ใส่หอมได้ไหมครับ",
+      "asset": "audio/thai/street_no_onion_male_5f4779f88835b0bc.mp3"
+    },
+    {
+      "phraseId": "street_no_onion",
+      "form": "female",
+      "thai": "ไม่ใส่หอมได้ไหมคะ",
+      "asset": "audio/thai/street_no_onion_female_904c02e409304aa1.mp3"
+    },
+    {
+      "phraseId": "street_chicken_available",
+      "form": "male",
+      "thai": "มีไก่ไหมครับ",
+      "asset": "audio/thai/street_chicken_available_male_9fa3b6728a7ca3bb.mp3"
+    },
+    {
+      "phraseId": "street_chicken_available",
+      "form": "female",
+      "thai": "มีไก่ไหมคะ",
+      "asset": "audio/thai/street_chicken_available_female_5f654a43fce6311c.mp3"
+    },
+    {
+      "phraseId": "street_one_portion",
+      "form": "male",
+      "thai": "เอาหนึ่งถุงครับ",
+      "asset": "audio/thai/street_one_portion_male_76f4b80b6f231589.mp3"
+    },
+    {
+      "phraseId": "street_one_portion",
+      "form": "female",
+      "thai": "เอาหนึ่งถุงค่ะ",
+      "asset": "audio/thai/street_one_portion_female_5da26cfc0cac79a8.mp3"
+    },
+    {
+      "phraseId": "street_fresh_made",
+      "form": "male",
+      "thai": "เพิ่งทำใหม่หรือเปล่าครับ",
+      "asset": "audio/thai/street_fresh_made_male_abe21673d2614d59.mp3"
+    },
+    {
+      "phraseId": "street_fresh_made",
+      "form": "female",
+      "thai": "เพิ่งทำใหม่หรือเปล่าคะ",
+      "asset": "audio/thai/street_fresh_made_female_cf8dabf651af6b15.mp3"
+    },
+    {
+      "phraseId": "street_sauce_not_spicy",
+      "form": "shared",
+      "thai": "ขอน้ำจิ้มไม่เผ็ด",
+      "asset": "audio/thai/street_sauce_not_spicy_shared_b7d31b1dfddccbff.mp3"
+    },
+    {
+      "phraseId": "taxi_go_to_place",
+      "form": "male",
+      "thai": "ช่วยไป…ได้ไหมครับ",
+      "asset": "audio/thai/taxi_go_to_place_male_5369c0a77b12a49c.mp3"
+    },
+    {
+      "phraseId": "taxi_go_to_place",
+      "form": "female",
+      "thai": "ช่วยไป…ได้ไหมคะ",
+      "asset": "audio/thai/taxi_go_to_place_female_5e6eced38e7d060e.mp3"
+    },
+    {
+      "phraseId": "taxi_turn_left_here",
+      "form": "male",
+      "thai": "ตรงนี้เลี้ยวซ้ายครับ",
+      "asset": "audio/thai/taxi_turn_left_here_male_cbf12ba1794da76e.mp3"
+    },
+    {
+      "phraseId": "taxi_turn_left_here",
+      "form": "female",
+      "thai": "ตรงนี้เลี้ยวซ้ายค่ะ",
+      "asset": "audio/thai/taxi_turn_left_here_female_6c2018d91ad8c839.mp3"
+    },
+    {
+      "phraseId": "taxi_gps",
+      "form": "male",
+      "thai": "ช่วยดูตามแผนที่ได้ไหมครับ",
+      "asset": "audio/thai/taxi_gps_male_bf549c1b6efc023f.mp3"
+    },
+    {
+      "phraseId": "taxi_gps",
+      "form": "female",
+      "thai": "ช่วยดูตามแผนที่ได้ไหมคะ",
+      "asset": "audio/thai/taxi_gps_female_44435b60b57cfe33.mp3"
+    },
+    {
+      "phraseId": "taxi_wait_five",
+      "form": "male",
+      "thai": "รอห้านาทีได้ไหมครับ",
+      "asset": "audio/thai/taxi_wait_five_male_72f5aea6d95e6e26.mp3"
+    },
+    {
+      "phraseId": "taxi_wait_five",
+      "form": "female",
+      "thai": "รอห้านาทีได้ไหมคะ",
+      "asset": "audio/thai/taxi_wait_five_female_33a8428d62902d43.mp3"
+    },
+    {
+      "phraseId": "taxi_no_change",
+      "form": "male",
+      "thai": "ไม่มีเงินทอนครับ",
+      "asset": "audio/thai/taxi_no_change_male_9cb019b7bac7c8aa.mp3"
+    },
+    {
+      "phraseId": "taxi_no_change",
+      "form": "female",
+      "thai": "ไม่มีเงินทอนค่ะ",
+      "asset": "audio/thai/taxi_no_change_female_fbca5d5739bc1866.mp3"
+    },
+    {
+      "phraseId": "taxi_drop_here",
+      "form": "male",
+      "thai": "จอดตรงหน้าทางเข้าได้ไหมครับ",
+      "asset": "audio/thai/taxi_drop_here_male_c805a32c3c6c93c3.mp3"
+    },
+    {
+      "phraseId": "taxi_drop_here",
+      "form": "female",
+      "thai": "จอดตรงหน้าทางเข้าได้ไหมคะ",
+      "asset": "audio/thai/taxi_drop_here_female_826b808d23622bdc.mp3"
+    },
+    {
+      "phraseId": "taxi_need_receipt",
+      "form": "male",
+      "thai": "ขอใบเสร็จค่าโดยสารได้ไหมครับ",
+      "asset": "audio/thai/taxi_need_receipt_male_1a78376201024089.mp3"
+    },
+    {
+      "phraseId": "taxi_need_receipt",
+      "form": "female",
+      "thai": "ขอใบเสร็จค่าโดยสารได้ไหมคะ",
+      "asset": "audio/thai/taxi_need_receipt_female_0fd2d18d98015e13.mp3"
+    },
+    {
+      "phraseId": "public_ticket_price",
+      "form": "male",
+      "thai": "ตั๋วราคาเท่าไหร่ครับ",
+      "asset": "audio/thai/public_ticket_price_male_a5255d4cbd160c74.mp3"
+    },
+    {
+      "phraseId": "public_ticket_price",
+      "form": "female",
+      "thai": "ตั๋วราคาเท่าไหร่คะ",
+      "asset": "audio/thai/public_ticket_price_female_e3c21828b7c40f6b.mp3"
+    },
+    {
+      "phraseId": "public_platform",
+      "form": "male",
+      "thai": "ต้องขึ้นชานชาลาไหนครับ",
+      "asset": "audio/thai/public_platform_male_d6fd4ae59fed7e4f.mp3"
+    },
+    {
+      "phraseId": "public_platform",
+      "form": "female",
+      "thai": "ต้องขึ้นชานชาลาไหนคะ",
+      "asset": "audio/thai/public_platform_female_d29891ebb151368a.mp3"
+    },
+    {
+      "phraseId": "public_change_line",
+      "form": "male",
+      "thai": "ต้องเปลี่ยนสายไหมครับ",
+      "asset": "audio/thai/public_change_line_male_3053ac45e490f9ef.mp3"
+    },
+    {
+      "phraseId": "public_change_line",
+      "form": "female",
+      "thai": "ต้องเปลี่ยนสายไหมคะ",
+      "asset": "audio/thai/public_change_line_female_f6d9a3449b30a0f3.mp3"
+    },
+    {
+      "phraseId": "public_next_station",
+      "form": "male",
+      "thai": "สถานีต่อไปชื่ออะไรครับ",
+      "asset": "audio/thai/public_next_station_male_dc893009f6be2192.mp3"
+    },
+    {
+      "phraseId": "public_next_station",
+      "form": "female",
+      "thai": "สถานีต่อไปชื่ออะไรคะ",
+      "asset": "audio/thai/public_next_station_female_b30993fca19ef18c.mp3"
+    },
+    {
+      "phraseId": "public_get_off_here",
+      "form": "male",
+      "thai": "ลงสถานีนี้ใช่ไหมครับ",
+      "asset": "audio/thai/public_get_off_here_male_1d3b1f2ac5bbdbae.mp3"
+    },
+    {
+      "phraseId": "public_get_off_here",
+      "form": "female",
+      "thai": "ลงสถานีนี้ใช่ไหมคะ",
+      "asset": "audio/thai/public_get_off_here_female_d298967e12bccfce.mp3"
+    },
+    {
+      "phraseId": "public_transport_card",
+      "form": "male",
+      "thai": "ใช้บัตรใบนี้ได้ไหมครับ",
+      "asset": "audio/thai/public_transport_card_male_cac76c451439fa65.mp3"
+    },
+    {
+      "phraseId": "public_transport_card",
+      "form": "female",
+      "thai": "ใช้บัตรใบนี้ได้ไหมคะ",
+      "asset": "audio/thai/public_transport_card_female_1963d74a8aacf112.mp3"
+    },
+    {
+      "phraseId": "public_bus_direction",
+      "form": "male",
+      "thai": "รถคันนี้ไป…ไหมครับ",
+      "asset": "audio/thai/public_bus_direction_male_993d3c0b9da228bd.mp3"
+    },
+    {
+      "phraseId": "public_bus_direction",
+      "form": "female",
+      "thai": "รถคันนี้ไป…ไหมคะ",
+      "asset": "audio/thai/public_bus_direction_female_7c2c05f8e839da57.mp3"
+    },
+    {
+      "phraseId": "health_fever",
+      "form": "male",
+      "thai": "ผมรู้สึกเหมือนมีไข้ครับ",
+      "asset": "audio/thai/health_fever_male_09a0833427360fcb.mp3"
+    },
+    {
+      "phraseId": "health_fever",
+      "form": "female",
+      "thai": "ฉันรู้สึกเหมือนมีไข้ค่ะ",
+      "asset": "audio/thai/health_fever_female_c4da0822787e33ab.mp3"
+    },
+    {
+      "phraseId": "health_cough",
+      "form": "male",
+      "thai": "ผมไอและเจ็บคอครับ",
+      "asset": "audio/thai/health_cough_male_ec166667843afbfe.mp3"
+    },
+    {
+      "phraseId": "health_cough",
+      "form": "female",
+      "thai": "ฉันไอและเจ็บคอค่ะ",
+      "asset": "audio/thai/health_cough_female_943499fbd398c0c6.mp3"
+    },
+    {
+      "phraseId": "health_nausea",
+      "form": "male",
+      "thai": "ผมคลื่นไส้ครับ",
+      "asset": "audio/thai/health_nausea_male_82220600b863882b.mp3"
+    },
+    {
+      "phraseId": "health_nausea",
+      "form": "female",
+      "thai": "ฉันคลื่นไส้ค่ะ",
+      "asset": "audio/thai/health_nausea_female_7dfafd9f376826fb.mp3"
+    },
+    {
+      "phraseId": "health_dizzy",
+      "form": "male",
+      "thai": "ผมรู้สึกเวียนหัวครับ",
+      "asset": "audio/thai/health_dizzy_male_53a5bb902e005432.mp3"
+    },
+    {
+      "phraseId": "health_dizzy",
+      "form": "female",
+      "thai": "ฉันรู้สึกเวียนหัวค่ะ",
+      "asset": "audio/thai/health_dizzy_female_6d4c95561810537f.mp3"
+    },
+    {
+      "phraseId": "health_point_to_pain",
+      "form": "male",
+      "thai": "เจ็บตรงนี้ครับ",
+      "asset": "audio/thai/health_point_to_pain_male_a575a0ba380ecb36.mp3"
+    },
+    {
+      "phraseId": "health_point_to_pain",
+      "form": "female",
+      "thai": "เจ็บตรงนี้ค่ะ",
+      "asset": "audio/thai/health_point_to_pain_female_6ee077da8c790991.mp3"
+    },
+    {
+      "phraseId": "health_since_when",
+      "form": "male",
+      "thai": "เริ่มมีอาการตั้งแต่เมื่อไหร่ครับ",
+      "asset": "audio/thai/health_since_when_male_04be2744cf2c539f.mp3"
+    },
+    {
+      "phraseId": "health_since_when",
+      "form": "female",
+      "thai": "เริ่มมีอาการตั้งแต่เมื่อไหร่คะ",
+      "asset": "audio/thai/health_since_when_female_ca61444b02237d9d.mp3"
+    },
+    {
+      "phraseId": "hospital_talk_doctor",
+      "form": "male",
+      "thai": "ขอพบแพทย์ได้ไหมครับ",
+      "asset": "audio/thai/hospital_talk_doctor_male_ced6d4c7f425ecbc.mp3"
+    },
+    {
+      "phraseId": "hospital_talk_doctor",
+      "form": "female",
+      "thai": "ขอพบแพทย์ได้ไหมคะ",
+      "asset": "audio/thai/hospital_talk_doctor_female_4e785e10b86312d7.mp3"
+    },
+    {
+      "phraseId": "hospital_show_passport",
+      "form": "male",
+      "thai": "ต้องใช้พาสปอร์ตไหมครับ",
+      "asset": "audio/thai/hospital_show_passport_male_0a89bde84e2e4579.mp3"
+    },
+    {
+      "phraseId": "hospital_show_passport",
+      "form": "female",
+      "thai": "ต้องใช้พาสปอร์ตไหมคะ",
+      "asset": "audio/thai/hospital_show_passport_female_5b96637337e0716f.mp3"
+    },
+    {
+      "phraseId": "hospital_write_information",
+      "form": "male",
+      "thai": "ช่วยเขียนข้อมูลให้ได้ไหมครับ",
+      "asset": "audio/thai/hospital_write_information_male_280be522aaecdc37.mp3"
+    },
+    {
+      "phraseId": "hospital_write_information",
+      "form": "female",
+      "thai": "ช่วยเขียนข้อมูลให้ได้ไหมคะ",
+      "asset": "audio/thai/hospital_write_information_female_29883b1d418bf78e.mp3"
+    },
+    {
+      "phraseId": "hospital_where_wait",
+      "form": "male",
+      "thai": "ต้องรอที่ไหนครับ",
+      "asset": "audio/thai/hospital_where_wait_male_91a1860f6cbf80e4.mp3"
+    },
+    {
+      "phraseId": "hospital_where_wait",
+      "form": "female",
+      "thai": "ต้องรอที่ไหนคะ",
+      "asset": "audio/thai/hospital_where_wait_female_f7c006f754f68247.mp3"
+    },
+    {
+      "phraseId": "hospital_contact_family",
+      "form": "male",
+      "thai": "ช่วยโทรหาครอบครัวให้ได้ไหมครับ",
+      "asset": "audio/thai/hospital_contact_family_male_bf2baba7b78d7816.mp3"
+    },
+    {
+      "phraseId": "hospital_contact_family",
+      "form": "female",
+      "thai": "ช่วยโทรหาครอบครัวให้ได้ไหมคะ",
+      "asset": "audio/thai/hospital_contact_family_female_4a62e978efa52b90.mp3"
+    },
+    {
+      "phraseId": "hospital_explain_cost",
+      "form": "male",
+      "thai": "ค่าใช้จ่ายประมาณเท่าไหร่ครับ",
+      "asset": "audio/thai/hospital_explain_cost_male_10bf7c27de6b83de.mp3"
+    },
+    {
+      "phraseId": "hospital_explain_cost",
+      "form": "female",
+      "thai": "ค่าใช้จ่ายประมาณเท่าไหร่คะ",
+      "asset": "audio/thai/hospital_explain_cost_female_358dfa8e6b2e355f.mp3"
+    },
+    {
+      "phraseId": "pharmacy_explain_label",
+      "form": "male",
+      "thai": "ช่วยอธิบายฉลากยานี้ได้ไหมครับ",
+      "asset": "audio/thai/pharmacy_explain_label_male_a4729ff3de99bba5.mp3"
+    },
+    {
+      "phraseId": "pharmacy_explain_label",
+      "form": "female",
+      "thai": "ช่วยอธิบายฉลากยานี้ได้ไหมคะ",
+      "asset": "audio/thai/pharmacy_explain_label_female_b54ee56878cec07d.mp3"
+    },
+    {
+      "phraseId": "pharmacy_show_medicine",
+      "form": "male",
+      "thai": "ช่วยดูยานี้ให้หน่อยครับ",
+      "asset": "audio/thai/pharmacy_show_medicine_male_a511d117c4336b32.mp3"
+    },
+    {
+      "phraseId": "pharmacy_show_medicine",
+      "form": "female",
+      "thai": "ช่วยดูยานี้ให้หน่อยค่ะ",
+      "asset": "audio/thai/pharmacy_show_medicine_female_fa225d103fad1848.mp3"
+    },
+    {
+      "phraseId": "pharmacy_speak_pharmacist",
+      "form": "male",
+      "thai": "ขอคุยกับเภสัชกรได้ไหมครับ",
+      "asset": "audio/thai/pharmacy_speak_pharmacist_male_ee7fdfe4eb770343.mp3"
+    },
+    {
+      "phraseId": "pharmacy_speak_pharmacist",
+      "form": "female",
+      "thai": "ขอคุยกับเภสัชกรได้ไหมคะ",
+      "asset": "audio/thai/pharmacy_speak_pharmacist_female_a686ea9271f5467e.mp3"
+    },
+    {
+      "phraseId": "pharmacy_allergy_note",
+      "form": "male",
+      "thai": "ผมแพ้ยาตามรายการนี้ครับ",
+      "asset": "audio/thai/pharmacy_allergy_note_male_fa0a939f40072abd.mp3"
+    },
+    {
+      "phraseId": "pharmacy_allergy_note",
+      "form": "female",
+      "thai": "ฉันแพ้ยาตามรายการนี้ค่ะ",
+      "asset": "audio/thai/pharmacy_allergy_note_female_b664f99f3f4de20f.mp3"
+    },
+    {
+      "phraseId": "pharmacy_read_instructions",
+      "form": "male",
+      "thai": "ช่วยอ่านวิธีใช้ให้ฟังได้ไหมครับ",
+      "asset": "audio/thai/pharmacy_read_instructions_male_84cce09233f1c44c.mp3"
+    },
+    {
+      "phraseId": "pharmacy_read_instructions",
+      "form": "female",
+      "thai": "ช่วยอ่านวิธีใช้ให้ฟังได้ไหมคะ",
+      "asset": "audio/thai/pharmacy_read_instructions_female_eb4d64a25888aa96.mp3"
+    },
+    {
+      "phraseId": "pharmacy_need_receipt",
+      "form": "male",
+      "thai": "ขอใบเสร็จค่ายาได้ไหมครับ",
+      "asset": "audio/thai/pharmacy_need_receipt_male_6217912453b91921.mp3"
+    },
+    {
+      "phraseId": "pharmacy_need_receipt",
+      "form": "female",
+      "thai": "ขอใบเสร็จค่ายาได้ไหมคะ",
+      "asset": "audio/thai/pharmacy_need_receipt_female_eb3dd90a62140053.mp3"
+    },
+    {
+      "phraseId": "emergency_call_ambulance",
+      "form": "male",
+      "thai": "ช่วยเรียกรถพยาบาลให้หน่อยครับ",
+      "asset": "audio/thai/emergency_call_ambulance_male_af016c8eac24bcc0.mp3"
+    },
+    {
+      "phraseId": "emergency_call_ambulance",
+      "form": "female",
+      "thai": "ช่วยเรียกรถพยาบาลให้หน่อยค่ะ",
+      "asset": "audio/thai/emergency_call_ambulance_female_5c982eea91e8de3d.mp3"
+    },
+    {
+      "phraseId": "emergency_call_police",
+      "form": "male",
+      "thai": "ช่วยเรียกตำรวจให้หน่อยครับ",
+      "asset": "audio/thai/emergency_call_police_male_cc2402810df0d843.mp3"
+    },
+    {
+      "phraseId": "emergency_call_police",
+      "form": "female",
+      "thai": "ช่วยเรียกตำรวจให้หน่อยค่ะ",
+      "asset": "audio/thai/emergency_call_police_female_64a3d869568dec09.mp3"
+    },
+    {
+      "phraseId": "emergency_someone_hurt",
+      "form": "male",
+      "thai": "มีคนบาดเจ็บครับ",
+      "asset": "audio/thai/emergency_someone_hurt_male_511bd254ca620163.mp3"
+    },
+    {
+      "phraseId": "emergency_someone_hurt",
+      "form": "female",
+      "thai": "มีคนบาดเจ็บค่ะ",
+      "asset": "audio/thai/emergency_someone_hurt_female_1be9c0ab013c6e47.mp3"
+    },
+    {
+      "phraseId": "emergency_fire",
+      "form": "male",
+      "thai": "ไฟไหม้ ช่วยด้วยครับ",
+      "asset": "audio/thai/emergency_fire_male_244236eaa04f041c.mp3"
+    },
+    {
+      "phraseId": "emergency_fire",
+      "form": "female",
+      "thai": "ไฟไหม้ ช่วยด้วยค่ะ",
+      "asset": "audio/thai/emergency_fire_female_32c23ae02365ed4d.mp3"
+    },
+    {
+      "phraseId": "emergency_lost_person",
+      "form": "male",
+      "thai": "ผมหาคนที่มาด้วยไม่เจอครับ",
+      "asset": "audio/thai/emergency_lost_person_male_7ed6be234c9dbb3a.mp3"
+    },
+    {
+      "phraseId": "emergency_lost_person",
+      "form": "female",
+      "thai": "ฉันหาคนที่มาด้วยไม่เจอค่ะ",
+      "asset": "audio/thai/emergency_lost_person_female_f89a6d6ba6b1ac8e.mp3"
+    },
+    {
+      "phraseId": "emergency_lost_wallet",
+      "form": "male",
+      "thai": "กระเป๋าสตางค์หายครับ",
+      "asset": "audio/thai/emergency_lost_wallet_male_7bba9bda3abb0f1e.mp3"
+    },
+    {
+      "phraseId": "emergency_lost_wallet",
+      "form": "female",
+      "thai": "กระเป๋าสตางค์หายค่ะ",
+      "asset": "audio/thai/emergency_lost_wallet_female_071d959b27e70d09.mp3"
+    },
+    {
+      "phraseId": "police_lost_phone",
+      "form": "male",
+      "thai": "โทรศัพท์ของผมหายครับ",
+      "asset": "audio/thai/police_lost_phone_male_580c8bad53739e4e.mp3"
+    },
+    {
+      "phraseId": "police_lost_phone",
+      "form": "female",
+      "thai": "โทรศัพท์ของฉันหายค่ะ",
+      "asset": "audio/thai/police_lost_phone_female_0b9ad1f66a2066e5.mp3"
+    },
+    {
+      "phraseId": "police_report_item",
+      "form": "male",
+      "thai": "ขอแจ้งของหายครับ",
+      "asset": "audio/thai/police_report_item_male_557fb17a6014f78e.mp3"
+    },
+    {
+      "phraseId": "police_report_item",
+      "form": "female",
+      "thai": "ขอแจ้งของหายค่ะ",
+      "asset": "audio/thai/police_report_item_female_7f6c44d87f39f8d1.mp3"
+    },
+    {
+      "phraseId": "police_report_copy",
+      "form": "male",
+      "thai": "ขอสำเนาบันทึกประจำวันได้ไหมครับ",
+      "asset": "audio/thai/police_report_copy_male_c50518b7c4d30d1e.mp3"
+    },
+    {
+      "phraseId": "police_report_copy",
+      "form": "female",
+      "thai": "ขอสำเนาบันทึกประจำวันได้ไหมคะ",
+      "asset": "audio/thai/police_report_copy_female_3c4e19f7c51ece82.mp3"
+    },
+    {
+      "phraseId": "police_need_interpreter",
+      "form": "male",
+      "thai": "ช่วยจัดหาล่ามภาษาพม่าให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/police_need_interpreter_male_0a68834313888d14.mp3"
+    },
+    {
+      "phraseId": "police_need_interpreter",
+      "form": "female",
+      "thai": "ช่วยจัดหาล่ามภาษาพม่าให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/police_need_interpreter_female_ab0b9fc45a96d9a5.mp3"
+    },
+    {
+      "phraseId": "police_understand_question",
+      "form": "male",
+      "thai": "ช่วยพูดให้ชัดเจนได้ไหมครับ",
+      "asset": "audio/thai/police_understand_question_male_749c8232cf2c2439.mp3"
+    },
+    {
+      "phraseId": "police_understand_question",
+      "form": "female",
+      "thai": "ช่วยพูดให้ชัดเจนได้ไหมคะ",
+      "asset": "audio/thai/police_understand_question_female_2e4d77b3ab313e7b.mp3"
+    },
+    {
+      "phraseId": "police_contact_consulate",
+      "form": "male",
+      "thai": "ขอติดต่อสถานทูตได้ไหมครับ",
+      "asset": "audio/thai/police_contact_consulate_male_62d7a356924d9301.mp3"
+    },
+    {
+      "phraseId": "police_contact_consulate",
+      "form": "female",
+      "thai": "ขอติดต่อสถานทูตได้ไหมคะ",
+      "asset": "audio/thai/police_contact_consulate_female_eefd10e1451e8652.mp3"
+    },
+    {
+      "phraseId": "police_wait_for_interpreter",
+      "form": "male",
+      "thai": "ขอรอล่ามก่อนครับ",
+      "asset": "audio/thai/police_wait_for_interpreter_male_12ee9a8e0ab1d6b0.mp3"
+    },
+    {
+      "phraseId": "police_wait_for_interpreter",
+      "form": "female",
+      "thai": "ขอรอล่ามก่อนค่ะ",
+      "asset": "audio/thai/police_wait_for_interpreter_female_d41610aec3f1b745.mp3"
+    },
+    {
+      "phraseId": "documents_submit_where",
+      "form": "male",
+      "thai": "ต้องยื่นเอกสารที่ไหนครับ",
+      "asset": "audio/thai/documents_submit_where_male_5549f664c3af24d5.mp3"
+    },
+    {
+      "phraseId": "documents_submit_where",
+      "form": "female",
+      "thai": "ต้องยื่นเอกสารที่ไหนคะ",
+      "asset": "audio/thai/documents_submit_where_female_35f9fbb0293464f4.mp3"
+    },
+    {
+      "phraseId": "documents_what_to_bring",
+      "form": "male",
+      "thai": "ต้องนำเอกสารอะไรไปบ้างครับ",
+      "asset": "audio/thai/documents_what_to_bring_male_949da29918f74566.mp3"
+    },
+    {
+      "phraseId": "documents_what_to_bring",
+      "form": "female",
+      "thai": "ต้องนำเอกสารอะไรไปบ้างคะ",
+      "asset": "audio/thai/documents_what_to_bring_female_94470c9ae49de808.mp3"
+    },
+    {
+      "phraseId": "documents_explain_form",
+      "form": "male",
+      "thai": "ช่วยอธิบายแบบฟอร์มนี้ได้ไหมครับ",
+      "asset": "audio/thai/documents_explain_form_male_4c91a0bbbeff763c.mp3"
+    },
+    {
+      "phraseId": "documents_explain_form",
+      "form": "female",
+      "thai": "ช่วยอธิบายแบบฟอร์มนี้ได้ไหมคะ",
+      "asset": "audio/thai/documents_explain_form_female_7c658633ddac3d20.mp3"
+    },
+    {
+      "phraseId": "documents_appointment",
+      "form": "male",
+      "thai": "มีนัดเรื่องเอกสารครับ",
+      "asset": "audio/thai/documents_appointment_male_142e289baeda1299.mp3"
+    },
+    {
+      "phraseId": "documents_appointment",
+      "form": "female",
+      "thai": "มีนัดเรื่องเอกสารค่ะ",
+      "asset": "audio/thai/documents_appointment_female_380dfaeeecf04d6f.mp3"
+    },
+    {
+      "phraseId": "documents_interpreter",
+      "form": "male",
+      "thai": "ขอล่ามภาษาพม่าได้ไหมครับ",
+      "asset": "audio/thai/documents_interpreter_male_937e74115382f26c.mp3"
+    },
+    {
+      "phraseId": "documents_interpreter",
+      "form": "female",
+      "thai": "ขอล่ามภาษาพม่าได้ไหมคะ",
+      "asset": "audio/thai/documents_interpreter_female_efa243953b30d2d3.mp3"
+    },
+    {
+      "phraseId": "documents_write_name",
+      "form": "male",
+      "thai": "ช่วยเขียนชื่อเอกสารให้หน่อยครับ",
+      "asset": "audio/thai/documents_write_name_male_7a2cde93c694da29.mp3"
+    },
+    {
+      "phraseId": "documents_write_name",
+      "form": "female",
+      "thai": "ช่วยเขียนชื่อเอกสารให้หน่อยค่ะ",
+      "asset": "audio/thai/documents_write_name_female_7e241efa39e82e13.mp3"
+    },
+    {
+      "phraseId": "documents_check_copy",
+      "form": "male",
+      "thai": "ช่วยตรวจสำเนานี้ได้ไหมครับ",
+      "asset": "audio/thai/documents_check_copy_male_d744cb493f917315.mp3"
+    },
+    {
+      "phraseId": "documents_check_copy",
+      "form": "female",
+      "thai": "ช่วยตรวจสำเนานี้ได้ไหมคะ",
+      "asset": "audio/thai/documents_check_copy_female_cbbb8bc20e178f3f.mp3"
+    },
+    {
+      "phraseId": "bank_deposit_cash",
+      "form": "male",
+      "thai": "ขอฝากเงินสดครับ",
+      "asset": "audio/thai/bank_deposit_cash_male_fc8e25010b4e2a14.mp3"
+    },
+    {
+      "phraseId": "bank_deposit_cash",
+      "form": "female",
+      "thai": "ขอฝากเงินสดค่ะ",
+      "asset": "audio/thai/bank_deposit_cash_female_01224456f81acbc0.mp3"
+    },
+    {
+      "phraseId": "bank_forgot_pin",
+      "form": "male",
+      "thai": "ผมลืมรหัสบัตรครับ",
+      "asset": "audio/thai/bank_forgot_pin_male_b76abeaeb626bdc9.mp3"
+    },
+    {
+      "phraseId": "bank_forgot_pin",
+      "form": "female",
+      "thai": "ฉันลืมรหัสบัตรค่ะ",
+      "asset": "audio/thai/bank_forgot_pin_female_10c26b321f02bf7b.mp3"
+    },
+    {
+      "phraseId": "bank_card_retained",
+      "form": "male",
+      "thai": "ตู้เอทีเอ็มไม่คืนบัตรครับ",
+      "asset": "audio/thai/bank_card_retained_male_2a76522cead83964.mp3"
+    },
+    {
+      "phraseId": "bank_card_retained",
+      "form": "female",
+      "thai": "ตู้เอทีเอ็มไม่คืนบัตรค่ะ",
+      "asset": "audio/thai/bank_card_retained_female_924f4f7212a92631.mp3"
+    },
+    {
+      "phraseId": "bank_transfer_not_arrived",
+      "form": "male",
+      "thai": "เงินที่โอนยังไม่เข้าบัญชีครับ",
+      "asset": "audio/thai/bank_transfer_not_arrived_male_38da3bb10b6fe671.mp3"
+    },
+    {
+      "phraseId": "bank_transfer_not_arrived",
+      "form": "female",
+      "thai": "เงินที่โอนยังไม่เข้าบัญชีค่ะ",
+      "asset": "audio/thai/bank_transfer_not_arrived_female_96343ced3b72e0d5.mp3"
+    },
+    {
+      "phraseId": "bank_account_balance",
+      "form": "male",
+      "thai": "ขอตรวจยอดเงินในบัญชีได้ไหมครับ",
+      "asset": "audio/thai/bank_account_balance_male_706a6098111f9a18.mp3"
+    },
+    {
+      "phraseId": "bank_account_balance",
+      "form": "female",
+      "thai": "ขอตรวจยอดเงินในบัญชีได้ไหมคะ",
+      "asset": "audio/thai/bank_account_balance_female_425f3a508fa38dca.mp3"
+    },
+    {
+      "phraseId": "bank_statement",
+      "form": "male",
+      "thai": "ขอรายการเดินบัญชีได้ไหมครับ",
+      "asset": "audio/thai/bank_statement_male_1b87bef172bf2b34.mp3"
+    },
+    {
+      "phraseId": "bank_statement",
+      "form": "female",
+      "thai": "ขอรายการเดินบัญชีได้ไหมคะ",
+      "asset": "audio/thai/bank_statement_female_77d439126f11d9f5.mp3"
+    },
+    {
+      "phraseId": "phone_buy_sim",
+      "form": "male",
+      "thai": "อยากซื้อซิมการ์ดครับ",
+      "asset": "audio/thai/phone_buy_sim_male_48a65ac7d2b07663.mp3"
+    },
+    {
+      "phraseId": "phone_buy_sim",
+      "form": "female",
+      "thai": "อยากซื้อซิมการ์ดค่ะ",
+      "asset": "audio/thai/phone_buy_sim_female_b642885cc3bd7b0e.mp3"
+    },
+    {
+      "phraseId": "phone_register_sim",
+      "form": "male",
+      "thai": "ลงทะเบียนซิมที่ไหนครับ",
+      "asset": "audio/thai/phone_register_sim_male_51b9717f0f0279ab.mp3"
+    },
+    {
+      "phraseId": "phone_register_sim",
+      "form": "female",
+      "thai": "ลงทะเบียนซิมที่ไหนคะ",
+      "asset": "audio/thai/phone_register_sim_female_ebdf4cd6a39323b2.mp3"
+    },
+    {
+      "phraseId": "phone_no_otp",
+      "form": "male",
+      "thai": "ยังไม่ได้รับรหัสยืนยันครับ",
+      "asset": "audio/thai/phone_no_otp_male_fd7e4256eeab0dc9.mp3"
+    },
+    {
+      "phraseId": "phone_no_otp",
+      "form": "female",
+      "thai": "ยังไม่ได้รับรหัสยืนยันค่ะ",
+      "asset": "audio/thai/phone_no_otp_female_c42590eaba11a109.mp3"
+    },
+    {
+      "phraseId": "phone_check_balance",
+      "form": "male",
+      "thai": "ขอตรวจยอดเงินในซิมได้ไหมครับ",
+      "asset": "audio/thai/phone_check_balance_male_9b3a93b83591d304.mp3"
+    },
+    {
+      "phraseId": "phone_check_balance",
+      "form": "female",
+      "thai": "ขอตรวจยอดเงินในซิมได้ไหมคะ",
+      "asset": "audio/thai/phone_check_balance_female_7293458bd80fdc2e.mp3"
+    },
+    {
+      "phraseId": "phone_repair",
+      "form": "male",
+      "thai": "ช่วยตรวจโทรศัพท์ให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/phone_repair_male_9906dd37a10313a2.mp3"
+    },
+    {
+      "phraseId": "phone_repair",
+      "form": "female",
+      "thai": "ช่วยตรวจโทรศัพท์ให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/phone_repair_female_f439f5255a96ec72.mp3"
+    },
+    {
+      "phraseId": "phone_internet_not_working",
+      "form": "male",
+      "thai": "อินเทอร์เน็ตใช้ไม่ได้ครับ",
+      "asset": "audio/thai/phone_internet_not_working_male_0ba56a53ded186c2.mp3"
+    },
+    {
+      "phraseId": "phone_internet_not_working",
+      "form": "female",
+      "thai": "อินเทอร์เน็ตใช้ไม่ได้ค่ะ",
+      "asset": "audio/thai/phone_internet_not_working_female_48aadcc9127fff47.mp3"
+    },
+    {
+      "phraseId": "job_type_opening",
+      "form": "male",
+      "thai": "มีงานตำแหน่งอะไรบ้างครับ",
+      "asset": "audio/thai/job_type_opening_male_b3ff133cb3694ab1.mp3"
+    },
+    {
+      "phraseId": "job_type_opening",
+      "form": "female",
+      "thai": "มีงานตำแหน่งอะไรบ้างคะ",
+      "asset": "audio/thai/job_type_opening_female_2dfd567c5b90b96f.mp3"
+    },
+    {
+      "phraseId": "job_interview_time",
+      "form": "male",
+      "thai": "สัมภาษณ์งานวันไหนครับ",
+      "asset": "audio/thai/job_interview_time_male_d534b86a437826a8.mp3"
+    },
+    {
+      "phraseId": "job_interview_time",
+      "form": "female",
+      "thai": "สัมภาษณ์งานวันไหนคะ",
+      "asset": "audio/thai/job_interview_time_female_eb0a17ea77445023.mp3"
+    },
+    {
+      "phraseId": "job_work_location",
+      "form": "male",
+      "thai": "สถานที่ทำงานอยู่ที่ไหนครับ",
+      "asset": "audio/thai/job_work_location_male_e04d6be0b54fd4e2.mp3"
+    },
+    {
+      "phraseId": "job_work_location",
+      "form": "female",
+      "thai": "สถานที่ทำงานอยู่ที่ไหนคะ",
+      "asset": "audio/thai/job_work_location_female_dff46b7447b38100.mp3"
+    },
+    {
+      "phraseId": "job_start_date",
+      "form": "male",
+      "thai": "เริ่มงานวันไหนได้ครับ",
+      "asset": "audio/thai/job_start_date_male_c9cc51d0d2c62925.mp3"
+    },
+    {
+      "phraseId": "job_start_date",
+      "form": "female",
+      "thai": "เริ่มงานวันไหนได้คะ",
+      "asset": "audio/thai/job_start_date_female_122951432beea596.mp3"
+    },
+    {
+      "phraseId": "job_contact",
+      "form": "male",
+      "thai": "ขอเบอร์ติดต่อได้ไหมครับ",
+      "asset": "audio/thai/job_contact_male_ec5233fc8b5206e7.mp3"
+    },
+    {
+      "phraseId": "job_contact",
+      "form": "female",
+      "thai": "ขอเบอร์ติดต่อได้ไหมคะ",
+      "asset": "audio/thai/job_contact_female_01e1c28943a52839.mp3"
+    },
+    {
+      "phraseId": "salary_not_received",
+      "form": "male",
+      "thai": "เงินเดือนยังไม่เข้าบัญชีครับ",
+      "asset": "audio/thai/salary_not_received_male_b8a88b951f7414f1.mp3"
+    },
+    {
+      "phraseId": "salary_not_received",
+      "form": "female",
+      "thai": "เงินเดือนยังไม่เข้าบัญชีค่ะ",
+      "asset": "audio/thai/salary_not_received_female_0807e5beed49ba16.mp3"
+    },
+    {
+      "phraseId": "salary_check_work_hours",
+      "form": "male",
+      "thai": "ขอตรวจจำนวนชั่วโมงทำงานได้ไหมครับ",
+      "asset": "audio/thai/salary_check_work_hours_male_32481607e8069eba.mp3"
+    },
+    {
+      "phraseId": "salary_check_work_hours",
+      "form": "female",
+      "thai": "ขอตรวจจำนวนชั่วโมงทำงานได้ไหมคะ",
+      "asset": "audio/thai/salary_check_work_hours_female_c2c951499cc1af10.mp3"
+    },
+    {
+      "phraseId": "salary_deduction",
+      "form": "male",
+      "thai": "รายการหักเงินนี้คืออะไรครับ",
+      "asset": "audio/thai/salary_deduction_male_78a87efb8ab2d7da.mp3"
+    },
+    {
+      "phraseId": "salary_deduction",
+      "form": "female",
+      "thai": "รายการหักเงินนี้คืออะไรคะ",
+      "asset": "audio/thai/salary_deduction_female_a7e12aa1c23e09e9.mp3"
+    },
+    {
+      "phraseId": "salary_payment_slip",
+      "form": "male",
+      "thai": "ขอสลิปเงินเดือนได้ไหมครับ",
+      "asset": "audio/thai/salary_payment_slip_male_ea050a5a1d7684c1.mp3"
+    },
+    {
+      "phraseId": "salary_payment_slip",
+      "form": "female",
+      "thai": "ขอสลิปเงินเดือนได้ไหมคะ",
+      "asset": "audio/thai/salary_payment_slip_female_e2340890068a7b38.mp3"
+    },
+    {
+      "phraseId": "salary_payment_date",
+      "form": "male",
+      "thai": "เงินเดือนรอบนี้จะโอนเข้าบัญชีวันไหนครับ",
+      "asset": "audio/thai/salary_payment_date_male_82dc00198749b87c.mp3"
+    },
+    {
+      "phraseId": "salary_payment_date",
+      "form": "female",
+      "thai": "เงินเดือนรอบนี้จะโอนเข้าบัญชีวันไหนคะ",
+      "asset": "audio/thai/salary_payment_date_female_c4b8d46aec855986.mp3"
+    },
+    {
+      "phraseId": "overtime_hours",
+      "form": "male",
+      "thai": "วันนี้ทำโอทีกี่ชั่วโมงครับ",
+      "asset": "audio/thai/overtime_hours_male_a06c37de188356bb.mp3"
+    },
+    {
+      "phraseId": "overtime_hours",
+      "form": "female",
+      "thai": "วันนี้ทำโอทีกี่ชั่วโมงคะ",
+      "asset": "audio/thai/overtime_hours_female_0375b455aea932f0.mp3"
+    },
+    {
+      "phraseId": "overtime_schedule",
+      "form": "male",
+      "thai": "ขอตารางโอทีได้ไหมครับ",
+      "asset": "audio/thai/overtime_schedule_male_590415d744ad1e19.mp3"
+    },
+    {
+      "phraseId": "overtime_schedule",
+      "form": "female",
+      "thai": "ขอตารางโอทีได้ไหมคะ",
+      "asset": "audio/thai/overtime_schedule_female_9af5577019162324.mp3"
+    },
+    {
+      "phraseId": "overtime_record",
+      "form": "male",
+      "thai": "ขอตรวจบันทึกโอทีได้ไหมครับ",
+      "asset": "audio/thai/overtime_record_male_eeedaf069d4f21fd.mp3"
+    },
+    {
+      "phraseId": "overtime_record",
+      "form": "female",
+      "thai": "ขอตรวจบันทึกโอทีได้ไหมคะ",
+      "asset": "audio/thai/overtime_record_female_dd8f43ec57a2d32e.mp3"
+    },
+    {
+      "phraseId": "overtime_pay_rate",
+      "form": "male",
+      "thai": "ค่าโอทีคิดชั่วโมงละเท่าไหร่ครับ",
+      "asset": "audio/thai/overtime_pay_rate_male_385ab3cce1844dcb.mp3"
+    },
+    {
+      "phraseId": "overtime_pay_rate",
+      "form": "female",
+      "thai": "ค่าโอทีคิดชั่วโมงละเท่าไหร่คะ",
+      "asset": "audio/thai/overtime_pay_rate_female_2331ebe50e37510d.mp3"
+    },
+    {
+      "phraseId": "overtime_end_time",
+      "form": "male",
+      "thai": "คืนนี้เลิกโอทีกี่โมงครับ",
+      "asset": "audio/thai/overtime_end_time_male_69b5fe3e7ed9fc1c.mp3"
+    },
+    {
+      "phraseId": "overtime_end_time",
+      "form": "female",
+      "thai": "คืนนี้เลิกโอทีกี่โมงคะ",
+      "asset": "audio/thai/overtime_end_time_female_6be3a162988b8b2a.mp3"
+    },
+    {
+      "phraseId": "overtime_confirm_hours",
+      "form": "male",
+      "thai": "ช่วยยืนยันชั่วโมงโอทีให้หน่อยครับ",
+      "asset": "audio/thai/overtime_confirm_hours_male_abc69729e418de33.mp3"
+    },
+    {
+      "phraseId": "overtime_confirm_hours",
+      "form": "female",
+      "thai": "ช่วยยืนยันชั่วโมงโอทีให้หน่อยค่ะ",
+      "asset": "audio/thai/overtime_confirm_hours_female_74b385fab868f201.mp3"
+    },
+    {
+      "phraseId": "leave_medical_appointment",
+      "form": "male",
+      "thai": "พรุ่งนี้มีนัดหมอ ขอลาหยุดหนึ่งวันได้ไหมครับ",
+      "asset": "audio/thai/leave_medical_appointment_male_eddedf9192bd5fc4.mp3"
+    },
+    {
+      "phraseId": "leave_medical_appointment",
+      "form": "female",
+      "thai": "พรุ่งนี้มีนัดหมอ ขอลาหยุดหนึ่งวันได้ไหมคะ",
+      "asset": "audio/thai/leave_medical_appointment_female_5a751750e19267b8.mp3"
+    },
+    {
+      "phraseId": "leave_notify_person",
+      "form": "male",
+      "thai": "ต้องแจ้งลาหยุดกับใครครับ",
+      "asset": "audio/thai/leave_notify_person_male_de3c3a2064d8604c.mp3"
+    },
+    {
+      "phraseId": "leave_notify_person",
+      "form": "female",
+      "thai": "ต้องแจ้งลาหยุดกับใครคะ",
+      "asset": "audio/thai/leave_notify_person_female_c88f11ff40fa7ccc.mp3"
+    },
+    {
+      "phraseId": "leave_return_date",
+      "form": "male",
+      "thai": "หลังวันหยุดต้องกลับมาวันไหนครับ",
+      "asset": "audio/thai/leave_return_date_male_a22b37df38756566.mp3"
+    },
+    {
+      "phraseId": "leave_return_date",
+      "form": "female",
+      "thai": "หลังวันหยุดต้องกลับมาวันไหนคะ",
+      "asset": "audio/thai/leave_return_date_female_c68a7650a858371e.mp3"
+    },
+    {
+      "phraseId": "leave_available_days",
+      "form": "male",
+      "thai": "เหลือวันลาอีกกี่วันครับ",
+      "asset": "audio/thai/leave_available_days_male_4afe2e98b87f9638.mp3"
+    },
+    {
+      "phraseId": "leave_available_days",
+      "form": "female",
+      "thai": "เหลือวันลาอีกกี่วันคะ",
+      "asset": "audio/thai/leave_available_days_female_a889b7fea35b8982.mp3"
+    },
+    {
+      "phraseId": "leave_cant_attend",
+      "form": "male",
+      "thai": "วันนี้ไปทำงานไม่ได้ครับ",
+      "asset": "audio/thai/leave_cant_attend_male_0f929a09564b60e8.mp3"
+    },
+    {
+      "phraseId": "leave_cant_attend",
+      "form": "female",
+      "thai": "วันนี้ไปทำงานไม่ได้ค่ะ",
+      "asset": "audio/thai/leave_cant_attend_female_4d24f2e3b695b1f5.mp3"
+    },
+    {
+      "phraseId": "leave_send_message",
+      "form": "male",
+      "thai": "ขอส่งข้อความแจ้งลาครับ",
+      "asset": "audio/thai/leave_send_message_male_5d561cfeedca30d8.mp3"
+    },
+    {
+      "phraseId": "leave_send_message",
+      "form": "female",
+      "thai": "ขอส่งข้อความแจ้งลาค่ะ",
+      "asset": "audio/thai/leave_send_message_female_95b73f40712ad84b.mp3"
+    },
+    {
+      "phraseId": "daily_need_water",
+      "form": "male",
+      "thai": "ขอน้ำดื่มได้ไหมครับ",
+      "asset": "audio/thai/daily_need_water_male_e38bcfe758da46bd.mp3"
+    },
+    {
+      "phraseId": "daily_need_water",
+      "form": "female",
+      "thai": "ขอน้ำดื่มได้ไหมคะ",
+      "asset": "audio/thai/daily_need_water_female_bc1035c347d8f5ca.mp3"
+    },
+    {
+      "phraseId": "daily_no_cash",
+      "form": "male",
+      "thai": "ตอนนี้ไม่มีเงินสดครับ",
+      "asset": "audio/thai/daily_no_cash_male_8fcceca33ca9d498.mp3"
+    },
+    {
+      "phraseId": "daily_no_cash",
+      "form": "female",
+      "thai": "ตอนนี้ไม่มีเงินสดค่ะ",
+      "asset": "audio/thai/daily_no_cash_female_f91ed88202fe1855.mp3"
+    },
+    {
+      "phraseId": "daily_wait_for_friend",
+      "form": "male",
+      "thai": "ขอรอเพื่อนตรงนี้ได้ไหมครับ",
+      "asset": "audio/thai/daily_wait_for_friend_male_df438245b27ec280.mp3"
+    },
+    {
+      "phraseId": "daily_wait_for_friend",
+      "form": "female",
+      "thai": "ขอรอเพื่อนตรงนี้ได้ไหมคะ",
+      "asset": "audio/thai/daily_wait_for_friend_female_8a82cf6cfef1e2a9.mp3"
+    },
+    {
+      "phraseId": "daily_lost_way",
+      "form": "male",
+      "thai": "ผมหลงทาง ช่วยบอกทางได้ไหมครับ",
+      "asset": "audio/thai/daily_lost_way_male_fb46e51e3a22ede5.mp3"
+    },
+    {
+      "phraseId": "daily_lost_way",
+      "form": "female",
+      "thai": "ฉันหลงทาง ช่วยบอกทางได้ไหมคะ",
+      "asset": "audio/thai/daily_lost_way_female_cec118649c115896.mp3"
+    },
+    {
+      "phraseId": "daily_call_friend",
+      "form": "male",
+      "thai": "ช่วยโทรหาเพื่อนให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/daily_call_friend_male_28c621b4c74841da.mp3"
+    },
+    {
+      "phraseId": "daily_call_friend",
+      "form": "female",
+      "thai": "ช่วยโทรหาเพื่อนให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/daily_call_friend_female_ba0ca54bb8bf0c5e.mp3"
+    },
+    {
+      "phraseId": "daily_need_toilet_urgent",
+      "form": "male",
+      "thai": "ขอใช้ห้องน้ำด่วนได้ไหมครับ",
+      "asset": "audio/thai/daily_need_toilet_urgent_male_508a75dd67ff04e8.mp3"
+    },
+    {
+      "phraseId": "daily_need_toilet_urgent",
+      "form": "female",
+      "thai": "ขอใช้ห้องน้ำด่วนได้ไหมคะ",
+      "asset": "audio/thai/daily_need_toilet_urgent_female_df8e9c35935cf281.mp3"
+    },
+    {
+      "phraseId": "daily_where_get_water",
+      "form": "male",
+      "thai": "ซื้อน้ำดื่มได้ที่ไหนครับ",
+      "asset": "audio/thai/daily_where_get_water_male_a599667e4aee8be4.mp3"
+    },
+    {
+      "phraseId": "daily_where_get_water",
+      "form": "female",
+      "thai": "ซื้อน้ำดื่มได้ที่ไหนคะ",
+      "asset": "audio/thai/daily_where_get_water_female_f71a38cdda0efed9.mp3"
+    },
+    {
+      "phraseId": "daily_charging_phone",
+      "form": "male",
+      "thai": "ขอชาร์จโทรศัพท์ได้ไหมครับ",
+      "asset": "audio/thai/daily_charging_phone_male_942ee4485835a5d4.mp3"
+    },
+    {
+      "phraseId": "daily_charging_phone",
+      "form": "female",
+      "thai": "ขอชาร์จโทรศัพท์ได้ไหมคะ",
+      "asset": "audio/thai/daily_charging_phone_female_36793b1422008619.mp3"
+    },
+    {
+      "phraseId": "greet_how_are_you",
+      "form": "male",
+      "thai": "สบายดีไหมครับ",
+      "asset": "audio/thai/greet_how_are_you_male_4cc29fb6ff3bc070.mp3"
+    },
+    {
+      "phraseId": "greet_how_are_you",
+      "form": "female",
+      "thai": "สบายดีไหมคะ",
+      "asset": "audio/thai/greet_how_are_you_female_319422c45ead92fd.mp3"
+    },
+    {
+      "phraseId": "greet_arrived",
+      "form": "male",
+      "thai": "ถึงแล้วเหรอครับ",
+      "asset": "audio/thai/greet_arrived_male_f0ed05fb806ab509.mp3"
+    },
+    {
+      "phraseId": "greet_arrived",
+      "form": "female",
+      "thai": "ถึงแล้วเหรอคะ",
+      "asset": "audio/thai/greet_arrived_female_a4904f813822321b.mp3"
+    },
+    {
+      "phraseId": "greet_thank_help",
+      "form": "male",
+      "thai": "ขอบคุณที่ช่วยนะครับ",
+      "asset": "audio/thai/greet_thank_help_male_7c5f4a2dfcf967f2.mp3"
+    },
+    {
+      "phraseId": "greet_thank_help",
+      "form": "female",
+      "thai": "ขอบคุณที่ช่วยนะคะ",
+      "asset": "audio/thai/greet_thank_help_female_3650b238ab533329.mp3"
+    },
+    {
+      "phraseId": "greet_sorry_late",
+      "form": "male",
+      "thai": "ขอโทษที่มาสายครับ",
+      "asset": "audio/thai/greet_sorry_late_male_809e9d6936c398a6.mp3"
+    },
+    {
+      "phraseId": "greet_sorry_late",
+      "form": "female",
+      "thai": "ขอโทษที่มาสายค่ะ",
+      "asset": "audio/thai/greet_sorry_late_female_f2c2c2a326965e36.mp3"
+    },
+    {
+      "phraseId": "greet_head_off",
+      "form": "male",
+      "thai": "ขอตัวกลับก่อนนะครับ",
+      "asset": "audio/thai/greet_head_off_male_1035a83696a4de98.mp3"
+    },
+    {
+      "phraseId": "greet_head_off",
+      "form": "female",
+      "thai": "ขอตัวกลับก่อนนะคะ",
+      "asset": "audio/thai/greet_head_off_female_a4a6b96caf4a3efa.mp3"
+    },
+    {
+      "phraseId": "intro_ask_name",
+      "form": "male",
+      "thai": "คุณชื่ออะไรครับ",
+      "asset": "audio/thai/intro_ask_name_male_ca1e0b6a9ae58840.mp3"
+    },
+    {
+      "phraseId": "intro_ask_name",
+      "form": "female",
+      "thai": "คุณชื่ออะไรคะ",
+      "asset": "audio/thai/intro_ask_name_female_93a161afd90b5e59.mp3"
+    },
+    {
+      "phraseId": "intro_call_me",
+      "form": "male",
+      "thai": "เรียกผมว่า…ก็ได้ครับ",
+      "asset": "audio/thai/intro_call_me_male_dcdcf335ae71aa3f.mp3"
+    },
+    {
+      "phraseId": "intro_call_me",
+      "form": "female",
+      "thai": "เรียกฉันว่า…ก็ได้ค่ะ",
+      "asset": "audio/thai/intro_call_me_female_da7711f8a3d689c4.mp3"
+    },
+    {
+      "phraseId": "intro_live_near",
+      "form": "male",
+      "thai": "ผมอยู่แถว…ครับ",
+      "asset": "audio/thai/intro_live_near_male_ec2932bc8e2c9c63.mp3"
+    },
+    {
+      "phraseId": "intro_live_near",
+      "form": "female",
+      "thai": "ฉันอยู่แถว…ค่ะ",
+      "asset": "audio/thai/intro_live_near_female_42c9b4ee52925aec.mp3"
+    },
+    {
+      "phraseId": "intro_work_at",
+      "form": "male",
+      "thai": "ผมทำงานที่…ครับ",
+      "asset": "audio/thai/intro_work_at_male_a9c515e5d6b3c8a5.mp3"
+    },
+    {
+      "phraseId": "intro_work_at",
+      "form": "female",
+      "thai": "ฉันทำงานที่…ค่ะ",
+      "asset": "audio/thai/intro_work_at_female_167c35fa3730bc1c.mp3"
+    },
+    {
+      "phraseId": "intro_from_city",
+      "form": "male",
+      "thai": "คุณมาจากที่ไหนครับ",
+      "asset": "audio/thai/intro_from_city_male_02fbe9a470ba932a.mp3"
+    },
+    {
+      "phraseId": "intro_from_city",
+      "form": "female",
+      "thai": "คุณมาจากที่ไหนคะ",
+      "asset": "audio/thai/intro_from_city_female_5626788a00745eed.mp3"
+    },
+    {
+      "phraseId": "number_say_slowly",
+      "form": "male",
+      "thai": "ช่วยพูดตัวเลขช้าๆ ได้ไหมครับ",
+      "asset": "audio/thai/number_say_slowly_male_ee9165f8c7276501.mp3"
+    },
+    {
+      "phraseId": "number_say_slowly",
+      "form": "female",
+      "thai": "ช่วยพูดตัวเลขช้าๆ ได้ไหมคะ",
+      "asset": "audio/thai/number_say_slowly_female_4ff466ddb773f523.mp3"
+    },
+    {
+      "phraseId": "number_write_down",
+      "form": "male",
+      "thai": "ช่วยเขียนตัวเลขให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/number_write_down_male_59a0ca2049fb4533.mp3"
+    },
+    {
+      "phraseId": "number_write_down",
+      "form": "female",
+      "thai": "ช่วยเขียนตัวเลขให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/number_write_down_female_705000643c2672e9.mp3"
+    },
+    {
+      "phraseId": "number_total_people",
+      "form": "male",
+      "thai": "มีทั้งหมดกี่คนครับ",
+      "asset": "audio/thai/number_total_people_male_d78a785728f005db.mp3"
+    },
+    {
+      "phraseId": "number_total_people",
+      "form": "female",
+      "thai": "มีทั้งหมดกี่คนคะ",
+      "asset": "audio/thai/number_total_people_female_850d6238d141a8e5.mp3"
+    },
+    {
+      "phraseId": "number_phone_digits",
+      "form": "male",
+      "thai": "หมายเลขโทรศัพท์ของผมคือ…ครับ",
+      "asset": "audio/thai/number_phone_digits_male_a241fc405dfc7bf0.mp3"
+    },
+    {
+      "phraseId": "number_phone_digits",
+      "form": "female",
+      "thai": "หมายเลขโทรศัพท์ของฉันคือ…ค่ะ",
+      "asset": "audio/thai/number_phone_digits_female_2993e5a154f2cf1d.mp3"
+    },
+    {
+      "phraseId": "number_enter",
+      "form": "male",
+      "thai": "ช่วยกรอกตัวเลขนี้ให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/number_enter_male_5533e9879d626c51.mp3"
+    },
+    {
+      "phraseId": "number_enter",
+      "form": "female",
+      "thai": "ช่วยกรอกตัวเลขนี้ให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/number_enter_female_331eb2815d5b71cf.mp3"
+    },
+    {
+      "phraseId": "money_small_notes",
+      "form": "male",
+      "thai": "มีแบงก์ย่อยไหมครับ",
+      "asset": "audio/thai/money_small_notes_male_6c7caa3a1cda5e5b.mp3"
+    },
+    {
+      "phraseId": "money_small_notes",
+      "form": "female",
+      "thai": "มีแบงก์ย่อยไหมคะ",
+      "asset": "audio/thai/money_small_notes_female_addf9b854754c74f.mp3"
+    },
+    {
+      "phraseId": "money_fee_included",
+      "form": "male",
+      "thai": "ราคานี้รวมค่าบริการแล้วไหมครับ",
+      "asset": "audio/thai/money_fee_included_male_fd923e52e565a2a7.mp3"
+    },
+    {
+      "phraseId": "money_fee_included",
+      "form": "female",
+      "thai": "ราคานี้รวมค่าบริการแล้วไหมคะ",
+      "asset": "audio/thai/money_fee_included_female_e3e799e2670bb3ce.mp3"
+    },
+    {
+      "phraseId": "money_two_items",
+      "form": "male",
+      "thai": "ถ้าซื้อสองชิ้นราคาเท่าไหร่ครับ",
+      "asset": "audio/thai/money_two_items_male_331a5f3d9bb8b669.mp3"
+    },
+    {
+      "phraseId": "money_two_items",
+      "form": "female",
+      "thai": "ถ้าซื้อสองชิ้นราคาเท่าไหร่คะ",
+      "asset": "audio/thai/money_two_items_female_978fc89ed035751b.mp3"
+    },
+    {
+      "phraseId": "money_bank_transfer",
+      "form": "male",
+      "thai": "รับโอนเงินไหมครับ",
+      "asset": "audio/thai/money_bank_transfer_male_6713e5c1bccc1738.mp3"
+    },
+    {
+      "phraseId": "money_bank_transfer",
+      "form": "female",
+      "thai": "รับโอนเงินไหมคะ",
+      "asset": "audio/thai/money_bank_transfer_female_825d018b05b9681e.mp3"
+    },
+    {
+      "phraseId": "money_already_paid",
+      "form": "male",
+      "thai": "จ่ายเงินแล้วครับ",
+      "asset": "audio/thai/money_already_paid_male_744e53e5830e9080.mp3"
+    },
+    {
+      "phraseId": "money_already_paid",
+      "form": "female",
+      "thai": "จ่ายเงินแล้วค่ะ",
+      "asset": "audio/thai/money_already_paid_female_7143ab67e8cdbee3.mp3"
+    },
+    {
+      "phraseId": "money_each_item",
+      "form": "male",
+      "thai": "ชิ้นละเท่าไหร่ครับ",
+      "asset": "audio/thai/money_each_item_male_cc6b88b0adc0b934.mp3"
+    },
+    {
+      "phraseId": "money_each_item",
+      "form": "female",
+      "thai": "ชิ้นละเท่าไหร่คะ",
+      "asset": "audio/thai/money_each_item_female_2794c5b8dfea6164.mp3"
+    },
+    {
+      "phraseId": "time_arrived",
+      "form": "male",
+      "thai": "ถึงแล้วครับ",
+      "asset": "audio/thai/time_arrived_male_88b5264a77388e42.mp3"
+    },
+    {
+      "phraseId": "time_arrived",
+      "form": "female",
+      "thai": "ถึงแล้วค่ะ",
+      "asset": "audio/thai/time_arrived_female_38970319c5830678.mp3"
+    },
+    {
+      "phraseId": "time_running_late",
+      "form": "male",
+      "thai": "รถติด อาจไปสายหน่อยครับ",
+      "asset": "audio/thai/time_running_late_male_bd92540a4a4df76d.mp3"
+    },
+    {
+      "phraseId": "time_running_late",
+      "form": "female",
+      "thai": "รถติด อาจไปสายหน่อยค่ะ",
+      "asset": "audio/thai/time_running_late_female_37b027ae84577af0.mp3"
+    },
+    {
+      "phraseId": "time_ready_notice",
+      "form": "male",
+      "thai": "ทำเสร็จแล้วช่วยบอกด้วยนะครับ",
+      "asset": "audio/thai/time_ready_notice_male_eb1ccf6c84db0fd9.mp3"
+    },
+    {
+      "phraseId": "time_ready_notice",
+      "form": "female",
+      "thai": "ทำเสร็จแล้วช่วยบอกด้วยนะคะ",
+      "asset": "audio/thai/time_ready_notice_female_1f2936b017e967ac.mp3"
+    },
+    {
+      "phraseId": "time_my_turn",
+      "form": "male",
+      "thai": "ถึงคิวผมหรือยังครับ",
+      "asset": "audio/thai/time_my_turn_male_dbfc2087fbe42d22.mp3"
+    },
+    {
+      "phraseId": "time_my_turn",
+      "form": "female",
+      "thai": "ถึงคิวฉันหรือยังคะ",
+      "asset": "audio/thai/time_my_turn_female_b47c77a717793a17.mp3"
+    },
+    {
+      "phraseId": "time_free_to_talk",
+      "form": "male",
+      "thai": "ตอนนี้สะดวกคุยไหมครับ",
+      "asset": "audio/thai/time_free_to_talk_male_ca81886d7a5ba6f9.mp3"
+    },
+    {
+      "phraseId": "time_free_to_talk",
+      "form": "female",
+      "thai": "ตอนนี้สะดวกคุยไหมคะ",
+      "asset": "audio/thai/time_free_to_talk_female_4b1769ddac46bc79.mp3"
+    },
+    {
+      "phraseId": "time_move_afternoon",
+      "form": "male",
+      "thai": "ขอเลื่อนเป็นช่วงบ่ายได้ไหมครับ",
+      "asset": "audio/thai/time_move_afternoon_male_42b527bda244837f.mp3"
+    },
+    {
+      "phraseId": "time_move_afternoon",
+      "form": "female",
+      "thai": "ขอเลื่อนเป็นช่วงบ่ายได้ไหมคะ",
+      "asset": "audio/thai/time_move_afternoon_female_0c88891600668d1f.mp3"
+    },
+    {
+      "phraseId": "date_appointment_day",
+      "form": "male",
+      "thai": "นัดวันไหนครับ",
+      "asset": "audio/thai/date_appointment_day_male_ec2efc4c75678bf8.mp3"
+    },
+    {
+      "phraseId": "date_appointment_day",
+      "form": "female",
+      "thai": "นัดวันไหนคะ",
+      "asset": "audio/thai/date_appointment_day_female_5ed3dd10d9d6859d.mp3"
+    },
+    {
+      "phraseId": "date_weekday",
+      "form": "male",
+      "thai": "วันที่…ตรงกับวันอะไรครับ",
+      "asset": "audio/thai/date_weekday_male_45bdabcced70f5f8.mp3"
+    },
+    {
+      "phraseId": "date_weekday",
+      "form": "female",
+      "thai": "วันที่…ตรงกับวันอะไรคะ",
+      "asset": "audio/thai/date_weekday_female_6ac57656e05195b6.mp3"
+    },
+    {
+      "phraseId": "date_is_holiday",
+      "form": "male",
+      "thai": "วันนี้เป็นวันหยุดไหมครับ",
+      "asset": "audio/thai/date_is_holiday_male_dfeba642245b0fc7.mp3"
+    },
+    {
+      "phraseId": "date_is_holiday",
+      "form": "female",
+      "thai": "วันนี้เป็นวันหยุดไหมคะ",
+      "asset": "audio/thai/date_is_holiday_female_c3b4521fc1487f34.mp3"
+    },
+    {
+      "phraseId": "date_next_month_day_off",
+      "form": "male",
+      "thai": "เดือนหน้าหยุดวันไหนครับ",
+      "asset": "audio/thai/date_next_month_day_off_male_c84b6e7ae3cd614c.mp3"
+    },
+    {
+      "phraseId": "date_next_month_day_off",
+      "form": "female",
+      "thai": "เดือนหน้าหยุดวันไหนคะ",
+      "asset": "audio/thai/date_next_month_day_off_female_ece32e46964dbb1a.mp3"
+    },
+    {
+      "phraseId": "date_confirm_again",
+      "form": "male",
+      "thai": "ขอยืนยันวันที่อีกครั้งนะครับ",
+      "asset": "audio/thai/date_confirm_again_male_608ce3d457c87111.mp3"
+    },
+    {
+      "phraseId": "date_confirm_again",
+      "form": "female",
+      "thai": "ขอยืนยันวันที่อีกครั้งนะคะ",
+      "asset": "audio/thai/date_confirm_again_female_e93bc8326750be57.mp3"
+    },
+    {
+      "phraseId": "question_word_meaning",
+      "form": "male",
+      "thai": "คำนี้แปลว่าอะไรครับ",
+      "asset": "audio/thai/question_word_meaning_male_045e2aafdb64c108.mp3"
+    },
+    {
+      "phraseId": "question_word_meaning",
+      "form": "female",
+      "thai": "คำนี้แปลว่าอะไรคะ",
+      "asset": "audio/thai/question_word_meaning_female_a391ca697bd77b27.mp3"
+    },
+    {
+      "phraseId": "question_form_field",
+      "form": "male",
+      "thai": "ช่องนี้ต้องกรอกอะไรครับ",
+      "asset": "audio/thai/question_form_field_male_3dbfd621d1ef0500.mp3"
+    },
+    {
+      "phraseId": "question_form_field",
+      "form": "female",
+      "thai": "ช่องนี้ต้องกรอกอะไรคะ",
+      "asset": "audio/thai/question_form_field_female_8db38b301518a5b0.mp3"
+    },
+    {
+      "phraseId": "question_which_counter",
+      "form": "male",
+      "thai": "ต้องไปเคาน์เตอร์ไหนครับ",
+      "asset": "audio/thai/question_which_counter_male_59bf7a21774c6b3d.mp3"
+    },
+    {
+      "phraseId": "question_which_counter",
+      "form": "female",
+      "thai": "ต้องไปเคาน์เตอร์ไหนคะ",
+      "asset": "audio/thai/question_which_counter_female_2098afe376759fb8.mp3"
+    },
+    {
+      "phraseId": "question_show_how",
+      "form": "male",
+      "thai": "ช่วยทำให้ดูหน่อยได้ไหมครับ",
+      "asset": "audio/thai/question_show_how_male_cb688136aa947898.mp3"
+    },
+    {
+      "phraseId": "question_show_how",
+      "form": "female",
+      "thai": "ช่วยทำให้ดูหน่อยได้ไหมคะ",
+      "asset": "audio/thai/question_show_how_female_44578fe8f4d6885d.mp3"
+    },
+    {
+      "phraseId": "question_have_here",
+      "form": "male",
+      "thai": "ที่นี่มี…ไหมครับ",
+      "asset": "audio/thai/question_have_here_male_9b187053f094d288.mp3"
+    },
+    {
+      "phraseId": "question_have_here",
+      "form": "female",
+      "thai": "ที่นี่มี…ไหมคะ",
+      "asset": "audio/thai/question_have_here_female_a49af078aed83f6a.mp3"
+    },
+    {
+      "phraseId": "question_book_ahead",
+      "form": "male",
+      "thai": "ต้องจองล่วงหน้าไหมครับ",
+      "asset": "audio/thai/question_book_ahead_male_fe775c7320c3d73a.mp3"
+    },
+    {
+      "phraseId": "question_book_ahead",
+      "form": "female",
+      "thai": "ต้องจองล่วงหน้าไหมคะ",
+      "asset": "audio/thai/question_book_ahead_female_ba29376c29c907eb.mp3"
+    },
+    {
+      "phraseId": "answer_understood",
+      "form": "male",
+      "thai": "เข้าใจแล้วครับ",
+      "asset": "audio/thai/answer_understood_male_5708d6fb71938406.mp3"
+    },
+    {
+      "phraseId": "answer_understood",
+      "form": "female",
+      "thai": "เข้าใจแล้วค่ะ",
+      "asset": "audio/thai/answer_understood_female_8389b9681c6e9ccc.mp3"
+    },
+    {
+      "phraseId": "answer_check_first",
+      "form": "male",
+      "thai": "เดี๋ยวขอตรวจดูก่อนครับ",
+      "asset": "audio/thai/answer_check_first_male_608ead814258dab4.mp3"
+    },
+    {
+      "phraseId": "answer_check_first",
+      "form": "female",
+      "thai": "เดี๋ยวขอตรวจดูก่อนค่ะ",
+      "asset": "audio/thai/answer_check_first_female_db0fa4490f00c3b7.mp3"
+    },
+    {
+      "phraseId": "answer_do_now",
+      "form": "male",
+      "thai": "จะทำให้ตอนนี้ครับ",
+      "asset": "audio/thai/answer_do_now_male_4b58475e69f98cdc.mp3"
+    },
+    {
+      "phraseId": "answer_do_now",
+      "form": "female",
+      "thai": "จะทำให้ตอนนี้ค่ะ",
+      "asset": "audio/thai/answer_do_now_female_19bc405000693e9c.mp3"
+    },
+    {
+      "phraseId": "answer_more_time",
+      "form": "male",
+      "thai": "ขอเวลาอีกสักครู่นะครับ",
+      "asset": "audio/thai/answer_more_time_male_55ca17215991e863.mp3"
+    },
+    {
+      "phraseId": "answer_more_time",
+      "form": "female",
+      "thai": "ขอเวลาอีกสักครู่นะคะ",
+      "asset": "audio/thai/answer_more_time_female_463cf466283a2141.mp3"
+    },
+    {
+      "phraseId": "answer_on_way",
+      "form": "male",
+      "thai": "กำลังไปครับ",
+      "asset": "audio/thai/answer_on_way_male_8980d08812cee76e.mp3"
+    },
+    {
+      "phraseId": "answer_on_way",
+      "form": "female",
+      "thai": "กำลังไปค่ะ",
+      "asset": "audio/thai/answer_on_way_female_f82f7e38f850c83a.mp3"
+    },
+    {
+      "phraseId": "food_more_rice",
+      "form": "male",
+      "thai": "ขอข้าวเพิ่มได้ไหมครับ",
+      "asset": "audio/thai/food_more_rice_male_09cb2955661770da.mp3"
+    },
+    {
+      "phraseId": "food_more_rice",
+      "form": "female",
+      "thai": "ขอข้าวเพิ่มได้ไหมคะ",
+      "asset": "audio/thai/food_more_rice_female_1a692c44e29fe6d0.mp3"
+    },
+    {
+      "phraseId": "food_no_peanuts",
+      "form": "male",
+      "thai": "ขออาหารที่ไม่มีถั่วลิสงได้ไหมครับ",
+      "asset": "audio/thai/food_no_peanuts_male_e4732589c673f5ac.mp3"
+    },
+    {
+      "phraseId": "food_no_peanuts",
+      "form": "female",
+      "thai": "ขออาหารที่ไม่มีถั่วลิสงได้ไหมคะ",
+      "asset": "audio/thai/food_no_peanuts_female_568efbfe888fbce2.mp3"
+    },
+    {
+      "phraseId": "food_ingredients",
+      "form": "male",
+      "thai": "จานนี้มีอะไรบ้างครับ",
+      "asset": "audio/thai/food_ingredients_male_25ef150d41465f33.mp3"
+    },
+    {
+      "phraseId": "food_ingredients",
+      "form": "female",
+      "thai": "จานนี้มีอะไรบ้างคะ",
+      "asset": "audio/thai/food_ingredients_female_e98f7f75b9202160.mp3"
+    },
+    {
+      "phraseId": "food_no_ice",
+      "form": "male",
+      "thai": "ขอน้ำเปล่าไม่ใส่น้ำแข็งครับ",
+      "asset": "audio/thai/food_no_ice_male_810318a4da4fd3fb.mp3"
+    },
+    {
+      "phraseId": "food_no_ice",
+      "form": "female",
+      "thai": "ขอน้ำเปล่าไม่ใส่น้ำแข็งค่ะ",
+      "asset": "audio/thai/food_no_ice_female_34573c4de499ca7a.mp3"
+    },
+    {
+      "phraseId": "food_more_cutlery",
+      "form": "male",
+      "thai": "ขอช้อนส้อมเพิ่มได้ไหมครับ",
+      "asset": "audio/thai/food_more_cutlery_male_7a54877d82e00b08.mp3"
+    },
+    {
+      "phraseId": "food_more_cutlery",
+      "form": "female",
+      "thai": "ขอช้อนส้อมเพิ่มได้ไหมคะ",
+      "asset": "audio/thai/food_more_cutlery_female_af0d14b67fca8237.mp3"
+    },
+    {
+      "phraseId": "food_no_fish_sauce",
+      "form": "male",
+      "thai": "ไม่ใส่น้ำปลาได้ไหมครับ",
+      "asset": "audio/thai/food_no_fish_sauce_male_87bf12f49657811c.mp3"
+    },
+    {
+      "phraseId": "food_no_fish_sauce",
+      "form": "female",
+      "thai": "ไม่ใส่น้ำปลาได้ไหมคะ",
+      "asset": "audio/thai/food_no_fish_sauce_female_3a7f76935296c708.mp3"
+    },
+    {
+      "phraseId": "shopping_specific_size",
+      "form": "male",
+      "thai": "มีไซซ์…ไหมครับ",
+      "asset": "audio/thai/shopping_specific_size_male_67bd22f562a36ada.mp3"
+    },
+    {
+      "phraseId": "shopping_specific_size",
+      "form": "female",
+      "thai": "มีไซซ์…ไหมคะ",
+      "asset": "audio/thai/shopping_specific_size_female_2e6f6aacbf7d3dbd.mp3"
+    },
+    {
+      "phraseId": "shopping_other_brand",
+      "form": "male",
+      "thai": "มีแบรนด์อื่นไหมครับ",
+      "asset": "audio/thai/shopping_other_brand_male_8d9d3e383878f97a.mp3"
+    },
+    {
+      "phraseId": "shopping_other_brand",
+      "form": "female",
+      "thai": "มีแบรนด์อื่นไหมคะ",
+      "asset": "audio/thai/shopping_other_brand_female_7f81d494aedb4fec.mp3"
+    },
+    {
+      "phraseId": "shopping_hold_item",
+      "form": "male",
+      "thai": "ช่วยเก็บชิ้นนี้ไว้ให้ก่อนได้ไหมครับ",
+      "asset": "audio/thai/shopping_hold_item_male_6c11675291bab775.mp3"
+    },
+    {
+      "phraseId": "shopping_hold_item",
+      "form": "female",
+      "thai": "ช่วยเก็บชิ้นนี้ไว้ให้ก่อนได้ไหมคะ",
+      "asset": "audio/thai/shopping_hold_item_female_b2223062c5cd303b.mp3"
+    },
+    {
+      "phraseId": "shopping_gift_wrap",
+      "form": "male",
+      "thai": "ช่วยห่อเป็นของขวัญได้ไหมครับ",
+      "asset": "audio/thai/shopping_gift_wrap_male_72338cf8afa47987.mp3"
+    },
+    {
+      "phraseId": "shopping_gift_wrap",
+      "form": "female",
+      "thai": "ช่วยห่อเป็นของขวัญได้ไหมคะ",
+      "asset": "audio/thai/shopping_gift_wrap_female_4ab60e837e526e64.mp3"
+    },
+    {
+      "phraseId": "shopping_exchange_days",
+      "form": "male",
+      "thai": "ถ้าใส่ไม่พอดีเปลี่ยนได้ภายในกี่วันครับ",
+      "asset": "audio/thai/shopping_exchange_days_male_106d60b384543e40.mp3"
+    },
+    {
+      "phraseId": "shopping_exchange_days",
+      "form": "female",
+      "thai": "ถ้าใส่ไม่พอดีเปลี่ยนได้ภายในกี่วันคะ",
+      "asset": "audio/thai/shopping_exchange_days_female_d47a575cf688f687.mp3"
+    },
+    {
+      "phraseId": "shopping_same_price",
+      "form": "male",
+      "thai": "อันนี้ราคาเท่ากับอันนั้นไหมครับ",
+      "asset": "audio/thai/shopping_same_price_male_188507fee8449bb8.mp3"
+    },
+    {
+      "phraseId": "shopping_same_price",
+      "form": "female",
+      "thai": "อันนี้ราคาเท่ากับอันนั้นไหมคะ",
+      "asset": "audio/thai/shopping_same_price_female_01d35fae34dc02af.mp3"
+    },
+    {
+      "phraseId": "store_pickup_parcel",
+      "form": "male",
+      "thai": "มารับพัสดุครับ",
+      "asset": "audio/thai/store_pickup_parcel_male_7d91652a3662d332.mp3"
+    },
+    {
+      "phraseId": "store_pickup_parcel",
+      "form": "female",
+      "thai": "มารับพัสดุค่ะ",
+      "asset": "audio/thai/store_pickup_parcel_female_148e9692ef56e9c2.mp3"
+    },
+    {
+      "phraseId": "store_charger_cable",
+      "form": "male",
+      "thai": "มีสายชาร์จโทรศัพท์ขายไหมครับ",
+      "asset": "audio/thai/store_charger_cable_male_fbb763577a086c08.mp3"
+    },
+    {
+      "phraseId": "store_charger_cable",
+      "form": "female",
+      "thai": "มีสายชาร์จโทรศัพท์ขายไหมคะ",
+      "asset": "audio/thai/store_charger_cable_female_216d3c9ebfe5e831.mp3"
+    },
+    {
+      "phraseId": "store_transit_topup",
+      "form": "male",
+      "thai": "เติมเงินบัตรเดินทางได้ไหมครับ",
+      "asset": "audio/thai/store_transit_topup_male_afa784f1c15a1d4f.mp3"
+    },
+    {
+      "phraseId": "store_transit_topup",
+      "form": "female",
+      "thai": "เติมเงินบัตรเดินทางได้ไหมคะ",
+      "asset": "audio/thai/store_transit_topup_female_8b235fe0856c3a8e.mp3"
+    },
+    {
+      "phraseId": "store_have_ice",
+      "form": "male",
+      "thai": "มีน้ำแข็งไหมครับ",
+      "asset": "audio/thai/store_have_ice_male_2a6bf5742d4fa254.mp3"
+    },
+    {
+      "phraseId": "store_have_ice",
+      "form": "female",
+      "thai": "มีน้ำแข็งไหมคะ",
+      "asset": "audio/thai/store_have_ice_female_b58f7aa83536c6d4.mp3"
+    },
+    {
+      "phraseId": "store_photocopy",
+      "form": "male",
+      "thai": "มีบริการถ่ายเอกสารไหมครับ",
+      "asset": "audio/thai/store_photocopy_male_99ff899402c49922.mp3"
+    },
+    {
+      "phraseId": "store_photocopy",
+      "form": "female",
+      "thai": "มีบริการถ่ายเอกสารไหมคะ",
+      "asset": "audio/thai/store_photocopy_female_2daee42f84a57883.mp3"
+    },
+    {
+      "phraseId": "transport_car_booking",
+      "form": "male",
+      "thai": "ผมจองรถไว้ในชื่อ…ครับ",
+      "asset": "audio/thai/transport_car_booking_male_426413acd8b2342a.mp3"
+    },
+    {
+      "phraseId": "transport_car_booking",
+      "form": "female",
+      "thai": "ฉันจองรถไว้ในชื่อ…ค่ะ",
+      "asset": "audio/thai/transport_car_booking_female_d6a05c7ea3a657bc.mp3"
+    },
+    {
+      "phraseId": "transport_waiting_entrance",
+      "form": "male",
+      "thai": "ผมรออยู่ที่ทางเข้าหมายเลข…ครับ",
+      "asset": "audio/thai/transport_waiting_entrance_male_efb59595f21ec0af.mp3"
+    },
+    {
+      "phraseId": "transport_waiting_entrance",
+      "form": "female",
+      "thai": "ฉันรออยู่ที่ทางเข้าหมายเลข…ค่ะ",
+      "asset": "audio/thai/transport_waiting_entrance_female_716c1b2aca4c4600.mp3"
+    },
+    {
+      "phraseId": "transport_near_destination",
+      "form": "male",
+      "thai": "ใกล้ถึงแล้วช่วยบอกด้วยนะครับ",
+      "asset": "audio/thai/transport_near_destination_male_8ca1957483fe6113.mp3"
+    },
+    {
+      "phraseId": "transport_near_destination",
+      "form": "female",
+      "thai": "ใกล้ถึงแล้วช่วยบอกด้วยนะคะ",
+      "asset": "audio/thai/transport_near_destination_female_bdc9e5d27b5b6edf.mp3"
+    },
+    {
+      "phraseId": "transport_wrong_destination",
+      "form": "male",
+      "thai": "ที่นี่ไม่ใช่ปลายทางของผมครับ",
+      "asset": "audio/thai/transport_wrong_destination_male_0eb15a1f6ce87371.mp3"
+    },
+    {
+      "phraseId": "transport_wrong_destination",
+      "form": "female",
+      "thai": "ที่นี่ไม่ใช่ปลายทางของฉันค่ะ",
+      "asset": "audio/thai/transport_wrong_destination_female_90221891449914b3.mp3"
+    },
+    {
+      "phraseId": "transport_heavy_luggage",
+      "form": "male",
+      "thai": "มีสัมภาระเยอะ ช่วยเปิดท้ายรถได้ไหมครับ",
+      "asset": "audio/thai/transport_heavy_luggage_male_bb7d008119f74e31.mp3"
+    },
+    {
+      "phraseId": "transport_heavy_luggage",
+      "form": "female",
+      "thai": "มีสัมภาระเยอะ ช่วยเปิดท้ายรถได้ไหมคะ",
+      "asset": "audio/thai/transport_heavy_luggage_female_afbc44dbe890003e.mp3"
+    },
+    {
+      "phraseId": "transport_lift_bag",
+      "form": "male",
+      "thai": "ช่วยยกกระเป๋าให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/transport_lift_bag_male_3e4b0fc699796e72.mp3"
+    },
+    {
+      "phraseId": "transport_lift_bag",
+      "form": "female",
+      "thai": "ช่วยยกกระเป๋าให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/transport_lift_bag_female_e4518cc9f675fc1b.mp3"
+    },
+    {
+      "phraseId": "directions_which_building",
+      "form": "male",
+      "thai": "อาคาร…ไปทางไหนครับ",
+      "asset": "audio/thai/directions_which_building_male_e4a68db2878cdced.mp3"
+    },
+    {
+      "phraseId": "directions_which_building",
+      "form": "female",
+      "thai": "อาคาร…ไปทางไหนคะ",
+      "asset": "audio/thai/directions_which_building_female_5f1ea183c968e2e5.mp3"
+    },
+    {
+      "phraseId": "directions_nearest_crossing",
+      "form": "male",
+      "thai": "ทางม้าลายที่ใกล้ที่สุดอยู่ตรงไหนครับ",
+      "asset": "audio/thai/directions_nearest_crossing_male_714f59b400ba07f0.mp3"
+    },
+    {
+      "phraseId": "directions_nearest_crossing",
+      "form": "female",
+      "thai": "ทางม้าลายที่ใกล้ที่สุดอยู่ตรงไหนคะ",
+      "asset": "audio/thai/directions_nearest_crossing_female_4e583c38b1ab6161.mp3"
+    },
+    {
+      "phraseId": "directions_right_way",
+      "form": "male",
+      "thai": "ผมมาถูกทางไหมครับ",
+      "asset": "audio/thai/directions_right_way_male_01601180ad345021.mp3"
+    },
+    {
+      "phraseId": "directions_right_way",
+      "form": "female",
+      "thai": "ฉันมาถูกทางไหมคะ",
+      "asset": "audio/thai/directions_right_way_female_84b43e227f2197cc.mp3"
+    },
+    {
+      "phraseId": "directions_turn_to_place",
+      "form": "male",
+      "thai": "ถ้าจะไป…ต้องเลี้ยวตรงไหนครับ",
+      "asset": "audio/thai/directions_turn_to_place_male_7d64306bd9754e90.mp3"
+    },
+    {
+      "phraseId": "directions_turn_to_place",
+      "form": "female",
+      "thai": "ถ้าจะไป…ต้องเลี้ยวตรงไหนคะ",
+      "asset": "audio/thai/directions_turn_to_place_female_92801c6647dfa130.mp3"
+    },
+    {
+      "phraseId": "directions_back_station",
+      "form": "male",
+      "thai": "ทางกลับไปสถานีอยู่ทางไหนครับ",
+      "asset": "audio/thai/directions_back_station_male_510d30bec8d8d3ee.mp3"
+    },
+    {
+      "phraseId": "directions_back_station",
+      "form": "female",
+      "thai": "ทางกลับไปสถานีอยู่ทางไหนคะ",
+      "asset": "audio/thai/directions_back_station_female_641b1fe30c346d22.mp3"
+    },
+    {
+      "phraseId": "home_lock_broken",
+      "form": "male",
+      "thai": "กลอนประตูเสียครับ",
+      "asset": "audio/thai/home_lock_broken_male_b7eb98f3b8c3d0ce.mp3"
+    },
+    {
+      "phraseId": "home_lock_broken",
+      "form": "female",
+      "thai": "กลอนประตูเสียค่ะ",
+      "asset": "audio/thai/home_lock_broken_female_4d7e5d336a1d37f0.mp3"
+    },
+    {
+      "phraseId": "home_aircon_not_cooling",
+      "form": "male",
+      "thai": "แอร์ไม่เย็นครับ",
+      "asset": "audio/thai/home_aircon_not_cooling_male_d75a09408654d49f.mp3"
+    },
+    {
+      "phraseId": "home_aircon_not_cooling",
+      "form": "female",
+      "thai": "แอร์ไม่เย็นค่ะ",
+      "asset": "audio/thai/home_aircon_not_cooling_female_a1eac44e4b61056c.mp3"
+    },
+    {
+      "phraseId": "home_water_leak",
+      "form": "male",
+      "thai": "มีน้ำรั่วใต้ซิงก์ครับ",
+      "asset": "audio/thai/home_water_leak_male_c3d85c1325cde7ba.mp3"
+    },
+    {
+      "phraseId": "home_water_leak",
+      "form": "female",
+      "thai": "มีน้ำรั่วใต้ซิงก์ค่ะ",
+      "asset": "audio/thai/home_water_leak_female_49fedfd664bd3744.mp3"
+    },
+    {
+      "phraseId": "home_power_out",
+      "form": "male",
+      "thai": "ไฟดับทั้งห้องครับ",
+      "asset": "audio/thai/home_power_out_male_53688dc7b430246e.mp3"
+    },
+    {
+      "phraseId": "home_power_out",
+      "form": "female",
+      "thai": "ไฟดับทั้งห้องค่ะ",
+      "asset": "audio/thai/home_power_out_female_1e3553e3ddfdc0c7.mp3"
+    },
+    {
+      "phraseId": "home_key_lost",
+      "form": "male",
+      "thai": "กุญแจห้องหายครับ",
+      "asset": "audio/thai/home_key_lost_male_e383edce8cefe73d.mp3"
+    },
+    {
+      "phraseId": "home_key_lost",
+      "form": "female",
+      "thai": "กุญแจห้องหายค่ะ",
+      "asset": "audio/thai/home_key_lost_female_24468dcb855c4d4c.mp3"
+    },
+    {
+      "phraseId": "home_noise_night",
+      "form": "male",
+      "thai": "ห้องข้างๆ เสียงดังตอนกลางคืนครับ",
+      "asset": "audio/thai/home_noise_night_male_1024a15937dbe629.mp3"
+    },
+    {
+      "phraseId": "home_noise_night",
+      "form": "female",
+      "thai": "ห้องข้างๆ เสียงดังตอนกลางคืนค่ะ",
+      "asset": "audio/thai/home_noise_night_female_e341741e3665163b.mp3"
+    },
+    {
+      "phraseId": "apt_view_before_decide",
+      "form": "male",
+      "thai": "ขอดูห้องก่อนตัดสินใจได้ไหมครับ",
+      "asset": "audio/thai/apt_view_before_decide_male_afab670d8f2bbe1d.mp3"
+    },
+    {
+      "phraseId": "apt_view_before_decide",
+      "form": "female",
+      "thai": "ขอดูห้องก่อนตัดสินใจได้ไหมคะ",
+      "asset": "audio/thai/apt_view_before_decide_female_2c5077fc80a4378c.mp3"
+    },
+    {
+      "phraseId": "apt_utilities_separate",
+      "form": "male",
+      "thai": "ค่าน้ำค่าไฟจ่ายแยกกันไหมครับ",
+      "asset": "audio/thai/apt_utilities_separate_male_69dc658d12ea6841.mp3"
+    },
+    {
+      "phraseId": "apt_utilities_separate",
+      "form": "female",
+      "thai": "ค่าน้ำค่าไฟจ่ายแยกกันไหมคะ",
+      "asset": "audio/thai/apt_utilities_separate_female_a01d84ad07ed0e14.mp3"
+    },
+    {
+      "phraseId": "apt_move_in_day",
+      "form": "male",
+      "thai": "ย้ายเข้าได้วันไหนครับ",
+      "asset": "audio/thai/apt_move_in_day_male_097a530b480f0bdb.mp3"
+    },
+    {
+      "phraseId": "apt_move_in_day",
+      "form": "female",
+      "thai": "ย้ายเข้าได้วันไหนคะ",
+      "asset": "audio/thai/apt_move_in_day_female_117cbab39af6effa.mp3"
+    },
+    {
+      "phraseId": "apt_motorcycle_parking",
+      "form": "male",
+      "thai": "มีที่จอดมอเตอร์ไซค์ไหมครับ",
+      "asset": "audio/thai/apt_motorcycle_parking_male_815e370f44b1b8eb.mp3"
+    },
+    {
+      "phraseId": "apt_motorcycle_parking",
+      "form": "female",
+      "thai": "มีที่จอดมอเตอร์ไซค์ไหมคะ",
+      "asset": "audio/thai/apt_motorcycle_parking_female_a5135ad34ffaf7bf.mp3"
+    },
+    {
+      "phraseId": "apt_repair_visit_day",
+      "form": "male",
+      "thai": "สะดวกให้ช่างเข้ามาซ่อมวันไหนครับ",
+      "asset": "audio/thai/apt_repair_visit_day_male_55629135341cdd57.mp3"
+    },
+    {
+      "phraseId": "apt_repair_visit_day",
+      "form": "female",
+      "thai": "สะดวกให้ช่างเข้ามาซ่อมวันไหนคะ",
+      "asset": "audio/thai/apt_repair_visit_day_female_94dd722b0e4b232f.mp3"
+    },
+    {
+      "phraseId": "restaurant_water_no_ice",
+      "form": "male",
+      "thai": "ขอน้ำเปล่าไม่ใส่น้ำแข็งอีกแก้วได้ไหมครับ",
+      "asset": "audio/thai/restaurant_water_no_ice_male_37963bd8416a9fe7.mp3"
+    },
+    {
+      "phraseId": "restaurant_water_no_ice",
+      "form": "female",
+      "thai": "ขอน้ำเปล่าไม่ใส่น้ำแข็งอีกแก้วได้ไหมคะ",
+      "asset": "audio/thai/restaurant_water_no_ice_female_c7c1d1d76ce65088.mp3"
+    },
+    {
+      "phraseId": "restaurant_peanut_question",
+      "form": "male",
+      "thai": "จานนี้มีถั่วลิสงไหมครับ",
+      "asset": "audio/thai/restaurant_peanut_question_male_9be26953daaf714c.mp3"
+    },
+    {
+      "phraseId": "restaurant_peanut_question",
+      "form": "female",
+      "thai": "จานนี้มีถั่วลิสงไหมคะ",
+      "asset": "audio/thai/restaurant_peanut_question_female_4a62917f6ed587b0.mp3"
+    },
+    {
+      "phraseId": "restaurant_extra_rice",
+      "form": "male",
+      "thai": "ขอข้าวเปล่าอีกจานได้ไหมครับ",
+      "asset": "audio/thai/restaurant_extra_rice_male_247da483cf5f6153.mp3"
+    },
+    {
+      "phraseId": "restaurant_extra_rice",
+      "form": "female",
+      "thai": "ขอข้าวเปล่าอีกจานได้ไหมคะ",
+      "asset": "audio/thai/restaurant_extra_rice_female_fdbffb50fbfeed60.mp3"
+    },
+    {
+      "phraseId": "restaurant_dine_in",
+      "form": "male",
+      "thai": "ทานที่ร้านครับ",
+      "asset": "audio/thai/restaurant_dine_in_male_5dcfd451ea625a94.mp3"
+    },
+    {
+      "phraseId": "restaurant_dine_in",
+      "form": "female",
+      "thai": "ทานที่ร้านค่ะ",
+      "asset": "audio/thai/restaurant_dine_in_female_faf179767f28c72c.mp3"
+    },
+    {
+      "phraseId": "restaurant_call_staff",
+      "form": "male",
+      "thai": "ขอเรียกพนักงานหน่อยครับ",
+      "asset": "audio/thai/restaurant_call_staff_male_686450b44002fb93.mp3"
+    },
+    {
+      "phraseId": "restaurant_call_staff",
+      "form": "female",
+      "thai": "ขอเรียกพนักงานหน่อยค่ะ",
+      "asset": "audio/thai/restaurant_call_staff_female_01c84f9ba2d8a759.mp3"
+    },
+    {
+      "phraseId": "street_no_fish_sauce",
+      "form": "male",
+      "thai": "อันนี้ไม่ใส่น้ำปลาได้ไหมครับ",
+      "asset": "audio/thai/street_no_fish_sauce_male_2650975f5323e0db.mp3"
+    },
+    {
+      "phraseId": "street_no_fish_sauce",
+      "form": "female",
+      "thai": "อันนี้ไม่ใส่น้ำปลาได้ไหมคะ",
+      "asset": "audio/thai/street_no_fish_sauce_female_037f0a78c4a6e968.mp3"
+    },
+    {
+      "phraseId": "street_half_portion",
+      "form": "male",
+      "thai": "ขอครึ่งหนึ่งได้ไหมครับ",
+      "asset": "audio/thai/street_half_portion_male_18e4c4afd5739c4d.mp3"
+    },
+    {
+      "phraseId": "street_half_portion",
+      "form": "female",
+      "thai": "ขอครึ่งหนึ่งได้ไหมคะ",
+      "asset": "audio/thai/street_half_portion_female_1dd228c3082e5cda.mp3"
+    },
+    {
+      "phraseId": "street_cut_small",
+      "form": "male",
+      "thai": "ช่วยหั่นเป็นชิ้นเล็กๆ ได้ไหมครับ",
+      "asset": "audio/thai/street_cut_small_male_f152dd5c891556b5.mp3"
+    },
+    {
+      "phraseId": "street_cut_small",
+      "form": "female",
+      "thai": "ช่วยหั่นเป็นชิ้นเล็กๆ ได้ไหมคะ",
+      "asset": "audio/thai/street_cut_small_female_7d27e3b9cff40c17.mp3"
+    },
+    {
+      "phraseId": "street_separate_bag",
+      "form": "male",
+      "thai": "ช่วยแยกใส่ถุงให้ได้ไหมครับ",
+      "asset": "audio/thai/street_separate_bag_male_18ac436fc400b7c1.mp3"
+    },
+    {
+      "phraseId": "street_separate_bag",
+      "form": "female",
+      "thai": "ช่วยแยกใส่ถุงให้ได้ไหมคะ",
+      "asset": "audio/thai/street_separate_bag_female_5ddd535ed69e2b82.mp3"
+    },
+    {
+      "phraseId": "street_pork_or_chicken",
+      "form": "male",
+      "thai": "อันนี้เป็นหมูหรือไก่ครับ",
+      "asset": "audio/thai/street_pork_or_chicken_male_4c02c3e9fdc2bda1.mp3"
+    },
+    {
+      "phraseId": "street_pork_or_chicken",
+      "form": "female",
+      "thai": "อันนี้เป็นหมูหรือไก่คะ",
+      "asset": "audio/thai/street_pork_or_chicken_female_3bcc754ac3197c21.mp3"
+    },
+    {
+      "phraseId": "taxi_aircon",
+      "form": "male",
+      "thai": "เปิดแอร์ได้ไหมครับ",
+      "asset": "audio/thai/taxi_aircon_male_27041f3818794e1f.mp3"
+    },
+    {
+      "phraseId": "taxi_aircon",
+      "form": "female",
+      "thai": "เปิดแอร์ได้ไหมคะ",
+      "asset": "audio/thai/taxi_aircon_female_f309454e76128e64.mp3"
+    },
+    {
+      "phraseId": "taxi_wrong_address",
+      "form": "male",
+      "thai": "ผมให้ที่อยู่ผิดครับ",
+      "asset": "audio/thai/taxi_wrong_address_male_929ed9bf3bf59b19.mp3"
+    },
+    {
+      "phraseId": "taxi_wrong_address",
+      "form": "female",
+      "thai": "ฉันให้ที่อยู่ผิดค่ะ",
+      "asset": "audio/thai/taxi_wrong_address_female_7231e107c2afe2f3.mp3"
+    },
+    {
+      "phraseId": "taxi_change_destination",
+      "form": "male",
+      "thai": "ขอเปลี่ยนจุดหมายได้ไหมครับ",
+      "asset": "audio/thai/taxi_change_destination_male_c26ed7fd5a91d127.mp3"
+    },
+    {
+      "phraseId": "taxi_change_destination",
+      "form": "female",
+      "thai": "ขอเปลี่ยนจุดหมายได้ไหมคะ",
+      "asset": "audio/thai/taxi_change_destination_female_3678553dd4de6d50.mp3"
+    },
+    {
+      "phraseId": "taxi_open_window",
+      "form": "male",
+      "thai": "เปิดหน้าต่างได้ไหมครับ",
+      "asset": "audio/thai/taxi_open_window_male_1fdeb82072693828.mp3"
+    },
+    {
+      "phraseId": "taxi_open_window",
+      "form": "female",
+      "thai": "เปิดหน้าต่างได้ไหมคะ",
+      "asset": "audio/thai/taxi_open_window_female_867d53019171cbed.mp3"
+    },
+    {
+      "phraseId": "taxi_left_bag",
+      "form": "male",
+      "thai": "ผมลืมกระเป๋าไว้ในรถครับ",
+      "asset": "audio/thai/taxi_left_bag_male_1fbc86126358b6d2.mp3"
+    },
+    {
+      "phraseId": "taxi_left_bag",
+      "form": "female",
+      "thai": "ฉันลืมกระเป๋าไว้ในรถค่ะ",
+      "asset": "audio/thai/taxi_left_bag_female_c6bcf0eee2ed21b9.mp3"
+    },
+    {
+      "phraseId": "public_nearest_exit",
+      "form": "male",
+      "thai": "ทางออกที่ใกล้ที่สุดอยู่ทางไหนครับ",
+      "asset": "audio/thai/public_nearest_exit_male_7b64dfad72a430de.mp3"
+    },
+    {
+      "phraseId": "public_nearest_exit",
+      "form": "female",
+      "thai": "ทางออกที่ใกล้ที่สุดอยู่ทางไหนคะ",
+      "asset": "audio/thai/public_nearest_exit_female_1a9c29529cdc4049.mp3"
+    },
+    {
+      "phraseId": "public_train_delayed",
+      "form": "male",
+      "thai": "รถไฟล่าช้าหรือเปล่าครับ",
+      "asset": "audio/thai/public_train_delayed_male_44523b8c0a605bd0.mp3"
+    },
+    {
+      "phraseId": "public_train_delayed",
+      "form": "female",
+      "thai": "รถไฟล่าช้าหรือเปล่าคะ",
+      "asset": "audio/thai/public_train_delayed_female_51d9ae0a19d281aa.mp3"
+    },
+    {
+      "phraseId": "public_one_way_ticket",
+      "form": "male",
+      "thai": "ขอตั๋วเที่ยวเดียวครับ",
+      "asset": "audio/thai/public_one_way_ticket_male_81b5204815dbc493.mp3"
+    },
+    {
+      "phraseId": "public_one_way_ticket",
+      "form": "female",
+      "thai": "ขอตั๋วเที่ยวเดียวค่ะ",
+      "asset": "audio/thai/public_one_way_ticket_female_8d9bd632891aa809.mp3"
+    },
+    {
+      "phraseId": "public_next_bus_time",
+      "form": "male",
+      "thai": "รถเมล์คันต่อไปมาเมื่อไหร่ครับ",
+      "asset": "audio/thai/public_next_bus_time_male_c663d934e8862001.mp3"
+    },
+    {
+      "phraseId": "public_next_bus_time",
+      "form": "female",
+      "thai": "รถเมล์คันต่อไปมาเมื่อไหร่คะ",
+      "asset": "audio/thai/public_next_bus_time_female_111934021f61c5fa.mp3"
+    },
+    {
+      "phraseId": "public_ticket_return",
+      "form": "male",
+      "thai": "ตั๋วนี้ใช้เดินทางกลับได้ไหมครับ",
+      "asset": "audio/thai/public_ticket_return_male_6f358448237b42d9.mp3"
+    },
+    {
+      "phraseId": "public_ticket_return",
+      "form": "female",
+      "thai": "ตั๋วนี้ใช้เดินทางกลับได้ไหมคะ",
+      "asset": "audio/thai/public_ticket_return_female_df2a09412581a07c.mp3"
+    },
+    {
+      "phraseId": "daily_meeting_person",
+      "form": "male",
+      "thai": "ผมนัดเจอ…ไว้ที่นี่ครับ",
+      "asset": "audio/thai/daily_meeting_person_male_6fd91068cc39ebf0.mp3"
+    },
+    {
+      "phraseId": "daily_meeting_person",
+      "form": "female",
+      "thai": "ฉันนัดเจอ…ไว้ที่นี่ค่ะ",
+      "asset": "audio/thai/daily_meeting_person_female_83bba681d0a393a6.mp3"
+    },
+    {
+      "phraseId": "daily_send_location",
+      "form": "male",
+      "thai": "ช่วยส่งโลเคชันให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/daily_send_location_male_0e11eb2c745ba319.mp3"
+    },
+    {
+      "phraseId": "daily_send_location",
+      "form": "female",
+      "thai": "ช่วยส่งโลเคชันให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/daily_send_location_female_b7744fc3f095536a.mp3"
+    },
+    {
+      "phraseId": "daily_left_item",
+      "form": "male",
+      "thai": "ผมลืมของไว้ที่…ครับ",
+      "asset": "audio/thai/daily_left_item_male_be17260e2ded61ef.mp3"
+    },
+    {
+      "phraseId": "daily_left_item",
+      "form": "female",
+      "thai": "ฉันลืมของไว้ที่…ค่ะ",
+      "asset": "audio/thai/daily_left_item_female_cb6f117a92d5a020.mp3"
+    },
+    {
+      "phraseId": "daily_borrow_pen",
+      "form": "male",
+      "thai": "ขอยืมปากกาได้ไหมครับ",
+      "asset": "audio/thai/daily_borrow_pen_male_2cec4d192669730d.mp3"
+    },
+    {
+      "phraseId": "daily_borrow_pen",
+      "form": "female",
+      "thai": "ขอยืมปากกาได้ไหมคะ",
+      "asset": "audio/thai/daily_borrow_pen_female_237dd0af45d8ff89.mp3"
+    },
+    {
+      "phraseId": "daily_find_building",
+      "form": "male",
+      "thai": "ผมหาอาคาร…ไม่เจอครับ",
+      "asset": "audio/thai/daily_find_building_male_8ba5e6ecfdc927fe.mp3"
+    },
+    {
+      "phraseId": "daily_find_building",
+      "form": "female",
+      "thai": "ฉันหาอาคาร…ไม่เจอค่ะ",
+      "asset": "audio/thai/daily_find_building_female_e25de65f81fd989b.mp3"
+    },
+    {
+      "phraseId": "daily_wait_inside",
+      "form": "male",
+      "thai": "ขอรอข้างในได้ไหมครับ",
+      "asset": "audio/thai/daily_wait_inside_male_09ecfc1324e49b01.mp3"
+    },
+    {
+      "phraseId": "daily_wait_inside",
+      "form": "female",
+      "thai": "ขอรอข้างในได้ไหมคะ",
+      "asset": "audio/thai/daily_wait_inside_female_a01cea72cf41836f.mp3"
+    },
+    {
+      "phraseId": "bank_update_phone",
+      "form": "male",
+      "thai": "ขอเปลี่ยนเบอร์โทรศัพท์ที่ผูกกับบัญชีได้ไหมครับ",
+      "asset": "audio/thai/bank_update_phone_male_2f9ea6ac33c903ac.mp3"
+    },
+    {
+      "phraseId": "bank_update_phone",
+      "form": "female",
+      "thai": "ขอเปลี่ยนเบอร์โทรศัพท์ที่ผูกกับบัญชีได้ไหมคะ",
+      "asset": "audio/thai/bank_update_phone_female_7267bcdae844e948.mp3"
+    },
+    {
+      "phraseId": "bank_lost_passbook",
+      "form": "male",
+      "thai": "สมุดบัญชีหายครับ",
+      "asset": "audio/thai/bank_lost_passbook_male_589e5509489e2278.mp3"
+    },
+    {
+      "phraseId": "bank_lost_passbook",
+      "form": "female",
+      "thai": "สมุดบัญชีหายค่ะ",
+      "asset": "audio/thai/bank_lost_passbook_female_700b9e8be5e3f5d2.mp3"
+    },
+    {
+      "phraseId": "bank_unknown_transaction",
+      "form": "male",
+      "thai": "ผมไม่รู้จักรายการนี้ครับ",
+      "asset": "audio/thai/bank_unknown_transaction_male_ce87b69629fa939d.mp3"
+    },
+    {
+      "phraseId": "bank_unknown_transaction",
+      "form": "female",
+      "thai": "ฉันไม่รู้จักรายการนี้ค่ะ",
+      "asset": "audio/thai/bank_unknown_transaction_female_7f805197c43c41db.mp3"
+    },
+    {
+      "phraseId": "bank_fee_explain",
+      "form": "male",
+      "thai": "ค่าธรรมเนียมนี้คิดจากอะไรครับ",
+      "asset": "audio/thai/bank_fee_explain_male_5af4ae75a7c505ce.mp3"
+    },
+    {
+      "phraseId": "bank_fee_explain",
+      "form": "female",
+      "thai": "ค่าธรรมเนียมนี้คิดจากอะไรคะ",
+      "asset": "audio/thai/bank_fee_explain_female_cb536355a95dddad.mp3"
+    },
+    {
+      "phraseId": "bank_queue_ticket",
+      "form": "male",
+      "thai": "ขอรับบัตรคิวได้ที่ไหนครับ",
+      "asset": "audio/thai/bank_queue_ticket_male_153ea54eea357029.mp3"
+    },
+    {
+      "phraseId": "bank_queue_ticket",
+      "form": "female",
+      "thai": "ขอรับบัตรคิวได้ที่ไหนคะ",
+      "asset": "audio/thai/bank_queue_ticket_female_4ea42e61a36930b2.mp3"
+    },
+    {
+      "phraseId": "bank_exchange_money",
+      "form": "male",
+      "thai": "แลกเงินได้ที่ไหนครับ",
+      "asset": "audio/thai/bank_exchange_money_male_0f7643c256f04a58.mp3"
+    },
+    {
+      "phraseId": "bank_exchange_money",
+      "form": "female",
+      "thai": "แลกเงินได้ที่ไหนคะ",
+      "asset": "audio/thai/bank_exchange_money_female_36427cef8da2c072.mp3"
+    },
+    {
+      "phraseId": "phone_lost_sim",
+      "form": "male",
+      "thai": "ซิมการ์ดหายครับ",
+      "asset": "audio/thai/phone_lost_sim_male_29919fbc226d532a.mp3"
+    },
+    {
+      "phraseId": "phone_lost_sim",
+      "form": "female",
+      "thai": "ซิมการ์ดหายค่ะ",
+      "asset": "audio/thai/phone_lost_sim_female_2dded300a64172ce.mp3"
+    },
+    {
+      "phraseId": "phone_change_number",
+      "form": "male",
+      "thai": "ขอเปลี่ยนหมายเลขโทรศัพท์ครับ",
+      "asset": "audio/thai/phone_change_number_male_c22fcec5c076457d.mp3"
+    },
+    {
+      "phraseId": "phone_change_number",
+      "form": "female",
+      "thai": "ขอเปลี่ยนหมายเลขโทรศัพท์ค่ะ",
+      "asset": "audio/thai/phone_change_number_female_90e968e863711e84.mp3"
+    },
+    {
+      "phraseId": "phone_set_thai_language",
+      "form": "male",
+      "thai": "ช่วยเปลี่ยนภาษาในโทรศัพท์เป็นภาษาไทยได้ไหมครับ",
+      "asset": "audio/thai/phone_set_thai_language_male_5e553e9616258aa0.mp3"
+    },
+    {
+      "phraseId": "phone_set_thai_language",
+      "form": "female",
+      "thai": "ช่วยเปลี่ยนภาษาในโทรศัพท์เป็นภาษาไทยได้ไหมคะ",
+      "asset": "audio/thai/phone_set_thai_language_female_acfe3a21dae0da67.mp3"
+    },
+    {
+      "phraseId": "phone_package_expiry",
+      "form": "male",
+      "thai": "แพ็กเกจอินเทอร์เน็ตหมดวันไหนครับ",
+      "asset": "audio/thai/phone_package_expiry_male_46b18ecc7192a01a.mp3"
+    },
+    {
+      "phraseId": "phone_package_expiry",
+      "form": "female",
+      "thai": "แพ็กเกจอินเทอร์เน็ตหมดวันไหนคะ",
+      "asset": "audio/thai/phone_package_expiry_female_20b852bf57c340e2.mp3"
+    },
+    {
+      "phraseId": "phone_weak_signal",
+      "form": "male",
+      "thai": "ตรงนี้สัญญาณอ่อนครับ",
+      "asset": "audio/thai/phone_weak_signal_male_271baaa67001030c.mp3"
+    },
+    {
+      "phraseId": "phone_weak_signal",
+      "form": "female",
+      "thai": "ตรงนี้สัญญาณอ่อนค่ะ",
+      "asset": "audio/thai/phone_weak_signal_female_4e4127b97ae921cc.mp3"
+    },
+    {
+      "phraseId": "phone_need_otp",
+      "form": "male",
+      "thai": "ผมต้องใช้เบอร์นี้รับรหัสยืนยันครับ",
+      "asset": "audio/thai/phone_need_otp_male_95e68a4de39db9ef.mp3"
+    },
+    {
+      "phraseId": "phone_need_otp",
+      "form": "female",
+      "thai": "ฉันต้องใช้เบอร์นี้รับรหัสยืนยันค่ะ",
+      "asset": "audio/thai/phone_need_otp_female_af15d742fe87cdea.mp3"
+    },
+    {
+      "phraseId": "work_uniform_today",
+      "form": "male",
+      "thai": "วันนี้ต้องใส่ชุดอะไรครับ",
+      "asset": "audio/thai/work_uniform_today_male_df805c9579a12a19.mp3"
+    },
+    {
+      "phraseId": "work_uniform_today",
+      "form": "female",
+      "thai": "วันนี้ต้องใส่ชุดอะไรคะ",
+      "asset": "audio/thai/work_uniform_today_female_28d5a3074729023a.mp3"
+    },
+    {
+      "phraseId": "work_clock_out",
+      "form": "male",
+      "thai": "ต้องลงเวลาออกงานตรงไหนครับ",
+      "asset": "audio/thai/work_clock_out_male_ba1170d8c88a55b3.mp3"
+    },
+    {
+      "phraseId": "work_clock_out",
+      "form": "female",
+      "thai": "ต้องลงเวลาออกงานตรงไหนคะ",
+      "asset": "audio/thai/work_clock_out_female_f08147e44368211b.mp3"
+    },
+    {
+      "phraseId": "work_priority_task",
+      "form": "male",
+      "thai": "วันนี้ควรทำงานไหนก่อนครับ",
+      "asset": "audio/thai/work_priority_task_male_507fb1fc73b0fd2d.mp3"
+    },
+    {
+      "phraseId": "work_priority_task",
+      "form": "female",
+      "thai": "วันนี้ควรทำงานไหนก่อนคะ",
+      "asset": "audio/thai/work_priority_task_female_54b052509be91eb0.mp3"
+    },
+    {
+      "phraseId": "work_check_step",
+      "form": "male",
+      "thai": "ขั้นตอนนี้ผมทำถูกไหมครับ",
+      "asset": "audio/thai/work_check_step_male_b8599468765552ee.mp3"
+    },
+    {
+      "phraseId": "work_check_step",
+      "form": "female",
+      "thai": "ขั้นตอนนี้ฉันทำถูกไหมคะ",
+      "asset": "audio/thai/work_check_step_female_7b75843d9e14bb73.mp3"
+    },
+    {
+      "phraseId": "work_cannot_finish_part",
+      "form": "male",
+      "thai": "ส่วนนี้ผมทำไม่เสร็จครับ",
+      "asset": "audio/thai/work_cannot_finish_part_male_b004e6153df5f7ec.mp3"
+    },
+    {
+      "phraseId": "work_cannot_finish_part",
+      "form": "female",
+      "thai": "ส่วนนี้ฉันทำไม่เสร็จค่ะ",
+      "asset": "audio/thai/work_cannot_finish_part_female_08bc01d07bff8f0b.mp3"
+    },
+    {
+      "phraseId": "work_read_sign",
+      "form": "male",
+      "thai": "ป้ายนี้เขียนว่าอะไรครับ",
+      "asset": "audio/thai/work_read_sign_male_73ca81b122417435.mp3"
+    },
+    {
+      "phraseId": "work_read_sign",
+      "form": "female",
+      "thai": "ป้ายนี้เขียนว่าอะไรคะ",
+      "asset": "audio/thai/work_read_sign_female_514bc11f5a7a265b.mp3"
+    },
+    {
+      "phraseId": "boss_schedule_changed",
+      "form": "male",
+      "thai": "พรุ่งนี้ตารางงานเปลี่ยนไหมครับ",
+      "asset": "audio/thai/boss_schedule_changed_male_c4d78d450f397c6d.mp3"
+    },
+    {
+      "phraseId": "boss_schedule_changed",
+      "form": "female",
+      "thai": "พรุ่งนี้ตารางงานเปลี่ยนไหมคะ",
+      "asset": "audio/thai/boss_schedule_changed_female_2db5ae21f85d1b83.mp3"
+    },
+    {
+      "phraseId": "boss_leave_status",
+      "form": "male",
+      "thai": "คำขอลาของผมอนุมัติหรือยังครับ",
+      "asset": "audio/thai/boss_leave_status_male_d4129527ffd62e75.mp3"
+    },
+    {
+      "phraseId": "boss_leave_status",
+      "form": "female",
+      "thai": "คำขอลาของฉันอนุมัติหรือยังคะ",
+      "asset": "audio/thai/boss_leave_status_female_216b455e4604c785.mp3"
+    },
+    {
+      "phraseId": "boss_report_person",
+      "form": "male",
+      "thai": "งานนี้ต้องรายงานให้ใครทราบครับ",
+      "asset": "audio/thai/boss_report_person_male_c995f035bf45285d.mp3"
+    },
+    {
+      "phraseId": "boss_report_person",
+      "form": "female",
+      "thai": "งานนี้ต้องรายงานให้ใครทราบคะ",
+      "asset": "audio/thai/boss_report_person_female_8fa4c81e4ee790a7.mp3"
+    },
+    {
+      "phraseId": "boss_duties_today",
+      "form": "male",
+      "thai": "วันนี้ผมมีหน้าที่อะไรบ้างครับ",
+      "asset": "audio/thai/boss_duties_today_male_9eab0e5c785ae82d.mp3"
+    },
+    {
+      "phraseId": "boss_duties_today",
+      "form": "female",
+      "thai": "วันนี้ฉันมีหน้าที่อะไรบ้างคะ",
+      "asset": "audio/thai/boss_duties_today_female_ac9c870da50a5819.mp3"
+    },
+    {
+      "phraseId": "boss_instruction_sheet",
+      "form": "male",
+      "thai": "ขอดูใบสั่งงานได้ไหมครับ",
+      "asset": "audio/thai/boss_instruction_sheet_male_2478df69c02b35bc.mp3"
+    },
+    {
+      "phraseId": "boss_instruction_sheet",
+      "form": "female",
+      "thai": "ขอดูใบสั่งงานได้ไหมคะ",
+      "asset": "audio/thai/boss_instruction_sheet_female_2db9d54f133c131f.mp3"
+    },
+    {
+      "phraseId": "boss_feedback_correction",
+      "form": "male",
+      "thai": "งานที่ทำไปมีตรงไหนต้องแก้ไหมครับ",
+      "asset": "audio/thai/boss_feedback_correction_male_7691f9efa93b95e8.mp3"
+    },
+    {
+      "phraseId": "boss_feedback_correction",
+      "form": "female",
+      "thai": "งานที่ทำไปมีตรงไหนต้องแก้ไหมคะ",
+      "asset": "audio/thai/boss_feedback_correction_female_0edf53c23b66db1e.mp3"
+    },
+    {
+      "phraseId": "factory_machine_stopped",
+      "form": "male",
+      "thai": "เครื่องจักรหยุดเองครับ",
+      "asset": "audio/thai/factory_machine_stopped_male_67aabdd67a9d748a.mp3"
+    },
+    {
+      "phraseId": "factory_machine_stopped",
+      "form": "female",
+      "thai": "เครื่องจักรหยุดเองค่ะ",
+      "asset": "audio/thai/factory_machine_stopped_female_5a233b7100a68307.mp3"
+    },
+    {
+      "phraseId": "factory_part_hot",
+      "form": "male",
+      "thai": "ชิ้นส่วนนี้ร้อนมากครับ",
+      "asset": "audio/thai/factory_part_hot_male_7c711dc80a855c24.mp3"
+    },
+    {
+      "phraseId": "factory_part_hot",
+      "form": "female",
+      "thai": "ชิ้นส่วนนี้ร้อนมากค่ะ",
+      "asset": "audio/thai/factory_part_hot_female_6abf96da03758f67.mp3"
+    },
+    {
+      "phraseId": "factory_floor_wet",
+      "form": "male",
+      "thai": "พื้นตรงนี้เปียกครับ",
+      "asset": "audio/thai/factory_floor_wet_male_33e86f78205c4138.mp3"
+    },
+    {
+      "phraseId": "factory_floor_wet",
+      "form": "female",
+      "thai": "พื้นตรงนี้เปียกค่ะ",
+      "asset": "audio/thai/factory_floor_wet_female_f2d861ce3efb9894.mp3"
+    },
+    {
+      "phraseId": "factory_button_function",
+      "form": "male",
+      "thai": "ปุ่มนี้ใช้ทำอะไรครับ",
+      "asset": "audio/thai/factory_button_function_male_3d4ac012fcd9904d.mp3"
+    },
+    {
+      "phraseId": "factory_button_function",
+      "form": "female",
+      "thai": "ปุ่มนี้ใช้ทำอะไรคะ",
+      "asset": "audio/thai/factory_button_function_female_22d823db2977e285.mp3"
+    },
+    {
+      "phraseId": "factory_separate_defect",
+      "form": "male",
+      "thai": "ชิ้นงานนี้ต้องแยกไว้ไหมครับ",
+      "asset": "audio/thai/factory_separate_defect_male_85b575ce355dacc5.mp3"
+    },
+    {
+      "phraseId": "factory_separate_defect",
+      "form": "female",
+      "thai": "ชิ้นงานนี้ต้องแยกไว้ไหมคะ",
+      "asset": "audio/thai/factory_separate_defect_female_85f3b77519e38172.mp3"
+    },
+    {
+      "phraseId": "factory_restricted_area",
+      "form": "male",
+      "thai": "บริเวณนี้เข้าได้ไหมครับ",
+      "asset": "audio/thai/factory_restricted_area_male_393b5622f8527d70.mp3"
+    },
+    {
+      "phraseId": "factory_restricted_area",
+      "form": "female",
+      "thai": "บริเวณนี้เข้าได้ไหมคะ",
+      "asset": "audio/thai/factory_restricted_area_female_154f44991633e222.mp3"
+    },
+    {
+      "phraseId": "health_toothache",
+      "form": "male",
+      "thai": "ปวดฟันครับ",
+      "asset": "audio/thai/health_toothache_male_b2cdeecdd96df853.mp3"
+    },
+    {
+      "phraseId": "health_toothache",
+      "form": "female",
+      "thai": "ปวดฟันค่ะ",
+      "asset": "audio/thai/health_toothache_female_d43d17b5e7964a7d.mp3"
+    },
+    {
+      "phraseId": "health_skin_rash",
+      "form": "male",
+      "thai": "มีผื่นขึ้นตามตัวครับ",
+      "asset": "audio/thai/health_skin_rash_male_e81b3654bbcf2028.mp3"
+    },
+    {
+      "phraseId": "health_skin_rash",
+      "form": "female",
+      "thai": "มีผื่นขึ้นตามตัวค่ะ",
+      "asset": "audio/thai/health_skin_rash_female_154365aa09265655.mp3"
+    },
+    {
+      "phraseId": "health_short_breath",
+      "form": "male",
+      "thai": "หายใจลำบากครับ",
+      "asset": "audio/thai/health_short_breath_male_719d6a32cc7ed277.mp3"
+    },
+    {
+      "phraseId": "health_short_breath",
+      "form": "female",
+      "thai": "หายใจลำบากค่ะ",
+      "asset": "audio/thai/health_short_breath_female_2ff5805f84eb7560.mp3"
+    },
+    {
+      "phraseId": "health_regular_medicine",
+      "form": "male",
+      "thai": "ผมกินยาประจำอยู่ครับ",
+      "asset": "audio/thai/health_regular_medicine_male_8445884cb0dea9c1.mp3"
+    },
+    {
+      "phraseId": "health_regular_medicine",
+      "form": "female",
+      "thai": "ฉันกินยาประจำอยู่ค่ะ",
+      "asset": "audio/thai/health_regular_medicine_female_951c39c884dbc4b4.mp3"
+    },
+    {
+      "phraseId": "health_existing_condition",
+      "form": "male",
+      "thai": "ผมมีโรคประจำตัวครับ",
+      "asset": "audio/thai/health_existing_condition_male_caefb17ce1c8bbc1.mp3"
+    },
+    {
+      "phraseId": "health_existing_condition",
+      "form": "female",
+      "thai": "ฉันมีโรคประจำตัวค่ะ",
+      "asset": "audio/thai/health_existing_condition_female_ef841d037299676a.mp3"
+    },
+    {
+      "phraseId": "health_food_allergy",
+      "form": "male",
+      "thai": "ผมแพ้อาหารบางอย่างครับ",
+      "asset": "audio/thai/health_food_allergy_male_063c11a0eafed93b.mp3"
+    },
+    {
+      "phraseId": "health_food_allergy",
+      "form": "female",
+      "thai": "ฉันแพ้อาหารบางอย่างค่ะ",
+      "asset": "audio/thai/health_food_allergy_female_71b093120e0a7dc1.mp3"
+    },
+    {
+      "phraseId": "hospital_explain_result",
+      "form": "male",
+      "thai": "ช่วยอธิบายผลตรวจเป็นภาษาพม่าได้ไหมครับ",
+      "asset": "audio/thai/hospital_explain_result_male_83266943afe95445.mp3"
+    },
+    {
+      "phraseId": "hospital_explain_result",
+      "form": "female",
+      "thai": "ช่วยอธิบายผลตรวจเป็นภาษาพม่าได้ไหมคะ",
+      "asset": "audio/thai/hospital_explain_result_female_1aab49cb926f2ffd.mp3"
+    },
+    {
+      "phraseId": "hospital_result_ready",
+      "form": "male",
+      "thai": "ผลตรวจจะออกเมื่อไหร่ครับ",
+      "asset": "audio/thai/hospital_result_ready_male_2603327a81c3750f.mp3"
+    },
+    {
+      "phraseId": "hospital_result_ready",
+      "form": "female",
+      "thai": "ผลตรวจจะออกเมื่อไหร่คะ",
+      "asset": "audio/thai/hospital_result_ready_female_2ef6c558a67ed678.mp3"
+    },
+    {
+      "phraseId": "hospital_exam_room",
+      "form": "male",
+      "thai": "ห้องตรวจอยู่ตรงไหนครับ",
+      "asset": "audio/thai/hospital_exam_room_male_6fadea4097248f1a.mp3"
+    },
+    {
+      "phraseId": "hospital_exam_room",
+      "form": "female",
+      "thai": "ห้องตรวจอยู่ตรงไหนคะ",
+      "asset": "audio/thai/hospital_exam_room_female_b0cb55819865884c.mp3"
+    },
+    {
+      "phraseId": "hospital_family_accompany",
+      "form": "male",
+      "thai": "ญาติเข้าไปด้วยได้ไหมครับ",
+      "asset": "audio/thai/hospital_family_accompany_male_d8a96226c712fe95.mp3"
+    },
+    {
+      "phraseId": "hospital_family_accompany",
+      "form": "female",
+      "thai": "ญาติเข้าไปด้วยได้ไหมคะ",
+      "asset": "audio/thai/hospital_family_accompany_female_34828147c977c51f.mp3"
+    },
+    {
+      "phraseId": "hospital_medical_certificate",
+      "form": "male",
+      "thai": "ขอใบรับรองแพทย์ได้ไหมครับ",
+      "asset": "audio/thai/hospital_medical_certificate_male_953605f31d5cc491.mp3"
+    },
+    {
+      "phraseId": "hospital_medical_certificate",
+      "form": "female",
+      "thai": "ขอใบรับรองแพทย์ได้ไหมคะ",
+      "asset": "audio/thai/hospital_medical_certificate_female_75d19c42419f52ab.mp3"
+    },
+    {
+      "phraseId": "hospital_queue_number",
+      "form": "male",
+      "thai": "ต้องรอเรียกหมายเลขอะไรครับ",
+      "asset": "audio/thai/hospital_queue_number_male_18d06c391ec99370.mp3"
+    },
+    {
+      "phraseId": "hospital_queue_number",
+      "form": "female",
+      "thai": "ต้องรอเรียกหมายเลขอะไรคะ",
+      "asset": "audio/thai/hospital_queue_number_female_e6d8066ff99dfede.mp3"
+    },
+    {
+      "phraseId": "pharmacy_buy_thermometer",
+      "form": "male",
+      "thai": "มีเครื่องวัดไข้ขายไหมครับ",
+      "asset": "audio/thai/pharmacy_buy_thermometer_male_34667bca216053d0.mp3"
+    },
+    {
+      "phraseId": "pharmacy_buy_thermometer",
+      "form": "female",
+      "thai": "มีเครื่องวัดไข้ขายไหมคะ",
+      "asset": "audio/thai/pharmacy_buy_thermometer_female_761b82e4aa9720b8.mp3"
+    },
+    {
+      "phraseId": "pharmacy_bandage",
+      "form": "male",
+      "thai": "มีผ้าพันแผลไหมครับ",
+      "asset": "audio/thai/pharmacy_bandage_male_2781500259a316a0.mp3"
+    },
+    {
+      "phraseId": "pharmacy_bandage",
+      "form": "female",
+      "thai": "มีผ้าพันแผลไหมคะ",
+      "asset": "audio/thai/pharmacy_bandage_female_129151d5e150fa52.mp3"
+    },
+    {
+      "phraseId": "pharmacy_write_medicine_name",
+      "form": "male",
+      "thai": "ช่วยเขียนชื่อยานี้ให้หน่อยครับ",
+      "asset": "audio/thai/pharmacy_write_medicine_name_male_7636a33f935014d2.mp3"
+    },
+    {
+      "phraseId": "pharmacy_write_medicine_name",
+      "form": "female",
+      "thai": "ช่วยเขียนชื่อยานี้ให้หน่อยค่ะ",
+      "asset": "audio/thai/pharmacy_write_medicine_name_female_364eb37dcf453d49.mp3"
+    },
+    {
+      "phraseId": "pharmacy_small_pack",
+      "form": "male",
+      "thai": "มียานี้แบบกล่องเล็กกว่านี้ไหมครับ",
+      "asset": "audio/thai/pharmacy_small_pack_male_e091cf5a1c176a97.mp3"
+    },
+    {
+      "phraseId": "pharmacy_small_pack",
+      "form": "female",
+      "thai": "มียานี้แบบกล่องเล็กกว่านี้ไหมคะ",
+      "asset": "audio/thai/pharmacy_small_pack_female_d0bb4fcc56370fb3.mp3"
+    },
+    {
+      "phraseId": "pharmacy_expiry_date",
+      "form": "male",
+      "thai": "ช่วยดูวันหมดอายุบนกล่องให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/pharmacy_expiry_date_male_62ba1f1ca21987be.mp3"
+    },
+    {
+      "phraseId": "pharmacy_expiry_date",
+      "form": "female",
+      "thai": "ช่วยดูวันหมดอายุบนกล่องให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/pharmacy_expiry_date_female_ca940ffa2bc592ee.mp3"
+    },
+    {
+      "phraseId": "pharmacy_read_label",
+      "form": "male",
+      "thai": "ช่วยอ่านฉลากนี้ให้ฟังหน่อยครับ",
+      "asset": "audio/thai/pharmacy_read_label_male_250ee84c28930974.mp3"
+    },
+    {
+      "phraseId": "pharmacy_read_label",
+      "form": "female",
+      "thai": "ช่วยอ่านฉลากนี้ให้ฟังหน่อยค่ะ",
+      "asset": "audio/thai/pharmacy_read_label_female_1224269b836909d0.mp3"
+    },
+    {
+      "phraseId": "emergency_road_collision",
+      "form": "male",
+      "thai": "รถชนกัน มีคนเจ็บครับ",
+      "asset": "audio/thai/emergency_road_collision_male_97cf0309ecc3b671.mp3"
+    },
+    {
+      "phraseId": "emergency_road_collision",
+      "form": "female",
+      "thai": "รถชนกัน มีคนเจ็บค่ะ",
+      "asset": "audio/thai/emergency_road_collision_female_e89fce4ad34e99cd.mp3"
+    },
+    {
+      "phraseId": "emergency_unconscious",
+      "form": "male",
+      "thai": "มีคนหมดสติครับ",
+      "asset": "audio/thai/emergency_unconscious_male_9c42620fe511a2e6.mp3"
+    },
+    {
+      "phraseId": "emergency_unconscious",
+      "form": "female",
+      "thai": "มีคนหมดสติค่ะ",
+      "asset": "audio/thai/emergency_unconscious_female_43e200daaffb29bc.mp3"
+    },
+    {
+      "phraseId": "emergency_child_missing",
+      "form": "male",
+      "thai": "เด็กหายไปครับ",
+      "asset": "audio/thai/emergency_child_missing_male_1c0960c3c8cb6efc.mp3"
+    },
+    {
+      "phraseId": "emergency_child_missing",
+      "form": "female",
+      "thai": "เด็กหายไปค่ะ",
+      "asset": "audio/thai/emergency_child_missing_female_bdb6dc5eb0e1579f.mp3"
+    },
+    {
+      "phraseId": "emergency_cannot_breathe",
+      "form": "male",
+      "thai": "ผมหายใจไม่ออกครับ",
+      "asset": "audio/thai/emergency_cannot_breathe_male_d16282950531f63a.mp3"
+    },
+    {
+      "phraseId": "emergency_cannot_breathe",
+      "form": "female",
+      "thai": "ฉันหายใจไม่ออกค่ะ",
+      "asset": "audio/thai/emergency_cannot_breathe_female_63e676c84cae8131.mp3"
+    },
+    {
+      "phraseId": "emergency_location",
+      "form": "male",
+      "thai": "ผมอยู่ที่…ครับ",
+      "asset": "audio/thai/emergency_location_male_e07c646ee8ac18ee.mp3"
+    },
+    {
+      "phraseId": "emergency_location",
+      "form": "female",
+      "thai": "ฉันอยู่ที่…ค่ะ",
+      "asset": "audio/thai/emergency_location_female_41615f01a610a3ae.mp3"
+    },
+    {
+      "phraseId": "emergency_trapped",
+      "form": "male",
+      "thai": "ติดอยู่ข้างใน ออกมาไม่ได้ครับ",
+      "asset": "audio/thai/emergency_trapped_male_d017b471e4edd8fa.mp3"
+    },
+    {
+      "phraseId": "emergency_trapped",
+      "form": "female",
+      "thai": "ติดอยู่ข้างใน ออกมาไม่ได้ค่ะ",
+      "asset": "audio/thai/emergency_trapped_female_2bccc5b185473ca9.mp3"
+    },
+    {
+      "phraseId": "police_report_accident",
+      "form": "male",
+      "thai": "ขอแจ้งเหตุรถชนครับ",
+      "asset": "audio/thai/police_report_accident_male_a00bca059b9a0b63.mp3"
+    },
+    {
+      "phraseId": "police_report_accident",
+      "form": "female",
+      "thai": "ขอแจ้งเหตุรถชนค่ะ",
+      "asset": "audio/thai/police_report_accident_female_f8e7eb086a4eb414.mp3"
+    },
+    {
+      "phraseId": "police_lost_passport",
+      "form": "male",
+      "thai": "หนังสือเดินทางหายครับ",
+      "asset": "audio/thai/police_lost_passport_male_496a5c2562d3a3fa.mp3"
+    },
+    {
+      "phraseId": "police_lost_passport",
+      "form": "female",
+      "thai": "หนังสือเดินทางหายค่ะ",
+      "asset": "audio/thai/police_lost_passport_female_3761656e6d02dcf9.mp3"
+    },
+    {
+      "phraseId": "police_nearest_station",
+      "form": "male",
+      "thai": "สถานีตำรวจที่ใกล้ที่สุดอยู่ที่ไหนครับ",
+      "asset": "audio/thai/police_nearest_station_male_a5b55c96f9683a62.mp3"
+    },
+    {
+      "phraseId": "police_nearest_station",
+      "form": "female",
+      "thai": "สถานีตำรวจที่ใกล้ที่สุดอยู่ที่ไหนคะ",
+      "asset": "audio/thai/police_nearest_station_female_7630ad8956a0acae.mp3"
+    },
+    {
+      "phraseId": "police_reference_number",
+      "form": "male",
+      "thai": "ขอเลขรับแจ้งได้ไหมครับ",
+      "asset": "audio/thai/police_reference_number_male_55898e0b4deca2b7.mp3"
+    },
+    {
+      "phraseId": "police_reference_number",
+      "form": "female",
+      "thai": "ขอเลขรับแจ้งได้ไหมคะ",
+      "asset": "audio/thai/police_reference_number_female_3b138dbc5d4025fa.mp3"
+    },
+    {
+      "phraseId": "police_contact_family",
+      "form": "male",
+      "thai": "ขอติดต่อคนในครอบครัวได้ไหมครับ",
+      "asset": "audio/thai/police_contact_family_male_c2d9a807ecad25b2.mp3"
+    },
+    {
+      "phraseId": "police_contact_family",
+      "form": "female",
+      "thai": "ขอติดต่อคนในครอบครัวได้ไหมคะ",
+      "asset": "audio/thai/police_contact_family_female_cac82a3ca91fcc85.mp3"
+    },
+    {
+      "phraseId": "police_translate_document",
+      "form": "male",
+      "thai": "ช่วยแปลข้อความนี้ให้ฟังหน่อยครับ",
+      "asset": "audio/thai/police_translate_document_male_0f33dafc96830eaa.mp3"
+    },
+    {
+      "phraseId": "police_translate_document",
+      "form": "female",
+      "thai": "ช่วยแปลข้อความนี้ให้ฟังหน่อยค่ะ",
+      "asset": "audio/thai/police_translate_document_female_dfa20b7af3188bb3.mp3"
+    },
+    {
+      "phraseId": "documents_collect_day",
+      "form": "male",
+      "thai": "มารับเอกสารได้วันไหนครับ",
+      "asset": "audio/thai/documents_collect_day_male_4077d9c28c4084d8.mp3"
+    },
+    {
+      "phraseId": "documents_collect_day",
+      "form": "female",
+      "thai": "มารับเอกสารได้วันไหนคะ",
+      "asset": "audio/thai/documents_collect_day_female_0d97f87c0df2fad2.mp3"
+    },
+    {
+      "phraseId": "documents_status_check",
+      "form": "male",
+      "thai": "ช่วยตรวจสอบสถานะเอกสารให้หน่อยได้ไหมครับ",
+      "asset": "audio/thai/documents_status_check_male_882e8597e2b709ae.mp3"
+    },
+    {
+      "phraseId": "documents_status_check",
+      "form": "female",
+      "thai": "ช่วยตรวจสอบสถานะเอกสารให้หน่อยได้ไหมคะ",
+      "asset": "audio/thai/documents_status_check_female_9f234df609dec722.mp3"
+    },
+    {
+      "phraseId": "documents_copy_here",
+      "form": "male",
+      "thai": "ถ่ายสำเนาเอกสารที่นี่ได้ไหมครับ",
+      "asset": "audio/thai/documents_copy_here_male_6274aa7a33efb21e.mp3"
+    },
+    {
+      "phraseId": "documents_copy_here",
+      "form": "female",
+      "thai": "ถ่ายสำเนาเอกสารที่นี่ได้ไหมคะ",
+      "asset": "audio/thai/documents_copy_here_female_8bbae81a81c16284.mp3"
+    },
+    {
+      "phraseId": "documents_translation_service",
+      "form": "male",
+      "thai": "ที่นี่มีบริการแปลเอกสารไหมครับ",
+      "asset": "audio/thai/documents_translation_service_male_64ceaf6185ed0f05.mp3"
+    },
+    {
+      "phraseId": "documents_translation_service",
+      "form": "female",
+      "thai": "ที่นี่มีบริการแปลเอกสารไหมคะ",
+      "asset": "audio/thai/documents_translation_service_female_a5c7b1fb8d1d4ec0.mp3"
+    },
+    {
+      "phraseId": "documents_update_contact",
+      "form": "male",
+      "thai": "ผมต้องการแก้ไขข้อมูลติดต่อครับ",
+      "asset": "audio/thai/documents_update_contact_male_66e658eafb7b8313.mp3"
+    },
+    {
+      "phraseId": "documents_update_contact",
+      "form": "female",
+      "thai": "ฉันต้องการแก้ไขข้อมูลติดต่อค่ะ",
+      "asset": "audio/thai/documents_update_contact_female_ad80069f6b5fec5c.mp3"
+    },
+    {
+      "phraseId": "documents_queue_ticket",
+      "form": "male",
+      "thai": "ขอบัตรคิวเพื่อติดต่อเรื่องเอกสารได้ไหมครับ",
+      "asset": "audio/thai/documents_queue_ticket_male_b3f7a28e4b07370d.mp3"
+    },
+    {
+      "phraseId": "documents_queue_ticket",
+      "form": "female",
+      "thai": "ขอบัตรคิวเพื่อติดต่อเรื่องเอกสารได้ไหมคะ",
+      "asset": "audio/thai/documents_queue_ticket_female_1c37ed0a3be12683.mp3"
+    },
+    {
+      "phraseId": "job_hours_per_day",
+      "form": "male",
+      "thai": "งานนี้ทำวันละกี่ชั่วโมงครับ",
+      "asset": "audio/thai/job_hours_per_day_male_b968835bfd13125f.mp3"
+    },
+    {
+      "phraseId": "job_hours_per_day",
+      "form": "female",
+      "thai": "งานนี้ทำวันละกี่ชั่วโมงคะ",
+      "asset": "audio/thai/job_hours_per_day_female_2c8ca3f54f1800a5.mp3"
+    },
+    {
+      "phraseId": "job_duties",
+      "form": "male",
+      "thai": "งานนี้ต้องทำอะไรบ้างครับ",
+      "asset": "audio/thai/job_duties_male_2b0692c0b0003291.mp3"
+    },
+    {
+      "phraseId": "job_duties",
+      "form": "female",
+      "thai": "งานนี้ต้องทำอะไรบ้างคะ",
+      "asset": "audio/thai/job_duties_female_b43a2b145cc46104.mp3"
+    },
+    {
+      "phraseId": "job_application_channel",
+      "form": "male",
+      "thai": "สมัครงานได้ทางไหนครับ",
+      "asset": "audio/thai/job_application_channel_male_050e0d7baabe4261.mp3"
+    },
+    {
+      "phraseId": "job_application_channel",
+      "form": "female",
+      "thai": "สมัครงานได้ทางไหนคะ",
+      "asset": "audio/thai/job_application_channel_female_45262216aa39c3ee.mp3"
+    },
+    {
+      "phraseId": "job_days_off",
+      "form": "male",
+      "thai": "งานนี้มีวันหยุดไหมครับ",
+      "asset": "audio/thai/job_days_off_male_6c94a62cbccb5d3c.mp3"
+    },
+    {
+      "phraseId": "job_days_off",
+      "form": "female",
+      "thai": "งานนี้มีวันหยุดไหมคะ",
+      "asset": "audio/thai/job_days_off_female_66f2fbc9b1e29990.mp3"
+    },
+    {
+      "phraseId": "job_interview_burmese",
+      "form": "male",
+      "thai": "สัมภาษณ์เป็นภาษาพม่าได้ไหมครับ",
+      "asset": "audio/thai/job_interview_burmese_male_b521938badee65cc.mp3"
+    },
+    {
+      "phraseId": "job_interview_burmese",
+      "form": "female",
+      "thai": "สัมภาษณ์เป็นภาษาพม่าได้ไหมคะ",
+      "asset": "audio/thai/job_interview_burmese_female_fc4d898bbb173bd5.mp3"
+    },
+    {
+      "phraseId": "job_start_tomorrow",
+      "form": "male",
+      "thai": "ผมเริ่มงานพรุ่งนี้ได้ไหมครับ",
+      "asset": "audio/thai/job_start_tomorrow_male_9c2a9c7e4852b360.mp3"
+    },
+    {
+      "phraseId": "job_start_tomorrow",
+      "form": "female",
+      "thai": "ฉันเริ่มงานพรุ่งนี้ได้ไหมคะ",
+      "asset": "audio/thai/job_start_tomorrow_female_3c3b5507ce412e1b.mp3"
+    },
+    {
+      "phraseId": "salary_overtime_included",
+      "form": "male",
+      "thai": "เงินเดือนนี้รวมค่าโอทีไหมครับ",
+      "asset": "audio/thai/salary_overtime_included_male_410d185bf53dda79.mp3"
+    },
+    {
+      "phraseId": "salary_overtime_included",
+      "form": "female",
+      "thai": "เงินเดือนนี้รวมค่าโอทีไหมคะ",
+      "asset": "audio/thai/salary_overtime_included_female_212a9cbe98cc2d51.mp3"
+    },
+    {
+      "phraseId": "salary_night_allowance",
+      "form": "male",
+      "thai": "กะกลางคืนมีค่ากะไหมครับ",
+      "asset": "audio/thai/salary_night_allowance_male_a469a28f04027fb8.mp3"
+    },
+    {
+      "phraseId": "salary_night_allowance",
+      "form": "female",
+      "thai": "กะกลางคืนมีค่ากะไหมคะ",
+      "asset": "audio/thai/salary_night_allowance_female_0fe6182a17143eb7.mp3"
+    },
+    {
+      "phraseId": "salary_daily_wage",
+      "form": "male",
+      "thai": "ค่าแรงวันละเท่าไหร่ครับ",
+      "asset": "audio/thai/salary_daily_wage_male_f3ceeee4a721172b.mp3"
+    },
+    {
+      "phraseId": "salary_daily_wage",
+      "form": "female",
+      "thai": "ค่าแรงวันละเท่าไหร่คะ",
+      "asset": "audio/thai/salary_daily_wage_female_5fb4834f03fcf47d.mp3"
+    },
+    {
+      "phraseId": "salary_less_than_agreed",
+      "form": "male",
+      "thai": "ยอดเงินนี้น้อยกว่าที่ตกลงกันครับ",
+      "asset": "audio/thai/salary_less_than_agreed_male_943fb2bbea67e427.mp3"
+    },
+    {
+      "phraseId": "salary_less_than_agreed",
+      "form": "female",
+      "thai": "ยอดเงินนี้น้อยกว่าที่ตกลงกันค่ะ",
+      "asset": "audio/thai/salary_less_than_agreed_female_248c968f3301a2ef.mp3"
+    },
+    {
+      "phraseId": "salary_payment_method",
+      "form": "male",
+      "thai": "จ่ายเงินเดือนทางไหนครับ",
+      "asset": "audio/thai/salary_payment_method_male_c9afd4ad6772dd3a.mp3"
+    },
+    {
+      "phraseId": "salary_payment_method",
+      "form": "female",
+      "thai": "จ่ายเงินเดือนทางไหนคะ",
+      "asset": "audio/thai/salary_payment_method_female_fbb2cf7badec94b7.mp3"
+    },
+    {
+      "phraseId": "salary_calculation_days",
+      "form": "male",
+      "thai": "เงินเดือนรอบนี้คิดจากกี่วันครับ",
+      "asset": "audio/thai/salary_calculation_days_male_c2dac25f169ad43a.mp3"
+    },
+    {
+      "phraseId": "salary_calculation_days",
+      "form": "female",
+      "thai": "เงินเดือนรอบนี้คิดจากกี่วันคะ",
+      "asset": "audio/thai/salary_calculation_days_female_e335f4ee9b4c07a2.mp3"
+    },
+    {
+      "phraseId": "overtime_can_work",
+      "form": "male",
+      "thai": "วันนี้ผมทำโอทีได้ครับ",
+      "asset": "audio/thai/overtime_can_work_male_b4660489f290e060.mp3"
+    },
+    {
+      "phraseId": "overtime_can_work",
+      "form": "female",
+      "thai": "วันนี้ฉันทำโอทีได้ค่ะ",
+      "asset": "audio/thai/overtime_can_work_female_20d6fbf4c82c89a4.mp3"
+    },
+    {
+      "phraseId": "overtime_cannot_stay",
+      "form": "male",
+      "thai": "วันนี้อยู่ทำโอทีไม่ได้ครับ",
+      "asset": "audio/thai/overtime_cannot_stay_male_2eb0c8a56b0686dc.mp3"
+    },
+    {
+      "phraseId": "overtime_cannot_stay",
+      "form": "female",
+      "thai": "วันนี้อยู่ทำโอทีไม่ได้ค่ะ",
+      "asset": "audio/thai/overtime_cannot_stay_female_56dc1c778303b194.mp3"
+    },
+    {
+      "phraseId": "overtime_start_time",
+      "form": "male",
+      "thai": "วันนี้โอทีเริ่มกี่โมงครับ",
+      "asset": "audio/thai/overtime_start_time_male_93902e20a0edb0cd.mp3"
+    },
+    {
+      "phraseId": "overtime_start_time",
+      "form": "female",
+      "thai": "วันนี้โอทีเริ่มกี่โมงคะ",
+      "asset": "audio/thai/overtime_start_time_female_ed10e940aba70fef.mp3"
+    },
+    {
+      "phraseId": "overtime_break_question",
+      "form": "male",
+      "thai": "ระหว่างทำโอทีได้พักไหมครับ",
+      "asset": "audio/thai/overtime_break_question_male_b72cc7d9f84f140e.mp3"
+    },
+    {
+      "phraseId": "overtime_break_question",
+      "form": "female",
+      "thai": "ระหว่างทำโอทีได้พักไหมคะ",
+      "asset": "audio/thai/overtime_break_question_female_d7d0fd137fb3859c.mp3"
+    },
+    {
+      "phraseId": "overtime_record_start",
+      "form": "male",
+      "thai": "ช่วยจดเวลาเริ่มโอทีให้หน่อยครับ",
+      "asset": "audio/thai/overtime_record_start_male_291fdaba36d76f27.mp3"
+    },
+    {
+      "phraseId": "overtime_record_start",
+      "form": "female",
+      "thai": "ช่วยจดเวลาเริ่มโอทีให้หน่อยค่ะ",
+      "asset": "audio/thai/overtime_record_start_female_37a69789aea9fd90.mp3"
+    },
+    {
+      "phraseId": "overtime_scheduled_days",
+      "form": "male",
+      "thai": "เดือนนี้มีโอทีวันไหนบ้างครับ",
+      "asset": "audio/thai/overtime_scheduled_days_male_5b54b738318af0b4.mp3"
+    },
+    {
+      "phraseId": "overtime_scheduled_days",
+      "form": "female",
+      "thai": "เดือนนี้มีโอทีวันไหนบ้างคะ",
+      "asset": "audio/thai/overtime_scheduled_days_female_8f8d0069feee6871.mp3"
+    },
+    {
+      "phraseId": "leave_half_day",
+      "form": "male",
+      "thai": "ขอลาครึ่งวันได้ไหมครับ",
+      "asset": "audio/thai/leave_half_day_male_fd10bebf7891eefa.mp3"
+    },
+    {
+      "phraseId": "leave_half_day",
+      "form": "female",
+      "thai": "ขอลาครึ่งวันได้ไหมคะ",
+      "asset": "audio/thai/leave_half_day_female_1fbb19e4c5056a51.mp3"
+    },
+    {
+      "phraseId": "leave_family_business",
+      "form": "male",
+      "thai": "ผมขอลาเพราะมีธุระครอบครัวครับ",
+      "asset": "audio/thai/leave_family_business_male_06a59544d9b127e6.mp3"
+    },
+    {
+      "phraseId": "leave_family_business",
+      "form": "female",
+      "thai": "ฉันขอลาเพราะมีธุระครอบครัวค่ะ",
+      "asset": "audio/thai/leave_family_business_female_a1771aca54521d74.mp3"
+    },
+    {
+      "phraseId": "leave_request_received",
+      "form": "male",
+      "thai": "ผมส่งคำขอลาไปแล้ว ได้รับหรือยังครับ",
+      "asset": "audio/thai/leave_request_received_male_d2c0ac33cc39adf8.mp3"
+    },
+    {
+      "phraseId": "leave_request_received",
+      "form": "female",
+      "thai": "ฉันส่งคำขอลาไปแล้ว ได้รับหรือยังคะ",
+      "asset": "audio/thai/leave_request_received_female_dec83780274548d4.mp3"
+    },
+    {
+      "phraseId": "leave_return_statement",
+      "form": "male",
+      "thai": "ผมจะกลับมาทำงานวันที่…ครับ",
+      "asset": "audio/thai/leave_return_statement_male_46da5f97f076c914.mp3"
+    },
+    {
+      "phraseId": "leave_return_statement",
+      "form": "female",
+      "thai": "ฉันจะกลับมาทำงานวันที่…ค่ะ",
+      "asset": "audio/thai/leave_return_statement_female_4a4ca9cea61680de.mp3"
+    },
+    {
+      "phraseId": "leave_annual_period",
+      "form": "male",
+      "thai": "ผมขอลาพักร้อนช่วง…ครับ",
+      "asset": "audio/thai/leave_annual_period_male_11055d77e6923bf9.mp3"
+    },
+    {
+      "phraseId": "leave_annual_period",
+      "form": "female",
+      "thai": "ฉันขอลาพักร้อนช่วง…ค่ะ",
+      "asset": "audio/thai/leave_annual_period_female_cb6689b663b4b02c.mp3"
+    },
+    {
+      "phraseId": "leave_early_today",
+      "form": "male",
+      "thai": "วันนี้ขอกลับก่อนเวลาได้ไหมครับ",
+      "asset": "audio/thai/leave_early_today_male_b2f9c2a673a0e0c6.mp3"
+    },
+    {
+      "phraseId": "leave_early_today",
+      "form": "female",
+      "thai": "วันนี้ขอกลับก่อนเวลาได้ไหมคะ",
+      "asset": "audio/thai/leave_early_today_female_44ca6ec9dc2c8e3f.mp3"
+    },
+    {
+      "phraseId": "apartment_elevator_available",
+      "form": "male",
+      "thai": "มีลิฟต์ไหมครับ",
+      "asset": "audio/thai/apartment_elevator_available_male_c39b66f15f996b97.mp3"
+    },
+    {
+      "phraseId": "apartment_elevator_available",
+      "form": "female",
+      "thai": "มีลิฟต์ไหมคะ",
+      "asset": "audio/thai/apartment_elevator_available_female_7f60f7647914e3b8.mp3"
+    },
+    {
+      "phraseId": "phone_call_back",
+      "form": "male",
+      "thai": "ช่วยโทรกลับมาได้ไหมครับ",
+      "asset": "audio/thai/phone_call_back_male_b884e83ea1ffc7fa.mp3"
+    },
+    {
+      "phraseId": "phone_call_back",
+      "form": "female",
+      "thai": "ช่วยโทรกลับมาได้ไหมคะ",
+      "asset": "audio/thai/phone_call_back_female_81bfca2a708d4770.mp3"
+    }
+  ]
 }
