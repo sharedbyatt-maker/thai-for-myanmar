@@ -87,6 +87,8 @@ void main() {
       repository.phrases.first.thaiFor(state.politeStyle),
     );
     await tester.ensureVisible(answer);
+    // Scroll changes need a frame before hit-testing the shuffled answer.
+    await tester.pumpAndSettle();
     await tester.tap(answer);
     await tester.pump();
     expect(
