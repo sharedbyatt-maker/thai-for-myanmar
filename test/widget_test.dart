@@ -88,6 +88,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const ValueKey('home-search')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('home-search')));
       await tester.pumpAndSettle();
       await tester.enterText(
@@ -175,6 +177,8 @@ void main() {
         playbackService: _playbackService(),
       ),
     );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('home-search')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('home-search')));
     await tester.pumpAndSettle();
