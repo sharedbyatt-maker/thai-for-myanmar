@@ -1,0 +1,33 @@
+name: Audio generator checks
+
+on:
+  pull_request:
+    paths:
+      - 'tool/generate_thai_audio.py'
+      - 'tool/tests/test_generate_thai_audio.py'
+      - 'tool/requirements-audio.txt'
+      - '.github/workflows/*audio*.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tool/generate_thai_audio.py'
+      - 'tool/tests/test_generate_thai_audio.py'
+      - 'assets/data/phrases.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test planning, resume, stale-cache rejection and failure handling
+        run: python -m unittest discover -s tool/tests -p 'test_generate_thai_audio.py' -v
+      - name: Plan all phrases without credentials or billable requests
+        run: python tool/generate_thai_audio.py

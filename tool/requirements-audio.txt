@@ -1,0 +1,3 @@
+# Used only by the manual audio generation job, never by the app.
+google-auth[requests]>=2.40,<3
+requests>=2.32.4,<3
