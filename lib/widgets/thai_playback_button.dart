@@ -14,6 +14,7 @@ class ThaiPlaybackButton extends StatefulWidget {
     required this.label,
     this.outlined = false,
     this.compact = false,
+    this.hero = false,
     super.key,
   });
 
@@ -23,6 +24,7 @@ class ThaiPlaybackButton extends StatefulWidget {
   final String label;
   final bool outlined;
   final bool compact;
+  final bool hero;
 
   @override
   State<ThaiPlaybackButton> createState() => _ThaiPlaybackButtonState();
@@ -111,6 +113,31 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
                 : widget.label;
             void onPressed() => unawaited(_toggle(politeStyle));
 
+            if (widget.hero) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox.square(
+                      dimension: 88,
+                      child: IconButton.filled(
+                        tooltip: failed ? 'အသံမရပါ • ထပ်စမ်းရန်' : label,
+                        onPressed: onPressed,
+                        iconSize: 42,
+                        style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                        ),
+                        icon: icon,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(label, style: Theme.of(context).textTheme.labelMedium),
+                  ],
+                ),
+              );
+            }
             if (widget.compact) {
               return IconButton.filledTonal(
                 tooltip: failed ? 'အသံမရပါ • ထပ်စမ်းရန်' : label,

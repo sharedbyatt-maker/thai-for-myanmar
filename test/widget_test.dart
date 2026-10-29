@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/main_shell.dart';
+import 'package:thai_for_myanmar/screens/everyday_screen.dart';
 import 'package:thai_for_myanmar/screens/quick_speak_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_detail_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_issue_screen.dart';
@@ -49,7 +50,7 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
+    expect(find.text('သင်ယူ'), findsWidgets);
     expect(tester.takeException(), isNull);
 
     final quickSpeakDestination = find.descendant(
@@ -61,10 +62,24 @@ void main() {
     await tester.pump();
     expect(
       tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
-      3,
+      1,
     );
+    expect(find.byType(EverydayScreen), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('ထိုင်းလူမျိုးကို ပြမယ်'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(EverydayScreen),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('ထိုင်းလူမျိုးကို ပြမယ်'));
+    await tester.pumpAndSettle();
     expect(find.byType(QuickSpeakScreen), findsOneWidget);
-    expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
+    expect(find.text('အမြန်သုံး'), findsWidgets);
     final emergencyHelp = repository.phrases.singleWhere(
       (phrase) => phrase.id == 'emergency_help',
     );
@@ -109,7 +124,7 @@ void main() {
     },
   );
 
-  testWidgets('desktop rail changes tabs and retains Quick Speak search', (
+  testWidgets('desktop uses four tabs and preserves the selected review mode', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1280, 900);
@@ -126,34 +141,26 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byType(NavigationRail), findsOneWidget);
     expect(find.byType(NavigationBar), findsNothing);
-    await tester.tap(
-      find.descendant(
-        of: find.byType(NavigationRail),
-        matching: find.byIcon(Icons.record_voice_over_outlined),
-      ),
+    expect(
+      tester.widget<NavigationRail>(find.byType(NavigationRail)).destinations,
+      hasLength(4),
     );
+    await tester.tap(find.byIcon(Icons.replay_rounded));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
+    await tester.tap(find.text('စာကြောင်းစီ'));
     await tester.pumpAndSettle();
-    await tester.tap(
-      find.descendant(
-        of: find.byType(NavigationRail),
-        matching: find.byIcon(Icons.home_outlined),
-      ),
-    );
+    final selected = tester
+        .widget<Card>(find.byKey(const ValueKey('mode-sentence')))
+        .color;
+    expect(selected, isNotNull);
+    await tester.tap(find.byIcon(Icons.route_rounded));
     await tester.pumpAndSettle();
-    await tester.tap(
-      find.descendant(
-        of: find.byType(NavigationRail),
-        matching: find.byIcon(Icons.record_voice_over_outlined),
-      ),
-    );
+    await tester.tap(find.byIcon(Icons.replay_rounded));
     await tester.pumpAndSettle();
     expect(
-      tester.widget<TextField>(find.byType(TextField)).controller!.text,
-      'ဗိုက်နာ',
+      tester.widget<Card>(find.byKey(const ValueKey('mode-sentence'))).color,
+      selected,
     );
     expect(tester.takeException(), isNull);
   });
@@ -236,6 +243,9 @@ void main() {
       find.byType(StudySessionScreen),
     );
     expect(session.phrases, hasLength(5));
+    expect(find.text(session.phrases.first.pronunciation), findsNothing);
+    await tester.tap(find.text('အသံထွက်စာ ကြည့်မယ်'));
+    await tester.pumpAndSettle();
     expect(find.text(session.phrases.first.pronunciation), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

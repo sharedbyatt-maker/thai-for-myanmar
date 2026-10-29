@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../widgets/content_frame.dart';
+import '../widgets/playful_components.dart';
 
 import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
@@ -45,7 +46,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   bool _heard = false;
   bool _audioBusy = false;
   bool _audioUnavailable = false;
-  bool _showPronunciation = true;
+  bool _showPronunciation = false;
   String? _selectedAnswer;
   final Map<String, int> _results = {};
   final List<int> _selectedChunks = [];
@@ -280,202 +281,283 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     final reverse = widget.mode == LearningMode.reverseMeaning;
     final flashcard = widget.mode == LearningMode.flashcard;
     final sentence = widget.mode == LearningMode.sentence;
+    final colors = Theme.of(context).colorScheme;
     final thai = _phrase.thaiFor(_politeStyle);
-    return ListView(
-      padding: const EdgeInsets.all(20),
+    final prompt = listening
+        ? 'နားထောင်ပြီး ရွေးပါ'
+        : sentence
+        ? 'ဝါကျကို စီပါ'
+        : flashcard
+        ? 'နားထောင်ပြီး မှတ်မိကြည့်ပါ'
+        : reverse
+        ? 'ထိုင်းအဖြေကို ရွေးပါ'
+        : 'အဓိပ္ပာယ်ကို ရွေးပါ';
+    return Column(
       children: [
-        LinearProgressIndicator(value: _index / widget.phrases.length),
-        const SizedBox(height: 8),
-        Text('${_index + 1} / ${widget.phrases.length}'),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  listening
-                      ? 'အသံနားထောင်ပြီး အဓိပ္ပာယ်ရွေးပါ'
-                      : sentence
-                      ? 'စာကြောင်းအပိုင်းတွေကို အစီအစဉ်တကျ စီပါ'
-                      : flashcard
-                      ? 'နားထောင်၊ မှတ်မိသလား စမ်းကြည့်ပါ'
-                      : reverse
-                      ? 'ထိုင်းအဖြေကို ရွေးပါ'
-                      : 'မြန်မာအဓိပ္ပာယ်ကို ရွေးပါ',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 18),
-                if ((!listening && !reverse) || _answered) ...[
-                  if (flashcard && _showPronunciation) ...[
-                    Text(
-                      _phrase.pronunciation,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (!sentence || _answered)
-                    Text(
-                      thai,
-                      style: flashcard
-                          ? Theme.of(context).textTheme.titleLarge
-                          : Theme.of(context).textTheme.headlineSmall,
-                      textAlign: TextAlign.center,
-                    ),
-                  if (_showPronunciation &&
-                      !flashcard &&
-                      (!sentence || _answered)) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      'အသံထွက်အနီးစပ်ဆုံး — ${_phrase.pronunciation}',
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ],
-                if (sentence || (reverse && !_answered))
-                  Text(
-                    _phrase.myanmar,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                const SizedBox(height: 16),
-                if (listening)
-                  FilledButton.icon(
-                    onPressed: _listen,
-                    icon: Icon(_audioBusy ? Icons.stop : Icons.headphones),
-                    label: Text(_audioBusy ? 'ရပ်ရန်' : 'အသံနားထောင်ရန်'),
-                  )
-                else if (!reverse || _answered)
-                  ThaiPlaybackButton(
-                    phrase: _phrase,
-                    appState: widget.appState,
-                    playbackService: widget.playbackService,
-                    label: 'ထိုင်းအသံ နားထောင်ရန်',
-                  ),
-                if (_audioUnavailable) ...[
-                  const SizedBox(height: 12),
-                  const Text(
-                    'ဒီစက်မှာ ထိုင်းအသံ မရသေးပါ။ ပြန်စမ်းပါ သို့မဟုတ် စာကတ်နဲ့ လေ့ကျင့်ပါ။',
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => StudySessionScreen(
-                            repository: widget.repository,
-                            appState: widget.appState,
-                            playbackService: widget.playbackService,
-                            phrases: widget.phrases,
-                            mode: LearningMode.flashcard,
-                            title: 'စာကတ်လေ့ကျင့်ရန်',
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text('စာကတ်နဲ့ လေ့ကျင့်မယ်'),
-                  ),
-                ],
-                if (_revealed || _answered) ...[
-                  const Divider(height: 32),
-                  Text(
-                    _phrase.myanmar,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(_phrase.english, textAlign: TextAlign.center),
-                  if (_phrase.note != null) ...[
-                    const SizedBox(height: 8),
-                    Text(_phrase.note!),
-                  ],
-                ],
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        if (flashcard) ...[
-          if (!_revealed)
-            FilledButton(
-              onPressed: () => setState(() => _revealed = true),
-              child: const Text('အဓိပ္ပာယ်ကြည့်မယ်'),
-            )
-          else
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                OutlinedButton(
-                  onPressed: () => _rateFlashcard(2),
-                  child: const Text('ပြန်လေ့ကျင့်မယ်'),
-                ),
-                FilledButton.tonal(
-                  onPressed: () => _rateFlashcard(4),
-                  child: const Text('မှတ်မိတယ်'),
-                ),
-                FilledButton(
-                  onPressed: () => _rateFlashcard(5),
-                  child: const Text('လွယ်ပါတယ်'),
-                ),
-              ],
-            ),
-        ] else if (sentence) ...[
-          _sentenceBuilder(context),
-        ] else ...[
-          ..._options.map((option) {
-            final correct = option.id == _phrase.id;
-            final selected = option.id == _selectedAnswer;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Card(
-                color: !_answered
-                    ? null
-                    : correct
-                    ? Theme.of(context).colorScheme.primaryContainer
-                    : selected
-                    ? Theme.of(context).colorScheme.errorContainer
-                    : null,
-                child: ListTile(
-                  title: Text(
-                    reverse ? option.thaiFor(_politeStyle) : option.myanmar,
-                  ),
-                  subtitle: reverse && _showPronunciation
-                      ? Text(option.pronunciation)
-                      : null,
-                  trailing: _answered && correct
-                      ? const Icon(Icons.check_circle)
-                      : null,
-                  enabled: !listening || _heard,
-                  onTap: _answered ? null : () => _answer(option),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: LinearProgressIndicator(
+                  value: _index / widget.phrases.length,
+                  minHeight: 10,
                 ),
               ),
-            );
-          }),
-          if (listening && !_heard && !_audioUnavailable)
-            const Text('အသံပြီးဆုံးအောင် နားထောင်ပြီးမှ အဖြေရွေးနိုင်ပါတယ်။'),
-        ],
-        if (_answered && !flashcard) ...[
-          const SizedBox(height: 12),
-          Text(
-            _results[_phrase.id]! >= 3
-                ? 'မှန်ပါတယ်။'
-                : 'ဒီစကားစုကို ပြန်လေ့ကျင့်ပေးမယ်။',
+              const SizedBox(width: 16),
+              Text('${_index + 1} / ${widget.phrases.length}'),
+            ],
           ),
-          const SizedBox(height: 12),
-          FilledButton(
-            onPressed: _next,
-            child: Text(
-              _index + 1 == widget.phrases.length
-                  ? 'ရလဒ်ကြည့်မယ်'
-                  : 'နောက်တစ်ခု',
+        ),
+        Expanded(
+          child: ListView(
+            key: ValueKey('question-$_index'),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+            children: [
+              Text(
+                prompt,
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              if (listening)
+                Center(
+                  child: FilledButton(
+                    onPressed: _listen,
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 20,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _audioBusy
+                              ? Icons.stop_rounded
+                              : Icons.headphones_rounded,
+                          size: 42,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(_audioBusy ? 'ရပ်ရန်' : 'အသံနားထောင်ရန်'),
+                      ],
+                    ),
+                  ),
+                )
+              else if (!reverse || _answered)
+                ThaiPlaybackButton(
+                  phrase: _phrase,
+                  appState: widget.appState,
+                  playbackService: widget.playbackService,
+                  label: 'ထိုင်းအသံ နားထောင်ရန်',
+                  hero: true,
+                ),
+              const SizedBox(height: 24),
+              if ((!listening && !reverse && !sentence) || _answered)
+                Text(
+                  thai,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    height: 1.5,
+                  ),
+                ),
+              if (sentence || (reverse && !_answered))
+                Text(
+                  _phrase.myanmar,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              if (_showPronunciation &&
+                  (!listening || _answered) &&
+                  (!reverse || _answered))
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(
+                    _phrase.pronunciation,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: colors.primary),
+                  ),
+                ),
+              if (flashcard && !_revealed)
+                TextButton.icon(
+                  onPressed: () =>
+                      setState(() => _showPronunciation = !_showPronunciation),
+                  icon: const Icon(Icons.subtitles_outlined, size: 18),
+                  label: Text(
+                    _showPronunciation
+                        ? 'အသံထွက်စာ ဖျောက်မယ်'
+                        : 'အသံထွက်စာ ကြည့်မယ်',
+                  ),
+                ),
+              if (_revealed || _answered) ...[
+                const SizedBox(height: 18),
+                Card(
+                  color: colors.primaryContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Text(
+                      _phrase.myanmar,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                ),
+                ExpansionTile(
+                  title: const Text('ရှင်းလင်းချက်'),
+                  tilePadding: EdgeInsets.zero,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(_phrase.english),
+                          if (_phrase.note != null) Text(_phrase.note!),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              if (_audioUnavailable) ...[
+                const SizedBox(height: 12),
+                const Text('အသံမရသေးပါ။ ထပ်စမ်းပါ သို့မဟုတ် စာကတ်သုံးပါ။'),
+                TextButton(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => StudySessionScreen(
+                        repository: widget.repository,
+                        appState: widget.appState,
+                        playbackService: widget.playbackService,
+                        phrases: widget.phrases,
+                        mode: LearningMode.flashcard,
+                        title: 'စာကတ်လေ့ကျင့်ရန်',
+                      ),
+                    ),
+                  ),
+                  child: const Text('စာကတ်နဲ့ လေ့ကျင့်မယ်'),
+                ),
+              ],
+              const SizedBox(height: 20),
+              if (sentence) _sentenceBuilder(context),
+              if (!flashcard && !sentence)
+                ..._options.asMap().entries.map((entry) {
+                  final option = entry.value;
+                  final correct = option.id == _phrase.id;
+                  final selected = option.id == _selectedAnswer;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Card(
+                      color: !_answered
+                          ? null
+                          : correct
+                          ? colors.primaryContainer
+                          : selected
+                          ? colors.errorContainer
+                          : null,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        leading: CircleAvatar(
+                          radius: 15,
+                          backgroundColor: colors.surfaceContainerHighest,
+                          child: Text(
+                            '${entry.key + 1}',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                        title: Text(
+                          reverse
+                              ? option.thaiFor(_politeStyle)
+                              : option.myanmar,
+                        ),
+                        trailing: _answered && correct
+                            ? const Icon(Icons.check_circle_rounded)
+                            : null,
+                        enabled: !listening || _heard,
+                        onTap: _answered ? null : () => _answer(option),
+                      ),
+                    ),
+                  );
+                }),
+              if (listening && !_heard && !_audioUnavailable)
+                const Text('အရင် နားထောင်ပါ။', textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+        if (flashcard || _answered)
+          Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(context).height * .45,
+            ),
+            decoration: BoxDecoration(
+              color: colors.surface,
+              border: Border(top: BorderSide(color: colors.outlineVariant)),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (flashcard && !_revealed)
+                    LiftButton(
+                      label: 'အဓိပ္ပာယ်ကြည့်မယ်',
+                      icon: Icons.visibility_rounded,
+                      onPressed: () => setState(() => _revealed = true),
+                    )
+                  else if (flashcard)
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () => _rateFlashcard(2),
+                          child: const Text('ပြန်လေ့ကျင့်မယ်'),
+                        ),
+                        FilledButton.tonal(
+                          onPressed: () => _rateFlashcard(4),
+                          child: const Text('မှတ်မိတယ်'),
+                        ),
+                        FilledButton(
+                          onPressed: () => _rateFlashcard(5),
+                          child: const Text('လွယ်ပါတယ်'),
+                        ),
+                      ],
+                    )
+                  else ...[
+                    Text(
+                      _results[_phrase.id]! >= 3
+                          ? 'မှန်ပါတယ်။'
+                          : 'ဒီစကားစုကို ပြန်လေ့ကျင့်ပေးမယ်။',
+                      style: TextStyle(
+                        color: _results[_phrase.id]! >= 3
+                            ? colors.primary
+                            : colors.error,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    LiftButton(
+                      label: _index + 1 == widget.phrases.length
+                          ? 'ရလဒ်ကြည့်မယ်'
+                          : 'နောက်တစ်ခု',
+                      onPressed: _next,
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
-        ],
       ],
     );
   }
@@ -670,6 +752,26 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
               ),
             ),
             child: const Text('ဒီစကားစုတွေ ပြန်လေ့ကျင့်မယ်'),
+          ),
+          const SizedBox(height: 12),
+        ],
+        if (widget.mode == LearningMode.flashcard) ...[
+          LiftButton(
+            label: 'နားထောင်ပြီး ပြန်စမ်းမယ်',
+            icon: Icons.headphones_rounded,
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => StudySessionScreen(
+                  repository: widget.repository,
+                  appState: widget.appState,
+                  playbackService: widget.playbackService,
+                  phrases: widget.phrases,
+                  mode: LearningMode.listening,
+                  title: 'နားထောင်ပြီးရွေး',
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
         ],

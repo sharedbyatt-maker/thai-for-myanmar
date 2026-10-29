@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/app.dart';
+import 'package:thai_for_myanmar/screens/everyday_screen.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
@@ -43,6 +44,18 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
+      await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-lesson');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-everyday');
+      await tester.tap(find.byIcon(Icons.route_rounded));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('home-search')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'ဗိုက်နာ');
@@ -68,11 +81,9 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.tap(find.byIcon(Icons.menu_book_outlined));
-    await tester.pump(const Duration(milliseconds: 500));
-    await tester.ensureVisible(find.text('စသင်မယ်'));
+    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('စသင်မယ်'));
+    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
     await tester.pump(const Duration(milliseconds: 500));
     for (var index = 0; index < 5; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
@@ -112,12 +123,25 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    expect(find.text('ထိုင်းစကား လက်တွေ့သုံး'), findsOneWidget);
+    expect(find.text('သင်ယူ'), findsWidgets);
 
     await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
-    expect(find.text('အမြန်ပြောရန်'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('ထိုင်းလူမျိုးကို ပြမယ်'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(EverydayScreen),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('ထိုင်းလူမျိုးကို ပြမယ်'));
+    await tester.pumpAndSettle();
+    expect(find.text('အမြန်သုံး'), findsWidgets);
     final emergencyHelp = repository.phrases.singleWhere(
       (phrase) => phrase.id == 'emergency_help',
     );

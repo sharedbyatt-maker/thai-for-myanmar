@@ -39,7 +39,6 @@ class PhraseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final category = repository.categoryFor(phrase.categoryId);
     final colors = Theme.of(context).colorScheme;
     return AnimatedBuilder(
       animation: appState,
@@ -52,7 +51,7 @@ class PhraseTile extends StatelessWidget {
                 child: Semantics(
                   button: true,
                   label:
-                      '${phrase.myanmar}. အသံထွက်အနီးစပ်ဆုံး ${phrase.pronunciation}. ${phrase.thaiFor(appState.politeStyle)}',
+                      '${phrase.myanmar}. ${phrase.thaiFor(appState.politeStyle)}. အသေးစိတ်ကြည့်ရန်',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () => _open(context),
@@ -61,13 +60,6 @@ class PhraseTile extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (category != null)
-                            Text(
-                              category.my,
-                              style: Theme.of(context).textTheme.labelSmall
-                                  ?.copyWith(color: colors.primary),
-                            ),
-                          const SizedBox(height: 3),
                           Text(
                             phrase.myanmar,
                             style: Theme.of(context).textTheme.titleMedium,
@@ -77,12 +69,6 @@ class PhraseTile extends StatelessWidget {
                             phrase.thaiFor(appState.politeStyle),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: colors.primary),
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            'အသံထွက်အနီးစပ်ဆုံး • ${phrase.pronunciation}',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: colors.onSurfaceVariant),
                           ),
                         ],
                       ),

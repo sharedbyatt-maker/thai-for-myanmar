@@ -9,6 +9,7 @@ import '../learning/study_catalog.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'study_session_screen.dart';
+import '../widgets/playful_components.dart';
 
 String modeLabel(LearningMode mode) => switch (mode) {
   LearningMode.flashcard => 'စာကတ်',
@@ -43,7 +44,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  LearningMode _mode = LearningMode.flashcard;
+  LearningMode _mode = LearningMode.listening;
   ReviewFilter _filter = ReviewFilter.due;
   String _category = '';
 
@@ -71,60 +72,103 @@ class _QuizScreenState extends State<QuizScreen> {
       return ListView(
         padding: const EdgeInsets.all(18),
         children: [
+          const Center(child: ElephantBuddy(size: 90)),
           Text(
-            'ကိုယ့်အတွက် လေ့ကျင့်ခန်း',
+            'နည်းနည်း ပြန်စမ်းကြည့်မယ်',
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'ပုံစံနဲ့ စကားစုကို အရင်ရွေးပြီး လေ့ကျင့်ပါ။ ရလဒ်အလိုက် နောက်တစ်ခါ ပြန်မေးပေးမယ်။',
-          ),
           const SizedBox(height: 20),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: LearningMode.values
-                .map(
-                  (mode) => ChoiceChip(
-                    label: Text(modeLabel(mode)),
-                    selected: _mode == mode,
-                    onSelected: (_) => setState(() => _mode = mode),
+          LayoutBuilder(
+            builder: (context, constraints) => Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: LearningMode.values.map((mode) {
+                final icon = switch (mode) {
+                  LearningMode.flashcard => Icons.style_rounded,
+                  LearningMode.listening => Icons.headphones_rounded,
+                  LearningMode.meaning => Icons.touch_app_rounded,
+                  LearningMode.reverseMeaning => Icons.swap_horiz_rounded,
+                  LearningMode.matching => Icons.extension_rounded,
+                  LearningMode.sentence => Icons.view_stream_rounded,
+                };
+                final active = _mode == mode;
+                return SizedBox(
+                  width: (constraints.maxWidth - 12) / 2,
+                  child: Card(
+                    key: ValueKey('mode-${mode.name}'),
+                    color: active
+                        ? Theme.of(context).colorScheme.primaryContainer
+                        : null,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () => setState(() => _mode = mode),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Icon(
+                              icon,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              modeLabel(mode),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            if (active)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 6),
+                                child: Icon(Icons.check_circle, size: 18),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                )
-                .toList(),
+                );
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 20),
-          DropdownButtonFormField<String>(
-            initialValue: _category,
-            isExpanded: true,
-            decoration: const InputDecoration(labelText: 'အကြောင်းအရာ'),
-            items: [
-              const DropdownMenuItem(
-                value: '',
-                child: Text('အကြောင်းအရာအားလုံး'),
+          ExpansionTile(
+            title: const Text('စကားစု ရွေးချယ်ရန်'),
+            children: [
+              DropdownButtonFormField<String>(
+                initialValue: _category,
+                isExpanded: true,
+                decoration: const InputDecoration(labelText: 'အကြောင်းအရာ'),
+                items: [
+                  const DropdownMenuItem(
+                    value: '',
+                    child: Text('အကြောင်းအရာအားလုံး'),
+                  ),
+                  ...widget.repository.categories.map(
+                    (c) => DropdownMenuItem(
+                      value: c.id,
+                      child: Text('${c.icon} ${c.my}'),
+                    ),
+                  ),
+                ],
+                onChanged: (value) => setState(() => _category = value ?? ''),
               ),
-              ...widget.repository.categories.map(
-                (c) => DropdownMenuItem(
-                  value: c.id,
-                  child: Text('${c.icon} ${c.my}'),
-                ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: ReviewFilter.values
+                    .map(
+                      (filter) => ChoiceChip(
+                        label: Text(filterLabel(filter)),
+                        selected: _filter == filter,
+                        onSelected: (_) => setState(() => _filter = filter),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
-            onChanged: (value) => setState(() => _category = value ?? ''),
-          ),
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: ReviewFilter.values
-                .map(
-                  (filter) => ChoiceChip(
-                    label: Text(filterLabel(filter)),
-                    selected: _filter == filter,
-                    onSelected: (_) => setState(() => _filter = filter),
-                  ),
-                )
-                .toList(),
           ),
           const SizedBox(height: 22),
           Card(
@@ -138,18 +182,6 @@ class _QuizScreenState extends State<QuizScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
-                  if (_mode == LearningMode.flashcard)
-                    const Text(
-                      'အဓိပ္ပာယ်ကို ဖော်ကြည့်ပြီး ကိုယ်မှတ်မိမှုကို အမှန်အတိုင်း ရွေးပါ။',
-                    ),
-                  if (_mode == LearningMode.listening)
-                    const Text(
-                      'ထိုင်းအသံရတဲ့စက်မှာ နားထောင်ပြီး မြန်မာအဖြေရွေးပါ။ အသံမရရင် အမှတ်မပေးဘဲ စာကတ်ပုံစံကို ပြောင်းနိုင်ပါတယ်။',
-                    ),
-                  if (_mode == LearningMode.sentence)
-                    const Text(
-                      'စစ်ထားတဲ့ စာကြောင်းအပိုင်းတွေကို စီပါ။ ဒီပုံစံက ထိုင်းစာ စဖတ်နေသူအတွက်ပါ။',
-                    ),
                   if (selected.isEmpty)
                     const Text(
                       'ဒီရွေးချယ်မှုအတွက် စကားစုမရှိသေးပါ။ အခြားအကြောင်းအရာ သို့မဟုတ် အားလုံးကို ရွေးပါ။',
