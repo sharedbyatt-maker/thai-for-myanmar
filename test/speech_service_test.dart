@@ -201,7 +201,9 @@ void main() {
 
         expect(await service.speakThai('สวัสดี'), SpeechResult.unavailable);
         expect(stopwatch.elapsed, lessThan(const Duration(milliseconds: 250)));
-        expect(engine.voiceChangeWaits, 1);
+        // Timers can wake just before the deadline, requiring another bounded
+        // wait. The elapsed-time bound is the contract, not a callback count.
+        expect(engine.voiceChangeWaits, greaterThanOrEqualTo(1));
         expect(engine.languageRequests, isEmpty);
         expect(
           service.diagnosticSnapshot['lastFailureReason'],
