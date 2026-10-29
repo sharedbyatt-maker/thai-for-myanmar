@@ -24,3 +24,19 @@ replace the dense dashboard. No Duolingo artwork, brand assets, or content is us
 Validation should cover mobile/desktop layouts, large text, direct search,
 Quick Speak, persisted lesson completion, audio state tests, and all content/audio
 validators. Audio coverage is not independent Thai pronunciation certification.
+
+## Ready-to-use polish and continuous path
+
+The Learn destination now contains one continuous, lazily built path across all
+35 topics, preserving the five-phrase lesson IDs and real completion checks.
+A pinned, searchable topic picker jumps to a topic without removing other units;
+the continue action follows the selected topic. Row extents account for text
+scaling so topic navigation can scroll accurately without building the entire
+long path at once. Every lesson remains available without paid or progress locks.
+
+Daily goal rings and seven-day activity use saved reviews. Everyday has inline
+search, saved filtering, and recent phrases; successful audio playback updates
+recency without marking a phrase as mastered. Phrase detail keeps audio and
+meaning visible while pronunciation and notes are expandable. The web entry
+shows an accessible startup indicator, retry recovery, reduced-motion support,
+and the app's own icon. This does not add offline web caching or Play publishing.

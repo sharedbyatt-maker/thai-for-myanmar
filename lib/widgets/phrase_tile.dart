@@ -50,6 +50,8 @@ class PhraseTile extends StatelessWidget {
               Expanded(
                 child: Semantics(
                   button: true,
+                  excludeSemantics: true,
+                  onTap: () => _open(context),
                   label:
                       '${phrase.myanmar}. ${phrase.thaiFor(appState.politeStyle)}. အသေးစိတ်ကြည့်ရန်',
                   child: InkWell(

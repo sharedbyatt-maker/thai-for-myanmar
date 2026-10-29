@@ -1,16 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="my">
 <head>
   <base href="$FLUTTER_BASE_HREF">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="မြန်မာလို နားလည်ပြီး ထိုင်းလို လက်တွေ့ပြောပါ။ နေ့စဉ်သုံး ထိုင်းစကားစု၊ အသံထွက်နဲ့ အမြန်ရှာဖွေမှု။">
-  <meta name="theme-color" content="#167d75">
+  <meta name="theme-color" content="#5b4fdb">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thai for Myanmar</title>
+  <link rel="icon" type="image/svg+xml" href="app-icon.svg">
+  <link rel="apple-touch-icon" href="app-icon-192.png">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <style>
+    body { margin: 0; background: #faf9f6; }
+    #app-start { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; box-sizing: border-box; color: #29233f; background: #faf9f6; font-family: system-ui, sans-serif; text-align: center; }
+    #app-start img { width: 88px; height: 88px; border-radius: 24px; }
+    #app-start h1 { font-size: 22px; margin: 18px 0 10px; }
+    #app-start p { font-size: 15px; line-height: 1.8; }
+    .loader { width: 30px; height: 30px; margin: 22px auto; border: 3px solid #e4dff6; border-top-color: #5b4fdb; border-radius: 50%; animation: turn 1s linear infinite; }
+    #retry { padding: 12px 24px; border: 0; border-radius: 12px; background: #5b4fdb; color: white; font: inherit; cursor: pointer; }
+    #retry[hidden] { display: none; }
+    @keyframes turn { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .loader { animation: none; } }
+  </style>
+  <div id="app-start" role="status" aria-live="polite"><div>
+    <img src="app-icon.svg" alt="">
+    <h1>Thai for Myanmar</h1>
+    <p id="startup-message">ထိုင်းစကား လေ့လာဖို့ အသင့်ပြင်နေပါတယ်…</p>
+    <div class="loader" aria-hidden="true"></div>
+    <button id="retry" hidden type="button">ပြန်ဖွင့်မယ်</button>
+    <noscript><p>ဒီ app ကို သုံးဖို့ JavaScript ဖွင့်ထားရန် လိုပါတယ်။</p></noscript>
+  </div></div>
+  <script>
+    (() => {
+      const showRetry = () => {
+        if (!document.getElementById('app-start')) return;
+        document.getElementById('startup-message').textContent = 'ဖွင့်ဖို့ ကြာနေပါတယ်။ အင်တာနက်စစ်ပြီး ပြန်စမ်းပါ။';
+        document.getElementById('retry').hidden = false;
+      };
+      const timer = setTimeout(showRetry, 30000);
+      window.addEventListener('flutter-first-frame', () => {
+        clearTimeout(timer);
+        document.getElementById('app-start')?.remove();
+      }, { once: true });
+      document.getElementById('retry').addEventListener('click', () => location.reload());
+      window.addEventListener('error', event => {
+        if (event.target?.tagName === 'SCRIPT') showRetry();
+      }, true);
+    })();
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

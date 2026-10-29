@@ -128,57 +128,55 @@ class PhraseDetailScreen extends StatelessWidget {
               ),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(22),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'မြန်မာလို ပြောချင်တာ',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
                       phrase.myanmar,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 18),
-                    Text(
-                      'အသံထွက်အနီးစပ်ဆုံး',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      phrase.pronunciation,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    const Divider(height: 32),
-                    Text(
-                      'ထိုင်းစာ',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      phrase.thaiFor(appState.politeStyle),
+                      textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: 18),
-                    Text(
-                      phrase.english,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    const SizedBox(height: 24),
+                    ThaiPlaybackButton(
+                      phrase: phrase,
+                      appState: appState,
+                      playbackService: playbackService,
+                      label: 'ထိုင်းအသံ နားထောင်ရန်',
+                      hero: true,
                     ),
-                    if (phrase.note != null) ...[
-                      const SizedBox(height: 16),
-                      Text(
-                        phrase.note!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                    const SizedBox(height: 24),
+                    Text(
+                      phrase.thaiFor(appState.politeStyle),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.w800, height: 1.5),
+                    ),
                   ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ExpansionTile(
+                title: const Text('အသံထွက်နဲ့ ရှင်းလင်းချက်'),
+                leading: const Icon(Icons.subtitles_outlined),
+                childrenPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    phrase.pronunciation,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(phrase.english),
+                  if (phrase.note != null) ...[
+                    const SizedBox(height: 12),
+                    Text(phrase.note!),
+                  ],
+                  const SizedBox(height: 12),
+                  const Text('အသံထွက်စာက အနီးစပ်ဆုံး လမ်းညွှန်သာဖြစ်ပါတယ်။'),
+                ],
               ),
             ),
             if (isSensitive) ...[
@@ -189,18 +187,6 @@ class PhraseDetailScreen extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 20),
-            ThaiPlaybackButton(
-              phrase: phrase,
-              appState: appState,
-              playbackService: playbackService,
-              label: 'ထိုင်းအသံ နားထောင်ရန်',
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'အသံထွက်စာက အနီးစပ်ဆုံး လမ်းညွှန်သာဖြစ်ပါတယ်။ အသံမရရင် ဆက်တင်က ထိုင်းအသံ စမ်းရန်ကို ဖွင့်ကြည့်ပါ။',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 14),
             FilledButton.tonalIcon(
               onPressed: () => Navigator.push(
                 context,

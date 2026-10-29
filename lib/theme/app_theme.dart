@@ -15,6 +15,9 @@ class AppTheme {
     );
     final scheme = brightness == Brightness.light
         ? generated.copyWith(
+            primary: const Color(0xFF5B4FDB),
+            onPrimary: Colors.white,
+            tertiary: const Color(0xFFB74F3A),
             primaryContainer: const Color(0xFFECE9FF),
             onPrimaryContainer: const Color(0xFF302565),
           )

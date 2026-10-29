@@ -6,6 +6,8 @@ import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/main_shell.dart';
 import 'package:thai_for_myanmar/screens/everyday_screen.dart';
+import 'package:thai_for_myanmar/screens/learn_screen.dart';
+import 'package:thai_for_myanmar/screens/profile_screen.dart';
 import 'package:thai_for_myanmar/screens/quick_speak_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_detail_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_issue_screen.dart';
@@ -247,6 +249,140 @@ void main() {
     await tester.tap(find.text('အသံထွက်စာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
     expect(find.text(session.phrases.first.pronunciation), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('topic search changes the actual lesson started', (tester) async {
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: LearnScreen(
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Food');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('အစားအသောက်'));
+    await tester.pumpAndSettle();
+    final path = tester.widget<CustomScrollView>(
+      find.byKey(const ValueKey('learning-path')),
+    );
+    expect(path.controller!.offset, greaterThan(1000));
+    expect(path.controller!.position.maxScrollExtent, greaterThan(20000));
+    path.controller!.jumpTo(0);
+    await tester.pumpAndSettle();
+    expect(find.text('ဆက်သင်ရန် · အစားအသောက်'), findsOneWidget);
+    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.pumpAndSettle();
+    final session = tester.widget<StudySessionScreen>(
+      find.byType(StudySessionScreen),
+    );
+    expect(session.phrases.every((p) => p.categoryId == 'food'), isTrue);
+    expect(session.lessonId, startsWith('food:'));
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Daily life');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('နေ့စဉ်ဘဝ'));
+    await tester.pumpAndSettle();
+    expect(path.controller!.offset, greaterThan(20000));
+    expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Everyday searches inline and filters saved phrases at 320px', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 760);
+    tester.view.devicePixelRatio = 1;
+    tester.view.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: EverydayScreen(
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+            onSearch: () {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('everyday-search')),
+      'ဗိုက်နာ',
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
+    await tester.ensureVisible(find.byTooltip('အကြိုက်ဆုံးအဖြစ် သိမ်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('အကြိုက်ဆုံးအဖြစ် သိမ်းရန်'));
+    await tester.pumpAndSettle();
+    expect(state.isFavorite('health_stomach'), isTrue);
+    await tester.ensureVisible(find.text('သိမ်းထားတာ'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('သိမ်းထားတာ'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('ဖျက်ရန်'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
+    expect(find.text('ဗိုက်နာနေပါတယ်။'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('daily goal changes persist and zero activity is honest', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ProfileScreen(
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('ဒီနေ့ကနေ စလိုက်ပါ'), findsOneWidget);
+    await tester.ensureVisible(find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 ကြိမ် / ရက်'));
+    await tester.pumpAndSettle();
+    expect(state.learning.dailyGoal, 5);
+    expect(find.text('0 / 5 ကြိမ်'), findsOneWidget);
+    final restored = AppState();
+    await restored.load();
+    expect(restored.learning.dailyGoal, 5);
     expect(tester.takeException(), isNull);
   });
 

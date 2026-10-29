@@ -3,7 +3,21 @@
   "short_name": "Thai for Myanmar",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f7f8f7",
-  "theme_color": "#167d75",
-  "description": "Practical Thai for Myanmar speakers in Thailand."
+  "background_color": "#faf9f6",
+  "theme_color": "#5b4fdb",
+  "description": "Practical Thai for Myanmar speakers in Thailand.",
+  "icons": [
+    {
+      "src": "app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

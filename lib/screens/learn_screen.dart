@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../data/phrase_repository.dart';
+import '../models/phrase.dart';
 import '../learning/learning_progress.dart';
 import '../learning/study_catalog.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
+import '../widgets/daily_goal_card.dart';
+import '../widgets/topic_picker.dart';
 import 'phrase_browser_screen.dart';
 import 'study_session_screen.dart';
 
@@ -27,6 +29,14 @@ class LearnScreen extends StatefulWidget {
 
 class _LearnScreenState extends State<LearnScreen> {
   String? _categoryId;
+  final _scroll = ScrollController();
+  final _headerKey = GlobalKey();
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
   void _open(StudyLesson lesson) => Navigator.push(
     context,
     MaterialPageRoute<void>(
@@ -41,6 +51,48 @@ class _LearnScreenState extends State<LearnScreen> {
       ),
     ),
   );
+  Future<void> _chooseTopic(
+    List<Object> rows,
+    double headerExtent,
+    double nodeExtent,
+    String selected,
+  ) async {
+    final id = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => SizedBox(
+        height: MediaQuery.sizeOf(context).height * .9,
+        child: TopicPicker(
+          repository: widget.repository,
+          appState: widget.appState,
+          selected: selected,
+        ),
+      ),
+    );
+    if (!mounted || id == null) return;
+    setState(() => _categoryId = id);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scroll.hasClients) return;
+      final box = _headerKey.currentContext?.findRenderObject() as RenderBox?;
+      var offset = box?.size.height ?? 0;
+      for (final row in rows) {
+        if (row is PhraseCategory && row.id == id) break;
+        offset += row is PhraseCategory ? headerExtent : nodeExtent;
+      }
+      final target = offset.clamp(0.0, _scroll.position.maxScrollExtent);
+      if (MediaQuery.disableAnimationsOf(context)) {
+        _scroll.jumpTo(target);
+      } else {
+        _scroll.animateTo(
+          target,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: widget.appState,
@@ -50,251 +102,388 @@ class _LearnScreenState extends State<LearnScreen> {
       final pending = lessons.where(
         (l) => !progress.completedLessons.contains(l.id),
       );
-      final next = pending.isEmpty ? lessons.first : pending.first;
+      final suggested = pending.isEmpty ? lessons.first : pending.first;
       final category = widget.repository.categoryFor(
-        _categoryId ?? next.category.id,
+        _categoryId ?? suggested.category.id,
       )!;
       final unit = lessons.where((l) => l.category.id == category.id).toList();
-      final done = unit
-          .where((l) => progress.completedLessons.contains(l.id))
-          .length;
+      final remaining = unit.where(
+        (l) => !progress.completedLessons.contains(l.id),
+      );
+      final next = remaining.isEmpty ? unit.first : remaining.first;
+      final rows = <Object>[
+        for (final c in widget.repository.categories) ...[
+          c,
+          ...lessons.where((l) => l.category.id == c.id),
+        ],
+      ];
+      final extra = (MediaQuery.textScalerOf(context).scale(14) - 14)
+          .clamp(0, 35)
+          .toDouble();
+      final headerExtent = 150.0 + extra * 7;
+      final nodeExtent = 210.0 + extra * 7;
       final colors = Theme.of(context).colorScheme;
-      return ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-        children: [
-          Wrap(
-            spacing: 10,
-            runSpacing: 8,
-            children: [
-              MetricPill(
-                icon: Icons.local_fire_department_rounded,
-                label: '${progress.streak(DateTime.now())} ရက်ဆက်',
-              ),
-              MetricPill(
-                icon: Icons.check_circle_rounded,
-                label: '${progress.completedLessons.length} သင်ပြီး',
-              ),
-            ],
-          ),
-          const SizedBox(height: 22),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'နည်းနည်းစီ၊ နေ့တိုင်း',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 4),
-                    const Text('နားထောင် · မှတ်မိ · ပြန်စမ်း'),
-                  ],
-                ),
-              ),
-              const ElephantBuddy(size: 96),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Card(
-            color: colors.primaryContainer,
+      void choose() =>
+          _chooseTopic(rows, headerExtent, nodeExtent, category.id);
+      return CustomScrollView(
+        key: const ValueKey('learning-path'),
+        controller: _scroll,
+        slivers: [
+          SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(18),
+              key: _headerKey,
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    'ဆက်သင်ရန် · ${next.category.my}',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${next.phrases.length} စကားစု · သင်ခန်းစာ ${next.number}',
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 8,
+                    children: [
+                      MetricPill(
+                        icon: Icons.local_fire_department_rounded,
+                        label: '${progress.streak(DateTime.now())} ရက်ဆက်',
+                      ),
+                      MetricPill(
+                        icon: Icons.check_circle_rounded,
+                        label: '${progress.completedLessons.length} သင်ပြီး',
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 14),
-                  LiftButton(
-                    label: 'အခု စလေ့ကျင့်မယ်',
-                    onPressed: () => _open(next),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'နားထောင်၊ ပြောကြည့်',
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${widget.repository.categories.length} အကြောင်းအရာ · ${lessons.length} သင်ခန်းစာ',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const ElephantBuddy(size: 76),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  DailyGoalCard(appState: widget.appState),
+                  const SizedBox(height: 12),
+                  Card(
+                    color: colors.primaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'ဆက်သင်ရန် · ${next.category.my}',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${next.phrases.length} စကားစု · သင်ခန်းစာ ${next.number}',
+                          ),
+                          const SizedBox(height: 14),
+                          LiftButton(
+                            label: 'အခု စလေ့ကျင့်မယ်',
+                            onPressed: () => _open(next),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 22),
-          DropdownButtonFormField<String>(
-            key: ValueKey(category.id),
-            initialValue: category.id,
-            isExpanded: true,
-            decoration: const InputDecoration(
-              labelText: 'သင်ယူမှု လမ်းကြောင်း',
-            ),
-            items: widget.repository.categories
-                .map(
-                  (c) => DropdownMenuItem(
-                    value: c.id,
-                    child: Text('${c.icon} ${c.my}'),
-                  ),
-                )
-                .toList(),
-            onChanged: (v) => setState(() => _categoryId = v),
-          ),
-          const SizedBox(height: 18),
-          Row(
-            children: [
-              Text(category.icon, style: const TextStyle(fontSize: 26)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  category.my,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Text('$done / ${unit.length}'),
-            ],
-          ),
-          const SizedBox(height: 12),
-          LinearProgressIndicator(
-            value: unit.isEmpty ? 0 : done / unit.length,
-            minHeight: 8,
-          ),
-          const SizedBox(height: 24),
-          ...List.generate(unit.length, (i) {
-            final lesson = unit[i];
-            final complete = progress.completedLessons.contains(lesson.id);
-            final current = lesson.id == next.id;
-            return Column(
-              children: [
-                Align(
-                  alignment: Alignment(i.isEven ? -.35 : .35, 0),
-                  child: SizedBox(
-                    width: 200,
-                    child: Column(
-                      children: [
-                        if (current)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Text(
-                              'ဒီကနေ စမယ်',
-                              style: TextStyle(
-                                color: colors.primary,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                        Semantics(
-                          label:
-                              '${category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
-                          button: true,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      (complete
-                                              ? const Color(0xFF267A65)
-                                              : colors.primary)
-                                          .withValues(alpha: .28),
-                                  offset: const Offset(0, 7),
-                                ),
-                              ],
-                            ),
-                            child: SizedBox.square(
-                              dimension: 82,
-                              child: FilledButton(
-                                style: FilledButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: EdgeInsets.zero,
-                                  backgroundColor: complete
-                                      ? const Color(0xFF27866E)
-                                      : current
-                                      ? colors.primary
-                                      : colors.secondaryContainer,
-                                  foregroundColor: current || complete
-                                      ? Colors.white
-                                      : colors.onSecondaryContainer,
-                                ),
-                                onPressed: () => _open(lesson),
-                                child: Icon(
-                                  complete
-                                      ? Icons.check_rounded
-                                      : current
-                                      ? Icons.play_arrow_rounded
-                                      : Icons.star_rounded,
-                                  size: 36,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          'သင်ခန်းစာ ${lesson.number}',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        Text(
-                          '${lesson.phrases.length} စကားစု',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _TopicHeader(
+              extent: 92 + extra * 5,
+              child: ColoredBox(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 6, 20, 10),
+                  child: Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.route_rounded),
+                      title: Text(
+                        category.my,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: const Text('အကြောင်းအရာ ပြောင်းရန်'),
+                      trailing: const Icon(Icons.keyboard_arrow_down_rounded),
+                      onTap: choose,
                     ),
                   ),
                 ),
-                if (i + 1 < unit.length)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Column(
-                      children: List.generate(
-                        3,
-                        (_) => Container(
-                          width: 5,
-                          height: 5,
-                          margin: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: colors.outlineVariant,
-                            shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          SliverVariedExtentList(
+            itemExtentBuilder: (index, _) => index >= rows.length
+                ? null
+                : rows[index] is PhraseCategory
+                ? headerExtent
+                : nodeExtent,
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final row = rows[index];
+              if (row is PhraseCategory) {
+                final topic = lessons
+                    .where((l) => l.category.id == row.id)
+                    .toList();
+                final done = topic
+                    .where((l) => progress.completedLessons.contains(l.id))
+                    .length;
+                final n = widget.repository.categories.indexOf(row) + 1;
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+                  child: Card(
+                    color: n.isEven
+                        ? colors.secondaryContainer
+                        : colors.primaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'အပိုင်း $n · $done / ${topic.length} သင်ပြီး',
+                            style: Theme.of(context).textTheme.labelMedium,
                           ),
-                        ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Text(
+                                row.icon,
+                                style: const TextStyle(fontSize: 24),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  row.my,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: '${row.my} စကားစုများ',
+                                icon: const Icon(Icons.menu_book_outlined),
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => PhraseBrowserScreen(
+                                      repository: widget.repository,
+                                      appState: widget.appState,
+                                      playbackService: widget.playbackService,
+                                      title: row.my,
+                                      categoryId: row.id,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-              ],
-            );
-          }),
-          const SizedBox(height: 24),
-          Center(
-            child: Icon(
-              Icons.emoji_events_rounded,
-              size: 44,
-              color: colors.tertiary,
-            ),
+                );
+              }
+              final lesson = row as StudyLesson;
+              final complete = progress.completedLessons.contains(lesson.id);
+              final current = lesson.id == next.id;
+              final left = lesson.number.isOdd;
+              return Column(
+                children: [
+                  Align(
+                    alignment: Alignment(left ? -.22 : .22, 0),
+                    child: SizedBox(
+                      width: 220,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 26 + extra,
+                            child: current
+                                ? Text(
+                                    'ဒီကနေ စမယ်',
+                                    style: TextStyle(
+                                      color: colors.primary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          Semantics(
+                            label:
+                                '${lesson.category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
+                            button: true,
+                            excludeSemantics: true,
+                            onTap: () => _open(lesson),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        (complete
+                                                ? const Color(0xFF27866E)
+                                                : colors.primary)
+                                            .withValues(alpha: .28),
+                                    offset: const Offset(0, 6),
+                                  ),
+                                ],
+                              ),
+                              child: SizedBox.square(
+                                dimension: 78,
+                                child: FilledButton(
+                                  style: FilledButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    padding: EdgeInsets.zero,
+                                    backgroundColor: complete
+                                        ? const Color(0xFF27866E)
+                                        : current
+                                        ? colors.primary
+                                        : colors.secondaryContainer,
+                                    foregroundColor: complete || current
+                                        ? Colors.white
+                                        : colors.onSecondaryContainer,
+                                  ),
+                                  onPressed: () => _open(lesson),
+                                  child: Icon(
+                                    complete
+                                        ? Icons.check_rounded
+                                        : current
+                                        ? Icons.play_arrow_rounded
+                                        : Icons.star_rounded,
+                                    size: 34,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'သင်ခန်းစာ ${lesson.number}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Text(
+                            '${lesson.phrases.length} စကားစု',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  if (index + 1 < rows.length && rows[index + 1] is StudyLesson)
+                    SizedBox(
+                      height: 32,
+                      width: double.infinity,
+                      child: CustomPaint(
+                        painter: _PathLink(
+                          left: left,
+                          color: colors.outlineVariant,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            }, childCount: rows.length),
           ),
-          const SizedBox(height: 8),
-          TextButton.icon(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute<void>(
-                builder: (_) => PhraseBrowserScreen(
-                  repository: widget.repository,
-                  appState: widget.appState,
-                  playbackService: widget.playbackService,
-                  title: category.my,
-                  categoryId: category.id,
-                ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(28),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.emoji_events_rounded,
+                    color: colors.tertiary,
+                    size: 56,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'ကိုယ့်အရှိန်နဲ့ ကိုယ်သင်ပါ',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'အကြောင်းအရာတိုင်းကို အချိန်မရွေး ဖွင့်လို့ရပါတယ်။',
+                    textAlign: TextAlign.center,
+                  ),
+                  TextButton.icon(
+                    onPressed: () => _scroll.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeOut,
+                    ),
+                    icon: const Icon(Icons.vertical_align_top_rounded),
+                    label: const Text('အစကို ပြန်သွားမယ်'),
+                  ),
+                ],
               ),
             ),
-            icon: const Icon(Icons.menu_book_rounded),
-            label: const Text('ဒီအကြောင်းအရာရဲ့ စကားစုအားလုံး ကြည့်မယ်'),
           ),
-          if (widget.onSearch != null)
-            TextButton.icon(
-              key: const ValueKey('home-search'),
-              onPressed: widget.onSearch,
-              icon: const Icon(Icons.search),
-              label: const Text('စကားစုရှာရန်'),
-            ),
         ],
       );
     },
   );
+}
+
+class _TopicHeader extends SliverPersistentHeaderDelegate {
+  _TopicHeader({required this.extent, required this.child});
+  final double extent;
+  final Widget child;
+  @override
+  double get minExtent => extent;
+  @override
+  double get maxExtent => extent;
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => SizedBox.expand(child: child);
+  @override
+  bool shouldRebuild(covariant _TopicHeader oldDelegate) =>
+      oldDelegate.extent != extent || oldDelegate.child != child;
+}
+
+class _PathLink extends CustomPainter {
+  _PathLink({required this.left, required this.color});
+  final bool left;
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final start = size.width * (left ? .39 : .61);
+    final end = size.width * (left ? .61 : .39);
+    final path = Path()
+      ..moveTo(start, 0)
+      ..cubicTo(start, 20, end, 12, end, size.height);
+    final paint = Paint()..color = color;
+    for (final metric in path.computeMetrics()) {
+      for (var d = 0.0; d < metric.length; d += 11) {
+        final t = metric.getTangentForOffset(d);
+        if (t != null) canvas.drawCircle(t.position, 2.5, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PathLink oldDelegate) =>
+      oldDelegate.left != left || oldDelegate.color != color;
 }

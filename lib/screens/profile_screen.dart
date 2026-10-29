@@ -4,6 +4,7 @@ import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
+import '../widgets/daily_goal_card.dart';
 import 'favorites_screen.dart';
 import 'learning_progress_screen.dart';
 import 'settings_screen.dart';
@@ -32,7 +33,9 @@ class ProfileScreen extends StatelessWidget {
           const Center(child: ElephantBuddy(size: 120)),
           const SizedBox(height: 12),
           Text(
-            'နေ့တိုင်း နည်းနည်း ပိုတတ်လာပြီ',
+            appState.learning.totalReviews == 0
+                ? 'ဒီနေ့ကနေ စလိုက်ပါ'
+                : 'နေ့တိုင်း နည်းနည်း ပိုတတ်လာပြီ',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleLarge,
           ),
@@ -51,6 +54,60 @@ class ProfileScreen extends StatelessWidget {
                   label: '${appState.learning.totalReviews} ကြိမ် လေ့ကျင့်ပြီး',
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          DailyGoalCard(appState: appState),
+          const SizedBox(height: 20),
+          Text(
+            'နောက်ဆုံး ၇ ရက်',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+          LayoutBuilder(
+            builder: (context, box) => Wrap(
+              spacing: 6,
+              runSpacing: 8,
+              children: List.generate(7, (i) {
+                final now = DateTime.now();
+                final day = DateTime(now.year, now.month, now.day - 6 + i);
+                final count = appState.learning.reviewsOn(day);
+                return SizedBox(
+                  width: ((box.maxWidth - 36) / 7).clamp(38, 80),
+                  child: Semantics(
+                    label: '${day.day}/${day.month} · $count ကြိမ်',
+                    excludeSemantics: true,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: count > 0
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            count > 0
+                                ? Icons.check_rounded
+                                : Icons.remove_rounded,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${day.day}',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
           const SizedBox(height: 26),
