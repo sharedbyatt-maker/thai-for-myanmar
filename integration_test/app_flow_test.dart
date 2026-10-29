@@ -54,6 +54,15 @@ void main() {
       await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-everyday');
+      await tester.enterText(
+        find.byKey(const ValueKey('everyday-search')),
+        'ဗိုက်နာ',
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
+      await binding.takeScreenshot('${width.round()}-inline-search');
+      await tester.enterText(find.byKey(const ValueKey('everyday-search')), '');
+      await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.route_rounded));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('home-search')));
@@ -63,6 +72,19 @@ void main() {
       expect(find.text('1 ခုတွေ့သည်'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-search');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'Daily life');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('နေ့စဉ်ဘဝ'));
+      await tester.pumpAndSettle();
+      expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
+      expect(tester.takeException(), isNull);
+      await binding.takeScreenshot('${width.round()}-path-end');
     });
   }
 

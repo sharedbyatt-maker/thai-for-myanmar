@@ -54,6 +54,10 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
     await service.setVolume(widget.appState.audioVolume);
     if (!mounted) return;
     final result = await service.playThai(widget.phrase, politeStyle);
+    if (result == ThaiPlaybackResult.audioAsset ||
+        result == ThaiPlaybackResult.spoken) {
+      unawaited(widget.appState.remember(widget.phrase.id));
+    }
     if (result == ThaiPlaybackResult.unavailable && mounted) {
       setState(() => _failedStyle = politeStyle);
       ScaffoldMessenger.of(context).showSnackBar(
