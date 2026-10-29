@@ -8,27 +8,27 @@ class AppTheme {
   static ThemeData dark() => _create(Brightness.dark);
 
   static ThemeData _create(Brightness brightness) {
-    const seed = Color(0xFF167D75);
+    const seed = Color(0xFF6255CD);
     final generated = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: brightness,
     );
     final scheme = brightness == Brightness.light
         ? generated.copyWith(
-            primaryContainer: const Color(0xFFE3F1E9),
-            onPrimaryContainer: const Color(0xFF123C32),
+            primaryContainer: const Color(0xFFECE9FF),
+            onPrimaryContainer: const Color(0xFF302565),
           )
         : generated;
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: brightness == Brightness.light
-          ? const Color(0xFFF5F7F5)
-          : const Color(0xFF111817),
+          ? const Color(0xFFFAF9F6)
+          : const Color(0xFF171623),
       appBarTheme: AppBarTheme(
         backgroundColor: brightness == Brightness.light
-            ? const Color(0xFFF5F7F5)
-            : const Color(0xFF111817),
+            ? const Color(0xFFFAF9F6)
+            : const Color(0xFF171623),
         foregroundColor: scheme.onSurface,
         centerTitle: false,
         scrolledUnderElevation: 0,
@@ -44,7 +44,7 @@ class AppTheme {
           minimumSize: const Size(48, 52),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(18),
           ),
         ),
       ),
@@ -53,7 +53,7 @@ class AppTheme {
           minimumSize: const Size(48, 52),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(18),
           ),
         ),
       ),
@@ -70,7 +70,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: brightness == Brightness.light
             ? Colors.white
-            : const Color(0xFF1B2422),
+            : const Color(0xFF242231),
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
@@ -86,7 +86,7 @@ class AppTheme {
         filled: true,
         fillColor: brightness == Brightness.light
             ? Colors.white
-            : const Color(0xFF1B2422),
+            : const Color(0xFF242231),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -99,7 +99,7 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: brightness == Brightness.light
             ? Colors.white
-            : const Color(0xFF18211F),
+            : const Color(0xFF201E2D),
         indicatorColor: scheme.secondaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           return TextStyle(
