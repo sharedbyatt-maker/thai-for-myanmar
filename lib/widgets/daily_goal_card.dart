@@ -9,27 +9,29 @@ class DailyGoalCard extends StatelessWidget {
       context: context,
       showDragHandle: true,
       builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'နေ့စဉ်ပန်းတိုင်',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 12),
-              ...[5, 10, 20].map(
-                (n) => ListTile(
-                  title: Text('$n ကြိမ် / ရက်'),
-                  trailing: n == appState.learning.dailyGoal
-                      ? const Icon(Icons.check_circle_rounded)
-                      : null,
-                  onTap: () => Navigator.pop(context, n),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'နေ့စဉ်ပန်းတိုင်',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                ...[5, 10, 20].map(
+                  (n) => ListTile(
+                    title: Text('$n ကြိမ် / ရက်'),
+                    trailing: n == appState.learning.dailyGoal
+                        ? const Icon(Icons.check_circle_rounded)
+                        : null,
+                    onTap: () => Navigator.pop(context, n),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -16,6 +16,7 @@ import 'package:thai_for_myanmar/screens/speech_setup_screen.dart';
 import 'package:thai_for_myanmar/screens/study_session_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
+import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -383,6 +384,35 @@ void main() {
     final restored = AppState();
     await restored.load();
     expect(restored.learning.dailyGoal, 5);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('daily goal picker scrolls in large-text landscape', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(568, 320);
+    tester.view.devicePixelRatio = 1;
+    tester.view.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ListView(children: [DailyGoalCard(appState: state)]),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('20 ကြိမ် / ရက်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('20 ကြိမ် / ရက်'));
+    await tester.pumpAndSettle();
+    expect(state.learning.dailyGoal, 20);
     expect(tester.takeException(), isNull);
   });
 
