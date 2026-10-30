@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:thai_for_myanmar/screens/league_screen.dart';
@@ -5,12 +7,17 @@ import 'package:thai_for_myanmar/services/league_service.dart';
 
 class FakeLeague implements LeagueGateway {
   bool ready = true;
+  final auth = StreamController<bool>.broadcast();
   @override
-  bool get recovering => false;
+  Stream<bool> get authChanges => auth.stream;
+  int googleLaunches = 0;
+  bool launchSucceeds = true;
   @override
-  Future<void> resetPassword(String email) async {}
-  @override
-  Future<void> updatePassword(String password) async {}
+  Future<bool> signInWithGoogle() async {
+    googleLaunches++;
+    return launchSucceeds;
+  }
+
   bool loggedIn = true;
   bool joined = true;
   int daily = 0;
@@ -21,13 +28,6 @@ class FakeLeague implements LeagueGateway {
   bool get signedIn => loggedIn;
   @override
   Future<bool> initialize() async => ready;
-  @override
-  Future<void> signIn(String email, String password) async {
-    loggedIn = true;
-  }
-
-  @override
-  Future<bool> signUp(String email, String password) async => false;
   @override
   Future<void> signOut() async {
     loggedIn = false;
@@ -116,9 +116,46 @@ void main() {
     final api = FakeLeague()..loggedIn = false;
     await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
     await tester.pumpAndSettle();
-    expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Mya'), findsNothing);
+    expect(find.text('Google နဲ့ ဝင်မယ်'), findsOneWidget);
+    expect(find.text('Email'), findsNothing);
+    expect(find.text('Account အသစ်ဖွင့်မယ်'), findsNothing);
+    expect(find.textContaining('Mya'), findsNothing);
     expect(api.joins, 0);
+  });
+  testWidgets('OAuth launch does not imply login; auth event restores board', (
+    tester,
+  ) async {
+    final api = FakeLeague()..loggedIn = false;
+    addTearDown(api.auth.close);
+    await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('league-google-sign-in')));
+    await tester.pumpAndSettle();
+    expect(api.googleLaunches, 1);
+    expect(find.textContaining('Mya'), findsNothing);
+    api.loggedIn = true;
+    api.auth.add(true);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Mya'), findsOneWidget);
+    api.loggedIn = false;
+    api.auth.add(false);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Mya'), findsNothing);
+    expect(find.text('Google နဲ့ ဝင်မယ်'), findsOneWidget);
+  });
+  testWidgets('failed Google launch can be retried', (tester) async {
+    final api = FakeLeague()
+      ..loggedIn = false
+      ..launchSucceeds = false;
+    addTearDown(api.auth.close);
+    await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('league-google-sign-in')));
+    await tester.pumpAndSettle();
+    expect(find.text('Google ဖွင့်မရသေးပါ။ ပြန်စမ်းပါ။'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('league-google-sign-in')));
+    await tester.pumpAndSettle();
+    expect(api.googleLaunches, 2);
   });
   testWidgets(
     'real board fits small large-text screen and respects daily cap',

@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../services/league_service.dart';
 import '../widgets/content_frame.dart';
 
@@ -12,16 +14,15 @@ class LeagueScreen extends StatefulWidget {
 
 class _LeagueScreenState extends State<LeagueScreen> {
   late final LeagueGateway _api = widget.gateway ?? LeagueService.instance;
-  final _email = TextEditingController();
-  final _password = TextEditingController();
   final _alias = TextEditingController();
   bool _loading = true;
   bool _ready = false;
-  bool _signUp = false;
   String? _message;
   Map<String, dynamic>? _board;
   int _avatar = 0;
   Timer? _poll;
+  StreamSubscription<bool>? _authSubscription;
+  bool _authReloadPending = false;
   final _boardAge = Stopwatch();
   static const _avatars = ['🐘', '🌱', '🐱', '🦊', '🐻', '🐼', '🐯', '🐨'];
   static const _tiers = [
@@ -36,7 +37,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
     super.initState();
     _load();
     _poll = Timer.periodic(const Duration(minutes: 1), (_) {
-      if (mounted && !_loading && _ready && _api.signedIn && !_api.recovering) {
+      if (mounted && !_loading && _ready && _api.signedIn) {
         _load();
       }
     });
@@ -45,8 +46,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
   @override
   void dispose() {
     _poll?.cancel();
-    _email.dispose();
-    _password.dispose();
+    _authSubscription?.cancel();
     _alias.dispose();
     super.dispose();
   }
@@ -54,7 +54,28 @@ class _LeagueScreenState extends State<LeagueScreen> {
   Future<void> _load() async {
     await _run(() async {
       _ready = await _api.initialize();
-      if (_ready && _api.signedIn && !_api.recovering) {
+      if (!mounted) return;
+      if (_ready) {
+        _authSubscription ??= _api.authChanges.listen(
+          (_) {
+            if (!mounted) return;
+            // Supabase auth callbacks must not await other Auth/RPC requests.
+            _authReloadPending = true;
+            if (!_loading) unawaited(_load());
+          },
+          onError: (Object _) {
+            if (mounted) {
+              setState(() {
+                _board = null;
+                _message = 'Account ဝင်မရသေးပါ။ ပြန်စမ်းပါ။';
+              });
+            }
+          },
+        );
+      }
+      _authReloadPending = false;
+      _board = null;
+      if (_ready && _api.signedIn) {
         _board = await _api.board();
         _boardAge.reset();
         _boardAge.start();
@@ -73,25 +94,18 @@ class _LeagueScreenState extends State<LeagueScreen> {
       _message =
           'ချိတ်ဆက်မှု သို့မဟုတ် ထည့်ထားသောအချက်အလက်ကို စစ်ပြီး ပြန်စမ်းပါ။';
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+        if (_authReloadPending) unawaited(_load());
+      }
     }
   }
 
   Future<void> _authenticate() => _run(() async {
-    if (_password.text.length < 8 || !_email.text.contains('@')) {
-      _message = 'Email နဲ့ စကားဝှက် အနည်းဆုံး ၈ လုံး ထည့်ပါ။';
-      return;
+    final launched = await _api.signInWithGoogle();
+    if (!launched) {
+      _message = 'Google ဖွင့်မရသေးပါ။ ပြန်စမ်းပါ။';
     }
-    if (_signUp) {
-      final signed = await _api.signUp(_email.text, _password.text);
-      if (!signed) {
-        _message = 'Email ထဲက အတည်ပြုလင့်ခ်ကို နှိပ်ပြီး ဒီနေရာမှာ ဝင်ပါ။';
-      }
-    } else {
-      await _api.signIn(_email.text, _password.text);
-    }
-    _password.clear();
-    if (_api.signedIn) _board = await _api.board();
   });
   Future<void> _practice() async {
     await _run(() async {
@@ -153,33 +167,6 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 'ဒီအချိန်မှာ သင်ခန်းစာနဲ့ ကိုယ်ပိုင် Rank ကို ဆက်သုံးနိုင်ပါတယ်။',
                 textAlign: TextAlign.center,
               ),
-            ] else if (_ready && _api.recovering && _api.signedIn) ...[
-              Text(
-                'စကားဝှက်အသစ် သတ်မှတ်မယ်',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                decoration: const InputDecoration(
-                  labelText: 'စကားဝှက်အသစ် · အနည်းဆုံး ၈ လုံး',
-                ),
-              ),
-              FilledButton(
-                onPressed: _loading
-                    ? null
-                    : () => _run(() async {
-                        if (_password.text.length < 8) {
-                          _message = 'စကားဝှက် အနည်းဆုံး ၈ လုံး ထည့်ပါ။';
-                          return;
-                        }
-                        await _api.updatePassword(_password.text);
-                        _password.clear();
-                        _board = await _api.board();
-                      }),
-                child: const Text('စကားဝှက် ပြောင်းမယ်'),
-              ),
             ] else if (_ready && !_api.signedIn) ...[
               const Icon(Icons.emoji_events_rounded, size: 64),
               Text(
@@ -190,46 +177,11 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 'ပါဝင်ချင်မှ account ဝင်ပါ။ ဇယားမှာ နာမည်ပြောင်နဲ့ avatar ပဲ ပြပါမယ်။',
               ),
               const SizedBox(height: 20),
-              TextField(
-                controller: _email,
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                decoration: const InputDecoration(labelText: 'Email'),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: const InputDecoration(labelText: 'စကားဝှက်'),
-              ),
-              const SizedBox(height: 16),
-              FilledButton(
+              FilledButton.icon(
+                key: const ValueKey('league-google-sign-in'),
                 onPressed: _loading ? null : _authenticate,
-                child: Text(_signUp ? 'Account ဖွင့်မယ်' : 'ဝင်မယ်'),
-              ),
-              TextButton(
-                onPressed: _loading
-                    ? null
-                    : () => setState(() => _signUp = !_signUp),
-                child: Text(
-                  _signUp ? 'Account ရှိပြီးသားပါ' : 'Account အသစ်ဖွင့်မယ်',
-                ),
-              ),
-              TextButton(
-                onPressed: _loading
-                    ? null
-                    : () => _run(() async {
-                        if (!_email.text.contains('@')) {
-                          _message = 'Email ကို အရင်ထည့်ပါ။';
-                          return;
-                        }
-                        await _api.resetPassword(_email.text);
-                        _message =
-                            'Account ရှိပါက Email ထဲက လင့်ခ်ကို ဒီ browser မှာ ဖွင့်ပါ။';
-                      }),
-                child: const Text('စကားဝှက် မေ့နေပါသလား?'),
+                icon: const Icon(Icons.login_rounded),
+                label: const Text('Google နဲ့ ဝင်မယ်'),
               ),
               _rules(),
             ] else if (_ready &&

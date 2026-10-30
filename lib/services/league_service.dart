@@ -1,15 +1,14 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class LeagueGateway {
   Future<bool> initialize();
   bool get signedIn;
-  bool get recovering;
-  Future<void> resetPassword(String email);
-  Future<void> updatePassword(String password);
-  Future<void> signIn(String email, String password);
-  Future<bool> signUp(String email, String password);
+  Stream<bool> get authChanges;
+  Future<bool> signInWithGoogle();
   Future<void> signOut();
   Future<void> join(String alias, int avatar);
   Future<void> leave();
@@ -23,9 +22,14 @@ class LeagueService implements LeagueGateway {
   LeagueService._();
   Future<bool>? _initializing;
   SupabaseClient? _client;
-  bool _recovering = false;
+  static const webRedirect =
+      'https://thai-for-myanmar-web-preview.onrender.com/?league-auth=1';
+  static const mobileRedirect =
+      'com.sharedbyatt.thaiformyanmar://league-callback/';
   @override
-  bool get recovering => _recovering;
+  Stream<bool> get authChanges => client.auth.onAuthStateChange
+      .map((event) => event.session != null)
+      .distinct();
   @override
   Future<bool> initialize() async {
     try {
@@ -49,7 +53,6 @@ class LeagueService implements LeagueGateway {
         !key.startsWith('sb_publishable_')) {
       throw const FormatException('Invalid public League configuration');
     }
-    _recovering = Uri.base.queryParameters['league-recovery'] == '1';
     await Supabase.initialize(url: url, publishableKey: key);
     _client = Supabase.instance.client;
     return true;
@@ -59,39 +62,17 @@ class LeagueService implements LeagueGateway {
   @override
   bool get signedIn => _client?.auth.currentSession != null;
   @override
-  Future<void> signIn(String email, String password) async {
-    await client.auth.signInWithPassword(
-      email: email.trim(),
-      password: password,
-    );
-  }
-
-  @override
-  Future<bool> signUp(String email, String password) async {
-    final response = await client.auth.signUp(
-      email: email.trim(),
-      password: password,
-    );
-    return response.session != null;
-  }
-
-  @override
-  Future<void> signOut() async {
-    await client.auth.signOut();
-    _recovering = false;
-  }
-
-  @override
-  Future<void> resetPassword(String email) => client.auth.resetPasswordForEmail(
-    email.trim(),
-    redirectTo:
-        'https://thai-for-myanmar-web-preview.onrender.com/?league-recovery=1',
+  Future<bool> signInWithGoogle() => client.auth.signInWithOAuth(
+    OAuthProvider.google,
+    redirectTo: kIsWeb ? webRedirect : mobileRedirect,
+    scopes: 'openid email profile',
+    authScreenLaunchMode: kIsWeb
+        ? LaunchMode.platformDefault
+        : LaunchMode.externalApplication,
   );
+
   @override
-  Future<void> updatePassword(String password) async {
-    await client.auth.updateUser(UserAttributes(password: password));
-    _recovering = false;
-  }
+  Future<void> signOut() => client.auth.signOut();
 
   @override
   Future<void> join(String alias, int avatar) async {

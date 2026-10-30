@@ -2,10 +2,50 @@
 
 ## Current release status
 
-Prepared on `codex/weekly-leagues`; do not activate or merge until a real Supabase
-project, public authentication and end-to-end tests are verified. The current
-live Flutter app remains unchanged. `assets/data/league_config.json` intentionally
-contains empty values and never fabricates competitors when unconfigured.
+PR #24 remains a draft on `codex/weekly-leagues`. On 2026-10-30 the remote
+head was `bee77ab044d30dadafe1458e8ac48d79dfd261de` and main was
+`b88c99963210d198a4e8b0c2ae234b988061e1dc`. Render deployment
+`dep-dbi7hgh7lnhs73e6tme0` was live at `a121d20ee104ec10afd3b4c35155a6e584fa8e5e`.
+The League feature has not been merged or deployed.
+
+Fresh hosted verification on 2026-10-30 confirmed the existing Free Supabase
+project `zkdghtwwjktokkykgefa` (`thai-for-myanmar-leagues`), Singapore, in
+organization `bufhfhpikxiqfethjqml`, is `ACTIVE_HEALTHY`.
+
+Hosted migration history uses versions `20261030113624` (`weekly_leagues`) and
+`20261030113630` (`question_catalog`). Their names match the two checked-in SQL
+files, whose filenames have earlier timestamps. Both are already applied;
+**do not apply duplicate migrations to reconcile filename timestamps**.
+
+The hosted catalog contains 502 questions / 112 lessons; profiles and rounds both
+remain zero. All seven private tables have RLS and deny direct SELECT to anon and
+authenticated roles. All five public League wrappers are SECURITY INVOKER; anon
+has no execute privilege, authenticated does. An actual anonymous HTTP RPC request
+returned 401 / PostgreSQL code `42501`. Security/performance advisors reported no
+ERROR/WARNING findings; seven intentional RLS-without-policy INFO notices remain.
+No public SELECT policy was added. See the
+[advisor explanation](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
+
+The enabled modern publishable key and URL were obtained from the existing
+project and written to `assets/data/league_config.json`. No secret key is used.
+An authenticated-by-publishable-key Auth settings request confirmed Google is
+**disabled**, email is enabled and anonymous sign-ins are disabled. This checks
+provider availability, not successful account login.
+
+The earlier handover records hosted scoring/retry/opt-out transaction tests,
+rolled back with no test profiles left. This continuation reran the local real
+PostgreSQL/PGlite suite; real hosted Google OAuth and scoring still need testing.
+Browser settings access currently requires the original owner's ChatGPT login.
+That flow reached a Google authentication origin; automatic browser approval
+blocked further observation pending explicit authorization for that Google sign-in.
+
+The frontend now uses Google OAuth only; unusable public email signup/recovery
+controls were removed. OAuth launch is not treated as successful login. Auth
+session changes reload the board, web returns reopen League, and Android callback
+routing is configured by `tool/configure_android.py`. Real Google login remains
+unverified. Google Cloud returned “Site Unavailable — Unable to access this site”
+in this continuation's cloud browser, including one reload. This is an access
+limitation of that browser, not evidence that Google is down.
 
 ## Rules
 
@@ -48,33 +88,60 @@ paid score boosts are implemented.
 
 ## Activation steps for the maintainer
 
-1. Connect Supabase project access. Inspect available organizations and existing
-   projects; use a dedicated Free-plan project if the available quota permits.
-   Do not choose a paid plan without the owner's explicit budget authorization.
-2. Apply the two ordered SQL files under `supabase/migrations/` to the new project.
-   The files were created with Supabase CLI 2.122.0 `migration new`; the second is
-   generated from the bundled content by `python tool/league/build_seed.py`.
-3. Configure Auth: email/password enabled, email confirmation required, minimum
-   password length 8, anonymous sign-in disabled. Set Site URL to
-   `https://thai-for-myanmar-web-preview.onrender.com/` and explicitly allow
-   `https://thai-for-myanmar-web-preview.onrender.com/?league-recovery=1`.
-4. Configure production email delivery or another verified provider before opening
-   public registration. Supabase's default SMTP only sends to organization team
-   addresses; it is not a public production mail service. Test confirmation and
-   password recovery (same-browser PKCE) using accounts controlled by the owner.
-5. Put only the project's HTTPS URL and **publishable** `sb_publishable_...` key in
-   `assets/data/league_config.json`. Never put secret/service-role keys, management
-   tokens, database passwords or email credentials in Git or app assets.
-6. Run Supabase security/performance advisors and inspect grants, RLS and query
-   plans. Verify anonymous denial, two-account isolation, real score submission,
-   replay safety, opt-out and rollover. Do not insert test bots into a public board.
-7. Run local/CI checks, review mobile/desktop UI, merge and observe the specific
-   Render deployment becoming live. Verify the actual released frontend against
-   the real backend. Then remove this pre-release status and record project ref,
-   migration status and tested commit in this document (no credentials).
+1. Continue using the existing project `zkdghtwwjktokkykgefa`. Hosted migration
+   names and private tables were rechecked above; do not recreate or reapply them.
+2. Public config is now populated using the enabled `sb_publishable_...` key.
+   Never commit service-role/secret keys, management tokens or database passwords.
+3. In Google Auth Platform, use an owner-authorized project, External audience,
+   app name **Thai for Myanmar**, owner-selected support/contact email and only
+   `openid`, `email`, `profile` scopes. Configure a **Web application** OAuth client:
+   - JavaScript origin: `https://thai-for-myanmar-web-preview.onrender.com`
+   - Redirect URI: `https://zkdghtwwjktokkykgefa.supabase.co/auth/v1/callback`
+   - Public release must not remain restricted to Testing/test users.
+   - No billing, paid APIs, Gmail/Drive/Calendar access or Google TTS is needed.
+4. Enter the Client ID/Secret directly in the existing project's Google provider
+   settings, not chat, Git or logs. Enable Google while preserving nonce checks
+   and the requirement for an email. Keep anonymous sign-in disabled and email
+   confirmation enabled. Inspect auth rate limits/CAPTCHA before launch.
+5. Set Supabase Site URL to
+   `https://thai-for-myanmar-web-preview.onrender.com/`. Add these exact allowed
+   redirect URLs (the Google client still redirects only to Supabase's callback):
+   - Web: `https://thai-for-myanmar-web-preview.onrender.com/?league-auth=1`
+   - Android: `com.sharedbyatt.thaiformyanmar://league-callback/`
+   PKCE is handled by the pinned Supabase Flutter SDK. On web, start and complete
+   sign-in in the same browser. On Android, generate scaffolding and run
+   `python3 tool/configure_android.py`; app_links receives the callback and opens
+   League for warm and cold starts. iOS native configuration/release is not done.
+6. Run hosted security/performance advisors, inspect grants/RLS and check anon
+   denial. Do not add public SELECT policies to silence private-table INFO notices.
+7. With real owner-controlled accounts (including a non-team Google account),
+   test login → alias/avatar → join → real board → challenge → server score →
+   identical retry → refresh → logout/login restore → opt-out/rejoin. Verify
+   callback denial/cancellation and Android return routing. No fake competitors.
+8. Run CI and release builds. Only after public auth and hosted checks pass, mark
+   PR #24 ready and merge. Observe the auto-deploy for the actual merge commit;
+   do not trigger a duplicate deploy. Verify released login/scoring before calling
+   League live. Keep this draft blocked until those requirements are met.
+
+Supabase's default SMTP does not support general public email signup. Email auth
+is intentionally absent from the UI; reintroducing it requires working production
+SMTP, confirmation and password recovery tests.
 
 Free Supabase projects can pause after low activity over seven days. Revisit
 capacity/backups and service guarantees before treating a free tier as an SLA.
+
+## Verification for this continuation
+
+- Flutter 3.47.9 / Dart 3.13.7; analyzer clean.
+- 27 League/widget/session tests passed, including OAuth launch versus actual
+  session arrival, sign-out clearing the board and failed-launch retry.
+- PostgreSQL/PGlite scoring/privacy suite passed; generated seed unchanged.
+- Content/audio validators passed (502 phrases / 990 mappings).
+- Android manifest fixture passed: valid XML, preserved launcher, callback,
+  internet permission and idempotent configuration. Native OAuth is unverified.
+- Release JavaScript Web build passed. Optional Wasm dry-run warnings remain in
+  the existing flutter_tts dependency; no Wasm release is claimed.
+- No main merge or Render deployment has been performed.
 
 ## Tests
 

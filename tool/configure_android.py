@@ -46,6 +46,31 @@ def main() -> int:
             '    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" '
             f'android:value="{TEST_ADMOB_APP_ID}" />\n  </application>',
         )
+    # Supabase/app_links owns this callback; disable Flutter's competing handler.
+    if 'android.permission.INTERNET' not in manifest_text:
+        manifest_text = manifest_text.replace(
+            '<application',
+            '<uses-permission android:name="android.permission.INTERNET" />\n    <application',
+            1,
+        )
+    if 'com.sharedbyatt.thaiformyanmar" android:host="league-callback' not in manifest_text:
+        callback = '''
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
+            <intent-filter android:label="League sign-in">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.sharedbyatt.thaiformyanmar" android:host="league-callback" />
+            </intent-filter>
+        '''
+        manifest_text, changed = re.subn(
+            r'(<activity\b[^>]*android:name="\.MainActivity"[^>]*>)',
+            lambda match: match.group(1) + callback,
+            manifest_text,
+            count=1,
+        )
+        if changed != 1:
+            raise SystemExit("MainActivity missing; League callback was not configured.")
     manifest.write_text(manifest_text, encoding="utf-8")
 
     main_activity = ANDROID / "app/src/main/kotlin/com/sharedbyatt/thai_for_myanmar/MainActivity.kt"
