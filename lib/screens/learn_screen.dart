@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import '../learning/learning_progress.dart';
@@ -9,6 +10,7 @@ import '../learning/learner_rank.dart';
 import '../widgets/daily_goal_card.dart';
 import '../widgets/rank_card.dart';
 import '../widgets/topic_picker.dart';
+import '../widgets/lesson_preview.dart';
 import 'phrase_browser_screen.dart';
 import 'study_session_screen.dart';
 
@@ -32,6 +34,7 @@ class _LearnScreenState extends State<LearnScreen> {
   String? _categoryId;
   final _scroll = ScrollController();
   final _headerKey = GlobalKey();
+  bool _previewOpen = false;
   @override
   void dispose() {
     _scroll.dispose();
@@ -52,6 +55,21 @@ class _LearnScreenState extends State<LearnScreen> {
       ),
     ),
   );
+  Future<void> _preview(StudyLesson lesson, BuildContext anchorContext) async {
+    if (_previewOpen) return;
+    final box = anchorContext.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    _previewOpen = true;
+    final start = await showLessonPreview(
+      context: context,
+      lesson: lesson,
+      completed: widget.appState.learning.completedLessons.contains(lesson.id),
+      anchor: box.localToGlobal(Offset.zero) & box.size,
+    );
+    _previewOpen = false;
+    if (mounted && start == true) _open(lesson);
+  }
+
   Future<void> _chooseTopic(
     List<Object> rows,
     double headerExtent,
@@ -245,9 +263,9 @@ class _LearnScreenState extends State<LearnScreen> {
                               Expanded(
                                 child: Text(
                                   'အပိုင်း ${widget.repository.categories.indexOf(category) + 1}',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelMedium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium,
                                 ),
                               ),
                               IconButton(
@@ -272,10 +290,12 @@ class _LearnScreenState extends State<LearnScreen> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: TextButton.icon(
-                              onPressed: () => _open(next),
-                              icon: const Icon(Icons.play_arrow_rounded),
-                              label: const Text('စလေ့ကျင့်မယ်'),
+                            child: Builder(
+                              builder: (anchorContext) => TextButton.icon(
+                                onPressed: () => _preview(next, anchorContext),
+                                icon: const Icon(Icons.play_arrow_rounded),
+                                label: const Text('သင်ခန်းစာ ကြည့်မယ်'),
+                              ),
                             ),
                           ),
                         ],
@@ -321,9 +341,9 @@ class _LearnScreenState extends State<LearnScreen> {
                                   row.my,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium,
                                 ),
                               ),
                               IconButton(
@@ -374,49 +394,53 @@ class _LearnScreenState extends State<LearnScreen> {
                                   )
                                 : null,
                           ),
-                          Semantics(
-                            label:
-                                '${lesson.category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
-                            button: true,
-                            excludeSemantics: true,
-                            onTap: () => _open(lesson),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        (complete
-                                                ? const Color(0xFF27866E)
-                                                : colors.primary)
-                                            .withValues(alpha: .28),
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: SizedBox.square(
-                                dimension: 78,
-                                child: FilledButton(
-                                  style: FilledButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    padding: EdgeInsets.zero,
-                                    backgroundColor: complete
-                                        ? const Color(0xFF27866E)
-                                        : current
-                                        ? colors.primary
-                                        : colors.secondaryContainer,
-                                    foregroundColor: complete || current
-                                        ? Colors.white
-                                        : colors.onSecondaryContainer,
-                                  ),
-                                  onPressed: () => _open(lesson),
-                                  child: Icon(
-                                    complete
-                                        ? Icons.check_rounded
-                                        : current
-                                        ? Icons.play_arrow_rounded
-                                        : Icons.star_rounded,
-                                    size: 34,
+                          Builder(
+                            builder: (anchorContext) => Semantics(
+                              label:
+                                  '${lesson.category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
+                              button: true,
+                              excludeSemantics: true,
+                              onTap: () => _preview(lesson, anchorContext),
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          (complete
+                                                  ? const Color(0xFF27866E)
+                                                  : colors.primary)
+                                              .withValues(alpha: .28),
+                                      offset: const Offset(0, 6),
+                                    ),
+                                  ],
+                                ),
+                                child: SizedBox.square(
+                                  dimension: 78,
+                                  child: FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      shape: const CircleBorder(),
+                                      padding: EdgeInsets.zero,
+                                      backgroundColor: complete
+                                          ? const Color(0xFF27866E)
+                                          : current
+                                          ? colors.primary
+                                          : colors.secondaryContainer,
+                                      foregroundColor: complete || current
+                                          ? Colors.white
+                                          : colors.onSecondaryContainer,
+                                    ),
+                                    key: ValueKey('lesson-node-${lesson.id}'),
+                                    onPressed: () =>
+                                        _preview(lesson, anchorContext),
+                                    child: Icon(
+                                      complete
+                                          ? Icons.check_rounded
+                                          : current
+                                          ? Icons.play_arrow_rounded
+                                          : Icons.star_rounded,
+                                      size: 34,
+                                    ),
                                   ),
                                 ),
                               ),
