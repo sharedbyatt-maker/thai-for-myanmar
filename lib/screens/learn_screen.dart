@@ -41,6 +41,7 @@ class _LearnScreenState extends State<LearnScreen> {
   List<Object> _pathRows = [];
   double _unitExtent = 104;
   double _lessonExtent = 150;
+  double _bannerExtent = 176;
   String? _currentLessonId;
   static const _unitColors = [
     Color(0xFF5B4FDB),
@@ -75,6 +76,15 @@ class _LearnScreenState extends State<LearnScreen> {
     return 0;
   }
 
+  bool _needsJump() {
+    if (!_scroll.hasClients) return false;
+    final delta = _currentOffset() - _scroll.offset;
+    final room =
+        _scroll.position.viewportDimension - _bannerExtent - _lessonExtent;
+    final below = room < _lessonExtent / 2 ? _lessonExtent / 2 : room;
+    return delta < -_lessonExtent || delta > below;
+  }
+
   void _handleScroll() {
     if (!mounted || !_scroll.hasClients || _pathRows.isEmpty) return;
     var offset = _statsExtent;
@@ -88,9 +98,7 @@ class _LearnScreenState extends State<LearnScreen> {
           ? (i == 0 ? 0 : _unitExtent)
           : _lessonExtent;
     }
-    final away =
-        (_scroll.offset - _currentOffset()).abs() >
-        _scroll.position.viewportDimension * .75;
+    final away = _needsJump();
     if (_categoryId != active || _showJump != away) {
       setState(() {
         _categoryId = active;
@@ -450,12 +458,14 @@ class _LearnScreenState extends State<LearnScreen> {
       _pathRows = rows;
       _unitExtent = headerExtent;
       _lessonExtent = nodeExtent;
+      _bannerExtent = compact ? 100 + extra * 2 : 176 + extra * 7;
       _currentLessonId = suggested.id;
       if (!_positioned) {
         _positioned = true;
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => _goCurrent(initial: true),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _goCurrent(initial: true);
+          _handleScroll();
+        });
       }
       void choose() =>
           _chooseTopic(rows, headerExtent, nodeExtent, category.id);
@@ -780,7 +790,7 @@ class _LearnScreenState extends State<LearnScreen> {
               ),
             ],
           ),
-          if (_showJump)
+          if (_needsJump())
             Positioned(
               right: 16,
               bottom: 16,

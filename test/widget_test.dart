@@ -40,6 +40,39 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
+  testWidgets(
+    'finishing a unit offers a return to the next current lesson without scrolling',
+    (tester) async {
+      final state = AppState();
+      await state.load();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final firstUnit = StudyCatalog.lessons(
+        repository,
+      ).where((l) => l.category.id == repository.categories.first.id);
+      for (final lesson in firstUnit) {
+        await state.finishStudySession(lessonId: lesson.id);
+      }
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('jump-current-lesson')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('jump-current-lesson')));
+      await tester.pumpAndSettle();
+      expect(find.text('အပိုင်း 2'), findsOneWidget);
+      expect(find.text('ဒီကနေ စမယ်'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('Learn puts the path first and opens XP details on demand', (
     tester,
   ) async {
