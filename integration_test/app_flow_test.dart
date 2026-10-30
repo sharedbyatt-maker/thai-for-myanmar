@@ -88,7 +88,12 @@ void main() {
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'Daily life');
       await tester.pumpAndSettle();
-      await tester.tap(find.text('နေ့စဉ်ဘဝ'));
+      await tester.tap(
+        find.ancestor(
+          of: find.text('နေ့စဉ်ဘဝ'),
+          matching: find.byType(ListTile),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
       expect(tester.takeException(), isNull);
