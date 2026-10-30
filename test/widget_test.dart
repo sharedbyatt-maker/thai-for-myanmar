@@ -17,6 +17,7 @@ import 'package:thai_for_myanmar/screens/study_session_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
+import 'package:thai_for_myanmar/widgets/rank_card.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -31,6 +32,49 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+
+  testWidgets('rank badges explain locked goals and XP rules at large text', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({});
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MediaQuery(
+          data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: RankCard(
+                repository: repository,
+                appState: state,
+                showBadges: true,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ActionChip, '🐘 ထိုင်းစကားမိတ်ဆွေ'));
+    await tester.pumpAndSettle();
+    expect(find.text('သင်ခန်းစာ 5 ခု ပြီးလျှင် ရရှိမယ်'), findsOneWidget);
+    await tester.tap(find.text('သိပါပြီ'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('XP ဘယ်လိုရမလဲ?'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('XP ဘယ်လိုရမလဲ?'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Rank သည်'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('home and Quick Speak render at a small, larger-text viewport', (

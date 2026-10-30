@@ -43,12 +43,17 @@ class RankCard extends StatelessWidget {
             ),
             if (showBadges) ...[
               const SizedBox(height: 16),
+              Text(
+                'ရရှိထားသော badges · ${rank.level + 1} / 6',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
                   6,
-                  (i) => Chip(
+                  (i) => ActionChip(
                     avatar: Icon(
                       i <= rank.level
                           ? Icons.verified_rounded
@@ -61,12 +66,60 @@ class RankCard extends StatelessWidget {
                     backgroundColor: i <= rank.level
                         ? Theme.of(context).colorScheme.primaryContainer
                         : null,
+                    onPressed: () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => SafeArea(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                LearnerRank.symbols[i],
+                                style: const TextStyle(fontSize: 48),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                LearnerRank.names[i],
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                i <= rank.level
+                                    ? 'ရရှိပြီးပါပြီ ✓'
+                                    : 'သင်ခန်းစာ ${LearnerRank.thresholds[i]} ခု ပြီးလျှင် ရရှိမယ်',
+                              ),
+                              const SizedBox(height: 8),
+                              Text('${rank.completed} သင်ခန်းစာ ပြီးထားပါတယ်'),
+                              const SizedBox(height: 16),
+                              FilledButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('သိပါပြီ'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'သင်ခန်းစာအသစ်ပြီးလျှင် 20 XP။ မှတ်မိ / မှန်သော စကားစုတစ်ခု 5 XP၊ တစ်နေ့ 50 XP အထိ။ တူညီသောစကားစုကို တစ်နေ့တစ်ကြိမ်သာ ရေတွက်သည်။',
+              Text(
+                'ဒီနေ့ bonus · ${appState.learning.reviewXpOn(DateTime.now())} / 50 XP',
+              ),
+              const ExpansionTile(
+                tilePadding: EdgeInsets.zero,
+                title: Text('XP ဘယ်လိုရမလဲ?'),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      'သင်ခန်းစာအသစ်ပြီးလျှင် 20 XP။ မှတ်မိ / မှန်သော စကားစုတစ်ခု 5 XP၊ တစ်နေ့ 50 XP အထိ။ တူညီသောစကားစုကို တစ်နေ့တစ်ကြိမ်သာ ရေတွက်သည်။ Rank သည် ပြီးစီးသော သင်ခန်းစာအရ တိုးသည်။',
+                    ),
+                  ),
+                ],
               ),
             ],
           ],
