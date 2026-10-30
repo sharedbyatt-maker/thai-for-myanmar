@@ -24,6 +24,7 @@ class FakeLeague implements LeagueGateway {
   int submissions = 0;
   bool failSubmit = false;
   int joins = 0;
+  List<Map<String, Object>>? rows;
   @override
   bool get signedIn => loggedIn;
   @override
@@ -51,16 +52,24 @@ class FakeLeague implements LeagueGateway {
           'tier': 0,
           'daily_points': daily,
           'ends_at': '2026-11-01T17:00:00Z',
-          'rows': [
-            {
-              'rank': 1,
-              'alias': 'Mya',
-              'avatar': 0,
-              'points': 25,
-              'mine': false,
-            },
-            {'rank': 2, 'alias': 'Ko', 'avatar': 1, 'points': 15, 'mine': true},
-          ],
+          'rows':
+              rows ??
+              [
+                {
+                  'rank': 1,
+                  'alias': 'Mya',
+                  'avatar': 0,
+                  'points': 25,
+                  'mine': false,
+                },
+                {
+                  'rank': 2,
+                  'alias': 'Ko',
+                  'avatar': 1,
+                  'points': 15,
+                  'mine': true,
+                },
+              ],
         }
       : {'joined': false};
   @override
@@ -122,6 +131,34 @@ void main() {
       'http://localhost:8765/?league-auth=1',
     );
   });
+  testWidgets(
+    'promotion zone uses the real scorer threshold and rounds up one quarter',
+    (tester) async {
+      tester.view.physicalSize = const Size(800, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final api = FakeLeague()
+        ..rows = List.generate(
+          6,
+          (i) => <String, Object>{
+            'rank': i + 1,
+            'alias': 'Learner ${i + 1}',
+            'avatar': i % 8,
+            'points': i < 5 ? 20 - i : 0,
+            'mine': i == 5,
+          },
+        );
+      addTearDown(api.auth.close);
+      await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('ထိပ်ဆုံး 2 ယောက်'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_upward_rounded), findsNWidgets(2));
+      expect(find.textContaining('အမှတ်ရသူ ၅ ယောက် ပြည့်ရင်'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('League is honest when shared backend is unavailable', (
     tester,
   ) async {

@@ -93,13 +93,31 @@ class _QuizScreenState extends State<QuizScreen> {
                   LearningMode.sentence => Icons.view_stream_rounded,
                 };
                 final active = _mode == mode;
+                const accents = [
+                  Color(0xFF6554CE),
+                  Color(0xFF197B69),
+                  Color(0xFF246BA6),
+                  Color(0xFF9B6028),
+                  Color(0xFFA34274),
+                  Color(0xFF7044A8),
+                ];
+                final accent = accents[mode.index];
                 return SizedBox(
                   width: (constraints.maxWidth - 12) / 2,
                   child: Card(
                     key: ValueKey('mode-${mode.name}'),
                     color: active
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : null,
+                        ? accent
+                        : Theme.of(context).colorScheme.surfaceContainerLow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
+                        color: active
+                            ? accent
+                            : Theme.of(context).colorScheme.outlineVariant,
+                        width: active ? 2 : 1,
+                      ),
+                    ),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
                       onTap: () => setState(() => _mode = mode),
@@ -110,13 +128,16 @@ class _QuizScreenState extends State<QuizScreen> {
                             Icon(
                               icon,
                               size: 30,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: active ? Colors.white : accent,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               modeLabel(mode),
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(
+                                    color: active ? Colors.white : null,
+                                  ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
@@ -126,7 +147,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                     : Icons.radio_button_unchecked_rounded,
                                 size: 18,
                                 color: active
-                                    ? Theme.of(context).colorScheme.primary
+                                    ? Colors.white
                                     : Theme.of(context).colorScheme.outline,
                               ),
                             ),
