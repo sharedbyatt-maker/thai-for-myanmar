@@ -14,6 +14,7 @@ dependencies:
   google_mobile_ads: ^7.0.0
   shared_preferences: ^2.5.3
   web: ^1.1.1
+  supabase_flutter: 2.18.3
 
 dev_dependencies:
   flutter_lints: ^6.0.0
@@ -27,6 +28,7 @@ flutter:
   assets:
     - third_party/licenses/pouple_tim_mit.txt
     - assets/audio/thai/
+    - assets/data/league_config.json
     - assets/data/phrase_categories.json
     - assets/data/phrases.json
     - assets/data/thai_audio_manifest.json

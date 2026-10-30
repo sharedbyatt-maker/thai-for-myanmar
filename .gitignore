@@ -35,3 +35,6 @@ web/.last_build_id
 *.log
 Thumbs.db
 .DS_Store
+
+# League database test dependencies
+tool/league/node_modules/

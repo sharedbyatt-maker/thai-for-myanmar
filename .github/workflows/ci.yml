@@ -15,6 +15,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  league-db:
+    name: Verify League scoring and privacy in PostgreSQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: python3 tool/league/build_seed.py
+      - run: git diff --exit-code -- supabase/migrations/20261030112659_question_catalog.sql
+      - run: npm ci --prefix tool/league
+      - run: npm test --prefix tool/league
   verify:
     name: Verify source, content, and Flutter tests
     runs-on: ubuntu-latest
@@ -61,7 +74,7 @@ jobs:
 
       - name: Run widget tests
         timeout-minutes: 5
-        run: flutter test test/widget_test.dart test/study_session_test.dart --reporter expanded
+        run: flutter test test/widget_test.dart test/study_session_test.dart test/league_screen_test.dart --reporter expanded
 
       - name: Verify Thai playback button states
         timeout-minutes: 5

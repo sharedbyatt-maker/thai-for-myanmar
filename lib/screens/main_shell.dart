@@ -7,6 +7,7 @@ import '../widgets/content_frame.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'learn_screen.dart';
+import 'league_screen.dart';
 import 'everyday_screen.dart';
 import 'profile_screen.dart';
 import 'quiz_screen.dart';
@@ -40,6 +41,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    if (Uri.base.queryParameters['league-recovery'] == '1') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(builder: (_) => const LeagueScreen()),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -129,6 +140,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ],
         ),
         actions: [
+          IconButton(
+            tooltip: 'အပတ်စဉ် League',
+            icon: const Icon(Icons.emoji_events_outlined),
+            onPressed: () {
+              unawaited(widget.playbackService.stop());
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(builder: (_) => const LeagueScreen()),
+              );
+            },
+          ),
           IconButton(
             key: const ValueKey('home-search'),
             tooltip: 'စကားစုရှာရန်',
