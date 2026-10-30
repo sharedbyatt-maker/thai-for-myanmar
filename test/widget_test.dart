@@ -449,8 +449,9 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
-      final lesson = StudyCatalog.lessons(repository)
-          .firstWhere((l) => l.phrases.length < 5);
+      final lesson = StudyCatalog.lessons(
+        repository,
+      ).firstWhere((l) => l.phrases.length < 5);
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData.dark(),

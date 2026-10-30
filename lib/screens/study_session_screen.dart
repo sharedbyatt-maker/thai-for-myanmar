@@ -379,8 +379,10 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                 Text(
                   thai,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w800, height: 1.5),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    height: 1.5,
+                  ),
                 ),
               if (sentence || (reverse && !_answered))
                 Text(

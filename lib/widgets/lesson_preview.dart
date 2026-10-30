@@ -81,8 +81,10 @@ class _LessonPreviewCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               lesson.category.my,
-              style: Theme.of(context).textTheme.titleLarge
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             const SizedBox(height: 16),
             Wrap(

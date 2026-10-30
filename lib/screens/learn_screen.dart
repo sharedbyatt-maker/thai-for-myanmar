@@ -263,9 +263,9 @@ class _LearnScreenState extends State<LearnScreen> {
                               Expanded(
                                 child: Text(
                                   'အပိုင်း ${widget.repository.categories.indexOf(category) + 1}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
                                 ),
                               ),
                               IconButton(
@@ -341,9 +341,9 @@ class _LearnScreenState extends State<LearnScreen> {
                                   row.my,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
                                 ),
                               ),
                               IconButton(
