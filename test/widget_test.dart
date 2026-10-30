@@ -373,7 +373,11 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('ဒီနေ့ကနေ စလိုက်ပါ'), findsOneWidget);
-    await tester.ensureVisible(find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'));
+    await tester.scrollUntilVisible(
+      find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('နေ့စဉ်ပန်းတိုင် ပြောင်းရန်'));
     await tester.pumpAndSettle();
