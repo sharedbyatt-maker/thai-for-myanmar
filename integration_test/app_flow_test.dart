@@ -121,12 +121,23 @@ void main() {
     expect(state.learning.totalReviews, 5);
     expect(state.learning.completedSessions, 1);
     expect(state.learning.completedLessons, hasLength(1));
+    expect(find.text('+45 XP'), findsOneWidget);
+    await tester.ensureVisible(find.text('နောက်သင်ခန်းစာ ဆက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
     // Await a queued settings save to drain the preceding review snapshots.
     await state.setDailyGoal(10);
     final restored = AppState();
     await restored.load();
     expect(restored.learning.totalReviews, 5);
+    expect(restored.learning.reviewXp, 25);
     expect(restored.learning.completedLessons, state.learning.completedLessons);
+    await tester.tap(find.text('နောက်သင်ခန်းစာ ဆက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsNothing);
+    expect(find.text('အဓိပ္ပာယ်ကြည့်မယ်'), findsOneWidget);
+    expect(state.learning.totalReviews, 5);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('Quick Speak searches, displays, and saves a phrase', (

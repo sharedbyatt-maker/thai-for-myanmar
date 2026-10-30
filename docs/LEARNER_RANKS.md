@@ -12,3 +12,12 @@ The optional xpPhrases field persists under the existing version-1 progress sche
 Old backups remain readable. All progress is local to the device/browser, without
 account sync or a competitive leaderboard. Ranks describe learning activity,
 not certified Thai fluency. Rank-up is announced in the session summary.
+
+## Session feedback and badge details
+
+Session summaries show actual XP gained since opening the session, including
+lesson and review XP, with a rank progress card. A zero-XP replay still records
+practice. Catalog lessons offer a direct next incomplete lesson action after
+completion. Badges open scrollable details with their unlock threshold. XP rules
+are collapsed by default to keep Personal readable. Today's review bonus is
+shown separately from total XP.

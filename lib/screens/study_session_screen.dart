@@ -9,6 +9,8 @@ import '../widgets/playful_components.dart';
 import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
 import '../learning/learner_rank.dart';
+import '../learning/study_catalog.dart';
+import '../widgets/rank_card.dart';
 import '../learning/sentence_chunks.dart';
 import '../models/phrase.dart';
 import '../quiz/quiz_logic.dart';
@@ -45,6 +47,8 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   bool _answered = false;
   bool _finished = false;
   bool _rankUp = false;
+  late final int _startingXp;
+  int _earnedXp = 0;
   bool _heard = false;
   bool _audioBusy = false;
   bool _audioUnavailable = false;
@@ -68,6 +72,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   @override
   void initState() {
     super.initState();
+    _startingXp = LearnerRank(widget.repository, widget.appState.learning).xp;
     _politeStyle = widget.appState.politeStyle;
     _rightOrder = List<Phrase>.from(widget.phrases)..shuffle();
     if (widget.phrases.isNotEmpty) _prepareQuestion();
@@ -145,6 +150,9 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     unawaited(widget.appState.finishStudySession(lessonId: widget.lessonId));
     _rankUp =
         LearnerRank(widget.repository, widget.appState.learning).level > before;
+    _earnedXp =
+        LearnerRank(widget.repository, widget.appState.learning).xp -
+        _startingXp;
     if (widget.mode == LearningMode.meaning ||
         widget.mode == LearningMode.reverseMeaning ||
         widget.mode == LearningMode.listening) {
@@ -717,6 +725,11 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     final difficult = widget.phrases
         .where((p) => (_results[p.id] ?? 5) < 4)
         .toList();
+    final nextLessons = StudyCatalog.lessons(widget.repository).where(
+      (lesson) =>
+          !widget.appState.learning.completedLessons.contains(lesson.id),
+    );
+    final nextLesson = nextLessons.isEmpty ? null : nextLessons.first;
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
@@ -736,7 +749,41 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
           'မှတ်မိ / မှန် $correct ခု • စုစုပေါင်း ${_results.length} ခု',
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 16),
+        Center(
+          child: Chip(
+            avatar: const Icon(Icons.bolt_rounded),
+            label: Text('+$_earnedXp XP'),
+          ),
+        ),
+        if (_earnedXp == 0)
+          const Text(
+            'ဒီတစ်ကြိမ် XP ထပ်မရပေမယ့် လေ့ကျင့်မှုကို မှတ်တမ်းတင်ထားပါတယ်။',
+            textAlign: TextAlign.center,
+          ),
+        RankCard(repository: widget.repository, appState: widget.appState),
+        const SizedBox(height: 16),
+        if (widget.lessonId != null && nextLesson != null) ...[
+          FilledButton.icon(
+            icon: const Icon(Icons.arrow_forward_rounded),
+            label: const Text('နောက်သင်ခန်းစာ ဆက်မယ်'),
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => StudySessionScreen(
+                  repository: widget.repository,
+                  appState: widget.appState,
+                  playbackService: widget.playbackService,
+                  phrases: nextLesson.phrases,
+                  mode: LearningMode.flashcard,
+                  title: '${nextLesson.category.my} · ${nextLesson.number}',
+                  lessonId: nextLesson.id,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
         if (difficult.isNotEmpty) ...[
           const Text('ပြန်လေ့ကျင့်သင့်တဲ့ စကားစုများ'),
           ...difficult.map(
