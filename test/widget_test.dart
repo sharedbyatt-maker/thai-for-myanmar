@@ -322,9 +322,9 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.scrollUntilVisible(find.text('အခု စလေ့ကျင့်မယ်'), 250);
+    await tester.scrollUntilVisible(find.text('စလေ့ကျင့်မယ်'), 250);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),
@@ -352,9 +352,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'Food');
     await tester.pumpAndSettle();
@@ -368,9 +368,9 @@ void main() {
     path.controller!.jumpTo(0);
     await tester.pumpAndSettle();
     expect(find.textContaining('အစားအသောက်'), findsWidgets);
-    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),
@@ -379,9 +379,9 @@ void main() {
     expect(session.lessonId, startsWith('food:'));
     await tester.pageBack();
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'Daily life');
     await tester.pumpAndSettle();

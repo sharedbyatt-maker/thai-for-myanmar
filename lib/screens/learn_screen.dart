@@ -250,11 +250,11 @@ class _LearnScreenState extends State<LearnScreen> {
                                   ).textTheme.labelMedium,
                                 ),
                               ),
-                              Flexible(
-                                flex: 2,
-                                child: TextButton(
-                                  onPressed: choose,
-                                  child: const Text('အကြောင်းအရာ ပြောင်းရန်'),
+                              IconButton(
+                                tooltip: 'အကြောင်းအရာ ပြောင်းရန်',
+                                onPressed: choose,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
                                 ),
                               ),
                             ],
@@ -275,7 +275,7 @@ class _LearnScreenState extends State<LearnScreen> {
                             child: TextButton.icon(
                               onPressed: () => _open(next),
                               icon: const Icon(Icons.play_arrow_rounded),
-                              label: const Text('အခု စလေ့ကျင့်မယ်'),
+                              label: const Text('စလေ့ကျင့်မယ်'),
                             ),
                           ),
                         ],
