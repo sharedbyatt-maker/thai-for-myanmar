@@ -18,8 +18,10 @@ Hosted migration history uses versions `20261030113624` (`weekly_leagues`) and
 files, whose filenames have earlier timestamps. Both are already applied;
 **do not apply duplicate migrations to reconcile filename timestamps**.
 
-The hosted catalog contains 502 questions / 112 lessons; profiles and rounds both
-remain zero. All seven private tables have RLS and deny direct SELECT to anon and
+The hosted catalog contains 502 questions / 112 lessons. Before real login testing,
+profiles and rounds were both zero; real owner sign-in testing has since created
+one actual profile, one weekly membership and one completed round. No bots or
+fabricated competitors were inserted. All seven private tables have RLS and deny direct SELECT to anon and
 authenticated roles. All five public League wrappers are SECURITY INVOKER; anon
 has no execute privilege, authenticated does. An actual anonymous HTTP RPC request
 returned 401 / PostgreSQL code `42501`. Security/performance advisors reported no
@@ -102,7 +104,8 @@ paid score boosts are implemented.
 All four CI jobs for code commit `7fb0604ecf827179532f38b06f84f3ed75d5d6ca`
 passed, including Android and mobile/desktop Web flows. On the next change, rerun
 checks for the current head. Google provider availability is now enabled, but
-public non-team login and end-to-end scoring remain unverified.
+the public non-team account check remains pending. The owner-account hosted
+flow has now passed login, join, challenge, score, refresh and session restoration.
 
 A local preview cannot be reached by this cloud browser (connection refused).
 The owner successfully signed into Happy's Render workspace with
@@ -121,7 +124,32 @@ No paid service or replacement app was created; production remains unchanged.
 CI run `41057386131` on code commit `36e03cf8fd014bc92c7007b2e7f798126cbc4a13`
 passed source/tests, PostgreSQL and Web jobs. Android built its APKs but the test
 harness failed before running app tests: `Failed to start Dart Development
-Service`. Only the failed Android job was rerun; await that result before merge.
+Service`. The failed Android job was rerun; CI run 41057386131 is now successful. The
+next code change must pass its own CI before merge.
+
+## Real hosted verification on the PR preview
+
+Preview `srv-dbi98kfb9u1s73ds71mg` deployed commit
+`5df304d025eac2530d1ce0168e65aec12d95eb4b` live via
+`dep-dbi98knb9u1s73ds71pg`. Its callback was explicitly allowlisted:
+`https://thai-for-myanmar-web-preview-pr-24.onrender.com/?league-auth=1`.
+
+Owner Google sign-in successfully returned through PKCE to League and created a
+confirmed Auth account. Nickname `Revenge Blaze` and elephant avatar joined a
+real 1/20-person Bronze board. The server chose five questions; answering all five
+correctly produced **45 points** (25 phrase points + 20 first-completion bonus).
+Both app and hosted database confirmed this result.
+
+Full page refresh and logout/login restored the same 45 points. Opt-out hid the
+profile; rejoining restored its original score with exactly one membership row.
+A hosted SQL transaction retried the already-finished real round using its owner
+claim and checked identical result/unchanged credits, then rolled back. This
+checks server retry behavior; it is separate from the browser OAuth test.
+
+The SDK/Google reused the previously signed-in browser account automatically.
+The login request now includes `prompt=select_account` so users can explicitly
+choose their Google account and a non-team account can be tested before launch.
+Public-account verification and production deployment are still pending.
 
 ## Activation steps for the maintainer
 

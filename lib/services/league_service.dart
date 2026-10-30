@@ -68,6 +68,7 @@ class LeagueService implements LeagueGateway {
     OAuthProvider.google,
     redirectTo: kIsWeb ? webRedirectFor(Uri.base) : mobileRedirect,
     scopes: 'openid email profile',
+    queryParams: const {'prompt': 'select_account'},
     authScreenLaunchMode: kIsWeb
         ? LaunchMode.platformDefault
         : LaunchMode.externalApplication,
