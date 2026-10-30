@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:app_links/app_links.dart';
 
 import '../data/phrase_repository.dart';
 import '../widgets/content_frame.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'learn_screen.dart';
+import 'league_screen.dart';
 import 'everyday_screen.dart';
 import 'profile_screen.dart';
 import 'quiz_screen.dart';
@@ -28,6 +31,42 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _selectedIndex = 0;
+  bool _leagueOpen = false;
+  StreamSubscription<Uri>? _links;
+
+  Future<void> _openLeague() async {
+    if (!mounted || _leagueOpen) return;
+    _leagueOpen = true;
+    unawaited(widget.playbackService.stop());
+    try {
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const LeagueScreen()),
+      );
+    } finally {
+      _leagueOpen = false;
+    }
+  }
+
+  Future<void> _listenForLeagueLinks() async {
+    if (kIsWeb) return;
+    try {
+      final links = AppLinks();
+      void handle(Uri uri) {
+        if (uri.scheme == 'com.sharedbyatt.thaiformyanmar' &&
+            uri.host == 'league-callback') {
+          unawaited(_openLeague());
+        }
+      }
+
+      _links = links.uriLinkStream.listen(handle, onError: (Object _) {});
+      final initial = await links.getInitialLink();
+      if (mounted && initial != null) handle(initial);
+    } catch (_) {
+      // Unsupported platforms keep offline learning available.
+    }
+  }
+
   final Set<int> _visitedTabs = {0};
   static const _labels = ['သင်ယူ', 'အမြန်သုံး', 'ပြန်လေ့ကျင့်', 'ကိုယ်ပိုင်'];
   static const _icons = [
@@ -40,6 +79,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (Uri.base.queryParameters['league-auth'] == '1') {
+        unawaited(_openLeague());
+      }
+      unawaited(_listenForLeagueLinks());
+    });
   }
 
   @override
@@ -52,6 +98,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _links?.cancel();
     unawaited(widget.playbackService.stop());
     super.dispose();
   }
@@ -129,6 +176,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ],
         ),
         actions: [
+          IconButton(
+            tooltip: 'အပတ်စဉ် League',
+            icon: const Icon(Icons.emoji_events_outlined),
+            onPressed: _openLeague,
+          ),
           IconButton(
             key: const ValueKey('home-search'),
             tooltip: 'စကားစုရှာရန်',
