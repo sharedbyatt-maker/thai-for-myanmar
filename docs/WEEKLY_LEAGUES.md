@@ -35,9 +35,17 @@ provider availability, not successful account login.
 The earlier handover records hosted scoring/retry/opt-out transaction tests,
 rolled back with no test profiles left. This continuation reran the local real
 PostgreSQL/PGlite suite; real hosted Google OAuth and scoring still need testing.
-Browser settings access currently requires the original owner's ChatGPT login.
-That flow reached a Google authentication origin; automatic browser approval
-blocked further observation pending explicit authorization for that Google sign-in.
+The original owner successfully signed into Supabase with ChatGPT using
+revengeblaze2025@gmail.com. The dashboard confirmed the correct organization and
+project. An expired OAuth state was resolved by a fresh login using the same
+account. The earlier browser authorization blocker is resolved.
+
+The exact web and Android redirect URLs below were saved and verified in the
+Supabase dashboard; the existing recovery redirect was retained. Auth rate limits
+were inspected: sign-up/sign-in 30 requests per 5 minutes per IP, refresh 150 per
+5 minutes, token verification 30 per 5 minutes. CAPTCHA is disabled; no CAPTCHA
+secret is configured, and protection was not enabled without a working client
+integration. These observations do not certify resistance to multi-account abuse.
 
 The frontend now uses Google OAuth only; unusable public email signup/recovery
 controls were removed. OAuth launch is not treated as successful login. Auth
@@ -103,9 +111,9 @@ paid score boosts are implemented.
    settings, not chat, Git or logs. Enable Google while preserving nonce checks
    and the requirement for an email. Keep anonymous sign-in disabled and email
    confirmation enabled. Inspect auth rate limits/CAPTCHA before launch.
-5. Set Supabase Site URL to
-   `https://thai-for-myanmar-web-preview.onrender.com/`. Add these exact allowed
-   redirect URLs (the Google client still redirects only to Supabase's callback):
+5. Already saved and verified: Supabase Site URL is
+   `https://thai-for-myanmar-web-preview.onrender.com/`. The exact allowed
+   redirect URLs now include (the Google client still redirects only to Supabase's callback):
    - Web: `https://thai-for-myanmar-web-preview.onrender.com/?league-auth=1`
    - Android: `com.sharedbyatt.thaiformyanmar://league-callback/`
    PKCE is handled by the pinned Supabase Flutter SDK. On web, start and complete
