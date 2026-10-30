@@ -54,6 +54,7 @@ jobs:
           test/speech_service_test.dart
           test/thai_audio_catalog_test.dart
           test/thai_playback_service_test.dart
+          test/learner_rank_test.dart
           test/learning_progress_test.dart
           test/study_catalog_test.dart
           --reporter expanded

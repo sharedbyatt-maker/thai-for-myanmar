@@ -8,6 +8,7 @@ import '../widgets/playful_components.dart';
 
 import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
+import '../learning/learner_rank.dart';
 import '../learning/sentence_chunks.dart';
 import '../models/phrase.dart';
 import '../quiz/quiz_logic.dart';
@@ -43,6 +44,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   bool _revealed = false;
   bool _answered = false;
   bool _finished = false;
+  bool _rankUp = false;
   bool _heard = false;
   bool _audioBusy = false;
   bool _audioUnavailable = false;
@@ -136,7 +138,13 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     if (_finished) return;
     setState(() => _finished = true);
     unawaited(widget.playbackService.stop());
+    final before = LearnerRank(
+      widget.repository,
+      widget.appState.learning,
+    ).level;
     unawaited(widget.appState.finishStudySession(lessonId: widget.lessonId));
+    _rankUp =
+        LearnerRank(widget.repository, widget.appState.learning).level > before;
     if (widget.mode == LearningMode.meaning ||
         widget.mode == LearningMode.reverseMeaning ||
         widget.mode == LearningMode.listening) {
@@ -719,7 +727,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          'ဒီအကြိမ် ပြီးပါပြီ',
+          _rankUp ? '🎉 Rank တက်သွားပါပြီ!' : 'ဒီအကြိမ် ပြီးပါပြီ',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall,
         ),

@@ -5,6 +5,7 @@ import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
 import '../widgets/daily_goal_card.dart';
+import '../widgets/rank_card.dart';
 import 'favorites_screen.dart';
 import 'learning_progress_screen.dart';
 import 'settings_screen.dart';
@@ -57,6 +58,12 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
+          RankCard(
+            repository: repository,
+            appState: appState,
+            showBadges: true,
+          ),
+          const SizedBox(height: 16),
           DailyGoalCard(appState: appState),
           const SizedBox(height: 20),
           Text(

@@ -7,6 +7,7 @@ import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
 import '../widgets/daily_goal_card.dart';
+import '../widgets/rank_card.dart';
 import '../widgets/topic_picker.dart';
 import 'phrase_browser_screen.dart';
 import 'study_session_screen.dart';
@@ -136,6 +137,11 @@ class _LearnScreenState extends State<LearnScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  RankCard(
+                    repository: widget.repository,
+                    appState: widget.appState,
+                  ),
+                  const SizedBox(height: 12),
                   Wrap(
                     spacing: 10,
                     runSpacing: 8,

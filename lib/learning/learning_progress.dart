@@ -18,6 +18,11 @@ class LearningProgress {
   final Map<String, ReviewCard> _cards = {};
   final Map<String, int> _activity = {};
   final Set<String> _completedLessons = {};
+  // Only future successful, unique phrase reviews earn bonus XP.
+  final Map<String, Set<String>> _xpPhrases = {};
+  int get reviewXp =>
+      _xpPhrases.values.fold(0, (sum, ids) => sum + ids.length * 5);
+  int reviewXpOn(DateTime day) => (_xpPhrases[dayKey(day)]?.length ?? 0) * 5;
   int dailyGoal = 10;
   int totalReviews = 0;
   int correctReviews = 0;
@@ -63,7 +68,11 @@ class LearningProgress {
     );
     _cards['$phraseId::${mode.name}'] = next;
     totalReviews++;
-    if (quality >= 3) correctReviews++;
+    if (quality >= 3) {
+      correctReviews++;
+      final earned = _xpPhrases.putIfAbsent(dayKey(now), () => <String>{});
+      if (earned.length < 10) earned.add(phraseId);
+    }
     final date = dayKey(now);
     _activity[date] = (_activity[date] ?? 0) + 1;
   }
@@ -75,6 +84,9 @@ class LearningProgress {
 
   Map<String, Object> toJson() => {
     'schemaVersion': 1,
+    'xpPhrases': _xpPhrases.map(
+      (day, ids) => MapEntry(day, ids.toList()..sort()),
+    ),
     'cards': _cards.map((key, value) => MapEntry(key, value.toJson())),
     'activity': _activity,
     'completedLessons': _completedLessons.toList()..sort(),
@@ -88,6 +100,19 @@ class LearningProgress {
   factory LearningProgress.fromJson(Map<String, dynamic> json) {
     final result = LearningProgress();
     if (json['schemaVersion'] != 1) return result;
+    final xp = json['xpPhrases'];
+    if (xp is Map) {
+      for (final entry in xp.entries) {
+        final date = DateTime.tryParse(entry.key.toString());
+        if (date != null && dayKey(date) == entry.key && entry.value is List) {
+          result._xpPhrases[entry.key as String] = (entry.value as List)
+              .whereType<String>()
+              .where((id) => id.isNotEmpty && !id.contains('::'))
+              .take(10)
+              .toSet();
+        }
+      }
+    }
     final cards = json['cards'];
     if (cards is Map) {
       for (final entry in cards.entries) {
