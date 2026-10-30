@@ -65,11 +65,13 @@ void main() {
   testWidgets('unavailable listening cannot earn progress', (tester) async {
     final state = await setup(tester, LearningMode.listening);
     final correct = find.text(repository.phrases.first.myanmar);
-    await tester.ensureVisible(correct);
+    await tester.scrollUntilVisible(correct, 200);
+    await tester.pumpAndSettle();
     await tester.tap(correct);
     await tester.pump();
     expect(state.learning.totalReviews, 0);
-    await tester.ensureVisible(find.text('အသံနားထောင်ရန်'));
+    await tester.scrollUntilVisible(find.text('အသံနားထောင်ရန်'), -200);
+    await tester.pumpAndSettle();
     await tester.tap(find.text('အသံနားထောင်ရန်'));
     await tester.pumpAndSettle();
     expect(find.text('စာကတ်နဲ့ လေ့ကျင့်မယ်'), findsOneWidget);
