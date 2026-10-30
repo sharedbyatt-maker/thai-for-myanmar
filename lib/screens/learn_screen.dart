@@ -250,9 +250,12 @@ class _LearnScreenState extends State<LearnScreen> {
                                   ).textTheme.labelMedium,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: choose,
-                                child: const Text('အကြောင်းအရာ ပြောင်းရန်'),
+                              Flexible(
+                                flex: 2,
+                                child: TextButton(
+                                  onPressed: choose,
+                                  child: const Text('အကြောင်းအရာ ပြောင်းရန်'),
+                                ),
                               ),
                             ],
                           ),
@@ -293,13 +296,6 @@ class _LearnScreenState extends State<LearnScreen> {
               final row = rows[index];
               if (row is PhraseCategory) {
                 if (index == 0) return const SizedBox.shrink();
-                final topic = lessons
-                    .where((l) => l.category.id == row.id)
-                    .toList();
-                final done = topic
-                    .where((l) => progress.completedLessons.contains(l.id))
-                    .length;
-                final n = widget.repository.categories.indexOf(row) + 1;
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
                   child: Card(
@@ -307,17 +303,12 @@ class _LearnScreenState extends State<LearnScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 12,
+                        vertical: 8,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'အပိုင်း $n · $done / ${topic.length}',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                          const SizedBox(height: 4),
                           Row(
                             children: [
                               Text(

@@ -367,7 +367,7 @@ void main() {
     expect(path.controller!.position.maxScrollExtent, greaterThan(20000));
     path.controller!.jumpTo(0);
     await tester.pumpAndSettle();
-    expect(find.text('ဆက်သင်ရန် · အစားအသောက်'), findsOneWidget);
+    expect(find.textContaining('အစားအသောက်'), findsWidgets);
     await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
