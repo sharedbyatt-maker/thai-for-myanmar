@@ -99,13 +99,6 @@ class _EverydayScreenState extends State<EverydayScreen> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: [
-          Text(
-            'အခုပဲ ပြောလိုက်ပါ',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 6),
-          const Text('ရှာပါ · နားထောင်ပါ · ပြောပါ'),
-          const SizedBox(height: 18),
           TextField(
             key: const ValueKey('everyday-search'),
             controller: _controller,

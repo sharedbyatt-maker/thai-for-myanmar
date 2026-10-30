@@ -72,9 +72,9 @@ class _QuizScreenState extends State<QuizScreen> {
       return ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          const Center(child: ElephantBuddy(size: 90)),
+          const Center(child: ElephantBuddy(size: 48)),
           Text(
-            'နည်းနည်း ပြန်စမ်းကြည့်မယ်',
+            'ဘာလေ့ကျင့်မလဲ?',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),

@@ -165,6 +165,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       bottomNavigationBar: wide
           ? null
           : NavigationBar(
+              labelBehavior:
+                  NavigationDestinationLabelBehavior.onlyShowSelected,
               selectedIndex: _selectedIndex,
               onDestinationSelected: _select,
               destinations: List.generate(
