@@ -11,6 +11,7 @@ import '../learning/learning_progress.dart';
 import '../learning/learner_rank.dart';
 import '../learning/study_catalog.dart';
 import '../widgets/rank_card.dart';
+import '../widgets/lesson_preview.dart';
 import '../learning/sentence_chunks.dart';
 import '../models/phrase.dart';
 import '../quiz/quiz_logic.dart';
@@ -53,6 +54,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   bool _audioBusy = false;
   bool _audioUnavailable = false;
   bool _showPronunciation = false;
+  bool _lessonPreviewOpen = false;
   String? _selectedAnswer;
   final Map<String, int> _results = {};
   final List<int> _selectedChunks = [];
@@ -767,20 +769,37 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
           FilledButton.icon(
             icon: const Icon(Icons.arrow_forward_rounded),
             label: const Text('နောက်သင်ခန်းစာ ဆက်မယ်'),
-            onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute<void>(
-                builder: (_) => StudySessionScreen(
-                  repository: widget.repository,
-                  appState: widget.appState,
-                  playbackService: widget.playbackService,
-                  phrases: nextLesson.phrases,
-                  mode: LearningMode.flashcard,
-                  title: '${nextLesson.category.my} · ${nextLesson.number}',
-                  lessonId: nextLesson.id,
+            onPressed: () async {
+              if (_lessonPreviewOpen) return;
+              _lessonPreviewOpen = true;
+              final size = MediaQuery.sizeOf(context);
+              final start = await showLessonPreview(
+                context: context,
+                lesson: nextLesson,
+                completed: false,
+                anchor: Rect.fromCenter(
+                  center: Offset(size.width / 2, size.height / 2),
+                  width: 0,
+                  height: 0,
                 ),
-              ),
-            ),
+              );
+              _lessonPreviewOpen = false;
+              if (!context.mounted || start != true) return;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => StudySessionScreen(
+                    repository: widget.repository,
+                    appState: widget.appState,
+                    playbackService: widget.playbackService,
+                    phrases: nextLesson.phrases,
+                    mode: LearningMode.flashcard,
+                    title: '${nextLesson.category.my} · ${nextLesson.number}',
+                    lessonId: nextLesson.id,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 16),
         ],

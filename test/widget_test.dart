@@ -1,4 +1,5 @@
 import 'dart:ui' show SemanticsAction;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,6 +20,8 @@ import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
 import 'package:thai_for_myanmar/widgets/rank_card.dart';
+import 'package:thai_for_myanmar/learning/study_catalog.dart';
+import 'package:thai_for_myanmar/widgets/lesson_preview.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -305,7 +308,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('home starts a five-card session without extra mode selection', (
+  testWidgets('home previews a five-card lesson before starting', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(420, 1000);
@@ -322,9 +325,13 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.scrollUntilVisible(find.text('စလေ့ကျင့်မယ်'), 250);
+    await tester.scrollUntilVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'), 250);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
+    await tester.pumpAndSettle();
+    expect(find.byType(StudySessionScreen), findsNothing);
+    expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),
@@ -336,6 +343,149 @@ void main() {
     expect(find.text(session.phrases.first.pronunciation), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'path node previews the selected lesson and dismissal earns no progress',
+    (tester) async {
+      final state = AppState();
+      await state.load();
+      final lesson = StudyCatalog.lessons(repository)[1];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final node = find.byKey(ValueKey('lesson-node-${lesson.id}'));
+      await tester.scrollUntilVisible(node, 160);
+      await tester.pumpAndSettle();
+      await tester.tap(node);
+      await tester.pumpAndSettle();
+      expect(find.byType(StudySessionScreen), findsNothing);
+      final preview = find.byKey(const ValueKey('lesson-preview'));
+      expect(
+        find.descendant(
+          of: preview,
+          matching: find.text('သင်ခန်းစာ ${lesson.number}'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: preview,
+          matching: find.text('စကားစု ${lesson.phrases.length} ခု'),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.byTooltip('ပိတ်မယ်'));
+      await tester.pumpAndSettle();
+      expect(preview, findsNothing);
+      expect(state.learning.totalReviews, 0);
+      expect(state.learning.completedLessons, isEmpty);
+      await tester.tap(node);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<StudySessionScreen>(find.byType(StudySessionScreen))
+            .lessonId,
+        lesson.id,
+      );
+      expect(state.learning.totalReviews, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'completed lesson preview offers replay without promising completion XP',
+    (tester) async {
+      final state = AppState();
+      await state.load();
+      final lesson = StudyCatalog.lessons(repository).first;
+      await state.finishStudySession(lessonId: lesson.id);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(ValueKey('lesson-node-${lesson.id}')));
+      await tester.pumpAndSettle();
+      expect(find.text('သင်ပြီး'), findsOneWidget);
+      expect(find.text('+20 XP'), findsNothing);
+      expect(find.text('ပြန်လေ့ကျင့်မယ်'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<StudySessionScreen>(find.byType(StudySessionScreen))
+            .lessonId,
+        lesson.id,
+      );
+      expect(state.learning.completedLessons, {lesson.id});
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'lesson preview stays inside a short narrow dark screen with large text',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 400);
+      tester.view.devicePixelRatio = 1;
+      tester.view.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+      final lesson = StudyCatalog.lessons(
+        repository,
+      ).firstWhere((l) => l.phrases.length < 5);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.dark(),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TextButton(
+                onPressed: () => showLessonPreview(
+                  context: context,
+                  lesson: lesson,
+                  completed: false,
+                  anchor: const Rect.fromLTWH(290, 365, 25, 25),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final rect = tester.getRect(find.byKey(const ValueKey('lesson-preview')));
+      expect(rect.left, greaterThanOrEqualTo(16));
+      expect(rect.right, lessThanOrEqualTo(304));
+      expect(rect.top, greaterThanOrEqualTo(16));
+      expect(rect.bottom, lessThanOrEqualTo(384));
+      final start = find.byKey(const ValueKey('lesson-preview-start'));
+      await tester.ensureVisible(start);
+      await tester.pumpAndSettle();
+      await tester.tap(start);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('lesson-preview')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('topic search changes the actual lesson started', (tester) async {
     final state = AppState();
@@ -368,9 +518,13 @@ void main() {
     path.controller!.jumpTo(0);
     await tester.pumpAndSettle();
     expect(find.textContaining('အစားအသောက်'), findsWidgets);
-    await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
+    await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
+    await tester.pumpAndSettle();
+    expect(find.byType(StudySessionScreen), findsNothing);
+    expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),

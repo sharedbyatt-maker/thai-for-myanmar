@@ -44,9 +44,17 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
+      await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('စလေ့ကျင့်မယ်'));
+      await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
+      await binding.takeScreenshot('${width.round()}-lesson-preview');
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('lesson-preview-start')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-lesson');
       await tester.pageBack();
@@ -103,9 +111,16 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
+    await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('lesson-preview-start')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
     await tester.pump(const Duration(milliseconds: 500));
     for (var index = 0; index < 5; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
@@ -133,6 +148,9 @@ void main() {
     expect(restored.learning.reviewXp, 25);
     expect(restored.learning.completedLessons, state.learning.completedLessons);
     await tester.tap(find.text('နောက်သင်ခန်းစာ ဆက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
     await tester.pumpAndSettle();
     expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsNothing);
     expect(find.text('အဓိပ္ပာယ်ကြည့်မယ်'), findsOneWidget);
