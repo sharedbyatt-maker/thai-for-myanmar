@@ -2,11 +2,12 @@
 
 ## Current release status
 
-PR #24 remains a draft on `codex/weekly-leagues`. On 2026-10-30 the remote
-head was `bee77ab044d30dadafe1458e8ac48d79dfd261de` and main was
-`b88c99963210d198a4e8b0c2ae234b988061e1dc`. Render deployment
-`dep-dbi7hgh7lnhs73e6tme0` was live at `a121d20ee104ec10afd3b4c35155a6e584fa8e5e`.
-The League feature has not been merged or deployed.
+PR #24 is ready for review on `codex/weekly-leagues`: the owner explicitly
+authorized removing Draft status to enable preview testing before hosted login
+verification. This does not authorize skipping the hosted checks before merge.
+Main remains `b88c99963210d198a4e8b0c2ae234b988061e1dc`; Render deployment
+`dep-dbi7hgh7lnhs73e6tme0` is still live at
+`a121d20ee104ec10afd3b4c35155a6e584fa8e5e`. League is not deployed to production.
 
 Fresh hosted verification on 2026-10-30 confirmed the existing Free Supabase
 project `zkdghtwwjktokkykgefa` (`thai-for-myanmar-leagues`), Singapore, in
@@ -104,13 +105,23 @@ checks for the current head. Google provider availability is now enabled, but
 public non-team login and end-to-end scoring remain unverified.
 
 A local preview cannot be reached by this cloud browser (connection refused).
-The existing Render static site supports free PR previews; use Manual mode and
-label only PR #24 `render-preview`. Do not create a paid service or enable
-previews across unrelated apps. Dashboard access needs the owner's Render account,
-`happylearnkids2025@gmail.com` (different from the Supabase owner). The cloud
-browser auto-selected the existing other Gmail session and then Render reported a
-sign-in failure; manual sign-in with the correct account is required. No new
-Render account was created and no production merge/deploy has occurred.
+The owner successfully signed into Happy's Render workspace with
+`happylearnkids2025@gmail.com` using the secure email/password form. Supabase stays
+on `revengeblaze2025@gmail.com`.
+
+The existing Render static site's PR preview mode was set to Manual and PR #24
+has `render-preview`. With no preview appearing, PR #24 was marked ready with
+explicit owner approval. Its label remains intact. A proposed removal/re-add of
+the label was rejected by automatic approval review because it could disrupt the
+requested preview; removal was not performed. The repository has exactly one
+open PR (#24), so preview generation was set to Automatic on this service alone
+as an additive alternative. Return it to Manual after integration testing.
+No paid service or replacement app was created; production remains unchanged.
+
+CI run `41057386131` on code commit `36e03cf8fd014bc92c7007b2e7f798126cbc4a13`
+passed source/tests, PostgreSQL and Web jobs. Android built its APKs but the test
+harness failed before running app tests: `Failed to start Dart Development
+Service`. Only the failed Android job was rerun; await that result before merge.
 
 ## Activation steps for the maintainer
 
