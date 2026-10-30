@@ -6,8 +6,9 @@ import '../services/league_service.dart';
 import '../widgets/content_frame.dart';
 
 class LeagueScreen extends StatefulWidget {
-  const LeagueScreen({this.gateway, super.key});
+  const LeagueScreen({this.gateway, this.active = true, super.key});
   final LeagueGateway? gateway;
+  final bool active;
   @override
   State<LeagueScreen> createState() => _LeagueScreenState();
 }
@@ -37,10 +38,16 @@ class _LeagueScreenState extends State<LeagueScreen> {
     super.initState();
     _load();
     _poll = Timer.periodic(const Duration(minutes: 1), (_) {
-      if (mounted && !_loading && _ready && _api.signedIn) {
+      if (mounted && widget.active && !_loading && _ready && _api.signedIn) {
         _load();
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant LeagueScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active && !oldWidget.active && !_loading) _load();
   }
 
   @override
@@ -235,28 +242,16 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 child: const Text('Account ထွက်မယ်'),
               ),
             ] else if (_ready && _board?['joined'] == true) ...[
-              Text(
-                _tiers[(_board!['tier'] as num).toInt().clamp(0, 4)],
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Text('ဒီအပတ် · ${rows.length} / 20 ယောက်'),
-              Text('${_remaining()} · ထိုင်းအချိန်အရ'),
-              const SizedBox(height: 16),
-              ...rows.map(
-                (row) => Card(
-                  color: row['mine'] == true
-                      ? Theme.of(context).colorScheme.primaryContainer
-                      : null,
-                  child: ListTile(
-                    leading: Text('#${row['rank']}'),
-                    title: Text(
-                      '${_avatars[(row['avatar'] as num).toInt().clamp(0, 7)]} ${row['alias']}${row['mine'] == true ? ' · ကိုယ်' : ''}',
-                    ),
-                    trailing: Text('${row['points']} မှတ်'),
+              _overview(context, rows, daily),
+              const SizedBox(height: 18),
+              if (rows.where((row) => (row['points'] as num) > 0).length < 5)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    'အမှတ်ရသူ ၅ ယောက် ပြည့်ရင် အဆင့်တက်ဇုန် ဖွင့်ပါမယ်။',
                   ),
                 ),
-              ),
+              ..._standings(context, rows),
               const SizedBox(height: 16),
               Text('ဒီနေ့ $daily / 100 မှတ်'),
               const SizedBox(height: 8),
@@ -293,6 +288,140 @@ class _LeagueScreenState extends State<LeagueScreen> {
         ),
       ),
     );
+  }
+
+  Widget _overview(BuildContext context, List<Map> rows, int daily) {
+    final tier = (_board!['tier'] as num).toInt().clamp(0, 4);
+    final mine = rows.where((r) => r['mine'] == true).firstOrNull;
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [colors.primaryContainer, colors.surfaceContainerLow],
+        ),
+        borderRadius: BorderRadius.circular(26),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              5,
+              (i) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Tooltip(
+                  message: _tiers[i],
+                  child: Semantics(
+                    label: _tiers[i],
+                    selected: i == tier,
+                    child: _TierBadge(tier: i, selected: i == tier),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(_tiers[tier], style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 8),
+          Text('ဒီအပတ် · ${rows.length} / 20 ယောက်'),
+          const SizedBox(height: 8),
+          Text(
+            '${_remaining()} · ထိုင်းအချိန်အရ',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 22),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _scoreMetric(context, '#${mine?['rank'] ?? '—'}', 'ကိုယ့်အဆင့်'),
+              _scoreMetric(context, '${mine?['points'] ?? 0}', 'ဒီအပတ်'),
+              _scoreMetric(context, '$daily/100', 'ဒီနေ့'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _scoreMetric(BuildContext context, String value, String label) =>
+      Expanded(
+        child: Column(
+          children: [
+            Text(
+              value,
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ],
+        ),
+      );
+
+  List<Widget> _standings(BuildContext context, List<Map> rows) {
+    final scorers = rows.where((r) => (r['points'] as num) > 0).length;
+    final promoted = scorers >= 5 ? (scorers / 4).ceil() : 0;
+    final colors = Theme.of(context).colorScheme;
+    return [
+      if (promoted > 0)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Text(
+            '↑ အဆင့်တက်ဇုန် · ထိပ်ဆုံး $promoted ယောက်',
+            style: TextStyle(
+              color: colors.primary,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      for (var i = 0; i < rows.length; i++) ...[
+        if (i == promoted && promoted > 0)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Divider(),
+          ),
+        Card(
+          color: rows[i]['mine'] == true ? colors.primaryContainer : null,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(
+              color: i < promoted
+                  ? const Color(0xFF27866E)
+                  : colors.outlineVariant,
+              width: i < promoted ? 2 : 1,
+            ),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 8,
+            ),
+            leading: Text(
+              '#${rows[i]['rank']}',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            title: Text(
+              '${_avatars[(rows[i]['avatar'] as num).toInt().clamp(0, 7)]} ${rows[i]['alias']}${rows[i]['mine'] == true ? ' · ကိုယ်' : ''}',
+            ),
+            subtitle: Text('${rows[i]['points']} မှတ်'),
+            trailing: i < promoted
+                ? const Icon(
+                    Icons.arrow_upward_rounded,
+                    color: Color(0xFF27866E),
+                  )
+                : null,
+          ),
+        ),
+      ],
+    ];
   }
 
   String _remaining() {
@@ -439,6 +568,49 @@ class _LeagueRoundScreenState extends State<LeagueRoundScreen> {
           ],
         ],
       ),
+    ),
+  );
+}
+
+class _TierBadge extends StatelessWidget {
+  const _TierBadge({required this.tier, required this.selected});
+  final int tier;
+  final bool selected;
+  static const _colors = [
+    Color(0xFFA65D33),
+    Color(0xFF596C82),
+    Color(0xFF9A6A00),
+    Color(0xFF087C95),
+    Color(0xFF6554CE),
+  ];
+  static const _icons = [
+    Icons.shield_rounded,
+    Icons.shield_outlined,
+    Icons.workspace_premium_rounded,
+    Icons.diamond_rounded,
+    Icons.auto_awesome_rounded,
+  ];
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 36,
+    height: 42,
+    decoration: BoxDecoration(
+      color: selected ? _colors[tier] : Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: _colors[tier], width: selected ? 3 : 1),
+      boxShadow: selected
+          ? [
+              BoxShadow(
+                color: _colors[tier].withValues(alpha: .25),
+                offset: const Offset(0, 4),
+              ),
+            ]
+          : [],
+    ),
+    child: Icon(
+      _icons[tier],
+      size: 22,
+      color: selected ? Colors.white : _colors[tier],
     ),
   );
 }

@@ -88,11 +88,33 @@ void main() {
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'Daily life');
       await tester.pumpAndSettle();
-      await tester.tap(find.text('နေ့စဉ်ဘဝ'));
+      await tester.tap(
+        find.ancestor(
+          of: find.text('နေ့စဉ်ဘဝ'),
+          matching: find.byType(ListTile),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-path-end');
+      await tester.tap(find.byKey(const ValueKey('jump-current-lesson')));
+      await tester.pumpAndSettle();
+      expect(find.text('အပိုင်း 1'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.inventory_2_outlined));
+      await tester.pumpAndSettle();
+      expect(find.text('ဒီလရဲ့ စိန်ခေါ်မှု'), findsOneWidget);
+      await binding.takeScreenshot('${width.round()}-quests');
+      await tester.scrollUntilVisible(find.text('သင်ခန်းစာ ဆက်သင်မယ်'), 220);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('သင်ခန်းစာ ဆက်သင်မယ်'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.person_outline_rounded));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-profile');
+      await tester.tap(find.byIcon(Icons.replay_rounded));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-practice');
     });
   }
 
@@ -136,6 +158,10 @@ void main() {
     expect(state.learning.totalReviews, 5);
     expect(state.learning.completedSessions, 1);
     expect(state.learning.completedLessons, hasLength(1));
+    expect(
+      state.learning.lessonsOn(DateTime.now()),
+      contains(state.learning.completedLessons.single),
+    );
     expect(find.text('+45 XP'), findsOneWidget);
     await tester.ensureVisible(find.text('နောက်သင်ခန်းစာ ဆက်မယ်'));
     await tester.pumpAndSettle();

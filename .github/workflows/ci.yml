@@ -70,6 +70,7 @@ jobs:
           test/learner_rank_test.dart
           test/learning_progress_test.dart
           test/study_catalog_test.dart
+          test/study_quests_test.dart
           --reporter expanded
 
       - name: Run widget tests

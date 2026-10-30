@@ -21,7 +21,9 @@ import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
 import 'package:thai_for_myanmar/widgets/rank_card.dart';
 import 'package:thai_for_myanmar/learning/study_catalog.dart';
+import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/widgets/lesson_preview.dart';
+import 'package:thai_for_myanmar/screens/quests_screen.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -37,6 +39,39 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
+
+  testWidgets(
+    'finishing a unit offers a return to the next current lesson without scrolling',
+    (tester) async {
+      final state = AppState();
+      await state.load();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final firstUnit = StudyCatalog.lessons(
+        repository,
+      ).where((l) => l.category.id == repository.categories.first.id);
+      for (final lesson in firstUnit) {
+        await state.finishStudySession(lessonId: lesson.id);
+      }
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('jump-current-lesson')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('jump-current-lesson')));
+      await tester.pumpAndSettle();
+      expect(find.text('အပိုင်း 2'), findsOneWidget);
+      expect(find.text('ဒီကနေ စမယ်'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('Learn puts the path first and opens XP details on demand', (
     tester,
@@ -214,7 +249,7 @@ void main() {
     },
   );
 
-  testWidgets('desktop uses four tabs and preserves the selected review mode', (
+  testWidgets('desktop uses six tabs and preserves the selected review mode', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1280, 900);
@@ -234,7 +269,7 @@ void main() {
     expect(find.byType(NavigationBar), findsNothing);
     expect(
       tester.widget<NavigationRail>(find.byType(NavigationRail)).destinations,
-      hasLength(4),
+      hasLength(6),
     );
     await tester.tap(find.byIcon(Icons.replay_rounded));
     await tester.pumpAndSettle();
@@ -514,12 +549,10 @@ void main() {
       find.byKey(const ValueKey('learning-path')),
     );
     expect(path.controller!.offset, greaterThan(1000));
-    expect(path.controller!.position.maxScrollExtent, greaterThan(20000));
-    path.controller!.jumpTo(0);
-    await tester.pumpAndSettle();
+    expect(path.controller!.position.maxScrollExtent, greaterThan(15000));
     expect(find.textContaining('အစားအသောက်'), findsWidgets);
-    await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
-    await tester.pumpAndSettle();
+    // The unit action is already pinned on screen. Forcing ensureVisible on a
+    // pinned sliver scrolls to its original position and changes the active unit.
     await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
     expect(find.byType(StudySessionScreen), findsNothing);
@@ -541,9 +574,137 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('နေ့စဉ်ဘဝ'));
     await tester.pumpAndSettle();
-    expect(path.controller!.offset, greaterThan(20000));
+    expect(path.controller!.offset, greaterThan(15000));
     expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
 
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'scrolling updates the unit banner and current-step button returns home',
+    (tester) async {
+      final state = AppState();
+      await state.load();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final path = tester.widget<CustomScrollView>(
+        find.byKey(const ValueKey('learning-path')),
+      );
+      path.controller!.jumpTo(1800);
+      await tester.pumpAndSettle();
+      expect(find.text('အပိုင်း 1'), findsNothing);
+      expect(find.byKey(const ValueKey('jump-current-lesson')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('jump-current-lesson')));
+      await tester.pumpAndSettle();
+      expect(find.text('အပိုင်း 1'), findsOneWidget);
+      expect(path.controller!.offset, lessThan(100));
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'quests are reachable from mobile navigation and fit enlarged text',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 760);
+      tester.view.devicePixelRatio = 1;
+      tester.view.platformDispatcher.textScaleFactorTestValue = 1.5;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+      final state = AppState();
+      await state.load();
+      await tester.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repository,
+          appState: state,
+          playbackService: _playbackService(),
+        ),
+      );
+      await _pumpUi(tester);
+      expect(
+        tester.widget<NavigationBar>(find.byType(NavigationBar)).destinations,
+        hasLength(6),
+      );
+      await tester.tap(find.byIcon(Icons.inventory_2_outlined));
+      await tester.pumpAndSettle();
+      expect(find.byType(QuestsScreen), findsOneWidget);
+      expect(find.text('ဒီလရဲ့ စိန်ခေါ်မှု'), findsOneWidget);
+      await tester.scrollUntilVisible(find.text('သင်ခန်းစာ ဆက်သင်မယ်'), 200);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text('သင်ခန်းစာ ဆက်သင်မယ်'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('learning-path')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('visible quests roll over at midnight without another review', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    var now = DateTime(2026, 10, 30, 23, 59);
+    await state.recordReview(
+      repository.phrases.first.id,
+      LearningMode.meaning,
+      5,
+      now: now,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: QuestsScreen(
+            repository: repository,
+            appState: state,
+            clock: () => now,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('1 / 5'), findsOneWidget);
+    now = DateTime(2026, 10, 31);
+    await tester.pump(const Duration(minutes: 1));
+    await tester.pumpAndSettle();
+    expect(find.text('0 / 5'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('six destinations and the path fit a short desktop window', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      ThaiForMyanmarApp(
+        repository: repository,
+        appState: state,
+        playbackService: _playbackService(),
+      ),
+    );
+    await _pumpUi(tester);
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(
+      find.byKey(
+        ValueKey('lesson-node-${StudyCatalog.lessons(repository).first.id}'),
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 

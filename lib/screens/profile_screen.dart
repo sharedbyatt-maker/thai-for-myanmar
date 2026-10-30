@@ -6,6 +6,8 @@ import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
 import '../widgets/daily_goal_card.dart';
 import '../widgets/rank_card.dart';
+import '../learning/learner_rank.dart';
+import 'quests_screen.dart';
 import 'favorites_screen.dart';
 import 'learning_progress_screen.dart';
 import 'settings_screen.dart';
@@ -31,7 +33,19 @@ class ProfileScreen extends StatelessWidget {
       return ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Center(child: ElephantBuddy(size: 120)),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primaryContainer,
+                  Theme.of(context).colorScheme.surfaceContainerLow,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: const Center(child: ElephantBuddy(size: 120)),
+          ),
           const SizedBox(height: 12),
           Text(
             appState.learning.totalReviews == 0
@@ -46,6 +60,10 @@ class ProfileScreen extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: [
+                MetricPill(
+                  icon: Icons.bolt_rounded,
+                  label: '${LearnerRank(repository, appState.learning).xp} XP',
+                ),
                 MetricPill(
                   icon: Icons.local_fire_department,
                   label: '${appState.learning.streak(DateTime.now())} ရက်ဆက်',
@@ -121,6 +139,21 @@ class ProfileScreen extends StatelessWidget {
           Card(
             child: Column(
               children: [
+                ListTile(
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: const Text('စိန်ခေါ်မှုနဲ့ လစဉ်ဆုတံဆိပ်'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => open(
+                    Scaffold(
+                      appBar: AppBar(title: const Text('စိန်ခေါ်မှု')),
+                      body: QuestsScreen(
+                        repository: repository,
+                        appState: appState,
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.favorite_rounded),
                   title: const Text('သိမ်းထားတာ'),

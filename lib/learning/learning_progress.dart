@@ -18,6 +18,7 @@ class LearningProgress {
   final Map<String, ReviewCard> _cards = {};
   final Map<String, int> _activity = {};
   final Set<String> _completedLessons = {};
+  final Map<String, Set<String>> _lessonDays = {};
   // Only future successful, unique phrase reviews earn bonus XP.
   final Map<String, Set<String>> _xpPhrases = {};
   int get reviewXp =>
@@ -32,6 +33,8 @@ class LearningProgress {
   Map<String, ReviewCard> get cards => Map.unmodifiable(_cards);
   Map<String, int> get activity => Map.unmodifiable(_activity);
   Set<String> get completedLessons => Set.unmodifiable(_completedLessons);
+  Set<String> lessonsOn(DateTime date) =>
+      Set.unmodifiable(_lessonDays[dayKey(date)] ?? <String>{});
   Set<String> get reviewedPhraseIds =>
       _cards.keys.map((key) => key.split('::').first).toSet();
 
@@ -77,13 +80,21 @@ class LearningProgress {
     _activity[date] = (_activity[date] ?? 0) + 1;
   }
 
-  void finishSession({String? lessonId}) {
+  void finishSession({String? lessonId, DateTime? now}) {
     completedSessions++;
-    if (lessonId != null) _completedLessons.add(lessonId);
+    if (lessonId != null) {
+      _completedLessons.add(lessonId);
+      _lessonDays
+          .putIfAbsent(dayKey(now ?? DateTime.now()), () => <String>{})
+          .add(lessonId);
+    }
   }
 
   Map<String, Object> toJson() => {
     'schemaVersion': 1,
+    'lessonDays': _lessonDays.map(
+      (day, ids) => MapEntry(day, ids.toList()..sort()),
+    ),
     'xpPhrases': _xpPhrases.map(
       (day, ids) => MapEntry(day, ids.toList()..sort()),
     ),
@@ -100,6 +111,21 @@ class LearningProgress {
   factory LearningProgress.fromJson(Map<String, dynamic> json) {
     final result = LearningProgress();
     if (json['schemaVersion'] != 1) return result;
+    final days = json['lessonDays'];
+    if (days is Map) {
+      for (final entry in days.entries) {
+        final date = DateTime.tryParse(entry.key.toString());
+        if (entry.key is String &&
+            date != null &&
+            dayKey(date) == entry.key &&
+            entry.value is List) {
+          result._lessonDays[entry.key as String] = (entry.value as List)
+              .whereType<String>()
+              .where((id) => id.isNotEmpty)
+              .toSet();
+        }
+      }
+    }
     final xp = json['xpPhrases'];
     if (xp is Map) {
       for (final entry in xp.entries) {

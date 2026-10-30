@@ -10,6 +10,7 @@ import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'learn_screen.dart';
 import 'league_screen.dart';
+import 'quests_screen.dart';
 import 'everyday_screen.dart';
 import 'profile_screen.dart';
 import 'quiz_screen.dart';
@@ -68,11 +69,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   final Set<int> _visitedTabs = {0};
-  static const _labels = ['သင်ယူ', 'အမြန်သုံး', 'ပြန်လေ့ကျင့်', 'ကိုယ်ပိုင်'];
+  static const _labels = [
+    'သင်ယူ',
+    'အမြန်သုံး',
+    'ပြန်လေ့ကျင့်',
+    'စိန်ခေါ်မှု',
+    'အဆင့်ဇယား',
+    'ကိုယ်ပိုင်',
+  ];
   static const _icons = [
     Icons.route_rounded,
     Icons.record_voice_over_outlined,
     Icons.replay_rounded,
+    Icons.inventory_2_outlined,
+    Icons.emoji_events_rounded,
     Icons.person_outline_rounded,
   ];
   @override
@@ -144,6 +154,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         appState: widget.appState,
         playbackService: widget.playbackService,
       ),
+      QuestsScreen(
+        active: _selectedIndex == 3,
+        repository: widget.repository,
+        appState: widget.appState,
+        onLearn: () => _select(0),
+      ),
+      LeagueScreen(active: _selectedIndex == 4),
       ProfileScreen(
         repository: widget.repository,
         appState: widget.appState,
@@ -152,6 +169,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     ];
     final wide =
         MediaQuery.sizeOf(context).width >= 1000 &&
+        MediaQuery.sizeOf(context).height >= 600 &&
         MediaQuery.textScalerOf(context).scale(14) <= 20;
     final content = ContentFrame(
       child: IndexedStack(
@@ -163,33 +181,30 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       ),
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.translate_rounded,
-              color: Theme.of(context).colorScheme.primary,
+      appBar: _selectedIndex == 4
+          ? null
+          : AppBar(
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.translate_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(child: Text(_labels[_selectedIndex])),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  key: const ValueKey('home-search'),
+                  tooltip: 'စကားစုရှာရန်',
+                  onPressed: _search,
+                  icon: const Icon(Icons.search_rounded),
+                ),
+                const SizedBox(width: 8),
+              ],
             ),
-            const SizedBox(width: 10),
-            Flexible(child: Text(_labels[_selectedIndex])),
-          ],
-        ),
-        actions: [
-          IconButton(
-            tooltip: 'အပတ်စဉ် League',
-            icon: const Icon(Icons.emoji_events_outlined),
-            onPressed: _openLeague,
-          ),
-          IconButton(
-            key: const ValueKey('home-search'),
-            tooltip: 'စကားစုရှာရန်',
-            onPressed: _search,
-            icon: const Icon(Icons.search_rounded),
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
       body: SafeArea(
         top: false,
         child: wide
@@ -201,7 +216,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     labelType: NavigationRailLabelType.all,
                     groupAlignment: -.7,
                     destinations: List.generate(
-                      4,
+                      _labels.length,
                       (i) => NavigationRailDestination(
                         icon: Icon(_icons[i]),
                         label: Text(_labels[i]),
@@ -222,7 +237,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               selectedIndex: _selectedIndex,
               onDestinationSelected: _select,
               destinations: List.generate(
-                4,
+                _labels.length,
                 (i) => NavigationDestination(
                   icon: Icon(_icons[i]),
                   label: _labels[i],
