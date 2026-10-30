@@ -1,3 +1,4 @@
+import 'dart:ui' show SemanticsAction;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -37,6 +38,7 @@ void main() {
   testWidgets('rank badges explain locked goals and XP rules at large text', (
     tester,
   ) async {
+    final semantics = tester.ensureSemantics();
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -61,6 +63,13 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    expect(
+      tester
+          .getSemantics(find.widgetWithText(ActionChip, '🐘 ထိုင်းစကားမိတ်ဆွေ'))
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
     await tester.tap(find.widgetWithText(ActionChip, '🐘 ထိုင်းစကားမိတ်ဆွေ'));
     await tester.pumpAndSettle();
     expect(find.text('သင်ခန်းစာ 5 ခု ပြီးလျှင် ရရှိမယ်'), findsOneWidget);
@@ -75,6 +84,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('Rank သည်'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('home and Quick Speak render at a small, larger-text viewport', (
