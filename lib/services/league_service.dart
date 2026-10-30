@@ -22,8 +22,10 @@ class LeagueService implements LeagueGateway {
   LeagueService._();
   Future<bool>? _initializing;
   SupabaseClient? _client;
-  static const webRedirect =
-      'https://thai-for-myanmar-web-preview.onrender.com/?league-auth=1';
+  // Keep PKCE storage and callback on the same origin, including PR previews.
+  // Supabase still requires this exact URL in its redirect allowlist.
+  static String webRedirectFor(Uri location) =>
+      '${location.origin}/?league-auth=1';
   static const mobileRedirect =
       'com.sharedbyatt.thaiformyanmar://league-callback/';
   @override
@@ -64,7 +66,7 @@ class LeagueService implements LeagueGateway {
   @override
   Future<bool> signInWithGoogle() => client.auth.signInWithOAuth(
     OAuthProvider.google,
-    redirectTo: kIsWeb ? webRedirect : mobileRedirect,
+    redirectTo: kIsWeb ? webRedirectFor(Uri.base) : mobileRedirect,
     scopes: 'openid email profile',
     authScreenLaunchMode: kIsWeb
         ? LaunchMode.platformDefault

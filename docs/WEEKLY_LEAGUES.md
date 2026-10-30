@@ -29,7 +29,7 @@ No public SELECT policy was added. See the
 The enabled modern publishable key and URL were obtained from the existing
 project and written to `assets/data/league_config.json`. No secret key is used.
 An authenticated-by-publishable-key Auth settings request confirmed Google is
-**disabled**, email is enabled and anonymous sign-ins are disabled. This checks
+**enabled** after the owner saved the Google client/provider configuration, email is enabled and anonymous sign-ins are disabled. This checks
 provider availability, not successful account login.
 
 The earlier handover records hosted scoring/retry/opt-out transaction tests,
@@ -51,7 +51,9 @@ The frontend now uses Google OAuth only; unusable public email signup/recovery
 controls were removed. OAuth launch is not treated as successful login. Auth
 session changes reload the board, web returns reopen League, and Android callback
 routing is configured by `tool/configure_android.py`. Real Google login remains
-unverified. Google Cloud returned “Site Unavailable — Unable to access this site”
+unverified. Web OAuth callbacks now stay on the initiating app origin, so PR
+previews can complete PKCE without redirecting into the production build. Each
+preview callback must be explicitly added to the Supabase allowlist before testing. Google Cloud returned “Site Unavailable — Unable to access this site”
 in this continuation's cloud browser, including one reload. This is an access
 limitation of that browser, not evidence that Google is down.
 
@@ -93,6 +95,22 @@ These controls bound replay/score forgery; they do not establish that an account
 is a unique human or stop someone from looking up the bundled translations.
 Configure auth rate limits and CAPTCHA before public launch. No cash prizes or
 paid score boosts are implemented.
+
+## Preview testing status
+
+All four CI jobs for code commit `7fb0604ecf827179532f38b06f84f3ed75d5d6ca`
+passed, including Android and mobile/desktop Web flows. On the next change, rerun
+checks for the current head. Google provider availability is now enabled, but
+public non-team login and end-to-end scoring remain unverified.
+
+A local preview cannot be reached by this cloud browser (connection refused).
+The existing Render static site supports free PR previews; use Manual mode and
+label only PR #24 `render-preview`. Do not create a paid service or enable
+previews across unrelated apps. Dashboard access needs the owner's Render account,
+`happylearnkids2025@gmail.com` (different from the Supabase owner). The cloud
+browser auto-selected the existing other Gmail session and then Render reported a
+sign-in failure; manual sign-in with the correct account is required. No new
+Render account was created and no production merge/deploy has occurred.
 
 ## Activation steps for the maintainer
 
@@ -141,7 +159,7 @@ capacity/backups and service guarantees before treating a free tier as an SLA.
 ## Verification for this continuation
 
 - Flutter 3.47.9 / Dart 3.13.7; analyzer clean.
-- 27 League/widget/session tests passed, including OAuth launch versus actual
+- 28 League/widget/session and callback tests passed, including OAuth launch versus actual
   session arrival, sign-out clearing the board and failed-launch retry.
 - PostgreSQL/PGlite scoring/privacy suite passed; generated seed unchanged.
 - Content/audio validators passed (502 phrases / 990 mappings).

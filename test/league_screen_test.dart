@@ -100,6 +100,28 @@ class FakeLeague implements LeagueGateway {
 }
 
 void main() {
+  test('web OAuth callback stays on its initiating origin', () {
+    expect(
+      LeagueService.webRedirectFor(
+        Uri.parse(
+          'https://thai-for-myanmar-web-preview.onrender.com/?code=private#route',
+        ),
+      ),
+      'https://thai-for-myanmar-web-preview.onrender.com/?league-auth=1',
+    );
+    expect(
+      LeagueService.webRedirectFor(
+        Uri.parse(
+          'https://preview.example.com/lesson?redirect_to=https://other.example',
+        ),
+      ),
+      'https://preview.example.com/?league-auth=1',
+    );
+    expect(
+      LeagueService.webRedirectFor(Uri.parse('http://localhost:8765/')),
+      'http://localhost:8765/?league-auth=1',
+    );
+  });
   testWidgets('League is honest when shared backend is unavailable', (
     tester,
   ) async {
