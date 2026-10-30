@@ -35,6 +35,36 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
+  testWidgets('Learn puts the path first and opens XP details on demand', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final state = AppState();
+    await state.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: LearnScreen(
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(RankCard), findsNothing);
+    expect(find.byType(DailyGoalCard), findsNothing);
+    expect(tester.getTopLeft(find.text('ဒီကနေ စမယ်')).dy, lessThan(300));
+    await tester.tap(find.byIcon(Icons.bolt_rounded));
+    await tester.pumpAndSettle();
+    expect(find.byType(RankCard), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('rank badges explain locked goals and XP rules at large text', (
     tester,
   ) async {
@@ -292,9 +322,9 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.scrollUntilVisible(find.text('အခု စလေ့ကျင့်မယ်'), 250);
+    await tester.scrollUntilVisible(find.text('စလေ့ကျင့်မယ်'), 250);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),
@@ -322,9 +352,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'Food');
     await tester.pumpAndSettle();
@@ -337,10 +367,10 @@ void main() {
     expect(path.controller!.position.maxScrollExtent, greaterThan(20000));
     path.controller!.jumpTo(0);
     await tester.pumpAndSettle();
-    expect(find.text('ဆက်သင်ရန် · အစားအသောက်'), findsOneWidget);
-    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    expect(find.textContaining('အစားအသောက်'), findsWidgets);
+    await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
     final session = tester.widget<StudySessionScreen>(
       find.byType(StudySessionScreen),
@@ -349,9 +379,9 @@ void main() {
     expect(session.lessonId, startsWith('food:'));
     await tester.pageBack();
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+    await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'Daily life');
     await tester.pumpAndSettle();

@@ -5,7 +5,7 @@ import '../learning/learning_progress.dart';
 import '../learning/study_catalog.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
-import '../widgets/playful_components.dart';
+import '../learning/learner_rank.dart';
 import '../widgets/daily_goal_card.dart';
 import '../widgets/rank_card.dart';
 import '../widgets/topic_picker.dart';
@@ -79,7 +79,11 @@ class _LearnScreenState extends State<LearnScreen> {
       var offset = box?.size.height ?? 0;
       for (final row in rows) {
         if (row is PhraseCategory && row.id == id) break;
-        offset += row is PhraseCategory ? headerExtent : nodeExtent;
+        offset += row is PhraseCategory
+            ? (row.id == widget.repository.categories.first.id
+                  ? 0
+                  : headerExtent)
+            : nodeExtent;
       }
       final target = offset.clamp(0.0, _scroll.position.maxScrollExtent);
       if (MediaQuery.disableAnimationsOf(context)) {
@@ -93,6 +97,59 @@ class _LearnScreenState extends State<LearnScreen> {
       }
     });
   }
+
+  void _details(BuildContext context, bool rank) => showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (_) => SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: rank
+            ? RankCard(
+                repository: widget.repository,
+                appState: widget.appState,
+                showBadges: true,
+              )
+            : DailyGoalCard(appState: widget.appState),
+      ),
+    ),
+  );
+
+  Widget _stat(
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label,
+    VoidCallback tap,
+  ) => Semantics(
+    label: '$label $value',
+    button: true,
+    excludeSemantics: true,
+    onTap: tap,
+    child: InkWell(
+      onTap: tap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 22, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 5),
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
@@ -121,8 +178,8 @@ class _LearnScreenState extends State<LearnScreen> {
       final extra = (MediaQuery.textScalerOf(context).scale(14) - 14)
           .clamp(0, 35)
           .toDouble();
-      final headerExtent = 150.0 + extra * 7;
-      final nodeExtent = 210.0 + extra * 7;
+      final headerExtent = 104.0 + extra * 7;
+      final nodeExtent = 180.0 + extra * 7;
       final colors = Theme.of(context).colorScheme;
       void choose() =>
           _chooseTopic(rows, headerExtent, nodeExtent, category.id);
@@ -133,75 +190,34 @@ class _LearnScreenState extends State<LearnScreen> {
           SliverToBoxAdapter(
             child: Padding(
               key: _headerKey,
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+              child: Row(
                 children: [
-                  RankCard(
-                    repository: widget.repository,
-                    appState: widget.appState,
+                  Expanded(
+                    child: _stat(
+                      context,
+                      Icons.local_fire_department_rounded,
+                      '${progress.streak(DateTime.now())}',
+                      'ရက်ဆက်',
+                      () => _details(context, false),
+                    ),
                   ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 8,
-                    children: [
-                      MetricPill(
-                        icon: Icons.local_fire_department_rounded,
-                        label: '${progress.streak(DateTime.now())} ရက်ဆက်',
-                      ),
-                      MetricPill(
-                        icon: Icons.check_circle_rounded,
-                        label: '${progress.completedLessons.length} သင်ပြီး',
-                      ),
-                    ],
+                  Expanded(
+                    child: _stat(
+                      context,
+                      Icons.bolt_rounded,
+                      '${LearnerRank(widget.repository, progress).xp}',
+                      'XP',
+                      () => _details(context, true),
+                    ),
                   ),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'နားထောင်၊ ပြောကြည့်',
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${widget.repository.categories.length} အကြောင်းအရာ · ${lessons.length} သင်ခန်းစာ',
-                            ),
-                          ],
-                        ),
-                      ),
-                      const ElephantBuddy(size: 76),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  DailyGoalCard(appState: widget.appState),
-                  const SizedBox(height: 12),
-                  Card(
-                    color: colors.primaryContainer,
-                    child: Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'ဆက်သင်ရန် · ${next.category.my}',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${next.phrases.length} စကားစု · သင်ခန်းစာ ${next.number}',
-                          ),
-                          const SizedBox(height: 14),
-                          LiftButton(
-                            label: 'အခု စလေ့ကျင့်မယ်',
-                            onPressed: () => _open(next),
-                          ),
-                        ],
-                      ),
+                  Expanded(
+                    child: _stat(
+                      context,
+                      Icons.flag_rounded,
+                      '${progress.reviewsOn(DateTime.now())}/${progress.dailyGoal}',
+                      'ဒီနေ့',
+                      () => _details(context, false),
                     ),
                   ),
                 ],
@@ -211,22 +227,59 @@ class _LearnScreenState extends State<LearnScreen> {
           SliverPersistentHeader(
             pinned: true,
             delegate: _TopicHeader(
-              extent: 92 + extra * 5,
+              extent: 158 + extra * 7,
               child: ColoredBox(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 6, 20, 10),
-                  child: Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.route_rounded),
-                      title: Text(
-                        category.my,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                  child: Material(
+                    color: colors.primaryContainer,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 12, 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'အပိုင်း ${widget.repository.categories.indexOf(category) + 1}',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: 'အကြောင်းအရာ ပြောင်းရန်',
+                                onPressed: choose,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${category.icon} ${category.my}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton.icon(
+                              onPressed: () => _open(next),
+                              icon: const Icon(Icons.play_arrow_rounded),
+                              label: const Text('စလေ့ကျင့်မယ်'),
+                            ),
+                          ),
+                        ],
                       ),
-                      subtitle: const Text('အကြောင်းအရာ ပြောင်းရန်'),
-                      trailing: const Icon(Icons.keyboard_arrow_down_rounded),
-                      onTap: choose,
                     ),
                   ),
                 ),
@@ -237,38 +290,25 @@ class _LearnScreenState extends State<LearnScreen> {
             itemExtentBuilder: (index, _) => index >= rows.length
                 ? null
                 : rows[index] is PhraseCategory
-                ? headerExtent
+                ? (index == 0 ? 0 : headerExtent)
                 : nodeExtent,
             delegate: SliverChildBuilderDelegate((context, index) {
               final row = rows[index];
               if (row is PhraseCategory) {
-                final topic = lessons
-                    .where((l) => l.category.id == row.id)
-                    .toList();
-                final done = topic
-                    .where((l) => progress.completedLessons.contains(l.id))
-                    .length;
-                final n = widget.repository.categories.indexOf(row) + 1;
+                if (index == 0) return const SizedBox.shrink();
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
                   child: Card(
-                    color: n.isEven
-                        ? colors.secondaryContainer
-                        : colors.primaryContainer,
+                    color: colors.surfaceContainerLow,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 12,
+                        vertical: 8,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'အပိုင်း $n · $done / ${topic.length} သင်ပြီး',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                          const SizedBox(height: 4),
                           Row(
                             children: [
                               Text(
@@ -383,14 +423,11 @@ class _LearnScreenState extends State<LearnScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Text(
-                            'သင်ခန်းစာ ${lesson.number}',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Text(
-                            '${lesson.phrases.length} စကားစု',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                          if (current)
+                            Text(
+                              'သင်ခန်းစာ ${lesson.number}',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                         ],
                       ),
                     ),

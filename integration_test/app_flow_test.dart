@@ -44,9 +44,9 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+      await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+      await tester.tap(find.text('စလေ့ကျင့်မယ်'));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-lesson');
       await tester.pageBack();
@@ -74,9 +74,9 @@ void main() {
       await binding.takeScreenshot('${width.round()}-search');
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+      await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('အကြောင်းအရာ ပြောင်းရန်'));
+      await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'Daily life');
       await tester.pumpAndSettle();
@@ -103,9 +103,9 @@ void main() {
       ),
     );
     await _pumpUi(tester);
-    await tester.ensureVisible(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.ensureVisible(find.text('စလေ့ကျင့်မယ်'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('အခု စလေ့ကျင့်မယ်'));
+    await tester.tap(find.text('စလေ့ကျင့်မယ်'));
     await tester.pump(const Duration(milliseconds: 500));
     for (var index = 0; index < 5; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
