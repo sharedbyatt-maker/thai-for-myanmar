@@ -197,11 +197,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               ),
               actions: [
                 IconButton(
-                  tooltip: 'အပတ်စဉ် League',
-                  icon: const Icon(Icons.emoji_events_outlined),
-                  onPressed: _openLeague,
-                ),
-                IconButton(
                   key: const ValueKey('home-search'),
                   tooltip: 'စကားစုရှာရန်',
                   onPressed: _search,

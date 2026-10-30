@@ -516,7 +516,7 @@ void main() {
       find.byKey(const ValueKey('learning-path')),
     );
     expect(path.controller!.offset, greaterThan(1000));
-    expect(path.controller!.position.maxScrollExtent, greaterThan(20000));
+    expect(path.controller!.position.maxScrollExtent, greaterThan(15000));
     expect(find.textContaining('အစားအသောက်'), findsWidgets);
     // The unit action is already pinned on screen. Forcing ensureVisible on a
     // pinned sliver scrolls to its original position and changes the active unit.
@@ -541,7 +541,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('နေ့စဉ်ဘဝ'));
     await tester.pumpAndSettle();
-    expect(path.controller!.offset, greaterThan(20000));
+    expect(path.controller!.offset, greaterThan(15000));
     expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
 
     expect(tester.takeException(), isNull);

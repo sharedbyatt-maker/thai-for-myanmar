@@ -4,7 +4,7 @@ The user supplied a 29.4-second Duolingo Chess recording showing the learning pa
 
 This update adapts those useful patterns to Thai for Myanmar's original indigo/elephant identity:
 
-- Colored unit banners follow the visible path section. Real unit completion progress, current-step rings, the original elephant and a return-to-current control orient learners along all 112 lessons. Unit guides and existing lesson preview cards remain accessible.
+- A denser path and colored unit banners follow the visible section. Real unit completion progress, current-step rings, the original elephant and a return-to-current control orient learners along all 112 lessons. Unit guides and existing lesson preview cards remain accessible.
 - Six destinations expose Learn, Everyday, Review, Quests, League and Personal. Inactive League tabs stop periodic refresh polling.
 - Daily quests use actual reviews, unique phrase review XP and dated catalog-lesson completion. Weekly and monthly challenges count actual activity days. Twelve practice days earn a monthly badge derived from saved history; no claim button awards extra XP.
 - Dated completions are an optional backward-compatible field in the existing version-1 local progress format. Older undated completions are preserved without inventing completion dates. Personal quests use the device's calendar, consistent with existing offline progress.

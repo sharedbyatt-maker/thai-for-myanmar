@@ -39,8 +39,8 @@ class _LearnScreenState extends State<LearnScreen> {
   bool _positioned = false;
   bool _showJump = false;
   List<Object> _pathRows = [];
-  double _unitExtent = 134;
-  double _lessonExtent = 206;
+  double _unitExtent = 104;
+  double _lessonExtent = 150;
   String? _currentLessonId;
   static const _unitColors = [
     Color(0xFF5B4FDB),
@@ -444,8 +444,8 @@ class _LearnScreenState extends State<LearnScreen> {
           .clamp(0, 35)
           .toDouble();
       final compact = MediaQuery.sizeOf(context).height < 600;
-      final headerExtent = 134.0 + extra * 7;
-      final nodeExtent = 206.0 + extra * 7;
+      final headerExtent = 104.0 + extra * 7;
+      final nodeExtent = 150.0 + extra * 5;
       final colors = Theme.of(context).colorScheme;
       _pathRows = rows;
       _unitExtent = headerExtent;
@@ -505,7 +505,7 @@ class _LearnScreenState extends State<LearnScreen> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _TopicHeader(
-                  extent: compact ? 100 + extra * 2 : 196 + extra * 7,
+                  extent: compact ? 100 + extra * 2 : 176 + extra * 7,
                   child: ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: _unitBanner(
@@ -530,7 +530,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   if (row is PhraseCategory) {
                     if (index == 0) return const SizedBox.shrink();
                     return Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+                      padding: const EdgeInsets.fromLTRB(20, 6, 20, 6),
                       child: Card(
                         color: _unitColor(row).withValues(alpha: .10),
                         child: Padding(
@@ -552,7 +552,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                   Expanded(
                                     child: Text(
                                       row.my,
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(
                                         context,
@@ -664,7 +664,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                             ],
                                           ),
                                           child: SizedBox.square(
-                                            dimension: 78,
+                                            dimension: 64,
                                             child: FilledButton(
                                               style: FilledButton.styleFrom(
                                                 shape: const CircleBorder(),
@@ -708,21 +708,14 @@ class _LearnScreenState extends State<LearnScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 12),
-                                    if (current)
-                                      Text(
-                                        'သင်ခန်းစာ ${lesson.number}',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleSmall,
-                                      ),
+                                    const SizedBox(height: 8),
                                   ],
                                 ),
                               ),
                             ),
                             if (current)
                               Positioned(
-                                top: 40 + extra * 2,
+                                top: 30 + extra * 2,
                                 left:
                                     ((nodeBox.maxWidth - 220) *
                                                 (left ? .39 : .61) +
@@ -739,7 +732,7 @@ class _LearnScreenState extends State<LearnScreen> {
                       if (index + 1 < rows.length &&
                           rows[index + 1] is StudyLesson)
                         SizedBox(
-                          height: 32,
+                          height: 24,
                           width: double.infinity,
                           child: CustomPaint(
                             painter: _PathLink(

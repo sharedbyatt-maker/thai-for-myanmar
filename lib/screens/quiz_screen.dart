@@ -128,7 +128,12 @@ class _QuizScreenState extends State<QuizScreen> {
                             Icon(
                               icon,
                               size: 30,
-                              color: active ? Colors.white : accent,
+                              color: active
+                                  ? Colors.white
+                                  : Theme.of(context).brightness ==
+                                        Brightness.dark
+                                  ? Color.lerp(accent, Colors.white, .45)
+                                  : accent,
                             ),
                             const SizedBox(height: 8),
                             Text(
