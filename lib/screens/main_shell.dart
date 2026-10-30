@@ -155,6 +155,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         playbackService: widget.playbackService,
       ),
       QuestsScreen(
+        active: _selectedIndex == 3,
         repository: widget.repository,
         appState: widget.appState,
         onLearn: () => _select(0),

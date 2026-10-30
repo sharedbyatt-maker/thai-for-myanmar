@@ -84,11 +84,14 @@ class StudyQuests {
               ..sort())
             .reversed
             .toList();
-    daysLeft = DateTime(today.year, today.month + 1).difference(today).inDays;
+    final remaining = DateTime(today.year, today.month + 1).difference(now);
+    daysLeft = remaining.inDays;
+    hoursLeft = remaining.inHours % 24;
   }
   late final List<StudyQuest> daily;
   late final StudyQuest weekly;
   late final StudyQuest monthly;
   late final List<String> earnedMonths;
   late final int daysLeft;
+  late final int hoursLeft;
 }

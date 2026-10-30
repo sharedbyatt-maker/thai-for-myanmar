@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
@@ -5,22 +7,53 @@ import '../learning/study_quests.dart';
 import '../services/app_state.dart';
 import '../widgets/playful_components.dart';
 
-class QuestsScreen extends StatelessWidget {
+class QuestsScreen extends StatefulWidget {
   const QuestsScreen({
     required this.repository,
     required this.appState,
     this.onLearn,
+    this.active = true,
+    this.clock,
     super.key,
   });
   final PhraseRepository repository;
   final AppState appState;
   final VoidCallback? onLearn;
+  final bool active;
+  final DateTime Function()? clock;
+
+  @override
+  State<QuestsScreen> createState() => _QuestsScreenState();
+}
+
+class _QuestsScreenState extends State<QuestsScreen> {
+  late final Timer _calendar;
+  AppState get appState => widget.appState;
+  PhraseRepository get repository => widget.repository;
+  VoidCallback? get onLearn => widget.onLearn;
+  @override
+  void initState() {
+    super.initState();
+    _calendar = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted && widget.active) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _calendar.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: appState,
     builder: (context, _) {
-      final quests = StudyQuests(repository, appState.learning, DateTime.now());
+      final quests = StudyQuests(
+        repository,
+        appState.learning,
+        widget.clock?.call() ?? DateTime.now(),
+      );
       final colors = Theme.of(context).colorScheme;
       return ListView(
         key: const ValueKey('quests-page'),
@@ -55,7 +88,11 @@ class QuestsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'ကျန်ချိန် ${quests.daysLeft} ရက်',
+                  quests.daysLeft > 0
+                      ? 'ကျန်ချိန် ${quests.daysLeft} ရက် ${quests.hoursLeft} နာရီ'
+                      : quests.hoursLeft > 0
+                      ? 'ကျန်ချိန် ${quests.hoursLeft} နာရီ'
+                      : 'ကျန်ချိန် ၁ နာရီအောက်',
                   style: const TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 22),

@@ -21,6 +21,7 @@ import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
 import 'package:thai_for_myanmar/widgets/rank_card.dart';
 import 'package:thai_for_myanmar/learning/study_catalog.dart';
+import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/widgets/lesson_preview.dart';
 import 'package:thai_for_myanmar/screens/quests_screen.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
@@ -614,6 +615,38 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('visible quests roll over at midnight without another review', (
+    tester,
+  ) async {
+    final state = AppState();
+    await state.load();
+    var now = DateTime(2026, 10, 30, 23, 59);
+    await state.recordReview(
+      repository.phrases.first.id,
+      LearningMode.meaning,
+      5,
+      now: now,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: QuestsScreen(
+            repository: repository,
+            appState: state,
+            clock: () => now,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('1 / 5'), findsOneWidget);
+    now = DateTime(2026, 10, 31);
+    await tester.pump(const Duration(minutes: 1));
+    await tester.pumpAndSettle();
+    expect(find.text('0 / 5'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('six destinations and the path fit a short desktop window', (
     tester,

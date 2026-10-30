@@ -613,118 +613,127 @@ class _LearnScreenState extends State<LearnScreen> {
                   final left = lesson.number.isOdd;
                   return Column(
                     children: [
-                      Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment(left ? -.22 : .22, 0),
-                            child: SizedBox(
-                              width: 220,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 26 + extra * 2,
-                                    child: current
-                                        ? Text(
-                                            complete
-                                                ? 'ပြန်လေ့ကျင့်မယ်'
-                                                : 'ဒီကနေ စမယ်',
-                                            style: TextStyle(
-                                              color: accent,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          )
-                                        : null,
-                                  ),
-                                  Builder(
-                                    builder: (anchorContext) => Semantics(
-                                      label:
-                                          '${lesson.category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
-                                      button: true,
-                                      excludeSemantics: true,
-                                      onTap: () =>
-                                          _preview(lesson, anchorContext),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(7),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: current
-                                                ? accent
-                                                : Colors.transparent,
-                                            width: 3,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: accent.withValues(
-                                                alpha: .28,
-                                              ),
-                                              offset: const Offset(0, 6),
-                                            ),
-                                          ],
-                                        ),
-                                        child: SizedBox.square(
-                                          dimension: 78,
-                                          child: FilledButton(
-                                            style: FilledButton.styleFrom(
-                                              shape: const CircleBorder(),
-                                              padding: EdgeInsets.zero,
-                                              backgroundColor:
-                                                  complete || current
-                                                  ? accent
-                                                  : accent.withValues(
-                                                      alpha: .14,
-                                                    ),
-                                              foregroundColor:
-                                                  complete || current
-                                                  ? Colors.white
-                                                  : colors.brightness ==
-                                                        Brightness.dark
-                                                  ? colors.primary
-                                                  : accent,
-                                            ),
-                                            key: ValueKey(
-                                              'lesson-node-${lesson.id}',
-                                            ),
-                                            onPressed: () =>
-                                                _preview(lesson, anchorContext),
-                                            child: Icon(
+                      LayoutBuilder(
+                        builder: (context, nodeBox) => Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment(left ? -.22 : .22, 0),
+                              child: SizedBox(
+                                width: 220,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 26 + extra * 2,
+                                      child: current
+                                          ? Text(
                                               complete
-                                                  ? (unitEnd
-                                                        ? Icons
-                                                              .workspace_premium_rounded
-                                                        : Icons.check_rounded)
-                                                  : current
-                                                  ? Icons.play_arrow_rounded
-                                                  : unitEnd
-                                                  ? Icons.flag_rounded
-                                                  : Icons.star_rounded,
-                                              size: 34,
+                                                  ? 'ပြန်လေ့ကျင့်မယ်'
+                                                  : 'ဒီကနေ စမယ်',
+                                              style: TextStyle(
+                                                color: accent,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    Builder(
+                                      builder: (anchorContext) => Semantics(
+                                        label:
+                                            '${lesson.category.my} သင်ခန်းစာ ${lesson.number}${complete ? " သင်ပြီး" : ""}',
+                                        button: true,
+                                        excludeSemantics: true,
+                                        onTap: () =>
+                                            _preview(lesson, anchorContext),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(7),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: current
+                                                  ? accent
+                                                  : Colors.transparent,
+                                              width: 3,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: accent.withValues(
+                                                  alpha: .28,
+                                                ),
+                                                offset: const Offset(0, 6),
+                                              ),
+                                            ],
+                                          ),
+                                          child: SizedBox.square(
+                                            dimension: 78,
+                                            child: FilledButton(
+                                              style: FilledButton.styleFrom(
+                                                shape: const CircleBorder(),
+                                                padding: EdgeInsets.zero,
+                                                backgroundColor:
+                                                    complete || current
+                                                    ? accent
+                                                    : accent.withValues(
+                                                        alpha: .14,
+                                                      ),
+                                                foregroundColor:
+                                                    complete || current
+                                                    ? Colors.white
+                                                    : colors.brightness ==
+                                                          Brightness.dark
+                                                    ? colors.primary
+                                                    : accent,
+                                              ),
+                                              key: ValueKey(
+                                                'lesson-node-${lesson.id}',
+                                              ),
+                                              onPressed: () => _preview(
+                                                lesson,
+                                                anchorContext,
+                                              ),
+                                              child: Icon(
+                                                complete
+                                                    ? (unitEnd
+                                                          ? Icons
+                                                                .workspace_premium_rounded
+                                                          : Icons.check_rounded)
+                                                    : current
+                                                    ? Icons.play_arrow_rounded
+                                                    : unitEnd
+                                                    ? Icons.flag_rounded
+                                                    : Icons.star_rounded,
+                                                size: 34,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  if (current)
-                                    Text(
-                                      'သင်ခန်းစာ ${lesson.number}',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleSmall,
-                                    ),
-                                ],
+                                    const SizedBox(height: 12),
+                                    if (current)
+                                      Text(
+                                        'သင်ခန်းစာ ${lesson.number}',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleSmall,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          if (current)
-                            Positioned(
-                              top: 40,
-                              left: left ? null : 14,
-                              right: left ? 14 : null,
-                              child: const ElephantBuddy(size: 58),
-                            ),
-                        ],
+                            if (current)
+                              Positioned(
+                                top: 40 + extra * 2,
+                                left:
+                                    ((nodeBox.maxWidth - 220) *
+                                                (left ? .39 : .61) +
+                                            110 +
+                                            (left ? 100 : -100) -
+                                            44)
+                                        .clamp(8.0, nodeBox.maxWidth - 96),
+                                child: const ElephantBuddy(size: 88),
+                              ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
                       if (index + 1 < rows.length &&
