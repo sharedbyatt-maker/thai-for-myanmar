@@ -13,6 +13,92 @@ import 'package:thai_for_myanmar/widgets/thai_playback_button.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  testWidgets(
+    'muted playback explains settings and cannot add recent history',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final state = AppState();
+      await state.load();
+      await state.setAudioVolume(0);
+      final player = WaitingThaiAssetPlayer()..releaseInitialStop();
+      final playback = ThaiPlaybackService(
+        speechService: SpeechService(
+          engine: NoThaiSpeechEngine(),
+          voiceLookupWindow: Duration.zero,
+        ),
+        catalog: _catalog(),
+        assetPlayer: player,
+      );
+      addTearDown(playback.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ThaiPlaybackButton(
+              phrase: _phrase,
+              appState: state,
+              playbackService: playback,
+              label: 'အသံထွက်',
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('အသံထွက်'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('အတိုးအကျယ်ကို မြှင့်'), findsOneWidget);
+      expect(playback.state, ThaiPlaybackState.idle);
+      expect(state.recent, isEmpty);
+    },
+  );
+
+  testWidgets(
+    'a reused audio button cancels the old phrase without recording the new one',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final state = AppState();
+      await state.load();
+      final player = WaitingThaiAssetPlayer()..releaseInitialStop();
+      final playback = ThaiPlaybackService(
+        speechService: SpeechService(
+          engine: NoThaiSpeechEngine(),
+          voiceLookupWindow: Duration.zero,
+        ),
+        catalog: _catalog(),
+        assetPlayer: player,
+      );
+      addTearDown(playback.dispose);
+      Widget page(Phrase phrase) => MaterialApp(
+        home: Scaffold(
+          body: ThaiPlaybackButton(
+            phrase: phrase,
+            appState: state,
+            playbackService: playback,
+            label: 'အသံထွက်',
+          ),
+        ),
+      );
+      await tester.pumpWidget(page(_phrase));
+      await tester.tap(find.text('အသံထွက်'));
+      await tester.pump();
+      await tester.pump();
+      expect(playback.state, ThaiPlaybackState.playing);
+      const next = Phrase(
+        id: 'next',
+        categoryId: 'greetings',
+        thai: 'ขอบคุณ',
+        myanmar: 'ကျေးဇူးတင်ပါတယ်။',
+        pronunciation: '',
+        english: '',
+        keywords: [],
+        tags: [],
+      );
+      await tester.pumpWidget(page(next));
+      await tester.pumpAndSettle();
+      expect(playback.state, ThaiPlaybackState.idle);
+      expect(state.recent, isEmpty);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   for (final compact in [false, true]) {
     testWidgets(
       'button compact=$compact shows loading and playing states and can stop',

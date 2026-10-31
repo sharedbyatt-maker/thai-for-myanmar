@@ -69,7 +69,11 @@ class SpeechService {
     return diagnosticSnapshot;
   }
 
-  Future<SpeechResult> speakThai(String text, {void Function()? onStarted}) {
+  Future<SpeechResult> speakThai(
+    String text, {
+    void Function()? onStarted,
+    double speed = 1,
+  }) {
     final result = Completer<SpeechResult>();
     final generation = _generation;
     _queue = _queue.then((_) async {
@@ -84,6 +88,7 @@ class SpeechService {
           text,
           cancellation: cancellation,
           onStarted: onStarted,
+          speed: speed.isFinite ? speed.clamp(.5, 1.5).toDouble() : 1,
         );
         result.complete(
           generation == _generation ? speechResult : SpeechResult.cancelled,
@@ -108,6 +113,7 @@ class SpeechService {
     String text, {
     required _SpeechCancellation cancellation,
     void Function()? onStarted,
+    double speed = 1,
   }) async {
     try {
       if (text.trim().isEmpty) return _unavailable('empty_text');
@@ -134,7 +140,7 @@ class SpeechService {
       }
 
       final rateResult = await _waitOrCancel(
-        _engine.setSpeechRate(0.43).timeout(_speechTimeout),
+        _engine.setSpeechRate(0.43 * speed).timeout(_speechTimeout),
         cancellation,
       );
       if (!_operationDidNotFail(rateResult)) {

@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/app.dart';
+import 'package:thai_for_myanmar/learning/study_catalog.dart';
 import 'package:thai_for_myanmar/screens/everyday_screen.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
@@ -12,12 +13,15 @@ import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
 
+late ThaiAudioCatalog _testCatalog;
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   late PhraseRepository repository;
 
   setUpAll(() async {
     repository = await PhraseRepository.load(rootBundle);
+    _testCatalog = await ThaiAudioCatalog.load(rootBundle);
   });
 
   if (kIsWeb) {
@@ -44,7 +48,6 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
@@ -57,7 +60,15 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-lesson');
+      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-lesson-reveal');
+      await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-lesson-recall');
       await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('အခု နားမယ်'));
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
       await tester.pumpAndSettle();
@@ -121,6 +132,8 @@ void main() {
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
   ) async {
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
     final preferences = await SharedPreferences.getInstance();
     await preferences.clear();
     final state = AppState();
@@ -132,8 +145,7 @@ void main() {
         playbackService: _playbackService(),
       ),
     );
-    await _pumpUi(tester);
-    await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
+    await tester.pumpAndSettle();
     await tester.pumpAndSettle();
     await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
@@ -144,15 +156,39 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
     await tester.pump(const Duration(milliseconds: 500));
-    for (var index = 0; index < 5; index++) {
+    final phrases = StudyCatalog.lessons(repository).first.phrases;
+    for (var index = 0; index < phrases.length; index++) {
       await tester.ensureVisible(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
-      await tester.pump();
-      await tester.ensureVisible(find.text('မှတ်မိတယ်'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('မှတ်မိတယ်'));
+      await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      if (index % 3 == 2) {
+        if (kIsWeb) {
+          await binding.takeScreenshot(
+            '${(tester.view.physicalSize.width / tester.view.devicePixelRatio).round()}-lesson-listening',
+          );
+        }
+        await tester.tap(find.byKey(const ValueKey('guided-audio')));
+        await tester.pumpAndSettle();
+      }
+      final option = find.byKey(ValueKey('guided-option-${phrases[index].id}'));
+      await tester.ensureVisible(option);
+      await tester.pumpAndSettle();
+      await tester.tap(option);
       await tester.pump();
+      await tester.tap(find.text('အဖြေစစ်မယ်'));
+      await tester.pumpAndSettle();
+      if (kIsWeb && index == 0) {
+        await binding.takeScreenshot(
+          '${(tester.view.physicalSize.width / tester.view.devicePixelRatio).round()}-lesson-feedback',
+        );
+      }
+      await tester.tap(
+        find.text(index + 1 == phrases.length ? 'ရလဒ်ကြည့်မယ်' : 'နောက်စကားစု'),
+      );
+      await tester.pumpAndSettle();
     }
     expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsOneWidget);
     expect(state.learning.totalReviews, 5);
@@ -258,7 +294,7 @@ Future<void> _pumpUi(WidgetTester tester) async {
 
 ThaiPlaybackService _playbackService() => ThaiPlaybackService(
   speechService: SpeechService(),
-  catalog: ThaiAudioCatalog.empty(),
+  catalog: _testCatalog,
   assetPlayer: _NoopAssetPlayer(),
 );
 

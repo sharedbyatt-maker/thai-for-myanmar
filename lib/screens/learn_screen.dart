@@ -306,6 +306,7 @@ class _LearnScreenState extends State<LearnScreen> {
         phrases: lesson.phrases,
         mode: LearningMode.flashcard,
         lessonId: lesson.id,
+        guided: true,
         title: '${lesson.category.my} • ${lesson.number}',
       ),
     ),

@@ -28,6 +28,7 @@ class StudySessionScreen extends StatefulWidget {
     required this.mode,
     required this.title,
     this.lessonId,
+    this.guided = false,
     super.key,
   });
   final PhraseRepository repository;
@@ -37,6 +38,7 @@ class StudySessionScreen extends StatefulWidget {
   final LearningMode mode;
   final String title;
   final String? lessonId;
+  final bool guided;
 
   @override
   State<StudySessionScreen> createState() => _StudySessionScreenState();
@@ -55,6 +57,11 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   bool _audioUnavailable = false;
   bool _showPronunciation = false;
   bool _lessonPreviewOpen = false;
+  bool _checking = false;
+  bool _textFallback = false;
+  bool _exitPromptOpen = false;
+  int _audioGeneration = 0;
+  int _actionGeneration = 0;
   String? _selectedAnswer;
   final Map<String, int> _results = {};
   final List<int> _selectedChunks = [];
@@ -70,6 +77,10 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   late final List<Phrase> _rightOrder;
 
   Phrase get _phrase => widget.phrases[_index];
+  bool get _guided => widget.guided && widget.mode == LearningMode.flashcard;
+  bool get _listeningCheck =>
+      _guided && _checking && _index % 3 == 2 && !_textFallback;
+  bool get _reverseCheck => _guided && _checking && _index % 3 == 1;
 
   @override
   void initState() {
@@ -81,19 +92,10 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   void _prepareQuestion() {
-    final candidates =
-        widget.repository.phrases
-            .where((item) => item.id != _phrase.id)
-            .toList()
-          ..shuffle();
-    String label(Phrase phrase) => widget.mode == LearningMode.reverseMeaning
-        ? phrase.thaiFor(_politeStyle)
-        : phrase.myanmar;
-    final seen = <String>{label(_phrase)};
-    final distractors = candidates
-        .where((item) => seen.add(label(item)))
-        .take(3);
-    _options = [_phrase, ...distractors]..shuffle();
+    _audioGeneration++;
+    _checking = false;
+    _textFallback = false;
+    _buildOptions();
     final chunks = sentenceChunks(_phrase, _politeStyle) ?? [];
     _chunkOrder = List<int>.generate(chunks.length, (index) => index)
       ..shuffle();
@@ -106,6 +108,23 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     _selectedAnswer = null;
     _mistakes = 0;
     _sentenceFeedback = null;
+  }
+
+  void _buildOptions() {
+    final candidates =
+        widget.repository.phrases
+            .where((item) => item.id != _phrase.id)
+            .toList()
+          ..shuffle();
+    String label(Phrase phrase) =>
+        (widget.mode == LearningMode.reverseMeaning || _reverseCheck)
+        ? phrase.thaiFor(_politeStyle)
+        : phrase.myanmar;
+    final seen = <String>{label(_phrase)};
+    final distractors = candidates
+        .where((item) => seen.add(label(item)))
+        .take(3);
+    _options = [_phrase, ...distractors]..shuffle();
   }
 
   @override
@@ -162,7 +181,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     }
   }
 
-  Future<void> _listen() async {
+  Future<void> _listen({bool slow = false}) async {
     if (_finished || widget.phrases.isEmpty) return;
     if (widget.appState.audioVolume == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -180,14 +199,29 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
     }
     final phrase = _phrase;
     final phraseId = phrase.id;
+    final generation = ++_audioGeneration;
     setState(() {
       _audioBusy = true;
       _audioUnavailable = false;
     });
     await widget.playbackService.setVolume(widget.appState.audioVolume);
-    if (!mounted || _finished || _phrase.id != phraseId) return;
-    final result = await widget.playbackService.playThai(phrase, _politeStyle);
-    if (!mounted || _finished || _phrase.id != phraseId) return;
+    if (!mounted ||
+        _finished ||
+        _phrase.id != phraseId ||
+        generation != _audioGeneration) {
+      return;
+    }
+    final result = await widget.playbackService.playThai(
+      phrase,
+      _politeStyle,
+      speed: slow ? .8 : 1,
+    );
+    if (!mounted ||
+        _finished ||
+        _phrase.id != phraseId ||
+        generation != _audioGeneration) {
+      return;
+    }
     setState(() {
       _audioBusy = false;
       _heard =
@@ -199,13 +233,25 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   void _answer(Phrase option) {
-    if (_answered || (widget.mode == LearningMode.listening && !_heard)) return;
+    if (_answered ||
+        ((widget.mode == LearningMode.listening || _listeningCheck) &&
+            !_heard)) {
+      return;
+    }
     final correct = QuizLogic.isCorrect(_phrase, option);
     setState(() {
       _selectedAnswer = option.id;
       _answered = true;
     });
-    _record(_phrase, correct ? 5 : 2);
+    if (_guided) {
+      if (correct) {
+        _record(_phrase, _mistakes == 0 ? 5 : 3);
+      } else {
+        _mistakes++;
+      }
+    } else {
+      _record(_phrase, correct ? 5 : 2);
+    }
   }
 
   void _checkSentence() {
@@ -254,13 +300,27 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final active =
+        !_finished &&
+        widget.phrases.isNotEmpty &&
+        (_index > 0 ||
+            _revealed ||
+            _answered ||
+            _checking ||
+            _matched.isNotEmpty);
     return PopScope(
+      canPop: !active,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) unawaited(widget.playbackService.stop());
+        if (!didPop && !_exitPromptOpen) unawaited(_confirmExit());
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(
+            widget.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           actions: [
             IconButton(
               tooltip: 'အသံထွက်စာ ပြ/ဖျောက်',
@@ -285,12 +345,410 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     ? _summary(context)
                     : widget.mode == LearningMode.matching
                     ? _matching(context)
+                    : _guided
+                    ? _guidedQuestion(context)
                     : _question(context),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _confirmExit() async {
+    _exitPromptOpen = true;
+    final leave = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ဒီအကြိမ် နားမလား?'),
+        content: const Text(
+          'ဖြေပြီးသား စကားစုတွေကို သိမ်းထားပါတယ်။ သင်ခန်းစာပြီးဆုကိုတော့ အားလုံးပြီးမှ ရပါမယ်။',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('ဆက်သင်မယ်'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('အခု နားမယ်'),
+          ),
+        ],
+      ),
+    );
+    _exitPromptOpen = false;
+    if (mounted && leave == true) Navigator.pop(context);
+  }
+
+  void _beginCheck() {
+    _audioGeneration++;
+    unawaited(widget.playbackService.stop());
+    setState(() {
+      _checking = true;
+      _heard = false;
+      _audioBusy = false;
+      _audioUnavailable = false;
+      _selectedAnswer = null;
+      _buildOptions();
+    });
+  }
+
+  void _guidedPrimary() {
+    if (!_checking) {
+      if (!_revealed) {
+        setState(() => _revealed = true);
+      } else {
+        _beginCheck();
+      }
+    } else if (!_answered) {
+      if (_selectedAnswer == null) return;
+      _answer(_options.firstWhere((p) => p.id == _selectedAnswer));
+    } else if (_selectedAnswer == _phrase.id) {
+      _next();
+    } else {
+      setState(() {
+        _answered = false;
+        _selectedAnswer = null;
+        _options.shuffle();
+      });
+    }
+  }
+
+  Widget _guidedQuestion(BuildContext context) {
+    final actionGeneration = _actionGeneration;
+    final colors = Theme.of(context).colorScheme;
+    final passed = _answered && _selectedAnswer == _phrase.id;
+    final canHear = !_reverseCheck || _answered;
+    final canChoose = !_listeningCheck || _heard;
+    final showThai = (!_reverseCheck && !_listeningCheck) || _answered;
+    final prompt = !_checking
+        ? 'နားထောင်ပြီး လေ့လာပါ'
+        : _listeningCheck
+        ? 'ကြားတဲ့စကားရဲ့ အဓိပ္ပာယ်ကို ရွေးပါ'
+        : _reverseCheck
+        ? 'ထိုင်းလို ဘယ်လိုပြောမလဲ?'
+        : 'အဓိပ္ပာယ်ကို ရွေးပါ';
+    final primary = !_checking
+        ? (_revealed ? 'စမ်းဖြေမယ်' : 'အဓိပ္ပာယ်ကြည့်မယ်')
+        : !_answered
+        ? 'အဖြေစစ်မယ်'
+        : !passed
+        ? 'ပြန်စမ်းမယ်'
+        : _index + 1 == widget.phrases.length
+        ? 'ရလဒ်ကြည့်မယ်'
+        : 'နောက်စကားစု';
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value:
+                          (_index * 2 + (_checking ? 1 : 0)) /
+                          (widget.phrases.length * 2),
+                      minHeight: 9,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('${_index + 1} / ${widget.phrases.length}'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            key: ValueKey('guided-$_index-$_checking'),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const ElephantBuddy(size: 42),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        prompt,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Chip(label: Text(_checking ? 'စမ်းဖြေ' : 'လေ့လာ')),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  color: colors.primaryContainer.withValues(alpha: .5),
+                  child: Padding(
+                    padding: const EdgeInsets.all(22),
+                    child: Column(
+                      children: [
+                        if (canHear) ...[
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 12,
+                            runSpacing: 8,
+                            children: [
+                              FilledButton.icon(
+                                key: const ValueKey('guided-audio'),
+                                onPressed: () => unawaited(_listen()),
+                                icon: Icon(
+                                  _audioBusy
+                                      ? Icons.stop_rounded
+                                      : Icons.volume_up_rounded,
+                                  size: 30,
+                                ),
+                                label: Text(
+                                  _audioBusy ? 'အသံရပ်မယ်' : 'နားထောင်မယ်',
+                                ),
+                              ),
+                              OutlinedButton.icon(
+                                key: const ValueKey('guided-slow-audio'),
+                                onPressed: _audioBusy
+                                    ? null
+                                    : () => unawaited(_listen(slow: true)),
+                                icon: const Icon(
+                                  Icons.slow_motion_video_rounded,
+                                ),
+                                label: const Text('ဖြည်းဖြည်း'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                        if (showThai)
+                          Text(
+                            _phrase.thaiFor(_politeStyle),
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.5,
+                                ),
+                          ),
+                        if (_reverseCheck && !_answered)
+                          Text(
+                            _phrase.myanmar,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        if (_listeningCheck && !_answered) ...[
+                          Icon(
+                            Icons.graphic_eq_rounded,
+                            size: 54,
+                            color: colors.primary,
+                          ),
+                          Text(
+                            _heard
+                                ? 'ပြန်နားထောင်လို့ ရပါတယ်'
+                                : 'အသံကို အရင်နားထောင်ပါ',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                        if (!_checking || _answered) ...[
+                          if (_showPronunciation)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Text(
+                                _phrase.pronunciation,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: colors.primary),
+                              ),
+                            ),
+                          TextButton.icon(
+                            onPressed: () => setState(
+                              () => _showPronunciation = !_showPronunciation,
+                            ),
+                            icon: const Icon(
+                              Icons.subtitles_outlined,
+                              size: 18,
+                            ),
+                            label: Text(
+                              _showPronunciation
+                                  ? 'အသံထွက်စာ ဖျောက်မယ်'
+                                  : 'အသံထွက်စာ ကြည့်မယ်',
+                            ),
+                          ),
+                        ],
+                        if (!_checking && _revealed) ...[
+                          const Divider(height: 28),
+                          Text(
+                            _phrase.myanmar,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+                if ((!_checking && _revealed) || _answered)
+                  ExpansionTile(
+                    title: const Text('အသုံးပြုပုံ ကြည့်မယ်'),
+                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    children: [
+                      if (_phrase.note != null) Text(_phrase.note!),
+                      Text(_phrase.english),
+                    ],
+                  ),
+                if (_audioUnavailable) ...[
+                  const SizedBox(height: 12),
+                  const Text('အသံမရသေးပါ။ ထပ်နားထောင်နိုင်ပါတယ်။'),
+                  if (_listeningCheck)
+                    TextButton.icon(
+                      onPressed: () => setState(() {
+                        _textFallback = true;
+                        _audioUnavailable = false;
+                      }),
+                      icon: const Icon(Icons.article_outlined),
+                      label: const Text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'),
+                    ),
+                ],
+                if (_checking) ...[
+                  const SizedBox(height: 16),
+                  ..._options.asMap().entries.map((entry) {
+                    final p = entry.value;
+                    final selected = p.id == _selectedAnswer;
+                    final correct = p.id == _phrase.id;
+                    final feedbackColor = _answered && correct
+                        ? colors.primary
+                        : _answered && selected
+                        ? colors.error
+                        : selected
+                        ? colors.primary
+                        : colors.outlineVariant;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Semantics(
+                        selected: selected,
+                        child: OutlinedButton(
+                          key: ValueKey('guided-option-${p.id}'),
+                          style: OutlinedButton.styleFrom(
+                            alignment: Alignment.centerLeft,
+                            side: BorderSide(
+                              color: feedbackColor,
+                              width: selected || (_answered && correct) ? 2 : 1,
+                            ),
+                            backgroundColor: selected
+                                ? feedbackColor.withValues(alpha: .1)
+                                : colors.surface,
+                            padding: const EdgeInsets.all(16),
+                          ),
+                          onPressed: _answered || !canChoose
+                              ? null
+                              : () => setState(() => _selectedAnswer = p.id),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${entry.key + 1}',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  _reverseCheck
+                                      ? p.thaiFor(_politeStyle)
+                                      : p.myanmar,
+                                  style: TextStyle(
+                                    color: colors.onSurface,
+                                    fontSize: 17,
+                                    height: 1.6,
+                                  ),
+                                ),
+                              ),
+                              if (_answered && correct)
+                                Icon(
+                                  Icons.check_circle_rounded,
+                                  color: colors.primary,
+                                )
+                              else if (selected)
+                                Icon(
+                                  _answered
+                                      ? Icons.cancel_rounded
+                                      : Icons.radio_button_checked,
+                                  color: feedbackColor,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ],
+            ),
+          ),
+        ),
+        Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * .4,
+          ),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: Border(top: BorderSide(color: colors.outlineVariant)),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_answered) ...[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        passed
+                            ? Icons.check_circle_rounded
+                            : Icons.lightbulb_rounded,
+                        color: passed ? colors.primary : colors.error,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          passed
+                              ? (_mistakes == 0
+                                    ? 'မှန်ပါတယ်။ ကောင်းလိုက်တာ!'
+                                    : 'အခု မှန်သွားပြီ။')
+                              : 'မှတ်ထားပါ — ${_phrase.thaiFor(_politeStyle)}\n${_phrase.myanmar}',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                LiftButton(
+                  key: const ValueKey('guided-primary'),
+                  label: primary,
+                  icon: _checking
+                      ? Icons.arrow_forward_rounded
+                      : _revealed
+                      ? Icons.psychology_rounded
+                      : Icons.visibility_rounded,
+                  onPressed:
+                      _checking &&
+                          !_answered &&
+                          (_selectedAnswer == null || !canChoose)
+                      ? null
+                      : () {
+                          if (actionGeneration != _actionGeneration) return;
+                          _actionGeneration++;
+                          _guidedPrimary();
+                        },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -748,7 +1206,9 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'မှတ်မိ / မှန် $correct ခု • စုစုပေါင်း ${_results.length} ခု',
+          _guided
+              ? 'ပထမအကြိမ်မှန် ${_results.values.where((q) => q == 5).length} ခု • သင်ပြီး ${_results.length} ခု'
+              : 'မှတ်မိ / မှန် $correct ခု • စုစုပေါင်း ${_results.length} ခု',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
@@ -796,6 +1256,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
                     mode: LearningMode.flashcard,
                     title: '${nextLesson.category.my} · ${nextLesson.number}',
                     lessonId: nextLesson.id,
+                    guided: true,
                   ),
                 ),
               );

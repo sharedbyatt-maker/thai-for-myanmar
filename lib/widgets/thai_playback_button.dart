@@ -32,8 +32,28 @@ class ThaiPlaybackButton extends StatefulWidget {
 
 class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
   String? _failedStyle;
+  int _generation = 0;
+
+  @override
+  void didUpdateWidget(covariant ThaiPlaybackButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.phrase.id != widget.phrase.id ||
+        oldWidget.playbackService != widget.playbackService) {
+      _generation++;
+      _failedStyle = null;
+      if (oldWidget.playbackService.isActiveFor(oldWidget.phrase.id, 'male') ||
+          oldWidget.playbackService.isActiveFor(
+            oldWidget.phrase.id,
+            'female',
+          )) {
+        unawaited(oldWidget.playbackService.stop());
+      }
+    }
+  }
+
   @override
   void dispose() {
+    _generation++;
     if (widget.playbackService.isActiveFor(
       widget.phrase.id,
       widget.appState.politeStyle,
@@ -45,18 +65,40 @@ class _ThaiPlaybackButtonState extends State<ThaiPlaybackButton> {
 
   Future<void> _toggle(String politeStyle) async {
     final service = widget.playbackService;
+    final phrase = widget.phrase;
     if (service.isActiveFor(widget.phrase.id, politeStyle)) {
       await service.stop();
       return;
     }
 
+    if (widget.appState.audioVolume == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'ဆက်တင်မှာ ထိုင်းအသံ အတိုးအကျယ်ကို မြှင့်ပြီးမှ စမ်းပါ။',
+          ),
+        ),
+      );
+      return;
+    }
+
+    final generation = ++_generation;
     setState(() => _failedStyle = null);
     await service.setVolume(widget.appState.audioVolume);
-    if (!mounted) return;
-    final result = await service.playThai(widget.phrase, politeStyle);
+    if (!mounted ||
+        generation != _generation ||
+        widget.appState.politeStyle != politeStyle) {
+      return;
+    }
+    final result = await service.playThai(phrase, politeStyle);
+    if (!mounted ||
+        generation != _generation ||
+        widget.appState.politeStyle != politeStyle) {
+      return;
+    }
     if (result == ThaiPlaybackResult.audioAsset ||
         result == ThaiPlaybackResult.spoken) {
-      unawaited(widget.appState.remember(widget.phrase.id));
+      unawaited(widget.appState.remember(phrase.id));
     }
     if (result == ThaiPlaybackResult.unavailable && mounted) {
       setState(() => _failedStyle = politeStyle);
