@@ -133,6 +133,8 @@ void main() {
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
   ) async {
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
     final preferences = await SharedPreferences.getInstance();
     await preferences.clear();
     final state = AppState();
@@ -144,7 +146,7 @@ void main() {
         playbackService: _playbackService(),
       ),
     );
-    await _pumpUi(tester);
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
