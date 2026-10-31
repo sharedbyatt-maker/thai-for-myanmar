@@ -4,7 +4,7 @@ import '../data/phrase_repository.dart';
 import '../learning/course_catalog.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
-import 'course_lesson_screen.dart';
+import '../widgets/course_learning_path.dart';
 import 'legacy_learn_screen.dart';
 
 class LearnScreen extends StatefulWidget {
@@ -50,150 +50,37 @@ class _LearnScreenState extends State<LearnScreen> {
         return const Center(child: CircularProgressIndicator());
       }
       final course = snapshot.data!;
-      return AnimatedBuilder(
-        animation: widget.appState,
-        builder: (context, _) {
-          final progress = widget.appState.learning.course;
-          bool done(CourseUnit u) =>
-              u.lessons.every((l) => progress.completed.containsKey(l.id));
-          final next = course.units.firstWhere(
-            (u) => !done(u),
-            orElse: () => course.units.last,
-          );
-          final count = course.units.where(done).length;
-          return ListView.builder(
-            key: const ValueKey('course-main-path'),
-            padding: const EdgeInsets.fromLTRB(18, 12, 18, 32),
-            itemCount: course.units.length + 2,
-            itemBuilder: (context, i) {
-              if (i == 0) {
-                return Card(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'လက်တွေ့သုံး ထိုင်းစကား',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ),
-                            const Icon(Icons.school_rounded),
-                          ],
-                        ),
-                        Text(
-                          '$count / ${course.units.length} unit လေ့ကျင့်ပြီး',
-                        ),
-                        const SizedBox(height: 12),
-                        Text(next.goal),
-                        const SizedBox(height: 12),
-                        FilledButton.icon(
-                          key: const ValueKey('course-continue'),
-                          onPressed: () => _openUnit(course, next),
-                          icon: const Icon(Icons.play_arrow_rounded),
-                          label: Text(
-                            count == course.units.length
-                                ? 'ပြန်လေ့ကျင့်မယ်'
-                                : 'ဒီကနေ ဆက်သင်မယ်',
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          'စာသားလေ့ကျင့်နိုင်ပါပြီ · အသံအချို့ ထည့်ရန်ကျန်',
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-              if (i == course.units.length + 1) {
-                return TextButton.icon(
-                  key: const ValueKey('legacy-learning-history'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => Scaffold(
-                        appBar: AppBar(title: const Text('အရင်သင်ခန်းစာများ')),
-                        body: LegacyLearnScreen(
-                          repository: widget.repository,
-                          appState: widget.appState,
-                          playbackService: widget.playbackService,
-                          onSearch: widget.onSearch,
-                        ),
-                      ),
-                    ),
-                  ),
-                  icon: const Icon(Icons.history),
-                  label: const Text('အရင်သင်ခန်းစာနဲ့ မှတ်တမ်းများ'),
-                );
-              }
-              final u = course.units[i - 1];
-              final previous = i > 1 ? course.units[i - 2] : null;
-              final complete = u.lessons
-                  .where((l) => progress.completed.containsKey(l.id))
-                  .length;
-              final available = u.prerequisites.every(
-                (id) => done(course.units.firstWhere((v) => v.id == id)),
-              );
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (previous?.section != u.section)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(6, 28, 6, 12),
-                      child: Text(
-                        'အပိုင်း ${u.section} · ${course.sections[u.section - 1]}',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                  Card(
-                    child: ListTile(
-                      key: ValueKey('course-unit-${u.id}'),
-                      contentPadding: const EdgeInsets.all(16),
-                      leading: CircleAvatar(
-                        radius: 25,
-                        child: Icon(
-                          done(u)
-                              ? Icons.check_rounded
-                              : available
-                              ? Icons.star_rounded
-                              : Icons.lock_outline,
-                        ),
-                      ),
-                      title: Text(
-                        '${i.toString().padLeft(2, '0')}  ${u.title}',
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text('$complete / ${u.lessons.length} lesson'),
-                      ),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => _openUnit(course, u),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-  void _openUnit(CourseCatalog course, CourseUnit unit) => Navigator.push(
-    context,
-    MaterialPageRoute<void>(
-      builder: (_) => CourseUnitScreen(
+      return CourseLearningPath(
         course: course,
-        unit: unit,
         appState: widget.appState,
         playbackService: widget.playbackService,
-      ),
-    ),
+        openUnit: (unit) => Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (_) => CourseUnitScreen(
+              course: course,
+              unit: unit,
+              appState: widget.appState,
+              playbackService: widget.playbackService,
+            ),
+          ),
+        ),
+        openHistory: () => Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (_) => Scaffold(
+              appBar: AppBar(title: const Text('အရင်သင်ခန်းစာများ')),
+              body: LegacyLearnScreen(
+                repository: widget.repository,
+                appState: widget.appState,
+                playbackService: widget.playbackService,
+                onSearch: widget.onSearch,
+              ),
+            ),
+          ),
+        ),
+      );
+    },
   );
 }
 
@@ -227,7 +114,7 @@ class CourseUnitScreen extends StatelessWidget {
             .toList();
         return Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
+            constraints: const BoxConstraints(maxWidth: 480),
             child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
@@ -287,50 +174,38 @@ class CourseUnitScreen extends StatelessWidget {
                           missing.isEmpty &&
                           (i == 0 ||
                               p.completed.containsKey(unit.lessons[i - 1].id));
-                      return Card(
-                        child: ListTile(
-                          key: ValueKey('course-lesson-${unit.id}-${i + 1}'),
-                          contentPadding: const EdgeInsets.all(14),
-                          leading: CircleAvatar(
-                            child: Icon(
-                              complete
-                                  ? Icons.check
-                                  : unlocked
-                                  ? Icons.play_arrow
-                                  : Icons.lock_outline,
-                            ),
-                          ),
-                          title: Text(lesson.title),
-                          subtitle: Text(
-                            complete
-                                ? 'စာသားလေ့ကျင့်ပြီး · ပြန်လေ့ကျင့်နိုင်'
-                                : unlocked
-                                ? 'စတင်ရန်'
-                                : 'အရင် lesson ကို ဆက်သင်ပါ',
-                          ),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: unlocked
-                              ? () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute<void>(
-                                    builder: (_) => CourseLessonScreen(
-                                      course: course,
-                                      unit: unit,
-                                      lesson: lesson,
-                                      appState: appState,
-                                      playbackService: playbackService,
-                                    ),
+                      return CoursePathNode(
+                        nodeKey: ValueKey('course-lesson-${unit.id}-${i + 1}'),
+                        index: i,
+                        height:
+                            144 *
+                            (MediaQuery.textScalerOf(context).scale(14) / 14)
+                                .clamp(1.0, 1.5),
+                        title: lesson.title,
+                        color: courseUnitColor(unit),
+                        completed: complete,
+                        current: unlocked && !complete,
+                        locked: !unlocked,
+                        last: i == unit.lessons.length - 1,
+                        icon: i == unit.lessons.length - 1
+                            ? Icons.emoji_events_rounded
+                            : Icons.star_rounded,
+                        onPressed: (anchor) => unlocked
+                            ? previewCourseLesson(
+                                context: anchor,
+                                course: course,
+                                unit: unit,
+                                lesson: lesson,
+                                appState: appState,
+                                playbackService: playbackService,
+                              )
+                            : ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'အခြေခံ lesson ကို အရင်လေ့ကျင့်ပါ။',
                                   ),
-                                )
-                              : () =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'အခြေခံ lesson ကို အရင်လေ့ကျင့်ပါ။',
-                                        ),
-                                      ),
-                                    ),
-                        ),
+                                ),
+                              ),
                       );
                     },
                   ),

@@ -9,8 +9,10 @@ import 'package:thai_for_myanmar/learning/course_catalog.dart';
 import 'package:thai_for_myanmar/learning/course_progress.dart';
 import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/screens/learn_screen.dart';
+import 'package:thai_for_myanmar/widgets/course_learning_path.dart';
 import 'package:thai_for_myanmar/screens/course_lesson_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
+import 'package:thai_for_myanmar/theme/app_theme.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -74,7 +76,7 @@ void main() {
         scrollable: find.byType(Scrollable).first,
       );
     }
-    await t.ensureVisible(f);
+    await Scrollable.ensureVisible(t.element(f), alignment: .6);
     await t.pumpAndSettle();
     await t.tap(f);
     await t.pumpAndSettle();
@@ -181,6 +183,7 @@ void main() {
       addTearDown(service.dispose);
       await t.pumpWidget(
         MaterialApp(
+          theme: AppTheme.light(),
           home: MediaQuery(
             data: const MediaQueryData(textScaler: TextScaler.linear(2)),
             child: Scaffold(
@@ -195,9 +198,125 @@ void main() {
       );
       await t.pumpAndSettle();
       expect(find.byKey(const ValueKey('practical-intro-entry')), findsNothing);
-      await tap(t, find.byKey(const ValueKey('course-continue')));
+      expect(find.byType(CoursePathNode), findsWidgets);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('course-main-path')),
+          matching: find.byType(ListTile),
+        ),
+        findsNothing,
+      );
       await tap(t, find.byKey(const ValueKey('course-lesson-u01-2')));
       expect(find.text('အခြေခံ lesson ကို အရင်လေ့ကျင့်ပါ။'), findsOneWidget);
+      expect(find.byType(CourseLessonScreen), findsNothing);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'winding nodes open a dismissible preview before starting; no preview credit',
+    (t) async {
+      t.view.physicalSize = const Size(390, 900);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
+      final state = AppState();
+      await state.load();
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: audio,
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark(),
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repo,
+              appState: state,
+              playbackService: service,
+            ),
+          ),
+        ),
+      );
+      await t.pumpAndSettle();
+      final first = find.byKey(const ValueKey('course-lesson-u01-1'));
+      final second = find.byKey(const ValueKey('course-lesson-u01-2'));
+      expect(
+        (t.getCenter(first).dx - t.getCenter(second).dx).abs(),
+        greaterThan(20),
+      );
+      expect(find.byType(CoursePathNode), findsWidgets);
+      await tap(t, first);
+      expect(
+        find.byKey(const ValueKey('course-lesson-preview')),
+        findsOneWidget,
+      );
+      expect(find.byType(CourseLessonScreen), findsNothing);
+      expect(state.learning.course.completed, isEmpty);
+      await tap(t, find.byTooltip('ပိတ်မယ်'));
+      expect(find.byKey(const ValueKey('course-lesson-preview')), findsNothing);
+      expect(state.learning.course.events, isEmpty);
+      t.view.physicalSize = const Size(320, 760);
+      t.view.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(t.view.platformDispatcher.clearTextScaleFactorTestValue);
+      await t.pumpAndSettle();
+      await tap(t, first);
+      expect(t.takeException(), isNull);
+      await tap(t, find.byKey(const ValueKey('course-preview-start')));
+      expect(find.byType(CourseLessonScreen), findsOneWidget);
+      expect(state.learning.course.completed, isEmpty);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'late course resumes on the current node and unit chooser returns to it',
+    (t) async {
+      final state = AppState();
+      await state.load();
+      for (final unit in course.units.take(10)) {
+        for (final lesson in unit.lessons) {
+          state.learning.course.finish(lesson.id, DateTime.now());
+        }
+      }
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: audio,
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repo,
+              appState: state,
+              playbackService: service,
+            ),
+          ),
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('course-lesson-u11-1')).hitTestable(),
+        findsOneWidget,
+      );
+      await tap(t, find.byTooltip('ယူနစ် ရွေးမယ်'));
+      await t.scrollUntilVisible(
+        find.byKey(const ValueKey('course-jump-u26')),
+        400,
+        maxScrolls: 20,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tap(t, find.byKey(const ValueKey('course-jump-u26')));
+      expect(find.byKey(const ValueKey('course-unit-u26')), findsOneWidget);
+      await tap(t, find.byKey(const ValueKey('course-continue')));
+      expect(
+        find.byKey(const ValueKey('course-lesson-u11-1')).hitTestable(),
+        findsOneWidget,
+      );
       expect(find.byType(CourseLessonScreen), findsNothing);
       expect(t.takeException(), isNull);
     },

@@ -48,10 +48,20 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.tap(find.byKey(const ValueKey('course-continue')));
+      await state.setThemePreference('dark');
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-home-dark');
+      await state.setThemePreference('light');
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('ယူနစ် လမ်းညွှန်'));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-course-unit');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('course-lesson-u01-1')));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-course-preview');
+      await tester.tap(find.byKey(const ValueKey('course-preview-start')));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-course-model');
       await tester.tap(find.byKey(const ValueKey('course-primary')));
@@ -59,8 +69,6 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('course-primary')));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-course-listening');
-      await tester.pageBack();
-      await tester.pumpAndSettle();
       await tester.pageBack();
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
@@ -89,7 +97,7 @@ void main() {
       await tester.scrollUntilVisible(
         find.byKey(const ValueKey('course-unit-u26')),
         500,
-        maxScrolls: 50,
+        maxScrolls: 150,
       );
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-path-end');
@@ -132,9 +140,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const ValueKey('course-continue')));
-      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('course-lesson-u01-1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('course-preview-start')));
       await tester.pumpAndSettle();
       for (var i = 0; i < 2; i++) {
         await tester.tap(find.byKey(const ValueKey('course-primary')));
@@ -194,7 +202,7 @@ void main() {
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('legacy-learning-history')),
       500,
-      maxScrolls: 50,
+      maxScrolls: 150,
     );
     await tester.tap(find.byKey(const ValueKey('legacy-learning-history')));
     await tester.pumpAndSettle();

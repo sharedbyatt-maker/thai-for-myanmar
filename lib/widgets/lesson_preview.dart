@@ -3,6 +3,105 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../learning/study_catalog.dart';
+import '../learning/course_catalog.dart';
+
+/// Course entry shares the same anchored placement as the retained legacy path.
+Future<bool?> showCourseLessonPreview({
+  required BuildContext context,
+  required CourseLesson lesson,
+  required CourseUnit unit,
+  required bool completed,
+  required Rect anchor,
+  required Color color,
+}) => showDialog<bool>(
+  context: context,
+  barrierColor: Colors.black.withValues(alpha: .12),
+  useSafeArea: false,
+  builder: (context) => CustomSingleChildLayout(
+    delegate: _PreviewPosition(
+      anchor: anchor,
+      padding: MediaQuery.paddingOf(context),
+      viewInsets: MediaQuery.viewInsetsOf(context),
+    ),
+    child: Material(
+      key: const ValueKey('course-lesson-preview'),
+      color: color,
+      elevation: 12,
+      borderRadius: BorderRadius.circular(24),
+      clipBehavior: Clip.antiAlias,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(22, 10, 22, 22),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    completed ? 'ပြန်လေ့ကျင့်မယ်' : 'သင်ခန်းစာ စမယ်',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'ပိတ်မယ်',
+                  color: Colors.white,
+                  onPressed: () => Navigator.pop(context, false),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
+            Text(
+              lesson.title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(unit.goal, style: const TextStyle(color: Colors.white)),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                _Detail(
+                  icon: Icons.layers_rounded,
+                  text: '${lesson.steps.length} ဆင့်',
+                ),
+                if (completed)
+                  const _Detail(
+                    icon: Icons.check_rounded,
+                    text: 'လေ့ကျင့်ပြီး',
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'အသံမစုံသေးရင် စာသားနဲ့ လေ့ကျင့်နိုင်ပါတယ်။',
+              style: TextStyle(color: Colors.white, fontSize: 13),
+            ),
+            const SizedBox(height: 18),
+            FilledButton.icon(
+              key: const ValueKey('course-preview-start'),
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: color,
+                minimumSize: const Size.fromHeight(54),
+                padding: const EdgeInsets.all(16),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+              icon: Icon(
+                completed ? Icons.replay_rounded : Icons.play_arrow_rounded,
+              ),
+              label: Text(completed ? 'ပြန်လေ့ကျင့်မယ်' : 'စတင်မယ်'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
 
 /// A dismissible, node-anchored introduction. Opening it never earns progress.
 Future<bool?> showLessonPreview({
