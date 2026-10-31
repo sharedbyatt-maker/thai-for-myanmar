@@ -13,7 +13,11 @@ import 'package:thai_for_myanmar/services/thai_playback_service.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late PhraseRepository repository;
-  setUpAll(() async => repository = await PhraseRepository.load(rootBundle));
+  late ThaiAudioCatalog audioCatalog;
+  setUpAll(() async {
+    repository = await PhraseRepository.load(rootBundle);
+    audioCatalog = await ThaiAudioCatalog.load(rootBundle);
+  });
   setUp(() => SharedPreferences.setMockInitialValues({}));
   Future<AppState> setup(
     WidgetTester tester,
@@ -30,9 +34,7 @@ void main() {
         engine: _UnavailableEngine(),
         voiceLookupWindow: Duration.zero,
       ),
-      catalog: audioAvailable
-          ? await ThaiAudioCatalog.load(rootBundle)
-          : ThaiAudioCatalog.empty(),
+      catalog: audioAvailable ? audioCatalog : ThaiAudioCatalog.empty(),
       assetPlayer: _NoopPlayer(),
     );
     addTearDown(playback.dispose);
