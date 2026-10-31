@@ -5,6 +5,7 @@ class CourseProgress {
   final Map<String, DateTime> completed = {};
   final Map<String, int> cursors = {};
   final Map<String, ReviewCard> memory = {};
+  final Map<String, int> probeStages = {};
   final List<Map<String, dynamic>> events = [];
 
   void event(Map<String, dynamic> value) {
@@ -21,6 +22,7 @@ class CourseProgress {
     'version': 1,
     'completed': completed.map((k, v) => MapEntry(k, v.toIso8601String())),
     'cursors': cursors,
+    'probeStages': probeStages,
     'memory': memory.map((k, v) => MapEntry(k, v.toJson())),
     'events': events,
   };
@@ -43,6 +45,16 @@ class CourseProgress {
             row.value >= 0 &&
             row.value < 300) {
           result.cursors[row.key] = row.value;
+        }
+      }
+    }
+    if (raw['probeStages'] case final Map rows) {
+      for (final row in rows.entries) {
+        if (row.key is String &&
+            row.value is int &&
+            row.value >= 0 &&
+            row.value <= 2) {
+          result.probeStages[row.key] = row.value;
         }
       }
     }

@@ -39,6 +39,9 @@ actual playback completion. Course FSRS cards are updated only by completed,
 unaided bundled listening checks. A wrong first retrieval is Again; a supported
 retry cannot overwrite it with a second immediate Good. Due course checks are
 inserted at the start of a fresh lesson; base-step cursors remain stable.
+Completed units also offer one delayed check after one day and another after
+seven days. These checks retain the same text/assistance rules and do not imply
+listening mastery when answered in text mode; their two-stage schedule is saved.
 Normal replay is recorded without automatically being treated as a wrong answer.
 No microphone, pronunciation scoring or speaking certification is present.
 

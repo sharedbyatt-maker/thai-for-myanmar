@@ -63,7 +63,12 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           ..sort((a, b) => a.value.due.compareTo(b.value.due));
     // Stable base steps retain resume positions; review is inserted only on a fresh run.
     final cursor = widget.appState.learning.course.cursors[_lessonId] ?? 0;
+    final probe = widget.course.dueUnitProbe(
+      widget.appState.learning.course,
+      now,
+    );
     _steps = [
+      if (cursor == 0 && probe != null) probe,
       if (cursor == 0)
         ...due
             .take(2)
@@ -167,6 +172,11 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               _selectedParts.join(',')
         : _selected == _line!.id;
     _attempts++;
+    if (correct && _step['probeUnit'] is String && _step['probeStage'] is int) {
+      widget.appState.learning.course.probeStages[_step['probeUnit']
+              as String] =
+          _step['probeStage'] as int;
+    }
     widget.appState.learning.course.event({
       'lesson': _lessonId,
       'line': _line!.id,
@@ -178,6 +188,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       'assisted': _kind == 'build' || _hint || _text,
       'listened': _heard && !_text,
       'replays': _replays,
+      if (_step['probeUnit'] != null) 'probeUnit': _step['probeUnit'],
     });
     if (_kind == 'choice' && _heard && !_text && !_hint && !_memoryRecorded) {
       final memory = widget.appState.learning.course.memory;

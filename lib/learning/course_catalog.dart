@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/phrase.dart';
+import 'course_progress.dart';
 
 class CourseLine {
   CourseLine(this.data);
@@ -104,6 +105,27 @@ class CourseCatalog {
               as Map,
         ),
       );
+
+  Map<String, dynamic>? dueUnitProbe(CourseProgress progress, DateTime now) {
+    for (final unit in units) {
+      final completed = progress.completed[unit.lessons.last.id];
+      final stage = progress.probeStages[unit.id] ?? 0;
+      if (completed == null || stage >= 2) continue;
+      if (now.toUtc().isBefore(
+        completed.add(Duration(days: stage == 0 ? 1 : 7)),
+      )) {
+        continue;
+      }
+      return {
+        'kind': 'choice',
+        'line': unit.models.last,
+        'review': true,
+        'probeUnit': unit.id,
+        'probeStage': stage + 1,
+      };
+    }
+    return null;
+  }
 
   List<CourseLine> choices(CourseUnit unit, CourseLine target) {
     final seen = <String>{target.my};

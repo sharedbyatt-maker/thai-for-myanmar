@@ -26,6 +26,45 @@ void main() {
     audio = await ThaiAudioCatalog.load(rootBundle);
   });
   setUp(() => SharedPreferences.setMockInitialValues({}));
+  test('unit probes respect day and week boundaries and survive reload', () {
+    final progress = CourseProgress();
+    final start = DateTime.utc(2026, 10, 1);
+    progress.finish(course.units.first.lessons.last.id, start);
+    expect(
+      course.dueUnitProbe(
+        progress,
+        start.add(const Duration(hours: 23, minutes: 59)),
+      ),
+      isNull,
+    );
+    expect(
+      course.dueUnitProbe(
+        progress,
+        start.add(const Duration(days: 1)),
+      )?['probeStage'],
+      1,
+    );
+    progress.probeStages['u01'] = 1;
+    final restored = CourseProgress.fromJson(
+      jsonDecode(jsonEncode(progress.toJson())),
+    );
+    expect(
+      course.dueUnitProbe(restored, start.add(const Duration(days: 6))),
+      isNull,
+    );
+    expect(
+      course.dueUnitProbe(
+        restored,
+        start.add(const Duration(days: 7)),
+      )?['probeStage'],
+      2,
+    );
+    restored.probeStages['u01'] = 2;
+    expect(
+      course.dueUnitProbe(restored, start.add(const Duration(days: 30))),
+      isNull,
+    );
+  });
   Future<void> tap(WidgetTester t, Finder f) async {
     if (f.evaluate().isEmpty) {
       await t.scrollUntilVisible(
