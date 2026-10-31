@@ -16,6 +16,13 @@ String dayKey(DateTime date) =>
 
 class LearningProgress {
   final Map<String, ReviewCard> _cards = {};
+  final Map<String, DateTime> _practicalChecks = {};
+  Map<String, DateTime> get practicalChecks =>
+      Map.unmodifiable(_practicalChecks);
+  void completePractical(String id, DateTime now) {
+    _practicalChecks[id] = now;
+  }
+
   final Map<String, int> _activity = {};
   final Set<String> _completedLessons = {};
   final Map<String, Set<String>> _lessonDays = {};
@@ -92,6 +99,9 @@ class LearningProgress {
 
   Map<String, Object> toJson() => {
     'schemaVersion': 1,
+    'practicalChecks': _practicalChecks.map(
+      (id, at) => MapEntry(id, at.toIso8601String()),
+    ),
     'lessonDays': _lessonDays.map(
       (day, ids) => MapEntry(day, ids.toList()..sort()),
     ),
@@ -111,6 +121,19 @@ class LearningProgress {
   factory LearningProgress.fromJson(Map<String, dynamic> json) {
     final result = LearningProgress();
     if (json['schemaVersion'] != 1) return result;
+    final practical = json['practicalChecks'];
+    if (practical is Map) {
+      for (final entry in practical.entries) {
+        final at = entry.value is String
+            ? DateTime.tryParse(entry.value)
+            : null;
+        if (entry.key is String &&
+            entry.key.toString().startsWith('practical:') &&
+            at != null) {
+          result._practicalChecks[entry.key as String] = at;
+        }
+      }
+    }
     final days = json['lessonDays'];
     if (days is Map) {
       for (final entry in days.entries) {

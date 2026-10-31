@@ -14,6 +14,7 @@ import '../widgets/lesson_preview.dart';
 import '../widgets/playful_components.dart';
 import 'phrase_browser_screen.dart';
 import 'study_session_screen.dart';
+import 'practical_intro_screen.dart';
 
 class LearnScreen extends StatefulWidget {
   const LearnScreen({
@@ -480,34 +481,67 @@ class _LearnScreenState extends State<LearnScreen> {
                 child: Padding(
                   key: _headerKey,
                   padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: _stat(
-                          context,
-                          Icons.local_fire_department_rounded,
-                          '${progress.streak(DateTime.now())}',
-                          'ရက်ဆက်',
-                          () => _details(context, false),
+                      Card(
+                        child: ListTile(
+                          key: const ValueKey('practical-intro-entry'),
+                          leading: const Icon(Icons.forum_outlined),
+                          title: const Text('မိတ်ဆက်တတ်မယ်'),
+                          subtitle: Text(
+                            progress.practicalChecks.containsKey(
+                                  PracticalIntroScreen.lessonId,
+                                )
+                                ? 'လေ့ကျင့်ပြီး · မကြည့်ဘဲ ပြန်စမ်းကြည့်မယ်'
+                                : 'နားထောင်၊ ကိုယ့်နာမည်ထည့်၊ စကားဝိုင်း ဆက်ဖြေမယ်',
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () {
+                            widget.playbackService.stop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => PracticalIntroScreen(
+                                  repository: widget.repository,
+                                  appState: widget.appState,
+                                  playbackService: widget.playbackService,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      Expanded(
-                        child: _stat(
-                          context,
-                          Icons.bolt_rounded,
-                          '${LearnerRank(widget.repository, progress).xp}',
-                          'XP',
-                          () => _details(context, true),
-                        ),
-                      ),
-                      Expanded(
-                        child: _stat(
-                          context,
-                          Icons.flag_rounded,
-                          '${progress.reviewsOn(DateTime.now())}/${progress.dailyGoal}',
-                          'ဒီနေ့',
-                          () => _details(context, false),
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _stat(
+                              context,
+                              Icons.local_fire_department_rounded,
+                              '${progress.streak(DateTime.now())}',
+                              'ရက်ဆက်',
+                              () => _details(context, false),
+                            ),
+                          ),
+                          Expanded(
+                            child: _stat(
+                              context,
+                              Icons.bolt_rounded,
+                              '${LearnerRank(widget.repository, progress).xp}',
+                              'XP',
+                              () => _details(context, true),
+                            ),
+                          ),
+                          Expanded(
+                            child: _stat(
+                              context,
+                              Icons.flag_rounded,
+                              '${progress.reviewsOn(DateTime.now())}/${progress.dailyGoal}',
+                              'ဒီနေ့',
+                              () => _details(context, false),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

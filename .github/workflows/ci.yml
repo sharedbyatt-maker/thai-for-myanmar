@@ -95,7 +95,7 @@ jobs:
 
       - name: Run widget tests
         timeout-minutes: 5
-        run: flutter test test/widget_test.dart test/study_session_test.dart test/league_screen_test.dart --reporter expanded
+        run: flutter test test/widget_test.dart test/study_session_test.dart test/league_screen_test.dart test/practical_intro_test.dart --reporter expanded
 
       - name: Verify Thai playback button states
         timeout-minutes: 5
