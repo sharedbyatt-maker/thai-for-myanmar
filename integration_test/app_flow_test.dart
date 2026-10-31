@@ -48,6 +48,25 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('practical-intro-entry')),
+      );
+      await tester.tap(find.byKey(const ValueKey('practical-intro-entry')));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-practical-introduction');
+      await tester.scrollUntilVisible(
+        find.text('စကားလုံးပုံစံကို ကြည့်မယ်'),
+        180,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.tap(find.text('စကားလုံးပုံစံကို ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-practical-pattern');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('အခု နားမယ်'));
+      await tester.pumpAndSettle();
+
       await tester.pumpAndSettle();
       await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
