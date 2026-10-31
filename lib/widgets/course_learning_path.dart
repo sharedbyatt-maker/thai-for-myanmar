@@ -18,6 +18,11 @@ const coursePathColors = [
 Color courseUnitColor(CourseUnit unit) =>
     coursePathColors[(unit.section - 1) % coursePathColors.length];
 
+Color _pathInk(BuildContext context, Color color) =>
+    Theme.of(context).brightness == Brightness.dark
+    ? Color.lerp(color, Colors.white, .45)!
+    : color;
+
 Future<void> previewCourseLesson({
   required BuildContext context,
   required CourseCatalog course,
@@ -623,7 +628,7 @@ class CoursePathNode extends StatelessWidget {
                   child: Text(
                     'စတင်မယ်',
                     style: TextStyle(
-                      color: color,
+                      color: _pathInk(context, color),
                       fontWeight: FontWeight.w800,
                       fontSize: 13,
                     ),
@@ -701,11 +706,14 @@ class _Stat extends StatelessWidget {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: color, size: 24),
+        Icon(icon, color: _pathInk(context, color), size: 24),
         const SizedBox(width: 6),
         Text(
           value,
-          style: TextStyle(color: color, fontWeight: FontWeight.w800),
+          style: TextStyle(
+            color: _pathInk(context, color),
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     ),
