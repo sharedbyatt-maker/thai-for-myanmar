@@ -68,6 +68,15 @@ jobs:
       - name: Validate content dataset
         run: python3 tool/validate_content.py
 
+      - name: Validate authored course and deferred audio inventory
+        run: |
+          python3 tool/build_course_v2.py
+          python3 tool/validate_course_v2.py
+          python3 tool/course_audio_plan.py --output docs/audio/course-v2-required.json
+          python3 -m unittest discover -s tool/tests -p test_course_tools.py -v
+          python3 -m unittest discover -s tool/tests -p test_audio_studio.py -v
+          git diff --exit-code -- assets/data/course_v2.json docs/audio/course-v2-required.json
+
       - name: Validate Thai audio catalog
         run: python3 tool/validate_audio_manifest.py
 
@@ -95,7 +104,7 @@ jobs:
 
       - name: Run widget tests
         timeout-minutes: 5
-        run: flutter test test/widget_test.dart test/study_session_test.dart test/league_screen_test.dart test/practical_intro_test.dart --reporter expanded
+        run: flutter test test/widget_test.dart test/study_session_test.dart test/league_screen_test.dart test/practical_intro_test.dart test/course_v2_test.dart --reporter expanded
 
       - name: Verify Thai playback button states
         timeout-minutes: 5

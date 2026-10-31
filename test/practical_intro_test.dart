@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/practical_intro_screen.dart';
-import 'package:thai_for_myanmar/screens/learn_screen.dart';
+import 'package:thai_for_myanmar/screens/legacy_learn_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
@@ -73,7 +73,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: service,

@@ -47,6 +47,8 @@ class ThaiPlaybackService extends ChangeNotifier {
   bool _disposed = false;
 
   ThaiPlaybackState get state => _state;
+  bool hasBundledAudio(Phrase phrase, String style) =>
+      _catalog.match(phrase, style) != null;
 
   Future<void> setVolume(double volume) async {
     if (!volume.isFinite) return;

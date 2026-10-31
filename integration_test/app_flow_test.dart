@@ -48,46 +48,20 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('practical-intro-entry')),
-      );
-      await tester.tap(find.byKey(const ValueKey('practical-intro-entry')));
+      await tester.tap(find.byKey(const ValueKey('course-continue')));
       await tester.pumpAndSettle();
-      await binding.takeScreenshot('${width.round()}-practical-introduction');
-      await tester.scrollUntilVisible(
-        find.text('စကားလုံးပုံစံကို ကြည့်မယ်'),
-        180,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.tap(find.text('စကားလုံးပုံစံကို ကြည့်မယ်'));
+      await binding.takeScreenshot('${width.round()}-course-unit');
+      await tester.tap(find.byKey(const ValueKey('course-lesson-u01-1')));
       await tester.pumpAndSettle();
-      await binding.takeScreenshot('${width.round()}-practical-pattern');
+      await binding.takeScreenshot('${width.round()}-course-model');
+      await tester.tap(find.byKey(const ValueKey('course-primary')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('course-primary')));
+      await tester.pumpAndSettle();
+      await binding.takeScreenshot('${width.round()}-course-listening');
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('အခု နားမယ်'));
-      await tester.pumpAndSettle();
-
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
-      await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('lesson-preview')), findsOneWidget);
-      await binding.takeScreenshot('${width.round()}-lesson-preview');
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('lesson-preview-start')),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const ValueKey('lesson-preview-start')));
-      await tester.pumpAndSettle();
-      await binding.takeScreenshot('${width.round()}-lesson');
-      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
-      await tester.pumpAndSettle();
-      await binding.takeScreenshot('${width.round()}-lesson-reveal');
-      await tester.tap(find.text('စမ်းဖြေမယ်'));
-      await tester.pumpAndSettle();
-      await binding.takeScreenshot('${width.round()}-lesson-recall');
       await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('အခု နားမယ်'));
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
       await tester.pumpAndSettle();
@@ -112,25 +86,18 @@ void main() {
       await binding.takeScreenshot('${width.round()}-search');
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('အကြောင်းအရာ ပြောင်းရန်'));
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField), 'Daily life');
-      await tester.pumpAndSettle();
-      await tester.tap(
-        find.ancestor(
-          of: find.text('နေ့စဉ်ဘဝ'),
-          matching: find.byType(ListTile),
-        ),
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('course-unit-u26')),
+        500,
+        maxScrolls: 50,
       );
       await tester.pumpAndSettle();
-      expect(find.text('နေ့စဉ်ဘဝ'), findsWidgets);
-      expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-path-end');
-      await tester.tap(find.byKey(const ValueKey('jump-current-lesson')));
+      tester
+          .state<ScrollableState>(find.byType(Scrollable).first)
+          .position
+          .jumpTo(0);
       await tester.pumpAndSettle();
-      expect(find.text('အပိုင်း 1'), findsOneWidget);
       await tester.tap(find.byIcon(Icons.inventory_2_outlined));
       await tester.pumpAndSettle();
       expect(find.text('ဒီလရဲ့ စိန်ခေါ်မှု'), findsOneWidget);
@@ -147,6 +114,64 @@ void main() {
       await binding.takeScreenshot('${width.round()}-practice');
     });
   }
+
+  testWidgets(
+    'course text completion is durable and never becomes listening or league credit',
+    (tester) async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      final state = AppState();
+      await state.load();
+      await tester.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repository,
+          appState: state,
+          playbackService: _playbackService(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('course-continue')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('course-lesson-u01-1')));
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 2; i++) {
+        await tester.tap(find.byKey(const ValueKey('course-primary')));
+        await tester.pumpAndSettle();
+      }
+      for (final id in ['c2_u01_01', 'c2_u01_02']) {
+        await tester.ensureVisible(
+          find.byKey(const ValueKey('course-text-mode')),
+        );
+        await tester.tap(find.byKey(const ValueKey('course-text-mode')));
+        await tester.pumpAndSettle();
+        final option = find.byKey(ValueKey('course-option-$id'));
+        await tester.ensureVisible(option);
+        await tester.tap(option);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('course-primary')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('course-primary')));
+        await tester.pumpAndSettle();
+      }
+      expect(find.byKey(const ValueKey('course-done')), findsOneWidget);
+      expect(state.learning.course.completed.length, 1);
+      expect(state.learning.course.memory, isEmpty);
+      expect(state.learning.completedLessons, isEmpty);
+      expect(state.learning.totalReviews, 0);
+      await state.saveCourse();
+      final restored = AppState();
+      await restored.load();
+      expect(restored.learning.course.completed.length, 1);
+      if (kIsWeb) {
+        final width =
+            tester.view.physicalSize.width / tester.view.devicePixelRatio;
+        await binding.takeScreenshot('${width.round()}-course-text-summary');
+      }
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
@@ -165,6 +190,13 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('legacy-learning-history')),
+      500,
+      maxScrolls: 50,
+    );
+    await tester.tap(find.byKey(const ValueKey('legacy-learning-history')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
@@ -241,6 +273,8 @@ void main() {
     expect(find.text('အဓိပ္ပာယ်ကြည့်မယ်'), findsOneWidget);
     expect(state.learning.totalReviews, 5);
     expect(tester.takeException(), isNull);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
     await tester.pageBack();
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.replay_rounded));

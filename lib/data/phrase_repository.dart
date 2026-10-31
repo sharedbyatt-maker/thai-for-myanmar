@@ -3,9 +3,15 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../models/phrase.dart';
+import '../learning/course_catalog.dart';
 
 class PhraseRepository {
-  PhraseRepository({required this.categories, required this.phrases});
+  PhraseRepository({
+    required this.categories,
+    required this.phrases,
+    this.course,
+  });
+  final CourseCatalog? course;
 
   final List<PhraseCategory> categories;
   final List<Phrase> phrases;
@@ -19,7 +25,14 @@ class PhraseRepository {
     final phraseJson =
         jsonDecode(await bundle.loadString('assets/data/phrases.json'))
             as List<dynamic>;
+    CourseCatalog? course;
+    try {
+      course = await CourseCatalog.load(bundle);
+    } catch (_) {
+      // A damaged optional course must not block the existing phrase library.
+    }
     return PhraseRepository(
+      course: course,
       categories: categoryJson
           .map((row) => PhraseCategory.fromJson(row as Map<String, dynamic>))
           .toList(growable: false),
