@@ -107,7 +107,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     _heard = false;
     _busy = false;
     _text = false;
-    _hint = false;
+    _hint = _showThai;
     _answered = false;
     _correct = false;
     _memoryRecorded = false;
@@ -175,7 +175,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       'correct': correct,
       'firstAttempt': _attempts == 1,
       'attempt': _attempts,
-      'assisted': _hint || _text,
+      'assisted': _kind == 'build' || _hint || _text,
       'listened': _heard && !_text,
       'replays': _replays,
     });

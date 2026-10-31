@@ -245,6 +245,22 @@ void main() {
     },
   );
 
+  testWidgets(
+    'visible transcript remains assisted across steps and cannot grant FSRS',
+    (t) async {
+      final state = await show(t, catalog: audio);
+      await t.tap(find.byTooltip('ထိုင်းစာ ပြ/ဖျောက်'));
+      await t.pumpAndSettle();
+      await primary(t);
+      await primary(t);
+      await tap(t, find.byKey(const ValueKey('course-audio-c2_u01_01')));
+      await tap(t, find.byKey(const ValueKey('course-option-c2_u01_01')));
+      await primary(t);
+      expect(state.learning.course.events.single['assisted'], true);
+      expect(state.learning.course.memory, isEmpty);
+    },
+  );
+
   testWidgets('rapid next taps cannot skip an introduction', (t) async {
     final state = await show(t);
     final next = t
@@ -323,6 +339,7 @@ void main() {
       expect(state.learning.course.completed.length, 1);
       expect(state.learning.course.memory, isEmpty);
       expect(state.learning.course.events.single['kind'], 'build');
+      expect(state.learning.course.events.single['assisted'], true);
       expect(t.takeException(), isNull);
     },
   );
