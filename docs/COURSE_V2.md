@@ -7,6 +7,9 @@ construction, listening/meaning checks, substitution and dialogue are separate
 steps. Units have explicit prior-unit dependencies; lessons unlock sequentially.
 Existing content, audio, favorites, XP and the original lesson history remain.
 The old path and introduction pilot are available only through the history link.
+The primary interface remains a winding circular-node path with a pinned unit
+banner and anchored lesson-start previews. Curriculum changes must preserve the
+owner's interface requirements in `docs/LEARN_UI_CONTRACT.md`.
 
 The content is provisional, not independently certified Thai–Myanmar teaching
 material. This is a public **website preview**, not a claim that the audio course
