@@ -24,6 +24,7 @@ import 'package:thai_for_myanmar/learning/study_catalog.dart';
 import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/widgets/lesson_preview.dart';
 import 'package:thai_for_myanmar/screens/quests_screen.dart';
+import 'package:thai_for_myanmar/screens/quiz_screen.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
 import 'package:thai_for_myanmar/services/thai_playback_service.dart';
@@ -39,6 +40,65 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
+
+  testWidgets(
+    'scheduled listening reviews unlock at the exact due time without extra XP',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 760);
+      tester.view.devicePixelRatio = 1;
+      tester.view.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+      var now = DateTime.utc(2026, 10, 31, 12);
+      final state = AppState();
+      await state.load();
+      final phrase = repository.phrases.first;
+      await state.recordReview(phrase.id, LearningMode.flashcard, 4, now: now);
+      final xp = state.learning.reviewXp;
+      now = now.add(const Duration(minutes: 9));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: QuizScreen(
+              repository: repository,
+              appState: state,
+              playbackService: _playbackService(),
+              clock: () => now,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('scheduled-review')), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('start-scheduled-review')),
+        findsNothing,
+      );
+      now = now.add(const Duration(minutes: 1));
+      await tester.pump(const Duration(minutes: 1));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('start-scheduled-review')),
+        findsOneWidget,
+      );
+      expect(state.learning.reviewXp, xp);
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('start-scheduled-review')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('start-scheduled-review')));
+      await tester.pumpAndSettle();
+      final session = tester.widget<StudySessionScreen>(
+        find.byType(StudySessionScreen),
+      );
+      expect(session.guided, isTrue);
+      expect(session.phrases.single.id, phrase.id);
+      expect(session.lessonId, isNull);
+      expect(state.learning.reviewXp, xp);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'finishing a unit offers a return to the next current lesson without scrolling',

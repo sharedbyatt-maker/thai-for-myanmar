@@ -3,7 +3,6 @@ import 'dart:math';
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
 import 'learning_progress.dart';
-import 'review_card.dart';
 
 class StudyLesson {
   const StudyLesson({
@@ -38,7 +37,7 @@ class StudyCatalog {
     final reviewedDue =
         repository.phrases.where((phrase) {
           final card = progress.cardFor(phrase.id, LearningMode.flashcard);
-          return card != null && !card.due.isAfter(dateOnly(now));
+          return card != null && card.isDue(now);
         }).toList()..sort((a, b) {
           final left = progress.cardFor(a.id, LearningMode.flashcard)!;
           final right = progress.cardFor(b.id, LearningMode.flashcard)!;

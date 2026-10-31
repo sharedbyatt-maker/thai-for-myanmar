@@ -1,8 +1,22 @@
 # Third-party notices and feature provenance
 
+## FSRS and Thai content tooling
+
+Runtime scheduling uses `fsrs` 2.0.1 (Dart-FSRS), MIT License, from
+https://github.com/open-spaced-repetition/dart-fsrs.
+Its full license is bundled in `third_party/licenses/dart_fsrs_mit.txt`.
+The earlier SM-2 adapter's license remains retained for provenance and legacy
+storage compatibility; its interval formula is no longer used for reviews.
+
+The developer-only content checker uses PyThaiNLP 5.4.0 (Apache-2.0).
+Bundled corpus data have their own licenses; see the installed package's notices
+and https://pythainlp.org/dev-docs/notes/license.html.
+No PyThaiNLP corpus/model data is copied into the app, and no Python runtime or
+remote NLP service is added to the Flutter app.
+
 ## Adapted source code
 
-`lib/learning/review_card.dart` adapts the pure-Dart SM-2 scheduler from
+The former `lib/learning/review_card.dart` adapted the pure-Dart SM-2 scheduler from
 [Pouple-Tim/Language-Learning-App](https://github.com/Pouple-Tim/Language-Learning-App),
 reviewed at commit `e55fe3ccfd5228d977f2c6b6fe0e86ed379375a8`.
 Copyright (c) 2026 Timousss. MIT License.
@@ -32,5 +46,5 @@ translations, recordings, curricula or assets from them were imported.
 
 The 74 recordings in ofcRS/learn-thai were not imported. The Chinese recordings
 and educational assets from Burmese_language_app were not imported either.
-Thai for Myanmar's existing audio catalog remains empty until approved matching
-Thai recordings are supplied.
+Thai for Myanmar now includes 990 locally generated, matching Thai recordings;
+none of the above projects' recordings were imported.
