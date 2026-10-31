@@ -46,19 +46,6 @@ class _ElephantPainter extends CustomPainter {
     paint.color = const Color(0xFFFFB5AC);
     canvas.drawOval(const Rect.fromLTWH(28, 51, 10, 6), paint);
     canvas.drawOval(const Rect.fromLTWH(64, 51, 10, 6), paint);
-    paint.color = const Color(0xFFFFCD62);
-    canvas.drawCircle(const Offset(78, 15), 8, paint);
-    canvas.drawPath(
-      Path()
-        ..moveTo(78, 9)
-        ..lineTo(78, 21)
-        ..moveTo(72, 15)
-        ..lineTo(84, 15),
-      Paint()
-        ..color = Colors.white
-        ..strokeWidth = 2
-        ..style = PaintingStyle.stroke,
-    );
   }
 
   @override
