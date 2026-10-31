@@ -24,6 +24,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
   Timer? _poll;
   StreamSubscription<bool>? _authSubscription;
   bool _authReloadPending = false;
+  int _authRevision = 0;
   final _boardAge = Stopwatch();
   static const _avatars = ['🐘', '🌱', '🐱', '🦊', '🐻', '🐼', '🐯', '🐨'];
   static const _tiers = [
@@ -67,6 +68,8 @@ class _LeagueScreenState extends State<LeagueScreen> {
           (_) {
             if (!mounted) return;
             // Supabase auth callbacks must not await other Auth/RPC requests.
+            _authRevision++;
+            setState(() => _board = null);
             _authReloadPending = true;
             if (!_loading) unawaited(_load());
           },
@@ -81,9 +84,13 @@ class _LeagueScreenState extends State<LeagueScreen> {
         );
       }
       _authReloadPending = false;
-      _board = null;
-      if (_ready && _api.signedIn) {
-        _board = await _api.board();
+      if (!_ready || !_api.signedIn) {
+        _board = null;
+      } else {
+        final revision = _authRevision;
+        final board = await _api.board();
+        if (!mounted || revision != _authRevision || !_api.signedIn) return;
+        _board = board;
         _boardAge.reset();
         _boardAge.start();
       }
@@ -193,7 +200,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
               _rules(),
             ] else if (_ready &&
                 _api.signedIn &&
-                _board?['joined'] != true) ...[
+                _board?['joined'] == false) ...[
               Text(
                 'ဇယားမှာ ပါဝင်မယ်',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -453,10 +460,21 @@ class _LeagueRoundScreenState extends State<LeagueRoundScreen> {
   late final List<Map> _questions = (widget.round['questions'] as List)
       .cast<Map>();
   late final List<int> _choices = List.filled(_questions.length, -1);
+  final _scroll = ScrollController();
   int _index = 0;
   bool _busy = false;
   String? _error;
   Map<String, dynamic>? _result;
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (_scroll.hasClients) _scroll.jumpTo(0);
+  }
+
   Future<void> _submit() async {
     setState(() {
       _busy = true;
@@ -467,7 +485,10 @@ class _LeagueRoundScreenState extends State<LeagueRoundScreen> {
         widget.round['id'] as String,
         _choices,
       );
-      if (mounted) setState(() => _result = result);
+      if (mounted) {
+        setState(() => _result = result);
+        _scrollToTop();
+      }
     } catch (_) {
       if (mounted) {
         setState(() => _error = 'အမှတ်မသိမ်းရသေးပါ။ ခဏစောင့်ပြီး ပြန်စမ်းပါ။');
@@ -482,6 +503,7 @@ class _LeagueRoundScreenState extends State<LeagueRoundScreen> {
     appBar: AppBar(title: const Text('League စမ်းသပ်မှု')),
     body: ContentFrame(
       child: ListView(
+        controller: _scroll,
         padding: const EdgeInsets.all(24),
         children: [
           if (_result != null) ...[
@@ -553,6 +575,7 @@ class _LeagueRoundScreenState extends State<LeagueRoundScreen> {
                   : () {
                       if (_index + 1 < _questions.length) {
                         setState(() => _index++);
+                        _scrollToTop();
                       } else {
                         _submit();
                       }

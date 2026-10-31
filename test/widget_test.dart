@@ -42,6 +42,51 @@ void main() {
   });
 
   testWidgets(
+    'full-screen translation stays scrollable in large-text landscape',
+    (tester) async {
+      tester.view.physicalSize = const Size(568, 320);
+      tester.view.devicePixelRatio = 1;
+      tester.view.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+      final state = AppState();
+      await state.load();
+      final phrases = repository.phrases.toList()
+        ..sort((a, b) => b.myanmar.length.compareTo(a.myanmar.length));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: PhraseDetailScreen(
+            phrase: phrases.first,
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(find.text('ထိုင်းလူမျိုးကို ပြရန်'), 200);
+      await tester.tap(find.text('ထိုင်းလူမျိုးကို ပြရန်'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      final audio = find.descendant(
+        of: find.byType(Dialog),
+        matching: find.text('ထိုင်းအသံ နားထောင်ရန်'),
+      );
+      await tester.ensureVisible(audio);
+      await tester.pumpAndSettle();
+      expect(audio.hitTestable(), findsOneWidget);
+      final close = find.byTooltip('ပိတ်ရန်');
+      await tester.ensureVisible(close);
+      await tester.pumpAndSettle();
+      await tester.tap(close);
+      await tester.pumpAndSettle();
+      expect(find.byType(Dialog), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
     'scheduled listening reviews unlock at the exact due time without extra XP',
     (tester) async {
       tester.view.physicalSize = const Size(320, 760);

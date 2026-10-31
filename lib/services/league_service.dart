@@ -79,15 +79,17 @@ class LeagueService implements LeagueGateway {
 
   @override
   Future<void> join(String alias, int avatar) async {
-    await client.rpc(
-      'league_join',
-      params: {'p_alias': alias.trim(), 'p_avatar': avatar},
-    );
+    await client
+        .rpc(
+          'league_join',
+          params: {'p_alias': alias.trim(), 'p_avatar': avatar},
+        )
+        .timeout(const Duration(seconds: 20));
   }
 
   @override
   Future<void> leave() async {
-    await client.rpc('league_leave');
+    await client.rpc('league_leave').timeout(const Duration(seconds: 20));
   }
 
   Future<Map<String, dynamic>> _rpc(

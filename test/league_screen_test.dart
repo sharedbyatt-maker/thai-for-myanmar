@@ -24,6 +24,7 @@ class FakeLeague implements LeagueGateway {
   int submissions = 0;
   bool failSubmit = false;
   int joins = 0;
+  Future<Map<String, dynamic>> Function()? boardOverride;
   List<Map<String, Object>>? rows;
   @override
   bool get signedIn => loggedIn;
@@ -46,7 +47,9 @@ class FakeLeague implements LeagueGateway {
   }
 
   @override
-  Future<Map<String, dynamic>> board() async => joined
+  Future<Map<String, dynamic>> board() async => boardOverride != null
+      ? await boardOverride!()
+      : joined
       ? {
           'joined': true,
           'tier': 0,
@@ -159,6 +162,60 @@ void main() {
     },
   );
 
+  testWidgets(
+    'refresh failure retains an existing board instead of offering join',
+    (tester) async {
+      final api = FakeLeague();
+      addTearDown(api.auth.close);
+      await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+      await tester.pumpAndSettle();
+      api.boardOverride = () async => throw Exception('offline');
+      await tester.tap(find.byTooltip('ပြန်စစ်ရန်'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Mya'), findsOneWidget);
+      expect(find.text('ဒီနာမည်နဲ့ ပါဝင်မယ်'), findsNothing);
+      expect(find.byKey(const ValueKey('league-message')), findsOneWidget);
+    },
+  );
+
+  testWidgets('failed initial board request never offers a duplicate join', (
+    tester,
+  ) async {
+    final api = FakeLeague()
+      ..boardOverride = () async => throw Exception('offline');
+    addTearDown(api.auth.close);
+    await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+    await tester.pumpAndSettle();
+    expect(find.text('ဒီနာမည်နဲ့ ပါဝင်မယ်'), findsNothing);
+    expect(find.byKey(const ValueKey('league-message')), findsOneWidget);
+    api.boardOverride = null;
+    await tester.tap(find.byTooltip('ပြန်စစ်ရန်'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Mya'), findsOneWidget);
+  });
+
+  testWidgets('sign-out during board refresh discards the old response', (
+    tester,
+  ) async {
+    final api = FakeLeague();
+    addTearDown(api.auth.close);
+    await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+    await tester.pumpAndSettle();
+    final old = await api.board();
+    final response = Completer<Map<String, dynamic>>();
+    api.boardOverride = () => response.future;
+    await tester.tap(find.byTooltip('ပြန်စစ်ရန်'));
+    await tester.pump();
+    api.loggedIn = false;
+    api.auth.add(false);
+    await tester.pump();
+    response.complete(old);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Mya'), findsNothing);
+    expect(find.text('Google နဲ့ ဝင်မယ်'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('League is honest when shared backend is unavailable', (
     tester,
   ) async {
@@ -253,6 +310,39 @@ void main() {
     expect(api.joins, 0);
     expect(find.text('နာမည်ပြောင် အနည်းဆုံး ၂ လုံး ထည့်ပါ။'), findsOneWidget);
   });
+  testWidgets('League next question returns to the top on a short screen', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 360);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final api = FakeLeague();
+    addTearDown(api.auth.close);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LeagueRoundScreen(gateway: api, round: await api.beginRound()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('မင်္ဂလာပါ'));
+    await tester.tap(find.text('မင်္ဂလာပါ'));
+    await tester.ensureVisible(find.text('ဆက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.state<ScrollableState>(find.byType(Scrollable)).position.pixels,
+      greaterThan(0),
+    );
+    await tester.tap(find.text('ဆက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.state<ScrollableState>(find.byType(Scrollable)).position.pixels,
+      0,
+    );
+    expect(find.text('2 / 2').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'only acknowledged score is shown and a failed submit can retry',
     (tester) async {
