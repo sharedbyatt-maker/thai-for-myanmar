@@ -48,7 +48,6 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await binding.takeScreenshot('${width.round()}-home');
-      await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
       await tester.pumpAndSettle();
@@ -147,7 +146,6 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('သင်ခန်းစာ ကြည့်မယ်'));
     await tester.pumpAndSettle();
