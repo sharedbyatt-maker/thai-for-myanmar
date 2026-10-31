@@ -21,6 +21,7 @@ void main() {
     int count = 1,
     bool guided = false,
     bool dark = false,
+    bool audioAvailable = true,
   }) async {
     final state = AppState();
     await state.load();
@@ -29,7 +30,9 @@ void main() {
         engine: _UnavailableEngine(),
         voiceLookupWindow: Duration.zero,
       ),
-      catalog: ThaiAudioCatalog.empty(),
+      catalog: audioAvailable
+          ? await ThaiAudioCatalog.load(rootBundle)
+          : ThaiAudioCatalog.empty(),
       assetPlayer: _NoopPlayer(),
     );
     addTearDown(playback.dispose);
@@ -59,6 +62,12 @@ void main() {
       await tester.pumpAndSettle();
       expect(state.learning.totalReviews, 0);
       await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(repository.phrases.first.thaiFor(state.politeStyle)),
+        findsNothing,
+      );
+      await tester.tap(find.byKey(const ValueKey('guided-audio')));
       await tester.pumpAndSettle();
       final correctId = repository.phrases.first.id;
       final options = find.byWidgetPredicate(
@@ -134,6 +143,7 @@ void main() {
         LearningMode.flashcard,
         count: 3,
         guided: true,
+        audioAvailable: false,
       );
       for (var index = 0; index < 3; index++) {
         await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
@@ -143,9 +153,9 @@ void main() {
         final option = find.byKey(
           ValueKey('guided-option-${repository.phrases[index].id}'),
         );
-        if (index == 2) {
+        {
           expect(tester.widget<OutlinedButton>(option).onPressed, isNull);
-          expect(state.learning.totalReviews, 2);
+          expect(state.learning.totalReviews, index);
           await tester.tap(find.byKey(const ValueKey('guided-audio')));
           await tester.pumpAndSettle();
           expect(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'), findsOneWidget);

@@ -4,8 +4,7 @@
 
 The supplied screenshots show a large audio prompt, optional pronunciation,
 translation and bottom actions. Catalog lessons now use an original elephant
-study card followed by an active recall exercise for each phrase. Exercises
-alternate Thai-to-Myanmar, Myanmar-to-Thai and listening comprehension.
+study card followed by an active recall exercise for each phrase. Every recall exercise uses Thai audio and Myanmar answer choices. Thai reading is not required; study cards retain optional Thai script and pronunciation support.
 
 Selecting an option does not submit it. Learners explicitly check the answer,
 receive text/icon feedback and retry mistakes before continuing. Study-only
@@ -25,6 +24,10 @@ practice principles, using original layout and assets:
 
 - https://blog.duolingo.com/keeping-you-at-the-frontier-of-learning-with-adaptive-lessons/
 - https://blog.duolingo.com/guide-to-duolingo-practice-hub/
+
+## Beginner listening correction
+
+Beginner lessons no longer ask learners to read or choose Thai answers. Every recall step requires audio before Myanmar choices become available. Standalone reverse-translation practice remains an explicitly selected practice mode. Integration tests listen on every phrase and regression tests verify hidden Thai prompts and Myanmar choices.
 
 ## Confirmed issues addressed
 

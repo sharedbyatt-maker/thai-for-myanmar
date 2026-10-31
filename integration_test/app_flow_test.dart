@@ -164,7 +164,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('စမ်းဖြေမယ်'));
       await tester.pumpAndSettle();
-      if (index % 3 == 2) {
+      {
         if (kIsWeb) {
           await binding.takeScreenshot(
             '${(tester.view.physicalSize.width / tester.view.devicePixelRatio).round()}-lesson-listening',
