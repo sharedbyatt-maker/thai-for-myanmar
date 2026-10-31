@@ -177,6 +177,11 @@ class AppState extends ChangeNotifier {
     await _persistLearning();
   }
 
+  Future<void> saveCourse() async {
+    notifyListeners();
+    await _persistLearning();
+  }
+
   Future<void> finishStudySession({String? lessonId}) async {
     _learning.finishSession(lessonId: lessonId);
     notifyListeners();

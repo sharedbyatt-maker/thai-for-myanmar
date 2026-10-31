@@ -1,4 +1,5 @@
 import 'review_card.dart';
+import 'course_progress.dart';
 
 enum LearningMode {
   flashcard,
@@ -15,6 +16,7 @@ String dayKey(DateTime date) =>
     '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
 class LearningProgress {
+  CourseProgress course = CourseProgress();
   final Map<String, ReviewCard> _cards = {};
   final Map<String, DateTime> _practicalChecks = {};
   Map<String, DateTime> get practicalChecks =>
@@ -98,6 +100,7 @@ class LearningProgress {
   }
 
   Map<String, Object> toJson() => {
+    'courseV2': course.toJson(),
     'schemaVersion': 1,
     'practicalChecks': _practicalChecks.map(
       (id, at) => MapEntry(id, at.toIso8601String()),
@@ -120,6 +123,7 @@ class LearningProgress {
 
   factory LearningProgress.fromJson(Map<String, dynamic> json) {
     final result = LearningProgress();
+    result.course = CourseProgress.fromJson(json['courseV2']);
     if (json['schemaVersion'] != 1) return result;
     final practical = json['practicalChecks'];
     if (practical is Map) {

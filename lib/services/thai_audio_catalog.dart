@@ -95,7 +95,18 @@ class ThaiAudioCatalog {
     if (decoded is! Map) {
       throw const FormatException('Thai audio manifest must be a JSON object.');
     }
-    return ThaiAudioCatalog.fromJson(Map<String, dynamic>.from(decoded));
+    final base = Map<String, dynamic>.from(decoded);
+    // A separate, initially empty catalog allows the final course pack to be
+    // imported without rewriting the owner's original 990 mappings.
+    final course =
+        jsonDecode(
+              await bundle.loadString('assets/data/course_audio_manifest.json'),
+            )
+            as Map;
+    return ThaiAudioCatalog.fromJson({
+      'schemaVersion': 1,
+      'entries': [...base['entries'] as List, ...course['entries'] as List],
+    });
   }
 
   ThaiAudioEntry? match(Phrase phrase, String politeStyle) {

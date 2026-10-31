@@ -8,7 +8,7 @@ import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/screens/main_shell.dart';
 import 'package:thai_for_myanmar/screens/everyday_screen.dart';
-import 'package:thai_for_myanmar/screens/learn_screen.dart';
+import 'package:thai_for_myanmar/screens/legacy_learn_screen.dart';
 import 'package:thai_for_myanmar/screens/profile_screen.dart';
 import 'package:thai_for_myanmar/screens/quick_speak_screen.dart';
 import 'package:thai_for_myanmar/screens/phrase_detail_screen.dart';
@@ -153,7 +153,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: _playbackService(),
@@ -190,7 +190,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: _playbackService(),
@@ -453,7 +453,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('home previews a five-card lesson before starting', (
+  testWidgets('legacy history previews a five-card lesson before starting', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(420, 1000);
@@ -463,10 +463,14 @@ void main() {
     final state = AppState();
     await state.load();
     await tester.pumpWidget(
-      ThaiForMyanmarApp(
-        repository: repository,
-        appState: state,
-        playbackService: _playbackService(),
+      MaterialApp(
+        home: Scaffold(
+          body: LegacyLearnScreen(
+            repository: repository,
+            appState: state,
+            playbackService: _playbackService(),
+          ),
+        ),
       ),
     );
     await _pumpUi(tester);
@@ -498,7 +502,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: _playbackService(),
@@ -558,7 +562,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: _playbackService(),
@@ -638,7 +642,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: LearnScreen(
+          body: LegacyLearnScreen(
             repository: repository,
             appState: state,
             playbackService: _playbackService(),
@@ -698,7 +702,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: LearnScreen(
+            body: LegacyLearnScreen(
               repository: repository,
               appState: state,
               playbackService: _playbackService(),
@@ -754,7 +758,7 @@ void main() {
       expect(tester.takeException(), isNull);
       await tester.tap(find.text('သင်ခန်းစာ ဆက်သင်မယ်'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('learning-path')), findsOneWidget);
+      expect(find.byKey(const ValueKey('course-main-path')), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -809,12 +813,7 @@ void main() {
     );
     await _pumpUi(tester);
     expect(find.byType(NavigationBar), findsOneWidget);
-    expect(
-      find.byKey(
-        ValueKey('lesson-node-${StudyCatalog.lessons(repository).first.id}'),
-      ),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('course-continue')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

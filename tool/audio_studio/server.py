@@ -22,6 +22,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
 from engine import KokoroEngine, SPEAKERS, LOCK, validate_choices, validate_text, verify_mp3
 from generate_thai_audio import make_plan, build_bundle, write_json
+from course_audio_plan import course_audio_plan
 
 
 class Studio:
@@ -47,8 +48,13 @@ class Studio:
 
     def start(self, data):
         mode = data.get("mode")
-        if mode not in {"preview", "sample", "all"}:
-            raise ValueError("Choose preview, sample or all")
+        if mode not in {"preview", "sample", "all", "course"}:
+            raise ValueError("Choose preview, sample, all or course")
+        if mode == "course" and not (self.root / "assets/data/course_v2.json").is_file():
+            raise ValueError("Course data is not available in this checkout")
+        course = course_audio_plan(self.root) if mode == "course" else None
+        if course is not None and not course["requests"]:
+            raise ValueError("No missing course recordings. Existing files are retained.")
         male, female, speed = data.get("male", 9), data.get("female", 2), data.get("speed", 1.0)
         validate_choices(male, female, speed)
         text = validate_text(data.get("text")) if mode == "preview" else None
@@ -60,14 +66,14 @@ class Studio:
                 raise ValueError("A job is already running. Wait or press Stop.")
             job_id = uuid.uuid4().hex
             self.cancel.clear()
-            total = 1 if mode == "preview" else len(make_plan(self.phrases, mode))
+            total = len(course["requests"]) if course else (1 if mode == "preview" else len(make_plan(self.phrases, mode)))
             self.state = {"status": "running", "message": "Preparing local engine...", "done": 0,
                           "total": total, "job": job_id, "mode": mode}
-            self.thread = threading.Thread(target=self.run, args=(job_id, mode, text, speaker, male, female, speed), daemon=True)
+            self.thread = threading.Thread(target=self.run, args=(job_id, mode, text, speaker, male, female, speed, course), daemon=True)
             self.thread.start()
         return job_id
 
-    def run(self, job_id, mode, text, speaker, male, female, speed):
+    def run(self, job_id, mode, text, speaker, male, female, speed, course=None):
         job = self.work / "jobs" / job_id
         try:
             job.mkdir(parents=True)
@@ -81,7 +87,7 @@ class Studio:
                 self.verify(path)
                 self.update(status="complete", message="Preview ready. Listen below.", done=1, audio=True)
                 return
-            plan = make_plan(self.phrases, mode)
+            plan = [{k: row[k] for k in ["phraseId", "form", "thai"]} for row in course["requests"]] if course else make_plan(self.phrases, mode)
             voices = {form: f"kokoro:{LOCK['revision']}:speaker={sid}:speed={speed}:mp3-v1"
                       for form, sid in [("male", male), ("female", female), ("shared", female)]}
             def synthesize(row):
@@ -105,8 +111,23 @@ class Studio:
                         "licenseDeclaration": LOCK["license"], "humanListeningReview": "pending",
                         "maleSpeaker": male, "femaleSpeaker": female, "speed": speed,
                     })
-                    for name in ["phrases.json", "phrase_categories.json"]:
-                        (bundle / "assets/data" / name).write_bytes((self.root / "assets/data" / name).read_bytes())
+                    if course:
+                        # A course pack can never overwrite the original 990-entry manifest.
+                        original = bundle / "assets/data/thai_audio_manifest.json"
+                        generated = json.loads(original.read_text(encoding="utf-8"))["entries"]
+                        requests = {(r["phraseId"], r["form"]): r for r in course["requests"]}
+                        expanded = []
+                        for row in generated:
+                            for alias in requests[(row["phraseId"], row["form"])]["targets"]:
+                                expanded.append({**row, **alias})
+                        existing = json.loads((self.root / "assets/data/course_audio_manifest.json").read_text(encoding="utf-8"))["entries"]
+                        replacements = {(e["phraseId"], e["form"]) for e in expanded}
+                        write_json(bundle / "assets/data/course_audio_manifest.json", {"schemaVersion": 1, "entries": [e for e in existing if (e["phraseId"], e["form"]) not in replacements] + expanded})
+                        original.unlink()
+                        write_json(bundle / "course-source.json", course)
+                    else:
+                        for name in ["phrases.json", "phrase_categories.json"]:
+                            (bundle / "assets/data" / name).write_bytes((self.root / "assets/data" / name).read_bytes())
                     (bundle / "AUDIO_SOURCE.txt").write_text(
                         f"Thai Kokoro: https://huggingface.co/{LOCK['repository']}\n"
                         f"Revision: {LOCK['revision']}\nModel-card license: Apache-2.0.\n"
@@ -168,8 +189,9 @@ def make_handler(studio):
             elif path == "/api/state":
                 self.send(200, studio.snapshot())
             elif path == "/api/config":
+                course_count = course_audio_plan(studio.root)["newRecordings"] if (studio.root / "assets/data/course_v2.json").exists() else 0
                 self.send(200, {"speakers": SPEAKERS, "phrases": studio.phrases[:5],
-                                "files": len(make_plan(studio.phrases)), "phraseCount": len(studio.phrases)})
+                                "files": len(make_plan(studio.phrases)), "phraseCount": len(studio.phrases), "courseFiles": course_count})
             elif re.fullmatch(r"/(audio|download)/[a-f0-9]{32}", path):
                 kind, job = path.strip("/").split("/")
                 file = studio.work / "jobs" / job / ("preview.mp3" if kind == "audio" else "audio.zip")

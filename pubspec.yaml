@@ -35,3 +35,5 @@ flutter:
     - assets/data/phrase_categories.json
     - assets/data/phrases.json
     - assets/data/thai_audio_manifest.json
+    - assets/data/course_v2.json
+    - assets/data/course_audio_manifest.json

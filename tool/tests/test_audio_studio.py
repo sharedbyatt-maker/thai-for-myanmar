@@ -69,6 +69,25 @@ class StudioTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.studio.start(data)
 
+    def test_course_pack_deduplicates_aliases_and_never_overwrites_legacy_manifest(self):
+        data = self.root / 'assets/data'
+        (data / 'thai_audio_manifest.json').write_text('{"schemaVersion":1,"entries":[]}')
+        (data / 'course_audio_manifest.json').write_text('{"schemaVersion":1,"entries":[]}')
+        line = {'male':'น้ำ', 'female':'น้ำ', 'sources':{}}
+        (data / 'course_v2.json').write_text(json.dumps({'version':'test', 'lines':{'c2_a':line, 'c2_b':line}}), encoding='utf-8')
+        original = (data / 'thai_audio_manifest.json').read_bytes()
+        self.studio.start({'mode':'course'})
+        state = self.wait()
+        self.assertEqual((state['status'], state['done']), ('complete', 1))
+        self.assertEqual((data / 'thai_audio_manifest.json').read_bytes(), original)
+        with zipfile.ZipFile(self.studio.work / 'jobs' / state['job'] / 'audio.zip') as z:
+            self.assertNotIn('assets/data/thai_audio_manifest.json', z.namelist())
+            self.assertNotIn('assets/data/phrases.json', z.namelist())
+            entries = json.loads(z.read('assets/data/course_audio_manifest.json'))['entries']
+            self.assertEqual({e['phraseId'] for e in entries}, {'c2_a', 'c2_b'})
+            self.assertEqual(len({e['asset'] for e in entries}), 1)
+            self.assertEqual(json.loads(z.read('course-source.json'))['newRecordings'], 1)
+
     def test_single_job_stop_and_partial_zip(self):
         entered, release = threading.Event(), threading.Event()
         class Slow(FakeEngine):
