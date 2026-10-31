@@ -78,9 +78,9 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
 
   Phrase get _phrase => widget.phrases[_index];
   bool get _guided => widget.guided && widget.mode == LearningMode.flashcard;
-  bool get _listeningCheck =>
-      _guided && _checking && _index % 3 == 2 && !_textFallback;
-  bool get _reverseCheck => _guided && _checking && _index % 3 == 1;
+  bool get _listeningCheck => _guided && _checking && !_textFallback;
+  bool get _reverseCheck =>
+      !_guided && widget.mode == LearningMode.reverseMeaning;
 
   @override
   void initState() {

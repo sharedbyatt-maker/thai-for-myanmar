@@ -13,7 +13,11 @@ import 'package:thai_for_myanmar/services/thai_playback_service.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late PhraseRepository repository;
-  setUpAll(() async => repository = await PhraseRepository.load(rootBundle));
+  late ThaiAudioCatalog audioCatalog;
+  setUpAll(() async {
+    repository = await PhraseRepository.load(rootBundle);
+    audioCatalog = await ThaiAudioCatalog.load(rootBundle);
+  });
   setUp(() => SharedPreferences.setMockInitialValues({}));
   Future<AppState> setup(
     WidgetTester tester,
@@ -21,6 +25,7 @@ void main() {
     int count = 1,
     bool guided = false,
     bool dark = false,
+    bool audioAvailable = true,
   }) async {
     final state = AppState();
     await state.load();
@@ -29,7 +34,7 @@ void main() {
         engine: _UnavailableEngine(),
         voiceLookupWindow: Duration.zero,
       ),
-      catalog: ThaiAudioCatalog.empty(),
+      catalog: audioAvailable ? audioCatalog : ThaiAudioCatalog.empty(),
       assetPlayer: _NoopPlayer(),
     );
     addTearDown(playback.dispose);
@@ -59,6 +64,12 @@ void main() {
       await tester.pumpAndSettle();
       expect(state.learning.totalReviews, 0);
       await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(repository.phrases.first.thaiFor(state.politeStyle)),
+        findsNothing,
+      );
+      await tester.tap(find.byKey(const ValueKey('guided-audio')));
       await tester.pumpAndSettle();
       final correctId = repository.phrases.first.id;
       final options = find.byWidgetPredicate(
@@ -134,6 +145,7 @@ void main() {
         LearningMode.flashcard,
         count: 3,
         guided: true,
+        audioAvailable: false,
       );
       for (var index = 0; index < 3; index++) {
         await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
@@ -143,13 +155,13 @@ void main() {
         final option = find.byKey(
           ValueKey('guided-option-${repository.phrases[index].id}'),
         );
-        if (index == 2) {
+        {
           expect(tester.widget<OutlinedButton>(option).onPressed, isNull);
-          expect(state.learning.totalReviews, 2);
+          expect(state.learning.totalReviews, index);
           await tester.tap(find.byKey(const ValueKey('guided-audio')));
           await tester.pumpAndSettle();
           expect(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'), findsOneWidget);
-          expect(state.learning.totalReviews, 2);
+          expect(state.learning.totalReviews, index);
           await tester.ensureVisible(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
           await tester.pumpAndSettle();
           await tester.tap(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
@@ -212,7 +224,11 @@ void main() {
     expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsOneWidget);
   });
   testWidgets('unavailable listening cannot earn progress', (tester) async {
-    final state = await setup(tester, LearningMode.listening);
+    final state = await setup(
+      tester,
+      LearningMode.listening,
+      audioAvailable: false,
+    );
     final correct = find.text(repository.phrases.first.myanmar);
     await tester.scrollUntilVisible(correct, 200);
     await tester.pumpAndSettle();
