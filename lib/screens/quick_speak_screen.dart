@@ -7,6 +7,7 @@ import '../models/phrase.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/thai_playback_button.dart';
+import '../widgets/speaker_dialog.dart';
 
 class QuickSpeakScreen extends StatefulWidget {
   const QuickSpeakScreen({
@@ -65,55 +66,12 @@ class _QuickSpeakScreenState extends State<QuickSpeakScreen> {
   void _showToSpeaker(Phrase phrase) {
     showDialog<void>(
       context: context,
-      builder: (context) => Dialog.fullscreen(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton.filledTonal(
-                    tooltip: 'ပိတ်ရန်',
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close_rounded),
-                  ),
-                ),
-                const Spacer(),
-                Icon(
-                  Icons.translate_rounded,
-                  size: 42,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: 26),
-                Text(
-                  phrase.thaiFor(widget.appState.politeStyle),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontSize: 34,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  phrase.myanmar,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const Spacer(),
-                ThaiPlaybackButton(
-                  phrase: phrase,
-                  appState: widget.appState,
-                  playbackService: widget.playbackService,
-                  label: 'ထိုင်းအသံ နားထောင်ရန်',
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ),
+      builder: (_) => SpeakerDialog(
+        phrase: phrase,
+        appState: widget.appState,
+        playbackService: widget.playbackService,
       ),
-    );
+    ).whenComplete(widget.playbackService.stop);
   }
 
   @override
