@@ -161,7 +161,7 @@ void main() {
           await tester.tap(find.byKey(const ValueKey('guided-audio')));
           await tester.pumpAndSettle();
           expect(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'), findsOneWidget);
-          expect(state.learning.totalReviews, 2);
+          expect(state.learning.totalReviews, index);
           await tester.ensureVisible(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
           await tester.pumpAndSettle();
           await tester.tap(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
@@ -224,7 +224,11 @@ void main() {
     expect(find.text('ဒီအကြိမ် ပြီးပါပြီ'), findsOneWidget);
   });
   testWidgets('unavailable listening cannot earn progress', (tester) async {
-    final state = await setup(tester, LearningMode.listening);
+    final state = await setup(
+      tester,
+      LearningMode.listening,
+      audioAvailable: false,
+    );
     final correct = find.text(repository.phrases.first.myanmar);
     await tester.scrollUntilVisible(correct, 200);
     await tester.pumpAndSettle();
