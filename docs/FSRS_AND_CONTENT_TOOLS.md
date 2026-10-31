@@ -20,6 +20,10 @@ backend do not change. Quests, XP caps and competitive scoring remain separate.
 - Grades 0–2 map to Again, 3 to Hard, 4 to Good and 5 to Easy. Failed cards can
   become due in a minute; new Good cards have a ten-minute learning step. The
   minute precision is preserved in storage and all due checks compare instants.
+- Objective first-try correct answers are calibrated to Good (quality 4), not
+  Easy: recognizing a newly taught phrase once should still enter the learning
+  steps. Quality 5 is reserved for explicit Easy self-ratings on standalone
+  flashcards. Guided first-attempt accuracy and XP remain correct.
 - Convert review times to UTC for FSRS. The interface displays local time. The
   visible Review tab refreshes each minute; inactive tabs stop their timer.
 - Keep schema-version-1 progress and old per-card fields. Old saved due dates,
