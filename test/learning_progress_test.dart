@@ -3,19 +3,86 @@ import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/learning/review_card.dart';
 
 void main() {
-  test('successful reviews advance intervals, failure resets them', () {
-    final day = DateTime(2026, 10, 13);
-    final first = ReviewCard.initial(day).review(5, day);
-    final second = first.review(5, DateTime(2026, 10, 14));
-    final third = second.review(5, DateTime(2026, 10, 20));
-    expect(first.intervalDays, 1);
-    expect(second.intervalDays, 6);
-    expect(third.intervalDays, greaterThan(6));
-    final failed = third.review(2, DateTime(2026, 11, 5));
-    expect(failed.repetitions, 0);
-    expect(failed.intervalDays, 1);
-    expect(failed.due, DateTime(2026, 11, 6));
-    expect(() => first.review(6, day), throwsArgumentError);
+  test(
+    'FSRS advances successful reviews and relearns failures within minutes',
+    () {
+      final day = DateTime(2026, 10, 13);
+      final first = ReviewCard.initial(day).review(5, day);
+      final second = first.review(5, first.due);
+      final third = second.review(5, second.due);
+      expect(first.usesFsrs, isTrue);
+      expect(first.intervalDays, greaterThan(1));
+      expect(second.intervalDays, greaterThan(first.intervalDays));
+      expect(third.intervalDays, greaterThan(second.intervalDays));
+      final failed = third.review(2, third.due);
+      expect(failed.repetitions, 0);
+      expect(failed.intervalDays, 0);
+      expect(failed.due, third.due.add(const Duration(minutes: 10)));
+      expect(() => first.review(6, day), throwsArgumentError);
+    },
+  );
+  test('legacy due dates and counters survive until a real FSRS review', () {
+    final due = DateTime(2026, 11, 4);
+    final card = ReviewCard.fromJson({
+      'repetitions': 7,
+      'ease': 2.8,
+      'intervalDays': 30,
+      'due': due.toIso8601String(),
+      'lastQuality': 4,
+    });
+    expect(card.due, due);
+    expect(card.repetitions, 7);
+    expect(card.usesFsrs, isFalse);
+    expect(card.reviewLog, isEmpty);
+    expect(card.isDue(due.subtract(const Duration(seconds: 1))), isFalse);
+    final next = card.review(4, due);
+    expect(next.repetitions, 8);
+    expect(next.usesFsrs, isTrue);
+    expect(next.reviewLog, hasLength(1));
+  });
+  test(
+    'minute due times compare instants across time zones and survive JSON',
+    () {
+      final now = DateTime.parse('2026-10-31T12:00:00+07:00');
+      final p = LearningProgress()
+        ..record('hello', LearningMode.flashcard, 2, now);
+      final card = p.cardFor('hello', LearningMode.flashcard)!;
+      expect(card.due, now.toUtc().add(const Duration(minutes: 1)));
+      expect(p.isDue('hello', LearningMode.flashcard, now), isFalse);
+      final restored = LearningProgress.fromJson(p.toJson());
+      expect(restored.isDue('hello', LearningMode.flashcard, card.due), isTrue);
+      final copy = restored.cardFor('hello', LearningMode.flashcard)!;
+      expect(copy.usesFsrs, isTrue);
+      expect(
+        copy.review(4, copy.due).toJson(),
+        card.review(4, card.due).toJson(),
+      );
+    },
+  );
+  test('corrupt optional FSRS memory falls back without deleting the card', () {
+    final card = ReviewCard.initial(
+      DateTime.utc(2026, 10, 31),
+    ).review(5, DateTime.utc(2026, 10, 31));
+    final json = card.toJson();
+    json['fsrs'] = {
+      ...(json['fsrs'] as Map).cast<String, dynamic>(),
+      'difficulty': double.nan,
+    };
+    final restored = ReviewCard.fromJson(json);
+    expect(restored.due, card.due);
+    expect(restored.usesFsrs, isFalse);
+    expect(restored.repetitions, card.repetitions);
+  });
+  test('logs are bounded and device clock regression remains usable', () {
+    var now = DateTime.utc(2026, 10, 31);
+    var card = ReviewCard.initial(now);
+    for (var i = 0; i < 20; i++) {
+      card = card.review(4, now);
+      now = now.add(const Duration(minutes: 10));
+    }
+    expect(card.reviewLog, hasLength(8));
+    final next = card.review(4, DateTime.utc(2026, 10, 30));
+    expect(next.due.isAfter(now.subtract(const Duration(minutes: 10))), isTrue);
   });
   test('streak allows yesterday but breaks after a missed day', () {
     final p = LearningProgress();

@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
+  fsrs: 2.0.1
   audioplayers: ^6.8.0
   flutter:
     sdk: flutter
@@ -27,6 +28,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - third_party/licenses/dart_fsrs_mit.txt
     - third_party/licenses/pouple_tim_mit.txt
     - assets/audio/thai/
     - assets/data/league_config.json

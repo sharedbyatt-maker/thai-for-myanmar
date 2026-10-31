@@ -45,7 +45,7 @@ class LearningProgress {
 
   bool isDue(String phraseId, LearningMode mode, DateTime now) {
     final card = cardFor(phraseId, mode);
-    return card == null || !card.due.isAfter(dateOnly(now));
+    return card == null || card.isDue(now);
   }
 
   int streak(DateTime now) {

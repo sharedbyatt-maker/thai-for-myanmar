@@ -15,6 +15,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  content-audit:
+    name: Audit Thai content with PyThaiNLP
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r tool/requirements-content.txt
+      - run: python -m unittest discover -s tool/tests -p test_content_audit.py -v
+      - run: python tool/audit_thai_content.py
+      - run: git diff --exit-code -- assets/data
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: thai-content-audit
+          path: build/content-audit.json
+          if-no-files-found: error
+          retention-days: 14
   league-db:
     name: Verify League scoring and privacy in PostgreSQL
     runs-on: ubuntu-latest

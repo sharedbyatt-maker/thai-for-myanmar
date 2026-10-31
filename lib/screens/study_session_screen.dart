@@ -135,8 +135,13 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
 
   void _record(Phrase phrase, int quality) {
     if (_results.containsKey(phrase.id)) return;
-    _results[phrase.id] = quality;
-    unawaited(widget.appState.recordReview(phrase.id, widget.mode, quality));
+    // A correct quiz answer is Good, not the learner's explicit Easy rating.
+    final calibrated =
+        quality == 5 && (_guided || widget.mode != LearningMode.flashcard)
+        ? 4
+        : quality;
+    _results[phrase.id] = calibrated;
+    unawaited(widget.appState.recordReview(phrase.id, widget.mode, calibrated));
   }
 
   void _next() {
@@ -1207,7 +1212,7 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
         const SizedBox(height: 8),
         Text(
           _guided
-              ? 'ပထမအကြိမ်မှန် ${_results.values.where((q) => q == 5).length} ခု • သင်ပြီး ${_results.length} ခု'
+              ? 'ပထမအကြိမ်မှန် ${_results.values.where((q) => q >= 4).length} ခု • သင်ပြီး ${_results.length} ခု'
               : 'မှတ်မိ / မှန် $correct ခု • စုစုပေါင်း ${_results.length} ခု',
           textAlign: TextAlign.center,
         ),

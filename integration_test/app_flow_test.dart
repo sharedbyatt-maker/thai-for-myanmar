@@ -208,6 +208,10 @@ void main() {
     await restored.load();
     expect(restored.learning.totalReviews, 5);
     expect(restored.learning.reviewXp, 25);
+    expect(
+      restored.learning.cards.values.every((card) => card.usesFsrs),
+      isTrue,
+    );
     expect(restored.learning.completedLessons, state.learning.completedLessons);
     await tester.tap(find.text('နောက်သင်ခန်းစာ ဆက်မယ်'));
     await tester.pumpAndSettle();
@@ -218,6 +222,17 @@ void main() {
     expect(find.text('အဓိပ္ပာယ်ကြည့်မယ်'), findsOneWidget);
     expect(state.learning.totalReviews, 5);
     expect(tester.takeException(), isNull);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.replay_rounded));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('scheduled-review')), findsOneWidget);
+    expect(find.byKey(const ValueKey('start-scheduled-review')), findsNothing);
+    if (kIsWeb) {
+      final width =
+          tester.view.physicalSize.width / tester.view.devicePixelRatio;
+      await binding.takeScreenshot('${width.round()}-scheduled-review');
+    }
   });
 
   testWidgets('Quick Speak searches, displays, and saves a phrase', (

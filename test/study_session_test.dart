@@ -118,6 +118,38 @@ void main() {
     },
   );
 
+  testWidgets(
+    'first correct guided answer uses Good learning steps, not Easy',
+    (tester) async {
+      final state = await setup(tester, LearningMode.flashcard, guided: true);
+      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('guided-audio')));
+      await tester.pumpAndSettle();
+      final option = find.byKey(
+        ValueKey('guided-option-${repository.phrases.first.id}'),
+      );
+      await tester.ensureVisible(option);
+      await tester.pumpAndSettle();
+      await tester.tap(option);
+      await tester.pump();
+      await tester.tap(find.text('အဖြေစစ်မယ်'));
+      await tester.pumpAndSettle();
+      final card = state.learning.cardFor(
+        repository.phrases.first.id,
+        LearningMode.flashcard,
+      )!;
+      expect(card.lastQuality, 4);
+      expect(card.intervalDays, 0);
+      expect(card.reviewLog.single['rating'], 3);
+      await tester.tap(find.text('ရလဒ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      expect(find.text('ပထမအကြိမ်မှန် 1 ခု • သင်ပြီး 1 ခု'), findsOneWidget);
+    },
+  );
+
   testWidgets('guided study fits short windows, large text and dark theme', (
     tester,
   ) async {
@@ -262,7 +294,7 @@ void main() {
       state.learning
           .cardFor(repository.phrases.first.id, LearningMode.reverseMeaning)!
           .lastQuality,
-      5,
+      4,
     );
     expect(state.learning.totalReviews, 1);
   });

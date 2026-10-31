@@ -33,17 +33,49 @@ class QuizScreen extends StatefulWidget {
     required this.repository,
     required this.appState,
     required this.playbackService,
+    this.active = true,
+    this.clock,
     super.key,
   });
   final PhraseRepository repository;
   final AppState appState;
   final ThaiPlaybackService playbackService;
+  final bool active;
+  final DateTime Function()? clock;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  Timer? _refresh;
+  @override
+  void initState() {
+    super.initState();
+    _startRefresh();
+  }
+
+  void _startRefresh() {
+    _refresh?.cancel();
+    if (widget.active) {
+      _refresh = Timer.periodic(const Duration(minutes: 1), (_) {
+        if (mounted) setState(() {});
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant QuizScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.active != widget.active) _startRefresh();
+  }
+
+  @override
+  void dispose() {
+    _refresh?.cancel();
+    super.dispose();
+  }
+
   LearningMode _mode = LearningMode.listening;
   ReviewFilter _filter = ReviewFilter.due;
   String _category = '';
@@ -52,6 +84,41 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: widget.appState,
     builder: (context, _) {
+      final now = widget.clock?.call() ?? DateTime.now();
+      final reviewed =
+          widget.repository.phrases
+              .where(
+                (p) =>
+                    widget.appState.learning.cardFor(
+                      p.id,
+                      LearningMode.flashcard,
+                    ) !=
+                    null,
+              )
+              .toList()
+            ..sort(
+              (a, b) => widget.appState.learning
+                  .cardFor(a.id, LearningMode.flashcard)!
+                  .due
+                  .compareTo(
+                    widget.appState.learning
+                        .cardFor(b.id, LearningMode.flashcard)!
+                        .due,
+                  ),
+            );
+      final due = reviewed
+          .where(
+            (p) => widget.appState.learning
+                .cardFor(p.id, LearningMode.flashcard)!
+                .isDue(now),
+          )
+          .toList();
+      final next = reviewed.isEmpty
+          ? null
+          : widget.appState.learning
+                .cardFor(reviewed.first.id, LearningMode.flashcard)!
+                .due
+                .toLocal();
       final source = widget.repository.phrases
           .where(
             (p) =>
@@ -66,12 +133,61 @@ class _QuizScreenState extends State<QuizScreen> {
         _mode,
         _filter,
         widget.appState.favorites,
-        DateTime.now(),
+        now,
         limit: _mode == LearningMode.matching ? 4 : 10,
       );
       return ListView(
         padding: const EdgeInsets.all(18),
         children: [
+          if (reviewed.isNotEmpty)
+            Card(
+              key: const ValueKey('scheduled-review'),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'ကိုယ့်အတွက် ပြန်လေ့ကျင့်ရန်',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      due.isEmpty
+                          ? 'အခု ပြန်လေ့ကျင့်ချိန် မရောက်သေးပါ။'
+                          : '${due.length} စကားစု ပြန်လေ့ကျင့်ချိန် ရောက်ပါပြီ။',
+                    ),
+                    if (due.isEmpty && next != null)
+                      Text(
+                        'နောက်တစ်ကြိမ် · ${next.day}/${next.month} ${next.hour.toString().padLeft(2, "0")}:${next.minute.toString().padLeft(2, "0")}',
+                      ),
+                    if (due.isNotEmpty)
+                      FilledButton.icon(
+                        key: const ValueKey('start-scheduled-review'),
+                        icon: const Icon(Icons.headphones_rounded),
+                        label: const Text('နားထောင်ပြီး ပြန်ဖြေမယ်'),
+                        onPressed: () {
+                          unawaited(widget.playbackService.stop());
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) => StudySessionScreen(
+                                repository: widget.repository,
+                                appState: widget.appState,
+                                playbackService: widget.playbackService,
+                                phrases: due.take(5).toList(),
+                                mode: LearningMode.flashcard,
+                                guided: true,
+                                title: 'ကိုယ့်အတွက် ပြန်လေ့ကျင့်ရန်',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ),
           const Center(child: ElephantBuddy(size: 48)),
           Text(
             'ဘာလေ့ကျင့်မလဲ?',
