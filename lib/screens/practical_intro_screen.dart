@@ -54,11 +54,11 @@ class _PracticalIntroScreenState extends State<PracticalIntroScreen> {
       widget.repository.phrases.firstWhere((p) => p.id == id);
   List<String> get _answer => _step == 2
       ? [_speaker, 'ชื่อ', _name.text.trim(), _ending]
-      : [_speaker, 'มาจาก', 'เมียนมา', _ending];
+      : [_speaker, 'มาจาก', 'ประเทศไทย', _ending];
   // Fixed shuffled banks keep the task stable while feedback rebuilds.
   List<String> get _bank => _step == 2
       ? [_ending, _name.text.trim(), 'ชื่อ', _speaker]
-      : ['เมียนมา', _ending, _speaker, 'มาจาก'];
+      : ['เมียนมา', _ending, _speaker, 'มาจาก', 'ประเทศไทย'];
 
   @override
   void dispose() {
@@ -130,10 +130,12 @@ class _PracticalIntroScreenState extends State<PracticalIntroScreen> {
     setState(() {
       _passed = correct;
       _feedback = correct
-          ? 'ဝါကျအစီအစဉ် မှန်ပါတယ်။ နာမည်နေရာမှာ ကိုယ့်နာမည်ကို အစားထိုးသုံးနိုင်ပါတယ်။'
+          ? (_step == 2
+                ? 'ဝါကျအစီအစဉ် မှန်ပါတယ်။ နာမည်နေရာမှာ ကိုယ့်နာမည်ကို အစားထိုးသုံးနိုင်ပါတယ်။'
+                : 'မှန်ပါတယ်။ နိုင်ငံအမည်ကို အခြေအနေအလိုက် ပြောင်းထည့်ပြီး ဝါကျအသစ် တည်ဆောက်နိုင်ပါတယ်။')
           : _step == 2
           ? 'ကိုယ့်ကိုရည်ညွှန်းတဲ့စကား → ชื่อ → နာမည် → ယဉ်ကျေးစကား အစဉ်လိုက် ပြန်စမ်းပါ။'
-          : 'ကိုယ့်ကိုရည်ညွှန်းတဲ့စကား → มาจาก → နိုင်ငံ → ယဉ်ကျေးစကား အစဉ်လိုက် ပြန်စမ်းပါ။';
+          : 'ဒီအခြေအနေမှာ သူငယ်ချင်းက ထိုင်းနိုင်ငံကပါ။ ประเทศไทย ကို ရွေးပြီး ကိုယ့်ကိုရည်ညွှန်းတဲ့စကား → มาจาก → နိုင်ငံ → ယဉ်ကျေးစကား အစဉ်လိုက် ပြန်စမ်းပါ။';
     });
   }
 
@@ -194,7 +196,7 @@ class _PracticalIntroScreenState extends State<PracticalIntroScreen> {
       Text(
         _step == 2
             ? 'အောက်ကစကားလုံးတွေကို အစဉ်လိုက်နှိပ်ပါ။ နာမည်ကို ကိုယ်ရေးထားတဲ့အတိုင်း ထည့်ပါမယ်။'
-            : 'တစ်ဖက်လူက “ဘယ်ကလာတာလဲ” မေးတယ်။ မြန်မာနိုင်ငံကလာတာကို ဖြေပါ။',
+            : 'ဒီတစ်ခါ ထိုင်းနိုင်ငံကလာတဲ့ သူငယ်ချင်းတစ်ယောက်ရဲ့ နေရာကနေ ဖြေကြည့်ပါ။ “ဘယ်ကလာတာလဲ” မေးရင် ဘယ်လိုဖြေမလဲ။',
       ),
       const SizedBox(height: 20),
       Container(
@@ -216,7 +218,10 @@ class _PracticalIntroScreenState extends State<PracticalIntroScreen> {
           for (var i = 0; i < _bank.length; i++)
             OutlinedButton(
               key: ValueKey('practical-token-$i'),
-              onPressed: _passed || _selected.contains(i)
+              onPressed:
+                  _passed ||
+                      _selected.contains(i) ||
+                      _selected.length >= _answer.length
                   ? null
                   : () => setState(() {
                       _selected.add(i);
@@ -412,6 +417,9 @@ class _PracticalIntroScreenState extends State<PracticalIntroScreen> {
               ),
               const Text(
                 'มาจาก က … ကလာတယ် ဆိုတဲ့ အဓိပ္ပာယ်ပါ။ နာမည်ပြောတဲ့ ชื่อ ပုံစံနဲ့ မတူပါ။',
+              ),
+              const Text(
+                'နိုင်ငံအမည်: เมียนมา = မြန်မာနိုင်ငံ၊ ประเทศไทย = ထိုင်းနိုင်ငံ။ နိုင်ငံနေရာကို ပြောင်းထည့်ပြီး ပြောကြည့်ပါ။',
               ),
               _audio('intro_nice_to_meet', 'တွေ့ရတာ ဝမ်းသာကြောင်း ပြောမယ်'),
               FilledButton(

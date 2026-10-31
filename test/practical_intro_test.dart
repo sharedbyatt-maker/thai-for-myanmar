@@ -221,6 +221,12 @@ void main() {
           await token(tester, i);
         }
         await tap(tester, 'ဝါကျစစ်မယ်');
+        expect(find.text('ဆက်သင်မယ်'), findsNothing);
+        await tap(tester, 'အစီအစဉ် ပြန်ရွေးမယ်');
+        for (final i in [2, 3, 4, 1]) {
+          await token(tester, i);
+        }
+        await tap(tester, 'ဝါကျစစ်မယ်');
         await tap(tester, 'ဆက်သင်မယ်');
         expect(state.learning.practicalChecks, isEmpty);
         await show(tester, find.text('လေ့ကျင့်ပြီးကြောင်း သိမ်းမယ်'));

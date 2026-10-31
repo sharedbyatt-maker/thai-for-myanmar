@@ -18,7 +18,10 @@ construct an origin statement, and rehearse asking the other person's name.
    hiding it and replaying before grading. Muted/unavailable/cancelled playback
    cannot count as a passed listening check.
 5. Hear/read the origin question and Myanmar-origin answer; notice มาจาก.
-6. Construct the origin reply from a situation prompt without the pattern shown.
+6. Apply the pattern to a Thai-origin friend: choose ประเทศไทย rather than
+   repeating the Myanmar example. The alternate full sentence is not shown
+   beforehand. Country vocabulary is introduced in step 5; this is text-only
+   construction, not an unrecorded audio prompt.
 7. Rehearse the whole exchange and explicitly save a practice completion.
 
 The lesson captures the selected polite style at entry so its grammar/particles
