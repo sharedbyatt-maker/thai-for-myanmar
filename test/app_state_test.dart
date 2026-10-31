@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/learning/learning_progress.dart';
@@ -8,6 +10,52 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+
+  test(
+    'one corrupt preference does not discard intact learning or other settings',
+    () async {
+      final progress = LearningProgress()
+        ..record(
+          'greet_hello',
+          LearningMode.flashcard,
+          5,
+          DateTime(2026, 10, 31),
+        );
+      SharedPreferences.setMockInitialValues({
+        'thai_for_myanmar.favorites.v1': 17,
+        'thai_for_myanmar.learned.v1': <String>['greet_hello'],
+        'thai_for_myanmar.theme.v1': 'invalid',
+        'thai_for_myanmar.polite.v1': 42,
+        'thai_for_myanmar.quiz_count.v1': -5,
+        'thai_for_myanmar.audio_volume.v1': double.nan,
+        'thai_for_myanmar.learning.v1': jsonEncode(progress.toJson()),
+      });
+      final state = AppState();
+      await state.load();
+      expect(state.favorites, isEmpty);
+      expect(state.learned, contains('greet_hello'));
+      expect(state.learning.totalReviews, 1);
+      expect(state.themePreference, 'system');
+      expect(state.politeStyle, 'female');
+      expect(state.quizCount, 0);
+      expect(state.audioVolume, 1);
+      await state.setPoliteStyle('male');
+      final restored = AppState();
+      await restored.load();
+      expect(restored.politeStyle, 'male');
+      expect(restored.learning.totalReviews, 1);
+    },
+  );
+
+  test('incorrect practice does not mark a new phrase as learned', () async {
+    final state = AppState();
+    await state.load();
+    await state.recordReview('greet_hello', LearningMode.meaning, 2);
+    expect(state.learned, isEmpty);
+    expect(state.learning.totalReviews, 1);
+    await state.recordReview('greet_hello', LearningMode.meaning, 5);
+    expect(state.learned, contains('greet_hello'));
   });
 
   test(

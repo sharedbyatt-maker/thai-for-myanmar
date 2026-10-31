@@ -19,6 +19,8 @@ void main() {
     WidgetTester tester,
     LearningMode mode, {
     int count = 1,
+    bool guided = false,
+    bool dark = false,
   }) async {
     final state = AppState();
     await state.load();
@@ -33,6 +35,7 @@ void main() {
     addTearDown(playback.dispose);
     await tester.pumpWidget(
       MaterialApp(
+        theme: dark ? ThemeData.dark() : ThemeData.light(),
         home: StudySessionScreen(
           repository: repository,
           appState: state,
@@ -41,11 +44,157 @@ void main() {
           mode: mode,
           title: 'လေ့ကျင့်ရန်',
           lessonId: 'test:hello',
+          guided: guided,
         ),
       ),
     );
     return state;
   }
+
+  testWidgets(
+    'guided lesson requires recall, explains errors and records once',
+    (tester) async {
+      final state = await setup(tester, LearningMode.flashcard, guided: true);
+      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      expect(state.learning.totalReviews, 0);
+      await tester.tap(find.text('စမ်းဖြေမယ်'));
+      await tester.pumpAndSettle();
+      final correctId = repository.phrases.first.id;
+      final options = find.byWidgetPredicate(
+        (w) =>
+            w is OutlinedButton && w.key.toString().contains('guided-option-'),
+      );
+      final wrong = options
+          .evaluate()
+          .map((e) => e.widget as OutlinedButton)
+          .firstWhere((w) => w.key != ValueKey('guided-option-$correctId'));
+      await tester.ensureVisible(find.byKey(wrong.key!));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(wrong.key!));
+      await tester.pump();
+      await tester.tap(find.text('အဖြေစစ်မယ်'));
+      await tester.pumpAndSettle();
+      expect(state.learning.totalReviews, 0);
+      expect(state.learning.completedSessions, 0);
+      expect(find.textContaining('မှတ်ထားပါ'), findsOneWidget);
+      await tester.tap(find.text('ပြန်စမ်းမယ်'));
+      await tester.pumpAndSettle();
+      final correct = find.byKey(ValueKey('guided-option-$correctId'));
+      await tester.ensureVisible(correct);
+      await tester.pumpAndSettle();
+      await tester.tap(correct);
+      await tester.pump();
+      final check = find.descendant(
+        of: find.byKey(const ValueKey('guided-primary')),
+        matching: find.byType(FilledButton),
+      );
+      final onPressed = tester.widget<FilledButton>(check).onPressed!;
+      onPressed();
+      onPressed();
+      await tester.pumpAndSettle();
+      expect(state.learning.totalReviews, 1);
+      expect(state.learning.completedSessions, 0);
+      expect(
+        state.learning.cardFor(correctId, LearningMode.flashcard)!.lastQuality,
+        3,
+      );
+      await tester.tap(find.text('ရလဒ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      expect(state.learning.completedSessions, 1);
+      expect(state.learning.completedLessons, contains('test:hello'));
+      expect(find.text('ပထမအကြိမ်မှန် 0 ခု • သင်ပြီး 1 ခု'), findsOneWidget);
+    },
+  );
+
+  testWidgets('guided study fits short windows, large text and dark theme', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(568, 320);
+    tester.view.devicePixelRatio = 1;
+    tester.view.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.platformDispatcher.clearTextScaleFactorTestValue);
+    await setup(tester, LearningMode.flashcard, guided: true, dark: true);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('စမ်းဖြေမယ်'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'guided listening cannot grade unheard audio and offers an explicit text fallback',
+    (tester) async {
+      final state = await setup(
+        tester,
+        LearningMode.flashcard,
+        count: 3,
+        guided: true,
+      );
+      for (var index = 0; index < 3; index++) {
+        await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('စမ်းဖြေမယ်'));
+        await tester.pumpAndSettle();
+        final option = find.byKey(
+          ValueKey('guided-option-${repository.phrases[index].id}'),
+        );
+        if (index == 2) {
+          expect(tester.widget<OutlinedButton>(option).onPressed, isNull);
+          expect(state.learning.totalReviews, 2);
+          await tester.tap(find.byKey(const ValueKey('guided-audio')));
+          await tester.pumpAndSettle();
+          expect(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'), findsOneWidget);
+          expect(state.learning.totalReviews, 2);
+          await tester.ensureVisible(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text('စာနဲ့ ဆက်လေ့ကျင့်မယ်'));
+          await tester.pumpAndSettle();
+        }
+        await tester.ensureVisible(option);
+        await tester.pumpAndSettle();
+        await tester.tap(option);
+        await tester.pump();
+        await tester.tap(find.text('အဖြေစစ်မယ်'));
+        await tester.pumpAndSettle();
+        await tester.tap(
+          find.text(index == 2 ? 'ရလဒ်ကြည့်မယ်' : 'နောက်စကားစု'),
+        );
+        await tester.pumpAndSettle();
+      }
+      expect(state.learning.totalReviews, 3);
+      expect(state.learning.completedSessions, 1);
+      expect(
+        state.learning.cardFor(
+          repository.phrases[2].id,
+          LearningMode.listening,
+        ),
+        isNull,
+      );
+    },
+  );
+
+  testWidgets(
+    'leaving an active lesson asks first and cancelling retains the current stage',
+    (tester) async {
+      final state = await setup(tester, LearningMode.flashcard, guided: true);
+      await tester.tap(find.text('အဓိပ္ပာယ်ကြည့်မယ်'));
+      await tester.pumpAndSettle();
+      final context = tester.element(find.byType(StudySessionScreen));
+      await Navigator.of(context).maybePop();
+      await tester.pumpAndSettle();
+      expect(find.text('ဒီအကြိမ် နားမလား?'), findsOneWidget);
+      await tester.tap(find.text('ဆက်သင်မယ်'));
+      await tester.pumpAndSettle();
+      expect(find.text('စမ်းဖြေမယ်'), findsOneWidget);
+      expect(state.learning.completedSessions, 0);
+      expect(state.learning.completedLessons, isEmpty);
+    },
+  );
 
   testWidgets('flashcards record one review and complete the lesson', (
     tester,

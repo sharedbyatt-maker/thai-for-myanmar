@@ -43,23 +43,45 @@ class AppState extends ChangeNotifier {
   Future<void> load() async {
     try {
       _preferences = await SharedPreferences.getInstance();
+      Object? read(String key) => _preferences!.get(key);
+      List<String> strings(String key) {
+        final value = read(key);
+        return value is List
+            ? value
+                  .whereType<String>()
+                  .where((s) => s.isNotEmpty)
+                  .toSet()
+                  .toList()
+            : <String>[];
+      }
+
       _favorites
         ..clear()
-        ..addAll(_preferences!.getStringList(_favoritesKey) ?? const []);
+        ..addAll(strings(_favoritesKey));
       _learned
         ..clear()
-        ..addAll(_preferences!.getStringList(_learnedKey) ?? const []);
+        ..addAll(strings(_learnedKey));
       _recent
         ..clear()
-        ..addAll(_preferences!.getStringList(_recentKey) ?? const []);
-      _themePreference = _preferences!.getString(_themeKey) ?? 'system';
-      _politeStyle = _preferences!.getString(_politeKey) ?? 'female';
-      _quizCount = _preferences!.getInt(_quizKey) ?? 0;
-      _audioVolume = (_preferences!.getDouble(_volumeKey) ?? 1).clamp(0.0, 1.0);
+        ..addAll(strings(_recentKey).take(12));
+      final theme = read(_themeKey);
+      _themePreference = const {'system', 'light', 'dark'}.contains(theme)
+          ? theme as String
+          : 'system';
+      final polite = read(_politeKey);
+      _politeStyle = const {'male', 'female'}.contains(polite)
+          ? polite as String
+          : 'female';
+      final quizCount = read(_quizKey);
+      _quizCount = quizCount is int && quizCount >= 0 ? quizCount : 0;
+      final volume = read(_volumeKey);
+      _audioVolume = volume is num && volume.isFinite
+          ? volume.toDouble().clamp(0.0, 1.0)
+          : 1;
       _issues.clear();
       try {
-        final savedIssues = _preferences!.getString(_issuesKey);
-        if (savedIssues != null) {
+        final savedIssues = read(_issuesKey);
+        if (savedIssues is String) {
           final rows = jsonDecode(savedIssues) as List<dynamic>;
           for (final row in rows.take(100)) {
             final issue = PhraseIssue.tryParse(row);
@@ -70,8 +92,9 @@ class AppState extends ChangeNotifier {
         _issues.clear();
       }
       try {
-        final saved = _preferences!.getString(_learningKey);
-        if (saved != null) {
+        _learning = LearningProgress();
+        final saved = read(_learningKey);
+        if (saved is String) {
           _learning = LearningProgress.fromJson(
             jsonDecode(saved) as Map<String, dynamic>,
           );
@@ -142,7 +165,7 @@ class AppState extends ChangeNotifier {
     DateTime? now,
   }) async {
     _learning.record(phraseId, mode, quality, now ?? DateTime.now());
-    _learned.add(phraseId);
+    if (quality >= 3) _learned.add(phraseId);
     notifyListeners();
     await _persistLearning();
     await _saveStringList(_learnedKey, _learned.toList()..sort());

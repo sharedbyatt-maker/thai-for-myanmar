@@ -380,6 +380,15 @@ void main() {
       );
     });
 
+    test('slow speech does not leak into the next normal request', () async {
+      final engine = FakeSpeechEngine();
+      final service = _service(engine);
+      expect(await service.speakThai('สวัสดี', speed: .8), SpeechResult.spoken);
+      expect(await service.speakThai('ขอบคุณ'), SpeechResult.spoken);
+      expect(engine.speechRates.first, closeTo(.344, .00001));
+      expect(engine.speechRates.last, .43);
+    });
+
     test('empty text does not invoke the speech engine', () async {
       final engine = FakeSpeechEngine();
 

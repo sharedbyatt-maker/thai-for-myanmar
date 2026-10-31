@@ -22,6 +22,27 @@ void main() {
 
   group('ThaiPlaybackService', () {
     test(
+      'slow audio is request scoped and normal playback restores its rate',
+      () async {
+        final player = _RatePlayer();
+        final service = _service(
+          player,
+          FakeSpeechEngine(),
+          _catalog(phrase, femaleAsset: 'audio/thai/greet_hello_female.mp3'),
+        );
+        addTearDown(service.dispose);
+        expect(
+          await service.playThai(phrase, 'female', speed: .8),
+          ThaiPlaybackResult.audioAsset,
+        );
+        expect(
+          await service.playThai(phrase, 'female'),
+          ThaiPlaybackResult.audioAsset,
+        );
+        expect(player.rates, [.8, 1]);
+      },
+    );
+    test(
       'plays exact male and female assets before asking system TTS',
       () async {
         final player = FakeThaiAudioAssetPlayer();
@@ -263,6 +284,15 @@ ThaiPlaybackService _service(
     catalog: catalog,
     assetPlayer: player,
   );
+}
+
+class _RatePlayer extends FakeThaiAudioAssetPlayer
+    implements ThaiAudioSpeedControl {
+  final rates = <double>[];
+  @override
+  Future<void> setPlaybackRate(double rate) async {
+    rates.add(rate);
+  }
 }
 
 class FakeThaiAudioAssetPlayer implements ThaiAudioAssetPlayer {

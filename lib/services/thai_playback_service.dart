@@ -15,6 +15,10 @@ abstract interface class ThaiAudioVolumeControl {
   Future<void> setVolume(double volume);
 }
 
+abstract interface class ThaiAudioSpeedControl {
+  Future<void> setPlaybackRate(double rate);
+}
+
 abstract interface class ThaiAudioAssetPlayer {
   Future<void> play(String assetPath, {required void Function() onStarted});
   Future<void> stop();
@@ -63,7 +67,12 @@ class ThaiPlaybackService extends ChangeNotifier {
       _activePhraseId == phraseId &&
       _activeStyle == politeStyle;
 
-  Future<ThaiPlaybackResult> playThai(Phrase phrase, String politeStyle) async {
+  Future<ThaiPlaybackResult> playThai(
+    Phrase phrase,
+    String politeStyle, {
+    double speed = 1,
+  }) async {
+    final rate = speed.isFinite ? speed.clamp(.5, 1.5).toDouble() : 1.0;
     final requestId = ++_requestId;
     _publish(ThaiPlaybackState.loading, phrase.id, politeStyle);
     await _stopPlayers();
@@ -73,6 +82,12 @@ class ThaiPlaybackService extends ChangeNotifier {
     final entry = _catalog.match(phrase, politeStyle);
     if (entry != null) {
       try {
+        if (_assetPlayer case final ThaiAudioSpeedControl player) {
+          await player
+              .setPlaybackRate(rate)
+              .timeout(const Duration(seconds: 2));
+        }
+        if (requestId != _requestId) return ThaiPlaybackResult.cancelled;
         await _assetPlayer.play(
           entry.assetPath,
           onStarted: () => _publishIfCurrent(
@@ -93,6 +108,7 @@ class ThaiPlaybackService extends ChangeNotifier {
     if (requestId != _requestId) return ThaiPlaybackResult.cancelled;
     final speechResult = await _speechService.speakThai(
       text,
+      speed: rate,
       onStarted: () => _publishIfCurrent(
         requestId,
         ThaiPlaybackState.playing,
@@ -171,7 +187,10 @@ class ThaiPlaybackService extends ChangeNotifier {
 }
 
 class AudioPlayersThaiAssetPlayer
-    implements ThaiAudioAssetPlayer, ThaiAudioVolumeControl {
+    implements
+        ThaiAudioAssetPlayer,
+        ThaiAudioVolumeControl,
+        ThaiAudioSpeedControl {
   AudioPlayersThaiAssetPlayer({AudioPlayer? player})
     : _player = player ?? AudioPlayer();
 
@@ -180,6 +199,9 @@ class AudioPlayersThaiAssetPlayer
 
   @override
   Future<void> setVolume(double volume) => _player.setVolume(volume);
+
+  @override
+  Future<void> setPlaybackRate(double rate) => _player.setPlaybackRate(rate);
 
   @override
   Future<void> play(
