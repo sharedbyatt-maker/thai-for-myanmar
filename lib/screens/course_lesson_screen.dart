@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../learning/course_catalog.dart';
 import '../learning/course_progress.dart';
+import '../learning/course_insights.dart';
+import '../widgets/playful_components.dart';
 import '../learning/review_card.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
@@ -43,6 +45,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
   bool _showThai = false;
   bool _moving = false;
   int _earnedXp = 0;
+  late final DateTime _sessionDay;
+  late final int _goalBefore;
+  bool _unitJustCompleted = false;
   final _name = TextEditingController();
   String? _selected;
   String? _feedback;
@@ -58,6 +63,8 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     super.initState();
     _style = widget.appState.politeStyle;
     final now = DateTime.now();
+    _sessionDay = now;
+    _goalBefore = widget.appState.learning.practiceOn(now);
     final due =
         widget.appState.learning.course.memory.entries
             .where(
@@ -231,7 +238,15 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           widget.appState.learning.course.completed.containsKey(_lessonId)
           ? 0
           : CourseProgress.lessonXp;
+      final wasUnitDone = widget.unit.lessons.every(
+        (l) => widget.appState.learning.course.completed.containsKey(l.id),
+      );
       widget.appState.learning.course.finish(_lessonId, DateTime.now());
+      _unitJustCompleted =
+          !wasUnitDone &&
+          widget.unit.lessons.every(
+            (l) => widget.appState.learning.course.completed.containsKey(l.id),
+          );
       await widget.appState.saveCourse();
       if (mounted) {
         setState(() {
@@ -710,53 +725,156 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     }
   }
 
-  Widget _summary() => ListView(
-    padding: const EdgeInsets.all(24),
+  Widget _completionDetails() {
+    final now = DateTime.now();
+    final p = widget.appState.learning;
+    final sameDay =
+        now.year == _sessionDay.year &&
+        now.month == _sessionDay.month &&
+        now.day == _sessionDay.day;
+    final goalNow = p.practiceOn(now);
+    final unitDone = CourseInsights(
+      widget.course,
+      p.course,
+      now,
+    ).completedIn(widget.unit);
+    final goalJustCompleted =
+        sameDay && _goalBefore < p.dailyGoal && goalNow >= p.dailyGoal;
+    return Card(
+      key: const ValueKey('course-completion-details'),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'ဒီတစ်ခါ လေ့ကျင့်ခဲ့တာ',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              widget.lesson.title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 14),
+            Text(
+              sameDay
+                  ? 'ဒီနေ့ ပန်းတိုင် $_goalBefore → $goalNow / ${p.dailyGoal}'
+                  : 'ဒီနေ့ ပန်းတိုင် $goalNow / ${p.dailyGoal}',
+            ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: (goalNow / p.dailyGoal).clamp(0.0, 1.0),
+            ),
+            const SizedBox(height: 14),
+            Text('ယူနစ် $unitDone / ${widget.unit.lessons.length} ပြီး'),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: unitDone / widget.unit.lessons.length,
+            ),
+            if (goalJustCompleted) ...[
+              const SizedBox(height: 14),
+              const Text(
+                'ဒီနေ့ ပန်းတိုင် ပြည့်သွားပါပြီ ✓',
+                key: ValueKey('course-new-quests'),
+              ),
+            ],
+            if (_unitJustCompleted) ...[
+              const SizedBox(height: 14),
+              const Icon(Icons.emoji_events_rounded, size: 48),
+              Text(
+                'ယူနစ်လေ့ကျင့်မှု ပြီးပါပြီ!',
+                textAlign: TextAlign.center,
+                key: const ValueKey('course-unit-complete'),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 6),
+              Text(widget.unit.goal, textAlign: TextAlign.center),
+              const SizedBox(height: 6),
+              const Text(
+                '၁ ရက်နဲ့ ၇ ရက်အကြာမှာ အချိန်ခြား ပြန်စမ်းပါမယ်။',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _summary() => Column(
     children: [
-      const Icon(Icons.task_alt_rounded, size: 72),
-      const SizedBox(height: 20),
-      Text(
-        'ဒီ lesson လေ့ကျင့်ပြီးပါပြီ',
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headlineSmall,
-      ),
-      const SizedBox(height: 16),
-      Text(widget.unit.goal, textAlign: TextAlign.center),
-      const SizedBox(height: 18),
-      Text(
-        '+$_earnedXp XP',
-        key: const ValueKey('course-earned-xp'),
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w800,
+      Expanded(
+        child: ListView(
+          key: const ValueKey('course-summary-scroll'),
+          padding: const EdgeInsets.all(24),
+          children: [
+            const Center(child: ElephantBuddy(size: 88)),
+            const SizedBox(height: 16),
+            Text(
+              'ဒီ lesson လေ့ကျင့်ပြီးပါပြီ',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: .9, end: 1),
+              duration: Duration(
+                milliseconds: MediaQuery.disableAnimationsOf(context) ? 0 : 240,
+              ),
+              builder: (context, scale, child) =>
+                  Transform.scale(scale: scale, child: child),
+              child: Text(
+                '+$_earnedXp XP',
+                key: const ValueKey('course-earned-xp'),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            if (_earnedXp == 0)
+              const Text(
+                'ဒီသင်ခန်းစာရဲ့ XP ကို ရရှိပြီးသားပါ။',
+                textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: 16),
+            _completionDetails(),
+            const SizedBox(height: 12),
+            const Text(
+              'လေ့ကျင့်မှုကို သိမ်းထားပါတယ်။ အသံမစုံသေးတဲ့အပိုင်းတွေရဲ့ နားထောင်စစ်ဆေးမှုကို နောက်မှ ပြန်လုပ်နိုင်ပါတယ်။ စကားပြောကျွမ်းကျင်မှု အတည်ပြုချက် မဟုတ်ပါ။',
+            ),
+          ],
         ),
       ),
-      if (_earnedXp == 0)
-        const Text(
-          'ဒီသင်ခန်းစာရဲ့ XP ကို ရရှိပြီးသားပါ။',
-          textAlign: TextAlign.center,
-        ),
-      const SizedBox(height: 14),
-      const Text(
-        'လေ့ကျင့်မှုကို သိမ်းထားပါတယ်။ အသံမစုံသေးတဲ့အပိုင်းတွေရဲ့ နားထောင်စစ်ဆေးမှုကို နောက်မှ ပြန်လုပ်နိုင်ပါတယ်။ စကားပြောကျွမ်းကျင်မှု အတည်ပြုချက် မဟုတ်ပါ။',
-      ),
-      const SizedBox(height: 24),
-      if (_nextTarget != null) ...[
-        Builder(
-          builder: (anchor) => FilledButton.icon(
-            key: const ValueKey('course-next-lesson'),
-            onPressed: () => _continueLesson(anchor),
-            icon: const Icon(Icons.arrow_forward_rounded),
-            label: const Text('နောက်သင်ခန်းစာ ဆက်မယ်'),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_nextTarget != null) ...[
+                Builder(
+                  builder: (anchor) => FilledButton.icon(
+                    key: const ValueKey('course-next-lesson'),
+                    onPressed: () => _continueLesson(anchor),
+                    icon: const Icon(Icons.arrow_forward_rounded),
+                    label: const Text('နောက်သင်ခန်းစာ ဆက်မယ်'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+              OutlinedButton(
+                key: const ValueKey('course-done'),
+                onPressed: () => Navigator.pop(context),
+                child: const Text('လမ်းကြောင်းကို ပြန်သွားမယ်'),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 12),
-      ],
-      FilledButton(
-        key: const ValueKey('course-done'),
-        onPressed: () => Navigator.pop(context),
-        child: const Text('လမ်းကြောင်းကို ပြန်သွားမယ်'),
       ),
     ],
   );
