@@ -259,11 +259,25 @@ void main() {
               await primary(t);
             } else {
               if (kind == 'reflect') {
+                await reveal(
+                  t,
+                  find.byKey(const ValueKey('course-reflection-help')),
+                );
                 expect(
                   find.byKey(const ValueKey('course-reflection-help')),
                   findsOneWidget,
                 );
+                await reveal(t, find.byKey(const ValueKey('course-own-name')));
                 expect(find.byType(TextField), findsOneWidget);
+                await t.enterText(
+                  find.byKey(const ValueKey('course-own-name')),
+                  'မောင်မောင်',
+                );
+                await t.pumpAndSettle();
+                expect(
+                  jsonEncode(state.learning.toJson()),
+                  isNot(contains('မောင်မောင်')),
+                );
               }
               await primary(t);
             }
