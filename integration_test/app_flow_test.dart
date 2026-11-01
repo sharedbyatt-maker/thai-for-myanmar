@@ -99,6 +99,12 @@ void main() {
         find.byKey(const ValueKey('course-unit-u26')),
         500,
         maxScrolls: 150,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const ValueKey('course-main-path')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-path-end');
@@ -207,6 +213,12 @@ void main() {
       find.byKey(const ValueKey('legacy-learning-history')),
       500,
       maxScrolls: 150,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('course-main-path')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
     );
     await tester.tap(find.byKey(const ValueKey('legacy-learning-history')));
     await tester.pumpAndSettle();
