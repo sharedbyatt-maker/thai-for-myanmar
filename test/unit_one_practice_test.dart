@@ -131,24 +131,27 @@ void main() {
     );
   });
 
-  test('optional bookmarks survive serialization, ignore damage and clear on completion', () {
-    final p = CourseProgress();
-    final id = course.units.first.lessons[4].id;
-    p.completed['legacy'] = DateTime.utc(2026);
-    p.cursors[id] = 0;
-    p.stepBookmarks[id] = '${UnitOnePractice.revision}:name-reply';
-    var copy = CourseProgress.fromJson(jsonDecode(jsonEncode(p.toJson())));
-    expect(copy.stepBookmarks[id], p.stepBookmarks[id]);
-    expect(copy.completed, p.completed);
-    copy.finish(id, DateTime.now());
-    expect(copy.stepBookmarks, isEmpty);
-    final raw = p.toJson();
-    raw['stepBookmarks'] = {id: 14, 'bad': 'x'};
-    copy = CourseProgress.fromJson(raw);
-    expect(copy.stepBookmarks, isEmpty);
-    expect(copy.completed, p.completed);
-    expect(copy.cursors[id], 0);
-  });
+  test(
+    'optional bookmarks survive serialization, ignore damage and clear on completion',
+    () {
+      final p = CourseProgress();
+      final id = course.units.first.lessons[4].id;
+      p.completed['legacy'] = DateTime.utc(2026);
+      p.cursors[id] = 0;
+      p.stepBookmarks[id] = '${UnitOnePractice.revision}:name-reply';
+      var copy = CourseProgress.fromJson(jsonDecode(jsonEncode(p.toJson())));
+      expect(copy.stepBookmarks[id], p.stepBookmarks[id]);
+      expect(copy.completed, p.completed);
+      copy.finish(id, DateTime.now());
+      expect(copy.stepBookmarks, isEmpty);
+      final raw = p.toJson();
+      raw['stepBookmarks'] = {id: 14, 'bad': 'x'};
+      copy = CourseProgress.fromJson(raw);
+      expect(copy.stepBookmarks, isEmpty);
+      expect(copy.completed, p.completed);
+      expect(copy.cursors[id], 0);
+    },
+  );
 
   Future<void> tap(WidgetTester t, Finder f) async {
     if (f.evaluate().isEmpty) {
@@ -188,8 +191,9 @@ void main() {
       MaterialApp(
         theme: ThemeData(brightness: dark ? Brightness.dark : Brightness.light),
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: TextScaler.linear(scale)),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(scale)),
           child: child!,
         ),
         home: CourseLessonScreen(
