@@ -108,9 +108,8 @@ void main() {
     await t.pumpWidget(
       MaterialApp(
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
           child: child!,
         ),
         home: CourseLessonScreen(
@@ -148,36 +147,31 @@ void main() {
     },
   );
 
-  test(
-    'course corruption does not destroy legacy history and bounded evidence reloads',
-    () {
-      final p = LearningProgress();
-      p.record('greet_hello', LearningMode.flashcard, 4, DateTime.utc(2026));
-      p.finishSession(lessonId: 'legacy');
-      final json = p.toJson();
-      json['courseV2'] = {'version': 99};
-      final restored = LearningProgress.fromJson(
-        Map<String, dynamic>.from(json),
-      );
-      expect(restored.completedLessons, contains('legacy'));
-      expect(restored.totalReviews, 1);
-      expect(restored.course.completed, isEmpty);
-      final c = CourseProgress();
-      for (var i = 0; i < 650; i++) {
-        c.event({
-          'lesson': 'l',
-          'line': 'x',
-          'kind': 'choice',
-          'at': DateTime.utc(2026).toIso8601String(),
-          'correct': false,
-        });
-      }
-      c.finish('course-v2.1:u01-l01', DateTime.utc(2026));
-      final copy = CourseProgress.fromJson(jsonDecode(jsonEncode(c.toJson())));
-      expect(copy.events.length, 600);
-      expect(copy.completed.length, 1);
-    },
-  );
+  test('course corruption does not destroy legacy history and bounded evidence reloads', () {
+    final p = LearningProgress();
+    p.record('greet_hello', LearningMode.flashcard, 4, DateTime.utc(2026));
+    p.finishSession(lessonId: 'legacy');
+    final json = p.toJson();
+    json['courseV2'] = {'version': 99};
+    final restored = LearningProgress.fromJson(Map<String, dynamic>.from(json));
+    expect(restored.completedLessons, contains('legacy'));
+    expect(restored.totalReviews, 1);
+    expect(restored.course.completed, isEmpty);
+    final c = CourseProgress();
+    for (var i = 0; i < 650; i++) {
+      c.event({
+        'lesson': 'l',
+        'line': 'x',
+        'kind': 'choice',
+        'at': DateTime.utc(2026).toIso8601String(),
+        'correct': false,
+      });
+    }
+    c.finish('course-v2.1:u01-l01', DateTime.utc(2026));
+    final copy = CourseProgress.fromJson(jsonDecode(jsonEncode(c.toJson())));
+    expect(copy.events.length, 600);
+    expect(copy.completed.length, 1);
+  });
 
   testWidgets(
     'main path replaces side pilot and locks lessons by prerequisites',
@@ -738,6 +732,12 @@ void main() {
       expect(find.text('အသံထည့်ရန် ကျန်'), findsOneWidget);
       await primary(t);
       final model = course.lines['c2_u01_03']!;
+      await tap(
+        t,
+        find.byKey(ValueKey('course-option-${model.parts('female')[1]}')),
+      );
+      await primary(t);
+      await primary(t);
       for (var i = 0; i < model.parts('female').length; i++) {
         await tap(t, find.byKey(ValueKey('course-part-$i')));
       }
@@ -745,8 +745,14 @@ void main() {
       await primary(t);
       expect(state.learning.course.completed.length, 1);
       expect(state.learning.course.memory, isEmpty);
-      expect(state.learning.course.events.single['kind'], 'build');
-      expect(state.learning.course.events.single['assisted'], true);
+      expect(state.learning.course.events.map((e) => e['kind']), [
+        'gap',
+        'build',
+      ]);
+      expect(
+        state.learning.course.events.every((e) => e['assisted'] == true),
+        true,
+      );
       expect(t.takeException(), isNull);
     },
   );

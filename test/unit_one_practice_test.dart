@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,7 +30,7 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test(
-    'only two Unit 1 lessons expand; every existing text and identity survives',
+    'all six Unit 1 lessons progress; other units and authored data survive',
     () {
       final before = jsonEncode([for (final u in course.units) u.data]);
       var changed = 0;
@@ -51,7 +52,7 @@ void main() {
           }
         }
       }
-      expect(changed, 2);
+      expect(changed, 6);
       expect(jsonEncode([for (final u in course.units) u.data]), before);
       expect(
         UnitOnePractice.steps(
@@ -65,7 +66,7 @@ void main() {
           course.units.first,
           course.units.first.lessons[4],
         ).map((s) => s['kind']),
-        ['reply', 'reply'],
+        ['reply', 'reply', 'reply'],
       );
     },
   );
@@ -96,27 +97,58 @@ void main() {
     },
   );
 
-  test(
-    'optional bookmarks survive serialization, ignore damage and clear on completion',
-    () {
-      final p = CourseProgress();
-      final id = course.units.first.lessons[4].id;
-      p.completed['legacy'] = DateTime.utc(2026);
-      p.cursors[id] = 0;
-      p.stepBookmarks[id] = '${UnitOnePractice.revision}:name-reply';
-      var copy = CourseProgress.fromJson(jsonDecode(jsonEncode(p.toJson())));
-      expect(copy.stepBookmarks[id], p.stepBookmarks[id]);
-      expect(copy.completed, p.completed);
-      copy.finish(id, DateTime.now());
-      expect(copy.stepBookmarks, isEmpty);
-      final raw = p.toJson();
-      raw['stepBookmarks'] = {id: 14, 'bad': 'x'};
-      copy = CourseProgress.fromJson(raw);
-      expect(copy.stepBookmarks, isEmpty);
-      expect(copy.completed, p.completed);
-      expect(copy.cursors[id], 0);
-    },
-  );
+  test('every legacy cursor and released pilot bookmark keeps its meaning', () {
+    final unit = course.units.first;
+    for (final lesson in unit.lessons) {
+      final steps = UnitOnePractice.steps(unit, lesson);
+      for (var base = 0; base < lesson.steps.length; base++) {
+        final restored = steps[UnitOnePractice.resumeIndex(steps, base, null)];
+        expect(restored['baseIndex'], base);
+        expect(restored['original'], true);
+        expect(
+          restored['kind'],
+          lesson.id.endsWith('l05') ? 'reply' : lesson.steps[base]['kind'],
+        );
+      }
+    }
+    final dialogue = UnitOnePractice.steps(unit, unit.lessons[4]);
+    expect(
+      dialogue[UnitOnePractice.resumeIndex(
+        dialogue,
+        0,
+        'u01-practice-v1:name-reply',
+      )]['line'],
+      'c2_u01_03',
+    );
+    final gap = UnitOnePractice.steps(unit, unit.lessons[3]);
+    expect(
+      gap[UnitOnePractice.resumeIndex(
+        gap,
+        1,
+        'u01-practice-v1:new-name-gap',
+      )]['kind'],
+      'gap',
+    );
+  });
+
+  test('optional bookmarks survive serialization, ignore damage and clear on completion', () {
+    final p = CourseProgress();
+    final id = course.units.first.lessons[4].id;
+    p.completed['legacy'] = DateTime.utc(2026);
+    p.cursors[id] = 0;
+    p.stepBookmarks[id] = '${UnitOnePractice.revision}:name-reply';
+    var copy = CourseProgress.fromJson(jsonDecode(jsonEncode(p.toJson())));
+    expect(copy.stepBookmarks[id], p.stepBookmarks[id]);
+    expect(copy.completed, p.completed);
+    copy.finish(id, DateTime.now());
+    expect(copy.stepBookmarks, isEmpty);
+    final raw = p.toJson();
+    raw['stepBookmarks'] = {id: 14, 'bad': 'x'};
+    copy = CourseProgress.fromJson(raw);
+    expect(copy.stepBookmarks, isEmpty);
+    expect(copy.completed, p.completed);
+    expect(copy.cursors[id], 0);
+  });
 
   Future<void> tap(WidgetTester t, Finder f) async {
     if (f.evaluate().isEmpty) {
@@ -141,9 +173,11 @@ void main() {
     double scale = 1,
     bool dark = false,
     bool bundled = false,
+    String? style,
   }) async {
     final state = AppState();
     await state.load();
+    if (style != null) await state.setPoliteStyle(style);
     final service = ThaiPlaybackService(
       speechService: SpeechService(engine: _Silent()),
       catalog: bundled ? audio : ThaiAudioCatalog.empty(),
@@ -154,9 +188,8 @@ void main() {
       MaterialApp(
         theme: ThemeData(brightness: dark ? Brightness.dark : Brightness.light),
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(scale)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(scale)),
           child: child!,
         ),
         home: CourseLessonScreen(
@@ -170,6 +203,79 @@ void main() {
     );
     await t.pumpAndSettle();
     return state;
+  }
+
+  for (final style in ['female', 'male']) {
+    testWidgets(
+      'complete all six lessons in $style without Thai answer reading or invented listening credit',
+      (t) async {
+        final unit = course.units.first;
+        AppState? state;
+        for (
+          var lessonIndex = 0;
+          lessonIndex < unit.lessons.length;
+          lessonIndex++
+        ) {
+          await t.pumpWidget(const SizedBox());
+          await t.pumpAndSettle();
+          state = await show(t, lessonIndex, style: style);
+          final steps = UnitOnePractice.steps(unit, unit.lessons[lessonIndex]);
+          for (final step in steps) {
+            final kind = step['kind'];
+            final line = course.lines[step['line']];
+            if (kind == 'choice' || kind == 'reply') {
+              final answer = find.byKey(ValueKey('course-option-${line!.id}'));
+              expect(t.widget<OutlinedButton>(answer).onPressed, isNull);
+              await tap(t, find.byKey(const ValueKey('course-text-mode')));
+              // Every answer button is Myanmar, even with Thai display switched off.
+              expect(t.widget<OutlinedButton>(answer).child, isA<Text>());
+              expect(
+                (t.widget<OutlinedButton>(answer).child as Text).data,
+                line.myFor(style),
+              );
+              await tap(t, answer);
+              await primary(t);
+              await primary(t);
+            } else if (kind == 'gap') {
+              final part = line!.parts(style)[step['gapIndex'] as int];
+              await tap(t, find.byKey(ValueKey('course-option-$part')));
+              await primary(t);
+              await primary(t);
+            } else if (kind == 'build') {
+              for (var i = 0; i < line!.parts(style).length; i++) {
+                await tap(t, find.byKey(ValueKey('course-part-$i')));
+              }
+              await primary(t);
+              await primary(t);
+            } else {
+              if (kind == 'reflect') {
+                expect(
+                  find.byKey(const ValueKey('course-reflection-help')),
+                  findsOneWidget,
+                );
+                expect(find.byType(TextField), findsOneWidget);
+              }
+              await primary(t);
+            }
+          }
+          expect(find.text('+20 XP'), findsOneWidget);
+          expect(state.learning.course.completed.length, lessonIndex + 1);
+          expect(LearnerRank(repo, state.learning).xp, (lessonIndex + 1) * 20);
+          expect(state.learning.course.memory, isEmpty);
+          expect(state.learning.course.stepBookmarks, isEmpty);
+          expect(t.takeException(), isNull);
+        }
+        final restored = AppState();
+        await restored.load();
+        expect(LearnerRank(repo, restored.learning).xp, 120);
+        expect(
+          restored.learning.course.events.every(
+            (e) => e['listened'] == false && e['assisted'] == true,
+          ),
+          true,
+        );
+      },
+    );
   }
 
   testWidgets(
@@ -198,9 +304,14 @@ void main() {
         await tap(t, option);
         await primary(t);
         await primary(t);
-        expect(find.text('2 / 2'), findsOneWidget);
+        expect(find.text('2 / 3'), findsOneWidget);
         await tap(t, find.byKey(const ValueKey('course-text-mode')));
         await tap(t, find.byKey(const ValueKey('course-option-c2_u01_03')));
+        await primary(t);
+        await primary(t);
+        expect(find.text('3 / 3'), findsOneWidget);
+        await tap(t, find.byKey(const ValueKey('course-text-mode')));
+        await tap(t, find.byKey(const ValueKey('course-option-c2_u01_02')));
         await primary(t);
         await primary(t);
         expect(find.text(pass == 0 ? '+20 XP' : '+0 XP'), findsOneWidget);
@@ -280,7 +391,7 @@ void main() {
       );
       await state.saveCourse();
       final restored = await show(t, 4);
-      expect(find.text('2 / 2'), findsOneWidget);
+      expect(find.text('2 / 3'), findsOneWidget);
       expect(restored.learning.course.memory.length, 1);
     },
   );
