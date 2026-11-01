@@ -264,10 +264,10 @@ void main() {
       expect(find.text('+20 XP'), findsOneWidget);
       expect(LearnerRank(repository, state.learning).xp, 80);
       await tap(find.byKey(const ValueKey('course-next-lesson')));
-      expect(find.text('2 ဆင့်'), findsOneWidget);
+      expect(find.text('3 ဆင့်'), findsOneWidget);
       await tap(find.byKey(const ValueKey('course-preview-start')));
       await picture('dialogue');
-      for (final answer in ['c2_u01_01', 'c2_u01_03']) {
+      for (final answer in ['c2_u01_01', 'c2_u01_03', 'c2_u01_02']) {
         await tap(find.byKey(const ValueKey('course-text-mode')));
         await tap(find.byKey(ValueKey('course-option-$answer')));
         await next();

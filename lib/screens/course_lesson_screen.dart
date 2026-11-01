@@ -163,16 +163,19 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               .toList()
             ..shuffle();
       if (_kind == 'reply') {
-        _options = [
-          'c2_u01_01',
-          'c2_u01_02',
-          'c2_u01_03',
-        ].map((id) => widget.course.lines[id]!).toList()..shuffle();
+        _options = List<String>.from(
+          _step['options'] as List? ?? ['c2_u01_01', 'c2_u01_02', 'c2_u01_03'],
+        ).map((id) => widget.course.lines[id]!).toList()..shuffle();
       } else if (_kind == 'gap') {
         final ids = {
           _gapAnswer!,
-          widget.course.lines['c2_u01_03']!.parts(_style)[2],
-          line.parts(_style)[1],
+          if (_step['gapDistractorIndices'] is List)
+            for (final index in _step['gapDistractorIndices'] as List)
+              line.parts(_style)[index as int]
+          else ...[
+            widget.course.lines['c2_u01_03']!.parts(_style)[2],
+            line.parts(_style)[1],
+          ],
         };
         _options = ids.map((id) => widget.course.lines[id]!).toList()
           ..shuffle();
@@ -347,7 +350,11 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     );
   }
 
-  Widget _lineCard(CourseLine line, {bool partsOnly = false}) => Card(
+  Widget _lineCard(
+    CourseLine line, {
+    bool partsOnly = false,
+    bool teaching = false,
+  }) => Card(
     child: Padding(
       padding: const EdgeInsets.all(18),
       child: Column(
@@ -368,33 +375,61 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           ],
           if (line.parts(_style).isNotEmpty) ...[
             const SizedBox(height: 14),
-            const Text('စကားလုံးအပိုင်းတွေ'),
-            const SizedBox(height: 6),
-            for (final id in line.parts(_style))
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '${widget.course.lines[id]!.thai(_style)} · ${widget.course.lines[id]!.my}',
+            if (_pilot && teaching)
+              ExpansionTile(
+                title: const Text('စကားလုံးအပိုင်းနဲ့ သုံးနည်း'),
+                children: [
+                  Text(UnitOnePractice.teachingTip(line.id)),
+                  const SizedBox(height: 8),
+                  for (final id in line.parts(_style))
+                    ListTile(
+                      title: Text(widget.course.lines[id]!.myFor(_style)),
+                      subtitle: Text(widget.course.lines[id]!.thai(_style)),
+                      trailing: IconButton(
+                        tooltip: 'အပိုင်းအသံ',
+                        onPressed:
+                            !_busy &&
+                                widget.appState.audioVolume > 0 &&
+                                widget.playbackService.hasBundledAudio(
+                                  widget.course.lines[id]!.phrase(_style),
+                                  _style,
+                                )
+                            ? () => _play(widget.course.lines[id]!)
+                            : null,
+                        icon: const Icon(Icons.volume_up_outlined),
                       ),
                     ),
-                    IconButton(
-                      tooltip: 'အပိုင်းအသံ',
-                      onPressed:
-                          widget.playbackService.hasBundledAudio(
-                                widget.course.lines[id]!.phrase(_style),
-                                _style,
-                              ) &&
-                              !_busy
-                          ? () => _play(widget.course.lines[id]!)
-                          : null,
-                      icon: const Icon(Icons.volume_up_outlined),
-                    ),
-                  ],
+                ],
+              )
+            else ...[
+              const Text('စကားလုံးအပိုင်းတွေ'),
+              const SizedBox(height: 6),
+              for (final id in line.parts(_style))
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${widget.course.lines[id]!.thai(_style)} · ${widget.course.lines[id]!.my}',
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'အပိုင်းအသံ',
+                        onPressed:
+                            widget.playbackService.hasBundledAudio(
+                                  widget.course.lines[id]!.phrase(_style),
+                                  _style,
+                                ) &&
+                                !_busy
+                            ? () => _play(widget.course.lines[id]!)
+                            : null,
+                        icon: const Icon(Icons.volume_up_outlined),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+            ],
           ],
         ],
       ),
@@ -435,12 +470,14 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     final line = _line!;
     return [
       Text(
-        _kind == 'reply'
-            ? _step['instruction'] as String
-            : 'နာမည်အသစ်နဲ့ အပိုင်းတစ်ခု ဖြည့်ပါ',
+        _step['instruction'] as String? ?? 'နာမည်အသစ်နဲ့ အပိုင်းတစ်ခု ဖြည့်ပါ',
         style: Theme.of(context).textTheme.titleLarge,
       ),
       const SizedBox(height: 12),
+      if (_step['useNewName'] == true)
+        Text(
+          'ဒီတစ်ခါ သုံးမယ့်နာမည်: ${widget.course.lines[line.parts(_style)[2]]!.myFor(_style)}',
+        ),
       if (_kind == 'reply') ...[
         Card(
           child: Padding(
@@ -570,9 +607,15 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                           padding: const EdgeInsets.all(20),
                           children: [
                             if (_kind == 'teach' || _kind == 'notice') ...[
-                              _lineCard(line!, partsOnly: _kind == 'notice'),
-                              const SizedBox(height: 12),
-                              Text(widget.unit.tips),
+                              _lineCard(
+                                line!,
+                                partsOnly: !_pilot && _kind == 'notice',
+                                teaching: true,
+                              ),
+                              if (!_pilot) ...[
+                                const SizedBox(height: 12),
+                                Text(widget.unit.tips),
+                              ],
                             ],
                             if (_kind == 'dialogue') ...[
                               Text(
@@ -603,6 +646,29 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                               ),
                               if (widget.unit.id == 'u01') ...[
                                 const SizedBox(height: 18),
+                                const Text(
+                                  'နမူနာကို ပိတ်ပြီး အခြေအနေ ၃ ခုမှာ ကိုယ်တိုင် ပြောကြည့်ပါ။',
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  '၁။ အလုပ်ခွင်က လူသစ်တစ်ယောက်ကို နှုတ်ဆက်ပါ။\n၂။ ကိုယ့်နာမည်နဲ့ မိတ်ဆက်ပါ။\n၃။ သူ့နာမည်ကို ပြန်မေးပြီး ကျေးဇူးတင်ပါ။',
+                                ),
+                                const SizedBox(height: 12),
+                                ExpansionTile(
+                                  key: const ValueKey('course-reflection-help'),
+                                  title: const Text(
+                                    'မမှတ်မိရင် နမူနာ ပြန်ကြည့်မယ်',
+                                  ),
+                                  children: [
+                                    for (final id in [
+                                      'c2_u01_01',
+                                      'c2_u01_03',
+                                      'c2_u01_04',
+                                      'c2_u01_02',
+                                    ])
+                                      _lineCard(widget.course.lines[id]!),
+                                  ],
+                                ),
                                 TextField(
                                   controller: _name,
                                   maxLength: 60,
@@ -616,7 +682,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                 ),
                                 if (_name.text.trim().isNotEmpty)
                                   Text(
-                                    '${_style == 'male' ? 'ผม' : 'ฉัน'}ชื่อ ${_name.text.trim()} ${_style == 'male' ? 'ครับ' : 'ค่ะ'}',
+                                    'ကိုယ့်နာမည်: ${_name.text.trim()}\nနမူနာနာမည်နေရာမှာ ကိုယ့်နာမည်ကို အစားထိုးပြောကြည့်ပါ။',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleLarge,
@@ -628,9 +694,16 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                             ],
                             if (_supported) ..._supportedExercise(),
                             if (_kind == 'choice') ...[
+                              if (_step['contextual'] == true &&
+                                  (_text || _answered)) ...[
+                                Text(line!.scene),
+                                const SizedBox(height: 12),
+                              ],
                               Text(
                                 _text
-                                    ? line!.scene
+                                    ? (_step['contextual'] == true
+                                          ? 'အခြေအနေနဲ့ ကိုက်တဲ့ အဓိပ္ပာယ် ရွေးပါ'
+                                          : line!.scene)
                                     : 'နားထောင်ပြီး မြန်မာအဓိပ္ပာယ် ရွေးပါ',
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),

@@ -83,3 +83,28 @@ zero, without injecting fresh reviews on resume. Old cursors resume at the
 original step; malformed/stale optional bookmarks fall back safely. Completion
 clears both cursor forms and retains the same +20 first/+0 replay XP. Future
 exercise changes must version bookmarks and preserve saved learner data.
+
+## Complete Unit 1 guided progression — 2026-11-01
+
+The owner approved completing all six Unit 1 lessons within the same interface.
+Keep the released `u01-practice-v1` keys and original base-step meanings stable;
+new keys are additive, so previously saved gap/reply positions still resume.
+
+| Lesson | Progression |
+| --- | --- |
+| Greeting/thanks | Concise model and optional Myanmar usage/chunks → original two listening checks |
+| Say a name | Model → name-marker gap → original construction |
+| Ask a name | Model → listening check → question-word gap → original construction |
+| Change a name | Full model → existing new-name gap → original construction |
+| Conversation | Greet back → answer a name question → thank someone for introducing themselves |
+| Unit checkpoint | Original five checks → workplace reply with a specified new sample name → original construction → three real-life self-practice prompts |
+
+Answers stay Myanmar-labelled. Explanations/chunks and reflection models are
+optional disclosures. In audio checks, Myanmar scene clues appear only after
+answering or explicit text fallback; they do not leak the answer into independent
+listening evidence. Newly added gaps/replies remain assisted, with no FSRS or
+speaking-mastery credit. Reuse exactly the original male/female Thai and audio
+bindings; missing recordings remain pending. Self-practice uses a learner's name
+as a local reminder, never substitutes sample-name audio or claims ASR scoring.
+Preserve 26 units/178 IDs, XP, goals/ranks, history, the winding path and all saved
+progress. Units 2–26 are unchanged. Audio generation is still deferred.

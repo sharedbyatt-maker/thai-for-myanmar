@@ -738,6 +738,12 @@ void main() {
       expect(find.text('အသံထည့်ရန် ကျန်'), findsOneWidget);
       await primary(t);
       final model = course.lines['c2_u01_03']!;
+      await tap(
+        t,
+        find.byKey(ValueKey('course-option-${model.parts('female')[1]}')),
+      );
+      await primary(t);
+      await primary(t);
       for (var i = 0; i < model.parts('female').length; i++) {
         await tap(t, find.byKey(ValueKey('course-part-$i')));
       }
@@ -745,8 +751,14 @@ void main() {
       await primary(t);
       expect(state.learning.course.completed.length, 1);
       expect(state.learning.course.memory, isEmpty);
-      expect(state.learning.course.events.single['kind'], 'build');
-      expect(state.learning.course.events.single['assisted'], true);
+      expect(state.learning.course.events.map((e) => e['kind']), [
+        'gap',
+        'build',
+      ]);
+      expect(
+        state.learning.course.events.every((e) => e['assisted'] == true),
+        true,
+      );
       expect(t.takeException(), isNull);
     },
   );
