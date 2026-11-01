@@ -40,10 +40,30 @@ class LearningProgress {
   bool onboardingComplete = false;
 
   Map<String, ReviewCard> get cards => Map.unmodifiable(_cards);
-  Map<String, int> get activity => Map.unmodifiable(_activity);
+  Map<String, int> get activity => Map.unmodifiable({
+    ..._activity,
+    for (final row in course.activity.entries)
+      row.key: (_activity[row.key] ?? 0) + row.value,
+  });
+  int practiceOn(DateTime date) => reviewsOn(date) + course.practiceOn(date);
+  int get totalPractice => activity.values.fold(0, (sum, n) => sum + n);
+  Set<String> get allCompletedLessons =>
+      Set.unmodifiable({..._completedLessons, ...course.completed.keys});
   Set<String> get completedLessons => Set.unmodifiable(_completedLessons);
-  Set<String> lessonsOn(DateTime date) =>
-      Set.unmodifiable(_lessonDays[dayKey(date)] ?? <String>{});
+  Set<String> lessonsOn(DateTime date) => Set.unmodifiable({
+    ...?_lessonDays[dayKey(date)],
+    ...course.lessonsOn(date),
+  });
+  String? firstLessonDay(String id) {
+    final days =
+        _lessonDays.entries
+            .where((e) => e.value.contains(id))
+            .map((e) => e.key)
+            .toList()
+          ..sort();
+    return days.isEmpty ? null : days.first;
+  }
+
   Set<String> get reviewedPhraseIds =>
       _cards.keys.map((key) => key.split('::').first).toSet();
 
@@ -59,11 +79,11 @@ class LearningProgress {
 
   int streak(DateTime now) {
     var date = dateOnly(now);
-    if (reviewsOn(date) == 0) {
+    if (practiceOn(date) == 0) {
       date = DateTime(date.year, date.month, date.day - 1);
     }
     var count = 0;
-    while (reviewsOn(date) > 0) {
+    while (practiceOn(date) > 0) {
       count++;
       date = DateTime(date.year, date.month, date.day - 1);
     }

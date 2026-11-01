@@ -22,3 +22,23 @@ incorrectly changed the homepage to unit cards.
 `test/course_v2_test.dart` verifies path geometry, locks, preview entry/cancellation,
 large text and resume. Chrome integration captures the path and preview at mobile
 and desktop widths. Future curriculum changes must retain those behaviors.
+
+## Complete feature contract
+
+The owner flagged a second regression on 2026-11-01: restoring circular nodes
+without XP and the surrounding learning features was insufficient.
+
+| Feature | Required behavior |
+| --- | --- |
+| Lesson reward | Preview states +20 XP for a new lesson; the first saved completion earns exactly that amount. Replays state +0 XP. Opening/dismissing a preview earns nothing. |
+| Total XP | Home and Profile share `LearnerRank`, including known legacy and course completions plus the existing review bonus. Existing dated course completions retain credit. Unknown IDs earn nothing. |
+| Activity | Successful supported practice counts toward goals/streaks without becoming listening evidence. Durable daily activity survives the bounded diagnostic-event log. Replays count as practice without another completion XP reward. |
+| Mobile | Streak, total XP and daily-goal metrics stay visible above the scrolling path; tapping opens real details/settings. |
+| Desktop | A right support rail shows stats, the adjustable goal, personal Rank progress, actual review counts, the next lesson/reward and history access. Navigation retains visible labels. |
+| Unit banner | Keep the pinned title, unit progress, chooser and guide, with a compact layout for short/enlarged-text screens. |
+| Completion | Show actual earned XP, offer the next available lesson through its preview and retain return-to-path navigation. |
+| Integrity | Keep source IDs, progress, original audio, pending-audio behavior and competitive League scoring intact. XP rewards participation, not pronunciation certification. |
+
+Regression coverage: `test/course_rewards_test.dart`, `test/course_v2_test.dart`
+and the existing Profile/goal/quest tests; browser integration verifies saved XP
+and captures mobile/desktop, light/dark and lesson-preview/summary screens.

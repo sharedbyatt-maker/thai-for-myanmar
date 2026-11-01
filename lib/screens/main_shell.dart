@@ -6,6 +6,7 @@ import 'package:app_links/app_links.dart';
 
 import '../data/phrase_repository.dart';
 import '../widgets/content_frame.dart';
+import '../widgets/playful_components.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'learn_screen.dart';
@@ -142,6 +143,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         repository: widget.repository,
         appState: widget.appState,
         playbackService: widget.playbackService,
+        onReview: () => _select(2),
       ),
       EverydayScreen(
         repository: widget.repository,
@@ -172,13 +174,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         MediaQuery.sizeOf(context).width >= 1000 &&
         MediaQuery.sizeOf(context).height >= 600 &&
         MediaQuery.textScalerOf(context).scale(14) <= 20;
-    final content = ContentFrame(
-      child: IndexedStack(
-        index: _selectedIndex,
-        children: List.generate(
-          pages.length,
-          (i) => _visitedTabs.contains(i) ? pages[i] : const SizedBox.shrink(),
-        ),
+    final content = IndexedStack(
+      index: _selectedIndex,
+      children: List.generate(
+        pages.length,
+        (i) => _visitedTabs.contains(i)
+            ? (i == 0 ? pages[i] : ContentFrame(child: pages[i]))
+            : const SizedBox.shrink(),
       ),
     );
     return Scaffold(
@@ -214,7 +216,30 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   NavigationRail(
                     selectedIndex: _selectedIndex,
                     onDestinationSelected: _select,
-                    labelType: NavigationRailLabelType.all,
+                    leading: const Padding(
+                      padding: EdgeInsets.fromLTRB(12, 12, 12, 20),
+                      child: SizedBox(
+                        width: 184,
+                        child: Row(
+                          children: [
+                            ElephantBuddy(size: 42),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Thai for Myanmar',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    extended: true,
+                    minExtendedWidth: 216,
+                    labelType: NavigationRailLabelType.none,
                     groupAlignment: -.7,
                     destinations: List.generate(
                       _labels.length,

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../data/phrase_repository.dart';
 import '../learning/course_catalog.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/course_learning_path.dart';
+import '../widgets/learn_support.dart';
+import 'quiz_screen.dart';
 import 'legacy_learn_screen.dart';
 
 class LearnScreen extends StatefulWidget {
@@ -13,12 +16,14 @@ class LearnScreen extends StatefulWidget {
     required this.appState,
     required this.playbackService,
     this.onSearch,
+    this.onReview,
     super.key,
   });
   final PhraseRepository repository;
   final AppState appState;
   final ThaiPlaybackService playbackService;
   final VoidCallback? onSearch;
+  final VoidCallback? onReview;
   @override
   State<LearnScreen> createState() => _LearnScreenState();
 }
@@ -28,8 +33,9 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   void initState() {
     super.initState();
-    _catalog = widget.repository.course != null
-        ? Future.value(widget.repository.course)
+    final cached = widget.repository.course;
+    _catalog = cached != null
+        ? Future.value(cached)
         : CourseCatalog.load(rootBundle);
   }
 
@@ -50,34 +56,106 @@ class _LearnScreenState extends State<LearnScreen> {
         return const Center(child: CircularProgressIndicator());
       }
       final course = snapshot.data!;
-      return CourseLearningPath(
-        course: course,
-        appState: widget.appState,
-        playbackService: widget.playbackService,
-        openUnit: (unit) => Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (_) => CourseUnitScreen(
+      widget.repository.cacheCourse(course);
+      return AnimatedBuilder(
+        animation: widget.appState,
+        builder: (context, _) => LayoutBuilder(
+          builder: (context, box) {
+            final wide =
+                box.maxWidth >= 900 &&
+                box.maxHeight >= 550 &&
+                MediaQuery.textScalerOf(context).scale(14) <= 20;
+            void openHistory() => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => Scaffold(
+                  appBar: AppBar(title: const Text('အရင်သင်ခန်းစာများ')),
+                  body: LegacyLearnScreen(
+                    repository: widget.repository,
+                    appState: widget.appState,
+                    playbackService: widget.playbackService,
+                    onSearch: widget.onSearch,
+                  ),
+                ),
+              ),
+            );
+            final currentUnit = course.units.firstWhere(
+              (u) => u.lessons.any(
+                (l) => !widget.appState.learning.course.completed.containsKey(
+                  l.id,
+                ),
+              ),
+              orElse: () => course.units.last,
+            );
+            final current = currentUnit.lessons.firstWhere(
+              (l) =>
+                  !widget.appState.learning.course.completed.containsKey(l.id),
+              orElse: () => currentUnit.lessons.last,
+            );
+            final path = CourseLearningPath(
               course: course,
-              unit: unit,
+              repository: widget.repository,
+              showStats: !wide,
               appState: widget.appState,
               playbackService: widget.playbackService,
-            ),
-          ),
-        ),
-        openHistory: () => Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (_) => Scaffold(
-              appBar: AppBar(title: const Text('အရင်သင်ခန်းစာများ')),
-              body: LegacyLearnScreen(
-                repository: widget.repository,
-                appState: widget.appState,
-                playbackService: widget.playbackService,
-                onSearch: widget.onSearch,
+              openUnit: (unit) => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => CourseUnitScreen(
+                    course: course,
+                    unit: unit,
+                    appState: widget.appState,
+                    playbackService: widget.playbackService,
+                  ),
+                ),
               ),
-            ),
-          ),
+              openHistory: openHistory,
+            );
+            return SafeArea(
+              top: false,
+              child: Row(
+                children: [
+                  Expanded(child: path),
+                  if (wide)
+                    SizedBox(
+                      width: 304,
+                      child: LearnSupportRail(
+                        repository: widget.repository,
+                        appState: widget.appState,
+                        unit: currentUnit,
+                        lesson: current,
+                        continueLesson: (anchor) => previewCourseLesson(
+                          context: anchor,
+                          course: course,
+                          unit: currentUnit,
+                          lesson: current,
+                          appState: widget.appState,
+                          playbackService: widget.playbackService,
+                        ),
+                        openHistory: openHistory,
+                        openReview:
+                            widget.onReview ??
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => Scaffold(
+                                  appBar: AppBar(
+                                    title: const Text('ပြန်လေ့ကျင့်'),
+                                  ),
+                                  body: QuizScreen(
+                                    repository: widget.repository,
+                                    appState: widget.appState,
+                                    playbackService: widget.playbackService,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
         ),
       );
     },

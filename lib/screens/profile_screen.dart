@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            appState.learning.totalReviews == 0
+            appState.learning.totalPractice == 0
                 ? 'ဒီနေ့ကနေ စလိုက်ပါ'
                 : 'နေ့တိုင်း နည်းနည်း ပိုတတ်လာပြီ',
             textAlign: TextAlign.center,
@@ -70,7 +70,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 MetricPill(
                   icon: Icons.check_circle,
-                  label: '${appState.learning.totalReviews} ကြိမ် လေ့ကျင့်ပြီး',
+                  label:
+                      '${appState.learning.totalPractice} ကြိမ် လေ့ကျင့်ပြီး',
                 ),
               ],
             ),
@@ -96,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
               children: List.generate(7, (i) {
                 final now = DateTime.now();
                 final day = DateTime(now.year, now.month, now.day - 6 + i);
-                final count = appState.learning.reviewsOn(day);
+                final count = appState.learning.practiceOn(day);
                 return SizedBox(
                   width: ((box.maxWidth - 36) / 7).clamp(38, 80),
                   child: Semantics(

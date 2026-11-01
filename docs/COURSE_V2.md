@@ -37,6 +37,11 @@ owner. No paid API, cloud TTS, ASR, new service or database change was added.
 
 A passed practice lesson is labelled practice completion, not language mastery.
 It does not automatically complete a legacy lesson or award League points.
+It earns 20 personal practice XP on its first saved completion, including text
+practice. Home/Profile/ranks use the same reward source; replay earns no further
+completion XP. Existing course completions keep that credit. Successful course
+practice and dated completions also feed goals, streaks and quests through a
+durable daily ledger, without modifying legacy review or listening evidence.
 Course events preserve first-attempt/correct, attempts, assistance, replays and
 actual playback completion. Course FSRS cards are updated only by completed,
 unaided bundled listening checks. A wrong first retrieval is Again; a supported

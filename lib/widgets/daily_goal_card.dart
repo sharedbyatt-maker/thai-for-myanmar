@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../services/app_state.dart';
 
 class DailyGoalCard extends StatelessWidget {
@@ -43,7 +44,7 @@ class DailyGoalCard extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: appState,
     builder: (context, _) {
-      final done = appState.learning.reviewsOn(DateTime.now());
+      final done = appState.learning.practiceOn(DateTime.now());
       final goal = appState.learning.dailyGoal;
       final complete = done >= goal;
       final colors = Theme.of(context).colorScheme;
