@@ -153,7 +153,7 @@ void main() {
     },
   );
 
-  Future<void> tap(WidgetTester t, Finder f) async {
+  Future<void> reveal(WidgetTester t, Finder f) async {
     if (f.evaluate().isEmpty) {
       await t.scrollUntilVisible(
         f,
@@ -164,6 +164,10 @@ void main() {
     }
     await Scrollable.ensureVisible(t.element(f), alignment: .5);
     await t.pumpAndSettle();
+  }
+
+  Future<void> tap(WidgetTester t, Finder f) async {
+    await reveal(t, f);
     await t.tap(f);
     await t.pumpAndSettle();
   }
@@ -229,8 +233,10 @@ void main() {
             final line = course.lines[step['line']];
             if (kind == 'choice' || kind == 'reply') {
               final answer = find.byKey(ValueKey('course-option-${line!.id}'));
+              await reveal(t, answer);
               expect(t.widget<OutlinedButton>(answer).onPressed, isNull);
               await tap(t, find.byKey(const ValueKey('course-text-mode')));
+              await reveal(t, answer);
               // Every answer button is Myanmar, even with Thai display switched off.
               expect(t.widget<OutlinedButton>(answer).child, isA<Text>());
               expect(
