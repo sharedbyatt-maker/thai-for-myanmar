@@ -10,6 +10,7 @@ import 'package:thai_for_myanmar/learning/learner_rank.dart';
 import 'package:thai_for_myanmar/learning/review_card.dart';
 import 'package:thai_for_myanmar/learning/unit_one_practice.dart';
 import 'package:thai_for_myanmar/screens/course_lesson_screen.dart';
+import 'package:thai_for_myanmar/screens/learn_screen.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
 import 'package:thai_for_myanmar/services/speech_service.dart';
 import 'package:thai_for_myanmar/services/thai_audio_catalog.dart';
@@ -281,6 +282,44 @@ void main() {
       final restored = await show(t, 4);
       expect(find.text('2 / 2'), findsOneWidget);
       expect(restored.learning.course.memory.length, 1);
+    },
+  );
+
+  testWidgets(
+    'review cue describes a bookmarked turn as resume even when its base cursor is zero',
+    (t) async {
+      final state = AppState();
+      await state.load();
+      final lesson = course.units.first.lessons[4];
+      for (final earlier in course.units.first.lessons.take(4)) {
+        state.learning.course.finish(earlier.id, DateTime.now());
+      }
+      state.learning.course.cursors[lesson.id] = 0;
+      state.learning.course.stepBookmarks[lesson.id] =
+          '${UnitOnePractice.revision}:name-reply';
+      state.learning.course.memory['c2_u01_01'] = ReviewCard.initial(
+        DateTime.now(),
+      );
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: ThaiAudioCatalog.empty(),
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repo,
+              appState: state,
+              playbackService: service,
+            ),
+          ),
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(find.textContaining('လက်ရှိ lesson အရင်ဆက်မယ်'), findsOneWidget);
+      expect(t.takeException(), isNull);
     },
   );
 
