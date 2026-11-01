@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../learning/course_catalog.dart';
+import '../learning/course_insights.dart';
+import 'course_outcomes.dart';
 import '../data/phrase_repository.dart';
 import 'learn_support.dart';
 import '../services/app_state.dart';
@@ -251,6 +253,13 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
                     .id),
       );
       final color = courseUnitColor(active);
+      final insights = CourseInsights(widget.course, progress, DateTime.now());
+      final currentUnit = widget.course.units.firstWhere(
+        (u) => u.lessons.any((l) => l.id == _currentId),
+      );
+      final currentLesson = currentUnit.lessons.firstWhere(
+        (l) => l.id == _currentId,
+      );
       return Column(
         children: [
           if (widget.showStats)
@@ -260,6 +269,13 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
                 repository: widget.repository,
                 appState: widget.appState,
               ),
+            ),
+          if (insights.dueItems > 0)
+            CourseReviewCue(
+              count: insights.dueItems,
+              resuming: (progress.cursors[_currentId] ?? 0) > 0,
+              onPressed: (anchor) =>
+                  _preview(anchor, currentUnit, currentLesson),
             ),
           Expanded(
             child: Stack(
@@ -656,14 +672,36 @@ class CoursePathNode extends StatelessWidget {
                               clipBehavior: Clip.antiAlias,
                               child: InkWell(
                                 onTap: () => onPressed(anchor),
-                                child: Icon(
-                                  completed
-                                      ? Icons.check_rounded
-                                      : locked
-                                      ? Icons.lock_rounded
-                                      : icon,
-                                  size: 34,
-                                  color: foreground,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Icon(
+                                      locked ? Icons.lock_rounded : icon,
+                                      size: 34,
+                                      color: foreground,
+                                    ),
+                                    if (completed)
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                            color: fill,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: const Icon(
+                                            Icons.check_rounded,
+                                            size: 14,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -681,7 +719,7 @@ class CoursePathNode extends StatelessWidget {
                 child: Transform.translate(
                   offset: Offset(dx, 0),
                   child: Text(
-                    'စတင်မယ်',
+                    last ? 'ယူနစ်အဆုံး ပြန်စမ်းမယ်' : 'စတင်မယ်',
                     style: TextStyle(
                       color: _pathInk(context, color),
                       fontWeight: FontWeight.w800,

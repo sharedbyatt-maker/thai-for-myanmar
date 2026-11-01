@@ -172,6 +172,10 @@ void main() {
       }
       expect(find.byKey(const ValueKey('course-done')), findsOneWidget);
       expect(state.learning.course.completed.length, 1);
+      expect(
+        find.byKey(const ValueKey('course-completion-details')),
+        findsOneWidget,
+      );
       expect(LearnerRank(repository, state.learning).xp, 20);
       expect(find.text('+20 XP'), findsOneWidget);
       expect(state.learning.course.memory, isEmpty);

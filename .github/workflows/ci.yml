@@ -98,6 +98,7 @@ jobs:
           test/thai_playback_service_test.dart
           test/learner_rank_test.dart
           test/course_rewards_test.dart
+          test/course_insights_test.dart
           test/learning_progress_test.dart
           test/study_catalog_test.dart
           test/study_quests_test.dart

@@ -55,6 +55,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
         widget.clock?.call() ?? DateTime.now(),
       );
       final colors = Theme.of(context).colorScheme;
+      final pending = quests.daily.where((q) => !q.complete).toList();
       return ListView(
         key: const ValueKey('quests-page'),
         padding: const EdgeInsets.all(20),
@@ -146,6 +147,26 @@ class _QuestsScreenState extends State<QuestsScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 12),
+          Card(
+            key: const ValueKey('daily-quest-summary'),
+            color: colors.secondaryContainer,
+            child: ListTile(
+              leading: Icon(
+                quests.daily.every((q) => q.complete)
+                    ? Icons.celebration_rounded
+                    : Icons.flag_rounded,
+              ),
+              title: Text(
+                'ဒီနေ့ ${quests.daily.where((q) => q.complete).length} / ${quests.daily.length} ပြီး',
+              ),
+              subtitle: Text(
+                quests.daily.every((q) => q.complete)
+                    ? 'ဒီနေ့ရဲ့ ရည်မှန်းချက်အားလုံး ပြည့်ပါပြီ!'
+                    : pending.first.title,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
           ...quests.daily.map((q) => _QuestCard(quest: q)),
           const SizedBox(height: 18),
           Text('ဒီအပတ်', style: Theme.of(context).textTheme.titleLarge),
@@ -210,9 +231,17 @@ class _QuestCard extends StatelessWidget {
                 color: colors.primaryContainer,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(
-                quest.complete ? Icons.check_rounded : icon,
-                color: colors.primary,
+              child: AnimatedSwitcher(
+                duration: Duration(
+                  milliseconds: MediaQuery.disableAnimationsOf(context)
+                      ? 0
+                      : 200,
+                ),
+                child: Icon(
+                  quest.complete ? Icons.check_rounded : icon,
+                  key: ValueKey('${quest.id}-${quest.complete}'),
+                  color: colors.primary,
+                ),
               ),
             ),
             const SizedBox(width: 14),

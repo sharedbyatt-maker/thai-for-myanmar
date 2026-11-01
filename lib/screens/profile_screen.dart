@@ -7,6 +7,8 @@ import '../widgets/playful_components.dart';
 import '../widgets/daily_goal_card.dart';
 import '../widgets/rank_card.dart';
 import '../learning/learner_rank.dart';
+import '../learning/course_insights.dart';
+import '../widgets/course_outcomes.dart';
 import 'quests_screen.dart';
 import 'favorites_screen.dart';
 import 'learning_progress_screen.dart';
@@ -82,6 +84,16 @@ class ProfileScreen extends StatelessWidget {
             appState: appState,
             showBadges: true,
           ),
+          if (repository.course != null) ...[
+            const SizedBox(height: 16),
+            CourseOutcomes(
+              insights: CourseInsights(
+                repository.course!,
+                appState.learning.course,
+                DateTime.now(),
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           DailyGoalCard(appState: appState),
           const SizedBox(height: 20),

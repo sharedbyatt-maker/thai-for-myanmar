@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +9,7 @@ import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/learning/course_catalog.dart';
 import 'package:thai_for_myanmar/learning/course_progress.dart';
 import 'package:thai_for_myanmar/learning/learner_rank.dart';
+import 'package:thai_for_myanmar/learning/review_card.dart';
 import 'package:thai_for_myanmar/widgets/learn_support.dart';
 import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
@@ -93,6 +95,7 @@ void main() {
     int lesson = 0,
     ThaiAudioCatalog? catalog,
     _Player? player,
+    double textScale = 1,
   }) async {
     final state = AppState();
     await state.load();
@@ -104,6 +107,12 @@ void main() {
     addTearDown(service.dispose);
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
         home: CourseLessonScreen(
           course: course,
           unit: course.units.first,
@@ -355,6 +364,12 @@ void main() {
       expect(state.learning.course.completed.length, 1);
       expect(LearnerRank(repo, state.learning).xp, 20);
       expect(find.text('+20 XP'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('course-completion-details')),
+        findsOneWidget,
+      );
+      expect(find.text('ယူနစ် 1 / 6 ပြီး'), findsOneWidget);
+      expect(find.byKey(const ValueKey('course-unit-complete')), findsNothing);
       expect(state.learning.practiceOn(DateTime.now()), 2);
       expect(state.learning.completedLessons, isEmpty);
       expect(state.learning.totalReviews, 0);
@@ -372,12 +387,69 @@ void main() {
   );
 
   testWidgets(
+    'unit checkpoint celebrates only the first complete unit and retains +0 replay',
+    (t) async {
+      t.view.physicalSize = const Size(320, 760);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
+      final state = AppState();
+      await state.load();
+      for (final l in course.units.first.lessons.take(
+        course.units.first.lessons.length - 1,
+      )) {
+        state.learning.course.finish(l.id, DateTime.now());
+      }
+      final last = course.units.first.lessons.last;
+      state.learning.course.cursors[last.id] = last.steps.length - 1;
+      await state.saveCourse();
+      await show(
+        t,
+        lesson: course.units.first.lessons.length - 1,
+        textScale: 2,
+      );
+      await primary(t);
+      expect(
+        find.byKey(const ValueKey('course-done')).hitTestable(),
+        findsOneWidget,
+      );
+      await t.scrollUntilVisible(
+        find.byKey(const ValueKey('course-unit-complete')),
+        160,
+      );
+      await t.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('course-unit-complete')),
+        findsOneWidget,
+      );
+      expect(t.takeException(), isNull);
+      await t.pumpWidget(const SizedBox());
+      await t.pumpAndSettle();
+      final restored = AppState();
+      await restored.load();
+      restored.learning.course.cursors[last.id] = last.steps.length - 1;
+      await restored.saveCourse();
+      await show(
+        t,
+        lesson: course.units.first.lessons.length - 1,
+        textScale: 2,
+      );
+      await primary(t);
+      expect(find.byKey(const ValueKey('course-unit-complete')), findsNothing);
+      await t.scrollUntilVisible(find.text('+0 XP'), 120);
+      expect(find.text('+0 XP'), findsOneWidget);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
     'course replay shows zero new XP and summary continues through the next preview',
     (t) async {
       for (var pass = 0; pass < 2; pass++) {
         await t.pumpWidget(const SizedBox.shrink());
         await t.pumpAndSettle();
         final state = await show(t);
+        state.learning.dailyGoal = 1;
         await primary(t);
         await primary(t);
         for (final id in ['c2_u01_01', 'c2_u01_02']) {
@@ -387,6 +459,10 @@ void main() {
           await primary(t);
         }
         expect(find.text(pass == 0 ? '+20 XP' : '+0 XP'), findsOneWidget);
+        expect(
+          find.byKey(const ValueKey('course-new-quests')),
+          pass == 0 ? findsOneWidget : findsNothing,
+        );
         expect(LearnerRank(repo, state.learning).xp, 20);
         expect(state.learning.practiceOn(DateTime.now()), 2);
         await state.saveCourse();
@@ -446,6 +522,54 @@ void main() {
       );
       expect(find.text('ကိုယ့်နာမည် ပြောမယ်'), findsWidgets);
       expect(find.text('+20 XP'), findsOneWidget);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'path review cue preserves a resumed cursor and opens the real lesson preview',
+    (t) async {
+      final state = AppState();
+      await state.load();
+      final lesson = course.units.first.lessons.first;
+      state.learning.course.memory[course.lines.keys.first] =
+          ReviewCard.initial(DateTime.now());
+      state.learning.course.cursors[lesson.id] = 1;
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: audio,
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: repo,
+              appState: state,
+              playbackService: service,
+            ),
+          ),
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('course-review-cue')), findsOneWidget);
+      await tap(
+        t,
+        find.descendant(
+          of: find.byKey(const ValueKey('course-review-cue')),
+          matching: find.byType(OutlinedButton),
+        ),
+      );
+      expect(
+        find.byKey(const ValueKey('course-lesson-preview')),
+        findsOneWidget,
+      );
+      expect(state.learning.course.cursors[lesson.id], 1);
+      expect(state.learning.course.completed, isEmpty);
+      await tap(t, find.byKey(const ValueKey('course-preview-start')));
+      expect(find.text('2 / 4'), findsOneWidget);
+      expect(state.learning.course.memory.length, 1);
       expect(t.takeException(), isNull);
     },
   );

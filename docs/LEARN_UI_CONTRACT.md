@@ -42,3 +42,21 @@ without XP and the surrounding learning features was insufficient.
 Regression coverage: `test/course_rewards_test.dart`, `test/course_v2_test.dart`
 and the existing Profile/goal/quest tests; browser integration verifies saved XP
 and captures mobile/desktop, light/dark and lesson-preview/summary screens.
+
+## Additive milestone feedback — 2026-11-01
+
+Preserve the same path, XP, navigation, authored IDs/audio and backend rules.
+Completed nodes retain their exercise icon plus a small check. The final node is
+labelled as a unit checkpoint; it reuses the authored reflection, not a new test
+or a certification of speaking. First full-unit completion has a one-time visual
+celebration, with no extra XP or currency. Replays retain +0 completion XP.
+
+Lesson summaries show actual saved daily activity and unit progress, the practiced
+lesson, and newly reached daily goal. No accuracy/speed is invented from bounded
+events. Profile outcomes count only fully practiced units; delayed-probe evidence
+is separately labelled as supported practice, never language mastery. Read-only
+insights do not migrate or clear saved data. The path's review cue uses known due
+cards and scheduled probes; a resumed session finishes before queued fresh-session
+reviews, matching the existing scheduling behavior. Quest feedback reflects the
+existing goals and does not grant a second reward. Reduced-motion preferences
+must be respected. Future changes preserve these alongside the full inventory.
