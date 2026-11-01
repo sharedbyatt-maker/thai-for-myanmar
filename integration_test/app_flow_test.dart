@@ -195,6 +195,102 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Unit 1 pilot gap and dialogue keep existing XP and saved progress',
+    (tester) async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      final state = AppState();
+      await state.load();
+      final course = repository.course!;
+      for (final lesson in course.units.first.lessons.take(3)) {
+        state.learning.course.finish(lesson.id, DateTime.now());
+      }
+      final service = _playbackService();
+      addTearDown(service.dispose);
+      await tester.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repository,
+          appState: state,
+          playbackService: service,
+        ),
+      );
+      await tester.pumpAndSettle();
+      Future<void> tap(Finder target) async {
+        await tester.ensureVisible(target);
+        await tester.pumpAndSettle();
+        await tester.tap(target);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> next() => tap(find.byKey(const ValueKey('course-primary')));
+      Future<void> picture(String label) async {
+        if (kIsWeb) {
+          final width =
+              tester.view.physicalSize.width / tester.view.devicePixelRatio;
+          await binding.takeScreenshot('${width.round()}-unit1-$label');
+        }
+      }
+
+      await tap(find.byKey(const ValueKey('course-lesson-u01-4')));
+      expect(find.text('3 ဆင့်'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-preview-start')));
+      await next();
+      await picture('gap');
+      final oldName = course.lines['c2_u01_03']!.parts(state.politeStyle)[2];
+      final newName = course.lines['c2_u01_05']!.parts(state.politeStyle)[2];
+      await tap(find.byKey(ValueKey('course-option-$oldName')));
+      await next();
+      expect(
+        find.byKey(const ValueKey('unit-one-answer-feedback')).hitTestable(),
+        findsOneWidget,
+      );
+      await picture('gap-feedback');
+      await next();
+      await tap(find.byKey(ValueKey('course-option-$newName')));
+      await next();
+      await next();
+      for (
+        var i = 0;
+        i < course.lines['c2_u01_05']!.parts(state.politeStyle).length;
+        i++
+      ) {
+        await tap(find.byKey(ValueKey('course-part-$i')));
+      }
+      await next();
+      await next();
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(LearnerRank(repository, state.learning).xp, 80);
+      await tap(find.byKey(const ValueKey('course-next-lesson')));
+      expect(find.text('2 ဆင့်'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-preview-start')));
+      await picture('dialogue');
+      for (final answer in ['c2_u01_01', 'c2_u01_03']) {
+        await tap(find.byKey(const ValueKey('course-text-mode')));
+        await tap(find.byKey(ValueKey('course-option-$answer')));
+        await next();
+        await picture('reply-$answer');
+        await next();
+      }
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(LearnerRank(repository, state.learning).xp, 100);
+      expect(state.learning.course.memory, isEmpty);
+      expect(state.learning.course.events.first['correct'], false);
+      expect(
+        state.learning.course.events.every((e) => e['assisted'] == true),
+        true,
+      );
+      expect(state.learning.course.stepBookmarks, isEmpty);
+      final restored = AppState();
+      await restored.load();
+      expect(LearnerRank(repository, restored.learning).xp, 100);
+      expect(restored.learning.course.completed.length, 5);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
   ) async {
