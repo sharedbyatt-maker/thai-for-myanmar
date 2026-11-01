@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
+import '../learning/learner_rank.dart';
 import '../services/app_state.dart';
 
 class LearningProgressScreen extends StatelessWidget {
@@ -39,7 +40,7 @@ class LearningProgressScreen extends StatelessWidget {
             ),
             Text('ဖြေဆို / ကိုယ်တိုင်သတ်မှတ်ထားတဲ့ မှန်ကန်မှု $accuracy%'),
             Text(
-              'ပြီးဆုံးတဲ့အကြိမ် ${progress.completedSessions} • သင်ခန်းစာ ${progress.completedLessons.length} ခု',
+              'ပြီးဆုံးတဲ့အကြိမ် ${progress.completedSessions} • သင်ခန်းစာ ${LearnerRank(repository, progress).completed} ခု',
             ),
             const SizedBox(height: 24),
             Text(
@@ -49,7 +50,7 @@ class LearningProgressScreen extends StatelessWidget {
             const SizedBox(height: 12),
             ...List.generate(7, (index) {
               final day = DateTime(now.year, now.month, now.day - 6 + index);
-              final count = progress.reviewsOn(day);
+              final count = progress.practiceOn(day);
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(

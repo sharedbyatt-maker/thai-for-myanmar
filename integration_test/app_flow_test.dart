@@ -6,6 +6,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/app.dart';
 import 'package:thai_for_myanmar/learning/study_catalog.dart';
+import 'package:thai_for_myanmar/learning/learner_rank.dart';
 import 'package:thai_for_myanmar/screens/everyday_screen.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/services/app_state.dart';
@@ -98,6 +99,12 @@ void main() {
         find.byKey(const ValueKey('course-unit-u26')),
         500,
         maxScrolls: 150,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const ValueKey('course-main-path')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-path-end');
@@ -165,6 +172,8 @@ void main() {
       }
       expect(find.byKey(const ValueKey('course-done')), findsOneWidget);
       expect(state.learning.course.completed.length, 1);
+      expect(LearnerRank(repository, state.learning).xp, 20);
+      expect(find.text('+20 XP'), findsOneWidget);
       expect(state.learning.course.memory, isEmpty);
       expect(state.learning.completedLessons, isEmpty);
       expect(state.learning.totalReviews, 0);
@@ -172,6 +181,7 @@ void main() {
       final restored = AppState();
       await restored.load();
       expect(restored.learning.course.completed.length, 1);
+      expect(LearnerRank(repository, restored.learning).xp, 20);
       if (kIsWeb) {
         final width =
             tester.view.physicalSize.width / tester.view.devicePixelRatio;
@@ -203,6 +213,12 @@ void main() {
       find.byKey(const ValueKey('legacy-learning-history')),
       500,
       maxScrolls: 150,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('course-main-path')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
     );
     await tester.tap(find.byKey(const ValueKey('legacy-learning-history')));
     await tester.pumpAndSettle();

@@ -2,6 +2,7 @@ import '../data/phrase_repository.dart';
 import 'learning_progress.dart';
 import 'review_card.dart';
 import 'study_catalog.dart';
+import 'learner_rank.dart';
 
 class StudyQuest {
   const StudyQuest(this.id, this.title, this.current, this.target);
@@ -26,17 +27,21 @@ class StudyQuests {
     final validLessons = StudyCatalog.lessons(
       repository,
     ).map((l) => l.id).toSet();
+    validLessons.addAll(
+      repository.course?.units.expand((u) => u.lessons).map((l) => l.id) ??
+          <String>[],
+    );
     daily = [
       StudyQuest(
         'practice',
-        'စကားစု ၅ ကြိမ် လေ့ကျင့်ပါ',
-        progress.reviewsOn(today),
+        'လေ့ကျင့်မှု ၅ ကြိမ် ပြည့်အောင်လုပ်ပါ',
+        progress.practiceOn(today),
         5,
       ),
       StudyQuest(
         'xp',
         'လေ့ကျင့်မှု XP ၂၀ မှတ် ရယူပါ',
-        progress.reviewXpOn(today),
+        LearnerRank(repository, progress).xpOn(today),
         20,
       ),
       StudyQuest(
@@ -45,7 +50,7 @@ class StudyQuests {
         progress
             .lessonsOn(today)
             .intersection(validLessons)
-            .intersection(progress.completedLessons)
+            .intersection(progress.allCompletedLessons)
             .length,
         1,
       ),

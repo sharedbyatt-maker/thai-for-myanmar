@@ -22,7 +22,7 @@ class LearningDashboard extends StatelessWidget {
     builder: (context, _) {
       final progress = appState.learning;
       final now = DateTime.now();
-      final today = progress.reviewsOn(now);
+      final today = progress.practiceOn(now);
       final goal = progress.dailyGoal;
       final colors = Theme.of(context).colorScheme;
       return Card(

@@ -4,6 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../learning/study_catalog.dart';
 import '../learning/course_catalog.dart';
+import '../learning/course_progress.dart';
+
+const courseUnitPalette = [
+  Color(0xFF5B4FDB),
+  Color(0xFF197B69),
+  Color(0xFFA34274),
+  Color(0xFF246BA6),
+  Color(0xFF9B6028),
+  Color(0xFF7044A8),
+];
+Color previewUnitColor(CourseUnit unit) =>
+    courseUnitPalette[(unit.section - 1) % courseUnitPalette.length];
 
 /// Course entry shares the same anchored placement as the retained legacy path.
 Future<bool?> showCourseLessonPreview({
@@ -69,6 +81,12 @@ Future<bool?> showCourseLessonPreview({
                   icon: Icons.layers_rounded,
                   text: '${lesson.steps.length} ဆင့်',
                 ),
+                _Detail(
+                  icon: Icons.bolt_rounded,
+                  text: completed
+                      ? 'XP ရပြီး'
+                      : '+${CourseProgress.lessonXp} XP',
+                ),
                 if (completed)
                   const _Detail(
                     icon: Icons.check_rounded,
@@ -94,7 +112,11 @@ Future<bool?> showCourseLessonPreview({
               icon: Icon(
                 completed ? Icons.replay_rounded : Icons.play_arrow_rounded,
               ),
-              label: Text(completed ? 'ပြန်လေ့ကျင့်မယ်' : 'စတင်မယ်'),
+              label: Text(
+                completed
+                    ? 'ပြန်လေ့ကျင့်မယ် · +0 XP'
+                    : 'စတင်မယ် · +${CourseProgress.lessonXp} XP',
+              ),
             ),
           ],
         ),

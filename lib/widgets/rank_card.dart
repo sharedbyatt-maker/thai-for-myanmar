@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../data/phrase_repository.dart';
 import '../services/app_state.dart';
 import '../learning/learner_rank.dart';
@@ -42,7 +43,7 @@ class RankCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 rank.isMax
-                    ? 'လမ်းကြောင်းတစ်ခုလုံး ပြီးပါပြီ 🎉'
+                    ? 'အမြင့်ဆုံး ကြိုးစားမှု Rank ရောက်ပါပြီ 🎉'
                     : 'နောက် Rank အတွက် ${rank.remaining} သင်ခန်းစာ',
               ),
               if (showBadges) ...[

@@ -12,3 +12,11 @@ explicitly requests a content change. New audio is deferred until the final
 distribution pass. Do not generate audio as part of a UI change.
 
 See `docs/LEARN_UI_CONTRACT.md` and the path/preview regression tests.
+
+Preserve the complete learning experience, not only the shape of the path:
+earned/available lesson XP, total XP, daily goal, streak, personal Rank/badges,
+unit progress, review/continue/history controls and the next-lesson completion
+flow. Mobile metrics stay visible while scrolling; desktop has a support rail.
+Visible rewards must match actual saved rewards. Course participation XP is
+separate from listening evidence and competitive League scoring. Do not drop
+these connections during later curriculum or visual updates.

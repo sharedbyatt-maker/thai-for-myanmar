@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import '../learning/course_catalog.dart';
+import '../learning/course_progress.dart';
 import '../learning/review_card.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
+import '../widgets/lesson_preview.dart';
 
 class CourseLessonScreen extends StatefulWidget {
   const CourseLessonScreen({
@@ -38,6 +42,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       _memoryRecorded = false;
   bool _showThai = false;
   bool _moving = false;
+  int _earnedXp = 0;
   final _name = TextEditingController();
   String? _selected;
   String? _feedback;
@@ -199,6 +204,14 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           );
       _memoryRecorded = true;
     }
+    if (correct) {
+      widget.appState.learning.course.recordPractice(
+        _lessonId,
+        _line!.id,
+        _kind,
+        DateTime.now(),
+      );
+    }
     unawaited(widget.appState.saveCourse());
     setState(() {
       _answered = true;
@@ -214,6 +227,10 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     _moving = true;
     unawaited(widget.playbackService.stop());
     if (_index + 1 == _steps.length) {
+      _earnedXp =
+          widget.appState.learning.course.completed.containsKey(_lessonId)
+          ? 0
+          : CourseProgress.lessonXp;
       widget.appState.learning.course.finish(_lessonId, DateTime.now());
       await widget.appState.saveCourse();
       if (mounted) {
@@ -633,6 +650,66 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     );
   }
 
+  ({CourseUnit unit, CourseLesson lesson})? get _nextTarget {
+    final rows = [
+      for (final u in widget.course.units)
+        for (final l in u.lessons) (unit: u, lesson: l),
+    ];
+    final index = rows.indexWhere((r) => r.lesson.id == _lessonId);
+    if (index < 0 || index + 1 == rows.length) return null;
+    final next = rows[index + 1];
+    final done = widget.appState.learning.course.completed;
+    final ready = next.unit.prerequisites.every(
+      (id) => widget.course.units
+          .firstWhere((u) => u.id == id)
+          .lessons
+          .every((l) => done.containsKey(l.id)),
+    );
+    final position = next.unit.lessons.indexWhere(
+      (l) => l.id == next.lesson.id,
+    );
+    return ready &&
+            (position == 0 ||
+                done.containsKey(next.unit.lessons[position - 1].id))
+        ? next
+        : null;
+  }
+
+  Future<void> _continueLesson(BuildContext anchor) async {
+    final next = _nextTarget;
+    if (_moving || next == null) return;
+    final box = anchor.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    _moving = true;
+    try {
+      final start = await showCourseLessonPreview(
+        context: context,
+        lesson: next.lesson,
+        unit: next.unit,
+        completed: widget.appState.learning.course.completed.containsKey(
+          next.lesson.id,
+        ),
+        anchor: box.localToGlobal(Offset.zero) & box.size,
+        color: previewUnitColor(next.unit),
+      );
+      if (start != true || !mounted) return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => CourseLessonScreen(
+            course: widget.course,
+            unit: next.unit,
+            lesson: next.lesson,
+            appState: widget.appState,
+            playbackService: widget.playbackService,
+          ),
+        ),
+      );
+    } finally {
+      _moving = false;
+    }
+  }
+
   Widget _summary() => ListView(
     padding: const EdgeInsets.all(24),
     children: [
@@ -645,11 +722,37 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       ),
       const SizedBox(height: 16),
       Text(widget.unit.goal, textAlign: TextAlign.center),
+      const SizedBox(height: 18),
+      Text(
+        '+$_earnedXp XP',
+        key: const ValueKey('course-earned-xp'),
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      if (_earnedXp == 0)
+        const Text(
+          'ဒီသင်ခန်းစာရဲ့ XP ကို ရရှိပြီးသားပါ။',
+          textAlign: TextAlign.center,
+        ),
       const SizedBox(height: 14),
       const Text(
         'လေ့ကျင့်မှုကို သိမ်းထားပါတယ်။ အသံမစုံသေးတဲ့အပိုင်းတွေရဲ့ နားထောင်စစ်ဆေးမှုကို နောက်မှ ပြန်လုပ်နိုင်ပါတယ်။ စကားပြောကျွမ်းကျင်မှု အတည်ပြုချက် မဟုတ်ပါ။',
       ),
       const SizedBox(height: 24),
+      if (_nextTarget != null) ...[
+        Builder(
+          builder: (anchor) => FilledButton.icon(
+            key: const ValueKey('course-next-lesson'),
+            onPressed: () => _continueLesson(anchor),
+            icon: const Icon(Icons.arrow_forward_rounded),
+            label: const Text('နောက်သင်ခန်းစာ ဆက်မယ်'),
+          ),
+        ),
+        const SizedBox(height: 12),
+      ],
       FilledButton(
         key: const ValueKey('course-done'),
         onPressed: () => Navigator.pop(context),

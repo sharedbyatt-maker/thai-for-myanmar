@@ -7,6 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thai_for_myanmar/data/phrase_repository.dart';
 import 'package:thai_for_myanmar/learning/course_catalog.dart';
 import 'package:thai_for_myanmar/learning/course_progress.dart';
+import 'package:thai_for_myanmar/learning/learner_rank.dart';
+import 'package:thai_for_myanmar/widgets/learn_support.dart';
+import 'package:thai_for_myanmar/app.dart';
+import 'package:thai_for_myanmar/widgets/daily_goal_card.dart';
 import 'package:thai_for_myanmar/learning/learning_progress.dart';
 import 'package:thai_for_myanmar/screens/learn_screen.dart';
 import 'package:thai_for_myanmar/widgets/course_learning_path.dart';
@@ -349,6 +353,9 @@ void main() {
       await primary(t);
       expect(find.byKey(const ValueKey('course-done')), findsOneWidget);
       expect(state.learning.course.completed.length, 1);
+      expect(LearnerRank(repo, state.learning).xp, 20);
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(state.learning.practiceOn(DateTime.now()), 2);
       expect(state.learning.completedLessons, isEmpty);
       expect(state.learning.totalReviews, 0);
       expect(state.learning.reviewXp, 0);
@@ -361,6 +368,124 @@ void main() {
       await restored.load();
       expect(restored.learning.course.completed.length, 1);
       expect(restored.learning.course.events.length, 3);
+    },
+  );
+
+  testWidgets(
+    'course replay shows zero new XP and summary continues through the next preview',
+    (t) async {
+      for (var pass = 0; pass < 2; pass++) {
+        await t.pumpWidget(const SizedBox.shrink());
+        await t.pumpAndSettle();
+        final state = await show(t);
+        await primary(t);
+        await primary(t);
+        for (final id in ['c2_u01_01', 'c2_u01_02']) {
+          await tap(t, find.byKey(const ValueKey('course-text-mode')));
+          await tap(t, find.byKey(ValueKey('course-option-$id')));
+          await primary(t);
+          await primary(t);
+        }
+        expect(find.text(pass == 0 ? '+20 XP' : '+0 XP'), findsOneWidget);
+        expect(LearnerRank(repo, state.learning).xp, 20);
+        expect(state.learning.practiceOn(DateTime.now()), 2);
+        await state.saveCourse();
+        if (pass == 1) {
+          await tap(t, find.byKey(const ValueKey('course-next-lesson')));
+          expect(
+            find.byKey(const ValueKey('course-lesson-preview')),
+            findsOneWidget,
+          );
+          expect(find.text('+20 XP'), findsOneWidget);
+          expect(LearnerRank(repo, state.learning).xp, 20);
+          await tap(t, find.byKey(const ValueKey('course-preview-start')));
+          expect(find.text('ကိုယ့်နာမည် ပြောမယ်'), findsOneWidget);
+          expect(state.learning.course.completed.length, 1);
+        }
+      }
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'desktop restores the actual XP, goal, rank and actionable next lesson rail',
+    (t) async {
+      t.view.physicalSize = const Size(1280, 900);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
+      final state = AppState();
+      await state.load();
+      state.learning.course.finish(
+        course.units.first.lessons.first.id,
+        DateTime.now(),
+      );
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: audio,
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repo,
+          appState: state,
+          playbackService: service,
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(find.byType(LearnSupportRail), findsOneWidget);
+      expect(find.byKey(const ValueKey('learn-total-xp')), findsOneWidget);
+      expect(find.text('20'), findsWidgets);
+      expect(find.text('ကိုယ်ပိုင် Rank'), findsOneWidget);
+      expect(find.byType(DailyGoalCard), findsOneWidget);
+      await tap(t, find.byKey(const ValueKey('learn-next-lesson')));
+      expect(
+        find.byKey(const ValueKey('course-lesson-preview')),
+        findsOneWidget,
+      );
+      expect(find.text('ကိုယ့်နာမည် ပြောမယ်'), findsWidgets);
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'successful course retry restores the shared XP catalog as well as Learn',
+    (t) async {
+      final fallback = PhraseRepository(
+        categories: repo.categories,
+        phrases: repo.phrases,
+      );
+      final state = AppState();
+      await state.load();
+      state.learning.course.finish(
+        course.units.first.lessons.first.id,
+        DateTime.now(),
+      );
+      final service = ThaiPlaybackService(
+        speechService: SpeechService(engine: _Silent()),
+        catalog: audio,
+        assetPlayer: _Player(),
+      );
+      addTearDown(service.dispose);
+      await t.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LearnScreen(
+              repository: fallback,
+              appState: state,
+              playbackService: service,
+            ),
+          ),
+        ),
+      );
+      await t.runAsync(() => CourseCatalog.load(rootBundle));
+      await t.pumpAndSettle();
+      expect(fallback.course, isNotNull);
+      expect(LearnerRank(fallback, state.learning).xp, 20);
+      expect(find.text('20'), findsWidgets);
+      expect(t.takeException(), isNull);
     },
   );
 

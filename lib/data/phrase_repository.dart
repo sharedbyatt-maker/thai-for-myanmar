@@ -9,9 +9,11 @@ class PhraseRepository {
   PhraseRepository({
     required this.categories,
     required this.phrases,
-    this.course,
-  });
-  final CourseCatalog? course;
+    CourseCatalog? course,
+  }) : _course = course;
+  CourseCatalog? _course;
+  CourseCatalog? get course => _course;
+  void cacheCourse(CourseCatalog value) => _course ??= value;
 
   final List<PhraseCategory> categories;
   final List<Phrase> phrases;
