@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../learning/course_catalog.dart';
 import '../learning/course_progress.dart';
 import '../learning/course_insights.dart';
+import '../learning/unit_one_practice.dart';
+import '../widgets/lesson_answer_feedback.dart';
 import '../widgets/playful_components.dart';
 import '../learning/review_card.dart';
 import '../services/app_state.dart';
@@ -57,6 +59,15 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
   CourseLine? get _line => widget.course.lines[_step['line']];
   String get _kind => _step['kind'] as String;
   String get _lessonId => widget.lesson.id;
+  bool get _pilot => UnitOnePractice.enabled(widget.unit);
+  bool get _supported => _kind == 'gap' || _kind == 'reply';
+  CourseLine? get _prompt => widget.course.lines[_step['prompt']];
+  String? get _gapAnswer =>
+      _kind == 'gap' ? _line!.parts(_style)[_step['gapIndex'] as int] : null;
+  bool get _needsSelection => _kind == 'choice' || _supported;
+  bool get _canCheck => _kind == 'build'
+      ? _selectedParts.length == _line!.parts(_style).length
+      : _selected != null && (_kind == 'gap' || _heard || _text);
 
   @override
   void initState() {
@@ -75,13 +86,18 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           ..sort((a, b) => a.value.due.compareTo(b.value.due));
     // Stable base steps retain resume positions; review is inserted only on a fresh run.
     final cursor = widget.appState.learning.course.cursors[_lessonId] ?? 0;
+    final baseSteps = UnitOnePractice.steps(widget.unit, widget.lesson);
+    final bookmark = widget.appState.learning.course.stepBookmarks[_lessonId];
+    final hasBookmark =
+        bookmark != null && baseSteps.any((s) => s['pilotKey'] == bookmark);
+    final resuming = cursor > 0 || hasBookmark;
     final probe = widget.course.dueUnitProbe(
       widget.appState.learning.course,
       now,
     );
     _steps = [
-      if (cursor == 0 && probe != null) probe,
-      if (cursor == 0)
+      if (!resuming && probe != null) probe,
+      if (!resuming)
         ...due
             .take(2)
             .map(
@@ -91,9 +107,11 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                 'review': true,
               },
             ),
-      ...widget.lesson.steps,
+      ...baseSteps,
     ];
-    _index = min(cursor, _steps.length - 1);
+    _index = resuming
+        ? UnitOnePractice.resumeIndex(baseSteps, cursor, bookmark)
+        : 0;
     _prepare();
   }
 
@@ -144,6 +162,21 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               .where((v) => known.contains(v.id))
               .toList()
             ..shuffle();
+      if (_kind == 'reply') {
+        _options = [
+          'c2_u01_01',
+          'c2_u01_02',
+          'c2_u01_03',
+        ].map((id) => widget.course.lines[id]!).toList()..shuffle();
+      } else if (_kind == 'gap') {
+        final ids = {
+          _gapAnswer!,
+          widget.course.lines['c2_u01_03']!.parts(_style)[2],
+          line.parts(_style)[1],
+        };
+        _options = ids.map((id) => widget.course.lines[id]!).toList()
+          ..shuffle();
+      }
       _order = List.generate(line.parts(_style).length, (i) => i)..shuffle();
     }
   }
@@ -176,13 +209,13 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
 
   void _check() {
     if (_answered || _line == null) return;
-    if (_kind == 'choice' && (_selected == null || (!_heard && !_text))) return;
+    if (_needsSelection && !_canCheck) return;
     final parts = _line!.parts(_style);
     if (_kind == 'build' && _selectedParts.length != parts.length) return;
     final correct = _kind == 'build'
         ? List.generate(parts.length, (i) => i).join(',') ==
               _selectedParts.join(',')
-        : _selected == _line!.id;
+        : _selected == (_kind == 'gap' ? _gapAnswer : _line!.id);
     _attempts++;
     if (correct && _step['probeUnit'] is String && _step['probeStage'] is int) {
       widget.appState.learning.course.probeStages[_step['probeUnit']
@@ -197,8 +230,12 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       'correct': correct,
       'firstAttempt': _attempts == 1,
       'attempt': _attempts,
-      'assisted': _kind == 'build' || _hint || _text,
-      'listened': _heard && !_text,
+      'assisted': _supported || _kind == 'build' || _hint || _text,
+      'listened': !_supported && _heard && !_text,
+      if (_kind == 'reply') ...{
+        'prompt': _step['prompt'],
+        'promptListened': _heard && !_text,
+      },
       'replays': _replays,
       if (_step['probeUnit'] != null) 'probeUnit': _step['probeUnit'],
     });
@@ -259,10 +296,15 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     }
     // Persist the base-step position, not the temporary inserted-review offset.
     final reviewCount = _steps.where((s) => s['review'] == true).length;
-    widget.appState.learning.course.cursors[_lessonId] = max(
-      0,
-      _index + 1 - reviewCount,
-    );
+    final next = _steps[_index + 1];
+    widget.appState.learning.course.cursors[_lessonId] =
+        next['baseIndex'] is int
+        ? next['baseIndex'] as int
+        : max(0, _index + 1 - reviewCount);
+    if (next['pilotKey'] is String) {
+      widget.appState.learning.course.stepBookmarks[_lessonId] =
+          next['pilotKey'] as String;
+    }
     await widget.appState.saveCourse();
     if (mounted) {
       setState(() {
@@ -359,10 +401,135 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     ),
   );
 
+  String _answerExplanation() {
+    if (_step['explanation'] is String) return _step['explanation'] as String;
+    if (_kind == 'build') {
+      return 'အစဉ်: ${_line!.parts(_style).map((id) => widget.course.lines[id]!.myFor(_style)).join(' → ')}';
+    }
+    return 'ဒီစကားရဲ့ မြန်မာအဓိပ္ပာယ်က «${_line!.myFor(_style)}» ပါ။';
+  }
+
+  void _showAnswerDetails() => showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (context) => SafeArea(
+      child: SizedBox(
+        height: MediaQuery.sizeOf(context).height * .65,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(_answerExplanation()),
+              const SizedBox(height: 12),
+              _lineCard(_line!),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
+  List<Widget> _supportedExercise() {
+    final line = _line!;
+    return [
+      Text(
+        _kind == 'reply'
+            ? _step['instruction'] as String
+            : 'နာမည်အသစ်နဲ့ အပိုင်းတစ်ခု ဖြည့်ပါ',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      const SizedBox(height: 12),
+      if (_kind == 'reply') ...[
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Row(
+                  children: [
+                    ElephantBuddy(size: 40),
+                    SizedBox(width: 10),
+                    Expanded(child: Text('တစ်ဖက်လူ')),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                _audio(_prompt!),
+                if (_text) Text(_prompt!.myFor(_style)),
+                if (_showThai) Text(_prompt!.thai(_style)),
+              ],
+            ),
+          ),
+        ),
+        if (!_text)
+          TextButton(
+            key: const ValueKey('course-text-mode'),
+            onPressed: _answered
+                ? null
+                : () => setState(() {
+                    _text = true;
+                    _hint = true;
+                  }),
+            child: const Text('စာသားနဲ့ ဆက်လေ့ကျင့်မယ်'),
+          ),
+      ] else ...[
+        Text(line.myFor(_style)),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (var i = 0; i < line.parts(_style).length; i++)
+              Chip(
+                label: Text(
+                  i == _step['gapIndex']
+                      ? (_selected == null
+                            ? '…'
+                            : widget.course.lines[_selected]!.myFor(_style))
+                      : widget.course.lines[line.parts(_style)[i]]!.myFor(
+                          _style,
+                        ),
+                ),
+              ),
+          ],
+        ),
+      ],
+      const SizedBox(height: 12),
+      for (final option in _options)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: OutlinedButton(
+            key: ValueKey('course-option-${option.id}'),
+            onPressed: _answered || (_kind == 'reply' && !_heard && !_text)
+                ? null
+                : () => setState(() => _selected = option.id),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.all(16),
+              backgroundColor: _selected == option.id
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : null,
+            ),
+            child: Text(option.myFor(_style)),
+          ),
+        ),
+      if (_answered && _kind == 'reply') ...[
+        Text('ကိုယ်ပြန်ပြောမယ့် စကား · ${line.myFor(_style)}'),
+        _audio(line),
+        if (_showThai) Text(line.thai(_style)),
+      ],
+      Text(
+        'အကူအညီနဲ့ လေ့ကျင့်မှုပါ။ နားထောင်/စကားပြောကျွမ်းကျင်မှု စစ်ဆေးချက် မဟုတ်ပါ။',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final line = _line;
-    final interactive = _kind == 'choice' || _kind == 'build';
+    final interactive = _needsSelection || _kind == 'build';
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.lesson.title),
@@ -459,6 +626,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                 ),
                               ],
                             ],
+                            if (_supported) ..._supportedExercise(),
                             if (_kind == 'choice') ...[
                               Text(
                                 _text
@@ -596,12 +764,12 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                               const Text(
                                 'အကူအညီနဲ့ ဝါကျဖွဲ့ခြင်းပါ။ ကိုယ်တိုင်လွတ်လပ်စွာ ပြောနိုင်မှုကို မစစ်ရသေးပါ။',
                               ),
-                              if (_answered) ...[
+                              if (_answered && !_pilot) ...[
                                 const SizedBox(height: 16),
                                 _lineCard(line),
                               ],
                             ],
-                            if (_feedback != null)
+                            if (_feedback != null && !(_pilot && _answered))
                               Padding(
                                 padding: const EdgeInsets.only(top: 18),
                                 child: Text(
@@ -623,37 +791,42 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                         padding: const EdgeInsets.fromLTRB(20, 12, 20, 18),
                         child: SizedBox(
                           width: double.infinity,
-                          child: FilledButton(
-                            key: const ValueKey('course-primary'),
-                            onPressed: _busy
-                                ? null
-                                : interactive && !_answered
-                                ? ((_kind == 'choice' &&
-                                              (_selected == null ||
-                                                  (!_heard && !_text))) ||
-                                          (_kind == 'build' &&
-                                              _selectedParts.length !=
-                                                  line!.parts(_style).length)
-                                      ? null
-                                      : _check)
-                                : _answered && !_correct
-                                ? () => setState(() {
-                                    _answered = false;
-                                    _selected = null;
-                                    _selectedParts = [];
-                                    _feedback = null;
-                                    _hint = true;
-                                  })
-                                : _next,
-                            child: Text(
-                              interactive && !_answered
-                                  ? 'အဖြေစစ်မယ်'
-                                  : _answered && !_correct
-                                  ? 'ပြန်စမ်းမယ်'
-                                  : _index + 1 == _steps.length
-                                  ? 'လေ့ကျင့်မှု သိမ်းမယ်'
-                                  : 'ဆက်သွားမယ်',
-                            ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (_pilot && _answered)
+                                LessonAnswerFeedback(
+                                  correct: _correct,
+                                  explanation: _answerExplanation(),
+                                  onDetails: _showAnswerDetails,
+                                ),
+                              FilledButton(
+                                key: const ValueKey('course-primary'),
+                                onPressed: _busy
+                                    ? null
+                                    : interactive && !_answered
+                                    ? (_canCheck ? _check : null)
+                                    : _answered && !_correct
+                                    ? () => setState(() {
+                                        _answered = false;
+                                        _selected = null;
+                                        _selectedParts = [];
+                                        _feedback = null;
+                                        _hint = true;
+                                      })
+                                    : _next,
+                                child: Text(
+                                  interactive && !_answered
+                                      ? 'အဖြေစစ်မယ်'
+                                      : _answered && !_correct
+                                      ? 'ပြန်စမ်းမယ်'
+                                      : _index + 1 == _steps.length
+                                      ? 'လေ့ကျင့်မှု သိမ်းမယ်'
+                                      : 'ဆက်သွားမယ်',
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

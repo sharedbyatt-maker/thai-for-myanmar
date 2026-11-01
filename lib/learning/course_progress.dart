@@ -6,6 +6,8 @@ class CourseProgress {
   final Map<String, DateTime> completed = {};
   final Map<String, Set<String>> _activity = {};
   final Map<String, int> cursors = {};
+  // Optional runtime-step bookmark; legacy integer cursors remain meaningful.
+  final Map<String, String> stepBookmarks = {};
   final Map<String, ReviewCard> memory = {};
   final Map<String, int> probeStages = {};
   final List<Map<String, dynamic>> events = [];
@@ -19,6 +21,7 @@ class CourseProgress {
     completed.putIfAbsent(id, () => now.toUtc());
     _activity.putIfAbsent(_day(now), () => {}).add('lesson|$id');
     cursors.remove(id);
+    stepBookmarks.remove(id);
   }
 
   static String _day(DateTime now) {
@@ -57,6 +60,7 @@ class CourseProgress {
     'completed': completed.map((k, v) => MapEntry(k, v.toIso8601String())),
     'activity': _activity.map((k, v) => MapEntry(k, v.toList()..sort())),
     'cursors': cursors,
+    'stepBookmarks': stepBookmarks,
     'probeStages': probeStages,
     'memory': memory.map((k, v) => MapEntry(k, v.toJson())),
     'events': events,
@@ -102,6 +106,16 @@ class CourseProgress {
             row.value >= 0 &&
             row.value < 300) {
           result.cursors[row.key] = row.value;
+        }
+      }
+    }
+    if (raw['stepBookmarks'] case final Map rows) {
+      for (final row in rows.entries) {
+        if (row.key is String &&
+            row.value is String &&
+            (row.value as String).startsWith('u01-practice-v1:') &&
+            (row.value as String).length < 100) {
+          result.stepBookmarks[row.key as String] = row.value as String;
         }
       }
     }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../learning/study_catalog.dart';
 import '../learning/course_catalog.dart';
+import '../learning/unit_one_practice.dart';
 import '../learning/course_progress.dart';
 
 const courseUnitPalette = [
@@ -79,7 +80,7 @@ Future<bool?> showCourseLessonPreview({
               children: [
                 _Detail(
                   icon: Icons.layers_rounded,
-                  text: '${lesson.steps.length} ဆင့်',
+                  text: '${UnitOnePractice.steps(unit, lesson).length} ဆင့်',
                 ),
                 _Detail(
                   icon: Icons.bolt_rounded,

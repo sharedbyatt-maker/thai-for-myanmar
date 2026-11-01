@@ -60,3 +60,26 @@ cards and scheduled probes; a resumed session finishes before queued fresh-sessi
 reviews, matching the existing scheduling behavior. Quest feedback reflects the
 existing goals and does not grant a second reward. Reduced-motion preferences
 must be respected. Future changes preserve these alongside the full inventory.
+
+## Unit 1 lesson-interaction pilot — 2026-11-01
+
+Only Unit 1 gets compact, fixed answer feedback. Its name-substitution lesson
+adds one Myanmar-labelled name gap before the existing full construction. Its
+existing dialogue lesson becomes two authored reply turns: greet back and answer
+a name question using the sample name. Use existing lines, gender forms and exact
+bundled mappings; do not require Thai reading or generate audio. Pending clips
+stay explicit and text practice is opt-in. Original path, 178 lesson IDs,
+prerequisites, completion XP, summaries, goals/ranks and League remain intact.
+
+`UnitOnePractice` owns this small runtime overlay; it does not rewrite the
+original course JSON or change Units 2–26. Shared preview counts include its steps.
+Supported gap/reply practice never creates FSRS or target-listening mastery.
+A heard dialogue prompt is separately recorded as `promptListened`, not evidence
+that the target response audio was heard. Keep first wrong attempts on retries.
+
+Keep legacy integer cursors as original base positions. Optional versioned
+`stepBookmarks` retain exact pilot turns, including a second turn with base cursor
+zero, without injecting fresh reviews on resume. Old cursors resume at the
+original step; malformed/stale optional bookmarks fall back safely. Completion
+clears both cursor forms and retains the same +20 first/+0 replay XP. Future
+exercise changes must version bookmarks and preserve saved learner data.
