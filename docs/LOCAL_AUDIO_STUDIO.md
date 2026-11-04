@@ -1,5 +1,25 @@
 # Thai Audio Studio — no-card local web interface
 
+## Continue the authored course (Units 1–5)
+
+The imported 990-form Everyday pack is already bundled. For the updated authored
+course, use the default **Units 1–5** scope, generate the six-file course sample,
+then **သင်ရိုးအသံ ထုတ်မယ်** with unchanged voice/speed. The current snapshot needs
+79 unique new MP3s for 85 missing bindings; 16 bindings reuse exact old audio.
+The all-course scope needs 426 unique new recordings. These are additional course
+recordings, not replacements for the 990 imported files. Every sentence part and
+spoken model used by the selected units is included; global representative IDs
+keep sample/scoped/all-course cache identities stable.
+
+Voice/speed settings persist locally. Controls are locked during a job; exported
+ZIP names distinguish course/sample/full output. Old 990-form generation is kept
+under a separate disclosure. See [step-by-step Myanmar instructions](AUDIO_UNITS_1_5.md).
+Build the small standalone Windows tool with `python tool/package_audio_studio.py`.
+It includes only allowlisted code/source/manifest files, never generated test
+MP3s, cached model binaries, credentials or production audio. Extracting a new
+copy reuses the existing short Python runtime; model/cache reuse still requires
+keeping/copying `build/audio-studio` from the old copy.
+
 ## Windows: the short version
 
 1. Download the repository ZIP from the branch containing this change (GitHub **Code → Download ZIP**).

@@ -88,6 +88,49 @@ class StudioTests(unittest.TestCase):
             self.assertEqual(len({e['asset'] for e in entries}), 1)
             self.assertEqual(json.loads(z.read('course-source.json'))['newRecordings'], 1)
 
+    def test_real_first_five_sample_full_resume_and_settings_without_synthesis_network(self):
+        root = Path(__file__).resolve().parents[2]
+        calls = []
+        class Recording(FakeEngine):
+            def synthesize(self, text, speaker, speed):
+                calls.append((text, speaker, speed))
+                return super().synthesize(text, speaker, speed)
+        studio = server.Studio(root=root, work=self.root / 'course-work', engine=Recording(), verify=self.studio.verify)
+        def run(mode, **kwargs):
+            studio.start({'mode': mode, **kwargs})
+            studio.thread.join(timeout=10)
+            self.assertFalse(studio.thread.is_alive())
+            state = studio.snapshot()
+            self.assertEqual(state['status'], 'complete', state)
+            return state
+        before = (root / 'assets/data/course_audio_manifest.json').read_bytes()
+        sample = run('course-sample', male=10, female=3, speed=0.85)
+        self.assertEqual(sample['total'], 6)
+        self.assertEqual(len(calls), 6)
+        with zipfile.ZipFile(studio.work / 'jobs' / sample['job'] / 'audio.zip') as z:
+            self.assertEqual(json.loads(z.read('course-source.json'))['selection'], 'sample')
+        full = run('course', male=10, female=3, speed=0.85)
+        self.assertEqual((full['done'], full['total'], full['report']['reused']), (79, 79, 6))
+        self.assertEqual(len(calls), 79)
+        self.assertTrue(all(speed == 0.85 and speaker in (10, 3) for _, speaker, speed in calls))
+        self.assertIn('units-1-5', full['downloadName'])
+        with zipfile.ZipFile(studio.work / 'jobs' / full['job'] / 'audio.zip') as z:
+            source = json.loads(z.read('course-source.json'))
+            entries = json.loads(z.read('assets/data/course_audio_manifest.json'))['entries']
+            self.assertEqual(source['unitIds'], ['u01', 'u02', 'u03', 'u04', 'u05'])
+            self.assertEqual(len(entries), 85)
+            self.assertEqual(len({e['asset'] for e in entries}), 79)
+            self.assertNotIn('assets/data/thai_audio_manifest.json', z.namelist())
+            for row in entries:
+                self.assertEqual(z.read('assets/' + row['asset']), b'test-audio')
+        self.assertEqual((root / 'assets/data/course_audio_manifest.json').read_bytes(), before)
+        restored = server.Studio(root=root, work=studio.work, engine=Recording(), verify=studio.verify)
+        self.assertEqual(restored.settings(), {'male': 10, 'female': 3, 'speed': 0.85})
+        again = run('course', male=10, female=3, speed=0.85)
+        self.assertEqual(again['report']['reused'], 79)
+        with self.assertRaises(ValueError):
+            studio.start({'mode': 'course', 'scope': '../invalid'})
+
     def test_single_job_stop_and_partial_zip(self):
         entered, release = threading.Event(), threading.Event()
         class Slow(FakeEngine):
@@ -109,6 +152,21 @@ class StudioTests(unittest.TestCase):
             report = json.loads(z.read("generation-report.json"))
             self.assertEqual(report["status"], "incomplete")
             self.assertLess(report["readyForms"], report["requestedForms"])
+
+    def test_standalone_package_contains_only_sources_and_matching_hashes(self):
+        sys.path.insert(0, str(STUDIO_PATH.parent))
+        from package_audio_studio import package, ROOT, FILES
+        path = self.root / 'windows.zip'
+        snapshot = package(ROOT, path)
+        self.assertEqual(snapshot['newRecordings'], 79)
+        import hashlib
+        with zipfile.ZipFile(path) as z:
+            prefix = 'Thai_Audio_Studio_Units_1-5/'
+            self.assertTrue(all(n.startswith(prefix) for n in z.namelist()))
+            self.assertFalse(any(n.endswith('.mp3') or '/build/' in n or n.endswith('.onnx') for n in z.namelist()))
+            self.assertEqual(len(z.namelist()), len(FILES) + 2)
+            for name, digest in snapshot['files'].items():
+                self.assertEqual(hashlib.sha256(z.read(prefix + name)).hexdigest(), digest)
 
     def test_http_session_origin_path_and_json_protection(self):
         httpd = server.ThreadingHTTPServer(("127.0.0.1", 0), server.make_handler(self.studio))
