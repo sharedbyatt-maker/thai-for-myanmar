@@ -1,0 +1,16 @@
+{
+  "status": "complete",
+  "humanReview": "pending",
+  "requestedForms": 79,
+  "readyForms": 79,
+  "generated": 79,
+  "reused": 0,
+  "sourceCharacters": 666,
+  "voices": {
+    "male": "kokoro:abf63dc118365bea784fa881bdd1dce4b2cc1fd4:speaker=9:speed=1:mp3-v1",
+    "female": "kokoro:abf63dc118365bea784fa881bdd1dce4b2cc1fd4:speaker=2:speed=1:mp3-v1",
+    "shared": "kokoro:abf63dc118365bea784fa881bdd1dce4b2cc1fd4:speaker=2:speed=1:mp3-v1"
+  },
+  "missing": [],
+  "error": null
+}

@@ -58,6 +58,6 @@ The `main` branch is the stable source. GitHub Actions validates content, format
 
 Download/extract this repository ZIP and double-click **Start_Audio_Studio.bat**. It prepares a private Python environment and opens a local browser UI for Thai Kokoro voice previews, the nine-file sample, all 990 phrase/form MP3s, progress/stop controls, and ZIP download. First setup downloads Python/packages and about 332 MB of verified model files. No Google account, card or synthesis API key is required. The app audio manifest is unchanged until the generated pack is reviewed and imported.
 
-For the authored course, the Studio now defaults to Units 1–5: six-file sample, then 79 missing recordings with the selected voice/speed. The original 990 files are already imported. [Myanmar audio steps](docs/AUDIO_UNITS_1_5.md).
+The owner-generated 79-file authored-course pack is now imported: Units 1–5 have complete technical audio coverage, including spoken parts, alongside the original 990 files. The local Studio remains available for future missing course audio. [Myanmar audio steps](docs/AUDIO_UNITS_1_5.md).
 
 See [Local Audio Studio setup and limitations](docs/LOCAL_AUDIO_STUDIO.md). Windows launcher execution still needs native Windows verification; the real CPU engine and nine-file MP3 pack have been tested on Linux.

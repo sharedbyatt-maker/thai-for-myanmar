@@ -49,6 +49,34 @@ def safe_asset_path(raw_path: object) -> Path:
     return candidate
 
 
+def validate_course_manifest(course, manifest, base_keys=()):
+    """Validate additive exact-text aliases before counting their assets as mapped."""
+    if not isinstance(manifest, dict) or manifest.get('schemaVersion') != 1 or not isinstance(manifest.get('entries'), list):
+        fail('course audio manifest must contain schemaVersion 1 and entries')
+    keys, paths, texts = set(base_keys), set(), {}
+    for entry in manifest['entries']:
+        if not isinstance(entry, dict):
+            fail('course audio entry must be an object')
+        lid, form, thai, asset = (entry.get(k) for k in ('phraseId', 'form', 'thai', 'asset'))
+        if not isinstance(lid, str) or lid not in course['lines'] or form not in ('male', 'female', 'shared'):
+            fail('unknown course audio line or form')
+        if (lid, form) in keys:
+            fail(f'duplicate course audio mapping for {lid}/{form}')
+        line = course['lines'][lid]
+        styles = ('male', 'female') if form == 'shared' else (form,)
+        if not isinstance(thai, str) or not thai.strip() or any(line[style] != thai for style in styles):
+            fail(f'stale course Thai text for {lid}/{form}')
+        path = safe_asset_path(asset)
+        if not path.is_file() or path.stat().st_size == 0:
+            fail(f'missing or empty course MP3: {asset}')
+        if asset in texts and texts[asset] != thai:
+            fail('one course audio asset cannot map to different Thai text')
+        texts[asset] = thai
+        keys.add((lid, form))
+        paths.add(asset)
+    return paths
+
+
 def main() -> int:
     phrases = read_json(PHRASES_PATH)
     categories = read_json(CATEGORIES_PATH)
@@ -103,6 +131,11 @@ def main() -> int:
         entries[key] = {"thai": thai, "asset": asset, "path": path}
         mapped_paths.add(asset)
 
+    course_path = ROOT / 'assets/data/course_audio_manifest.json'
+    course_paths = set()
+    if course_path.is_file():
+        course_paths = validate_course_manifest(read_json(ROOT / 'assets/data/course_v2.json'), read_json(course_path), entries)
+        mapped_paths.update(course_paths)
     actual_audio_files = set()
     if AUDIO_ROOT.exists():
         for path in AUDIO_ROOT.rglob("*"):
@@ -204,6 +237,8 @@ def main() -> int:
         f"Selected Thai text: {sum(map(len, selected_texts))} characters; "
         f"{duplicate_texts} duplicate text instances"
     )
+    if course_paths:
+        print(f'Course audio: {len(course_paths)} unique MP3s; exact aliases validated')
     return 0
 
 
