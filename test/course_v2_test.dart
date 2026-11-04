@@ -178,7 +178,7 @@ void main() {
       }
       final intro = course.lines['c2_u01_03']!;
       expect(intro.thai('male'), 'ผมชื่อเอกครับ');
-      expect(audio.match(intro.phrase('male'), 'male'), isNull);
+      expect(audio.match(intro.phrase('male'), 'male'), isNotNull);
       expect(
         audio.match(course.lines['c2_u01_01']!.phrase('female'), 'female'),
         isNotNull,
