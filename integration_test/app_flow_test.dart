@@ -301,11 +301,14 @@ void main() {
       final state = AppState();
       await state.load();
       final course = repository.course!, unit = course.units[3];
-      for (final earlier in course.units.take(3))
-        for (final lesson in earlier.lessons)
+      for (final earlier in course.units.take(3)) {
+        for (final lesson in earlier.lessons) {
           state.learning.course.finish(lesson.id, DateTime.now());
-      for (final lesson in unit.lessons.take(4))
+        }
+      }
+      for (final lesson in unit.lessons.take(4)) {
         state.learning.course.finish(lesson.id, DateTime.now());
+      }
       final before = LearnerRank(repository, state.learning).xp;
       final service = _playbackService();
       addTearDown(service.dispose);
@@ -318,13 +321,14 @@ void main() {
       );
       await tester.pumpAndSettle();
       Future<void> tap(Finder f) async {
-        if (f.evaluate().isEmpty)
+        if (f.evaluate().isEmpty) {
           await tester.scrollUntilVisible(
             f,
             140,
             maxScrolls: 50,
             scrollable: find.byType(Scrollable).first,
           );
+        }
         await Scrollable.ensureVisible(tester.element(f), alignment: .5);
         await tester.pumpAndSettle();
         await tester.tap(f);
@@ -333,10 +337,11 @@ void main() {
 
       Future<void> next() => tap(find.byKey(const ValueKey('course-primary')));
       Future<void> picture(String label) async {
-        if (kIsWeb)
+        if (kIsWeb) {
           await binding.takeScreenshot(
             '${(tester.view.physicalSize.width / tester.view.devicePixelRatio).round()}-guided-$label',
           );
+        }
       }
 
       Future<void> build(String id) async {
@@ -344,8 +349,9 @@ void main() {
           var i = 0;
           i < course.lines[id]!.parts(state.politeStyle).length;
           i++
-        )
+        ) {
           await tap(find.byKey(ValueKey('course-part-$i')));
+        }
         await next();
         await next();
       }

@@ -97,7 +97,7 @@ void main() {
       for (final unit in course.units.skip(1).take(4)) {
         for (final lesson in unit.lessons) {
           final steps = CoursePractice.steps(unit, lesson);
-          for (var i = 0; i < steps.length; i++)
+          for (var i = 0; i < steps.length; i++) {
             expect(
               CoursePractice.resumeIndex(
                 steps,
@@ -106,6 +106,7 @@ void main() {
               ),
               i,
             );
+          }
         }
         final id = unit.lessons[5].id;
         progress.cursors[id] = 0;
@@ -129,13 +130,14 @@ void main() {
   );
 
   Future<void> reveal(WidgetTester t, Finder f) async {
-    if (f.evaluate().isEmpty)
+    if (f.evaluate().isEmpty) {
       await t.scrollUntilVisible(
         f,
         120,
         maxScrolls: 50,
         scrollable: find.byType(Scrollable).first,
       );
+    }
     await Scrollable.ensureVisible(t.element(f), alignment: .5);
     await t.pumpAndSettle();
   }
@@ -194,9 +196,11 @@ void main() {
         (t) async {
           final seed = AppState();
           await seed.load();
-          for (final unit in course.units.take(unitIndex))
-            for (final lesson in unit.lessons)
+          for (final unit in course.units.take(unitIndex)) {
+            for (final lesson in unit.lessons) {
               seed.learning.course.finish(lesson.id, DateTime.now());
+            }
+          }
           final baseline = LearnerRank(repo, seed.learning).xp;
           await seed.saveCourse();
           final unit = course.units[unitIndex];
@@ -221,11 +225,12 @@ void main() {
                   (t.widget<OutlinedButton>(answer).child as Text).data,
                   line.myFor(style),
                 );
-                if (step['wordPractice'] == true)
+                if (step['wordPractice'] == true) {
                   expect(
                     find.byType(OutlinedButton).evaluate().length,
                     greaterThanOrEqualTo(2),
                   );
+                }
                 await tap(t, answer);
                 await next(t);
                 await next(t);
@@ -241,16 +246,18 @@ void main() {
                 await next(t);
                 await next(t);
               } else if (kind == 'build') {
-                for (var i = 0; i < line!.parts(style).length; i++)
+                for (var i = 0; i < line!.parts(style).length; i++) {
                   await tap(t, find.byKey(ValueKey('course-part-$i')));
+                }
                 await next(t);
                 await next(t);
               } else {
-                if (kind == 'reflect')
+                if (kind == 'reflect') {
                   await reveal(
                     t,
                     find.byKey(const ValueKey('course-unit-reflection-help')),
                   );
+                }
                 await next(t);
               }
             }
