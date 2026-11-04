@@ -291,6 +291,138 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Unit 4 guided gap, replies and transfer checkpoint preserve saved XP',
+    (tester) async {
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      final state = AppState();
+      await state.load();
+      final course = repository.course!, unit = course.units[3];
+      for (final earlier in course.units.take(3)) {
+        for (final lesson in earlier.lessons) {
+          state.learning.course.finish(lesson.id, DateTime.now());
+        }
+      }
+      for (final lesson in unit.lessons.take(4)) {
+        state.learning.course.finish(lesson.id, DateTime.now());
+      }
+      final before = LearnerRank(repository, state.learning).xp;
+      final service = _playbackService();
+      addTearDown(service.dispose);
+      await tester.pumpWidget(
+        ThaiForMyanmarApp(
+          repository: repository,
+          appState: state,
+          playbackService: service,
+        ),
+      );
+      await tester.pumpAndSettle();
+      Future<void> tap(Finder f) async {
+        if (f.evaluate().isEmpty) {
+          await tester.scrollUntilVisible(
+            f,
+            140,
+            maxScrolls: 50,
+            scrollable: find.byType(Scrollable).first,
+          );
+        }
+        await Scrollable.ensureVisible(tester.element(f), alignment: .5);
+        await tester.pumpAndSettle();
+        await tester.tap(f);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> next() => tap(find.byKey(const ValueKey('course-primary')));
+      Future<void> picture(String label) async {
+        if (kIsWeb) {
+          await binding.takeScreenshot(
+            '${(tester.view.physicalSize.width / tester.view.devicePixelRatio).round()}-guided-$label',
+          );
+        }
+      }
+
+      Future<void> build(String id) async {
+        for (
+          var i = 0;
+          i < course.lines[id]!.parts(state.politeStyle).length;
+          i++
+        ) {
+          await tap(find.byKey(ValueKey('course-part-$i')));
+        }
+        await next();
+        await next();
+      }
+
+      await tap(find.byKey(const ValueKey('course-lesson-u04-5')));
+      expect(find.text('3 ဆင့်'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-preview-start')));
+      await next();
+      await picture('request-gap');
+      await tap(find.byKey(const ValueKey('course-option-c2_w_f40da9b0d15a')));
+      await next();
+      await picture('request-gap-feedback');
+      await next();
+      await tap(find.byKey(const ValueKey('course-option-c2_w_c7f7ed66b94f')));
+      await next();
+      await next();
+      await build('c2_u04_05');
+      expect(find.text('+20 XP'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-next-lesson')));
+      expect(find.text('3 ဆင့်'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-preview-start')));
+      await picture('conversation');
+      for (final id in ['c2_u04_02', 'c2_u04_04', 'c2_u04_05']) {
+        await tap(find.byKey(const ValueKey('course-text-mode')));
+        await tap(find.byKey(ValueKey('course-option-$id')));
+        await next();
+        await next();
+      }
+      await tap(find.byKey(const ValueKey('course-next-lesson')));
+      expect(find.text('9 ဆင့်'), findsOneWidget);
+      await tap(find.byKey(const ValueKey('course-preview-start')));
+      for (final id in unit.models) {
+        await tap(find.byKey(const ValueKey('course-text-mode')));
+        await tap(find.byKey(ValueKey('course-option-$id')));
+        await next();
+        await next();
+      }
+      await picture('transfer');
+      for (final id in ['c2_u04_05', 'c2_u04_04']) {
+        await tap(find.byKey(ValueKey('course-option-$id')));
+        await next();
+        await picture('transfer-$id');
+        await next();
+      }
+      await build('c2_u04_05');
+      await picture('reflection');
+      await next();
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(LearnerRank(repository, state.learning).xp, before + 60);
+      expect(state.learning.course.memory, isEmpty);
+      expect(state.learning.course.events.first['correct'], false);
+      expect(
+        state.learning.course.events.every(
+          (e) => e['assisted'] == true && e['listened'] == false,
+        ),
+        true,
+      );
+      final restored = AppState();
+      await restored.load();
+      expect(LearnerRank(repository, restored.learning).xp, before + 60);
+      expect(
+        unit.lessons.every(
+          (l) => restored.learning.course.completed.containsKey(l.id),
+        ),
+        true,
+      );
+      expect(restored.learning.course.stepBookmarks, isEmpty);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('guided lesson completes and restores local learning progress', (
     tester,
   ) async {

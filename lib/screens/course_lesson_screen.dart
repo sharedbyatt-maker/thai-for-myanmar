@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../learning/course_catalog.dart';
 import '../learning/course_progress.dart';
 import '../learning/course_insights.dart';
-import '../learning/unit_one_practice.dart';
+import '../learning/course_practice.dart';
 import '../widgets/lesson_answer_feedback.dart';
 import '../widgets/playful_components.dart';
 import '../learning/review_card.dart';
@@ -59,15 +59,17 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
   CourseLine? get _line => widget.course.lines[_step['line']];
   String get _kind => _step['kind'] as String;
   String get _lessonId => widget.lesson.id;
-  bool get _pilot => UnitOnePractice.enabled(widget.unit);
-  bool get _supported => _kind == 'gap' || _kind == 'reply';
+  bool get _pilot => CoursePractice.enabled(widget.unit);
+  bool get _supported =>
+      _kind == 'gap' || _kind == 'reply' || _kind == 'situation';
   CourseLine? get _prompt => widget.course.lines[_step['prompt']];
   String? get _gapAnswer =>
       _kind == 'gap' ? _line!.parts(_style)[_step['gapIndex'] as int] : null;
   bool get _needsSelection => _kind == 'choice' || _supported;
   bool get _canCheck => _kind == 'build'
       ? _selectedParts.length == _line!.parts(_style).length
-      : _selected != null && (_kind == 'gap' || _heard || _text);
+      : _selected != null &&
+            (_kind == 'gap' || _kind == 'situation' || _heard || _text);
 
   @override
   void initState() {
@@ -86,7 +88,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           ..sort((a, b) => a.value.due.compareTo(b.value.due));
     // Stable base steps retain resume positions; review is inserted only on a fresh run.
     final cursor = widget.appState.learning.course.cursors[_lessonId] ?? 0;
-    final baseSteps = UnitOnePractice.steps(widget.unit, widget.lesson);
+    final baseSteps = CoursePractice.steps(widget.unit, widget.lesson);
     final bookmark = widget.appState.learning.course.stepBookmarks[_lessonId];
     final hasBookmark =
         bookmark != null && baseSteps.any((s) => s['pilotKey'] == bookmark);
@@ -110,7 +112,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       ...baseSteps,
     ];
     _index = resuming
-        ? UnitOnePractice.resumeIndex(baseSteps, cursor, bookmark)
+        ? CoursePractice.resumeIndex(baseSteps, cursor, bookmark)
         : 0;
     _prepare();
   }
@@ -162,14 +164,28 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               .where((v) => known.contains(v.id))
               .toList()
             ..shuffle();
-      if (_kind == 'reply') {
-        _options = List<String>.from(
-          _step['options'] as List? ?? ['c2_u01_01', 'c2_u01_02', 'c2_u01_03'],
-        ).map((id) => widget.course.lines[id]!).toList()..shuffle();
+      if (_kind == 'reply' ||
+          _kind == 'situation' ||
+          _step['options'] is List) {
+        final candidates =
+            List<String>.from(
+                  _step['options'] as List? ??
+                      ['c2_u01_01', 'c2_u01_02', 'c2_u01_03'],
+                )
+                .where((id) => _supported || known.contains(id))
+                .map((id) => widget.course.lines[id]!)
+                .toList();
+        final meanings = {line.myFor(_style)};
+        _options = [
+          line,
+          ...candidates.where((v) => meanings.add(v.myFor(_style))).take(3),
+        ]..shuffle();
       } else if (_kind == 'gap') {
         final ids = {
           _gapAnswer!,
-          if (_step['gapDistractorIndices'] is List)
+          if (_step['gapAlternatives'] is List)
+            ...List<String>.from(_step['gapAlternatives'] as List)
+          else if (_step['gapDistractorIndices'] is List)
             for (final index in _step['gapDistractorIndices'] as List)
               line.parts(_style)[index as int]
           else ...[
@@ -379,7 +395,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               ExpansionTile(
                 title: const Text('စကားလုံးအပိုင်းနဲ့ သုံးနည်း'),
                 children: [
-                  Text(UnitOnePractice.teachingTip(line.id)),
+                  Text(CoursePractice.teachingTip(widget.unit, line.id)),
                   const SizedBox(height: 8),
                   for (final id in line.parts(_style))
                     ListTile(
@@ -511,6 +527,14 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                   }),
             child: const Text('စာသားနဲ့ ဆက်လေ့ကျင့်မယ်'),
           ),
+      ] else if (_kind == 'situation') ...[
+        const Row(
+          children: [
+            ElephantBuddy(size: 40),
+            SizedBox(width: 10),
+            Expanded(child: Text('အခြေအနေအသစ်မှာ သုံးကြည့်မယ်')),
+          ],
+        ),
       ] else ...[
         Text(line.myFor(_style)),
         const SizedBox(height: 12),
@@ -551,7 +575,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
             child: Text(option.myFor(_style)),
           ),
         ),
-      if (_answered && _kind == 'reply') ...[
+      if (_answered && (_kind == 'reply' || _kind == 'situation')) ...[
         Text('ကိုယ်ပြန်ပြောမယ့် စကား · ${line.myFor(_style)}'),
         _audio(line),
         if (_showThai) Text(line.thai(_style)),
@@ -644,6 +668,31 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                               const Text(
                                 'နမူနာမကြည့်ဘဲ ကိုယ်တိုင် ပြောကြည့်ပါ။ ပြောကြည့်ပြီးတာကို မှတ်သားနိုင်ပေမယ့် အသံထွက်မှန်ကြောင်း အမှတ်မပေးပါ။',
                               ),
+                              if (CoursePractice.reflectionPrompts(
+                                widget.unit,
+                              ).isNotEmpty) ...[
+                                const SizedBox(height: 16),
+                                for (final prompt
+                                    in CoursePractice.reflectionPrompts(
+                                      widget.unit,
+                                    ))
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: Text(prompt),
+                                  ),
+                                ExpansionTile(
+                                  key: const ValueKey(
+                                    'course-unit-reflection-help',
+                                  ),
+                                  title: const Text(
+                                    'မမှတ်မိရင် နမူနာ ပြန်ကြည့်မယ်',
+                                  ),
+                                  children: [
+                                    for (final id in widget.unit.models)
+                                      _lineCard(widget.course.lines[id]!),
+                                  ],
+                                ),
+                              ],
                               if (widget.unit.id == 'u01') ...[
                                 const SizedBox(height: 18),
                                 const Text(
@@ -725,6 +774,8 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                     'စာသားလေ့ကျင့်မှု · နားထောင်စစ်ဆေးမှုအဖြစ် မတွက်ပါ။',
                                   ),
                                 ),
+                              if (_text && _step['wordPractice'] == true)
+                                Text('နမူနာအဓိပ္ပာယ် · ${line.myFor(_style)}'),
                               if (_showThai || _answered)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(

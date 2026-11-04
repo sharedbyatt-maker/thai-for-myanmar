@@ -108,3 +108,35 @@ bindings; missing recordings remain pending. Self-practice uses a learner's name
 as a local reminder, never substitutes sample-name audio or claims ASR scoring.
 Preserve 26 units/178 IDs, XP, goals/ranks, history, the winding path and all saved
 progress. Units 2–26 are unchanged. Audio generation is still deferred.
+
+## Guided Units 2–5 — 2026-11-04
+
+The owner approved extending the Unit 1 teaching pattern to the next four units:
+origin/residence, communication repair, requesting items, and order preferences.
+`CoursePractice` delegates Unit 1 exactly to its released overlay and leaves Units
+6–26 unchanged. Existing paths, XP/rank/goals, IDs, prerequisites, history and
+completion behavior remain intact.
+
+Within the existing seven lessons per unit: word lessons add short meaning checks
+using learned words; construction adds a single-part gap first; substitution adds
+a contrasting gap; dialogue becomes three guided reply turns; the checkpoint adds
+two new Myanmar situations before original construction/reflection. Reuse only
+existing male/female utterances, parts and exact audio bindings. Four Myanmar usage
+tips are corrected in the authored generator and JSON; the audio inventory's hash
+follows the new source, with no audio requests/recordings added or generated.
+
+Show Myanmar answers with at most four distinct meanings. Audio checks keep answers
+locked until actual playback or explicit text fallback. Text-only word practice
+shows a labelled model meaning; it is assisted and never listening/FSRS evidence.
+Situation tasks check intended use in a Myanmar context, require a real selected
+answer, and are always assisted. Gaps/replies/situations grant no listening or
+speaking mastery. Heard prompts remain separate from target-listening evidence.
+Keep first wrong attempts and +20 first / +0 replay completion rewards.
+
+New `u02-u05-practice-v1:` bookmarks are additive. Preserve the original base index
+of every original step, including dialogue base zero; never reinterpret old cursors
+as inserted tasks. Valid bookmarks resume exact added tasks without fresh reviews;
+finish clears both cursor forms. Keep old `u01-practice-v1:` bookmarks unchanged.
+Regression tests complete all 28 affected lessons in both polite styles and cover
+legacy cursors, saved XP, no invented evidence and 320px/2x dark/light feedback.
+Chrome/Android integration runs a real gap → dialogue → transfer-checkpoint flow.
