@@ -6,7 +6,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tool'))
-from course_audio_plan import course_audio_plan
+from course_audio_plan import course_audio_plan, unit_line_ids
 from validate_course_v2 import validate
 
 class CourseToolsTests(unittest.TestCase):
@@ -26,6 +26,25 @@ class CourseToolsTests(unittest.TestCase):
             for t in r['targets']:
                 line = self.course['lines'][t['phraseId']]
                 self.assertEqual(line['male' if t['form'] == 'shared' else t['form']], r['thai'])
+
+    def test_first_five_scopes_include_parts_and_keep_global_cache_identity(self):
+        units = ['u01', 'u02', 'u03', 'u04', 'u05']
+        scoped = course_audio_plan(ROOT, units)
+        self.assertEqual((scoped['requiredBindings'], scoped['reusedBindings'], scoped['missingBindings'], scoped['newRecordings']), (101, 16, 85, 79))
+        self.assertEqual(scoped['unitIds'], units)
+        ids = unit_line_ids(self.course, units)
+        for unit in self.course['units'][:5]:
+            for lid in unit['models']:
+                self.assertIn(lid, ids)
+                for parts in self.course['lines'][lid]['parts'].values():
+                    self.assertTrue(set(parts) <= ids)
+        full = {(r['form'], r['thai']): r for r in course_audio_plan(ROOT)['requests']}
+        for row in scoped['requests']:
+            self.assertEqual(row['phraseId'], full[(row['form'], row['thai'])]['phraseId'])
+            self.assertTrue(all(t['phraseId'] in ids for t in row['targets']))
+        for invalid in ([], ['u99'], 'u01', [None]):
+            with self.assertRaises(ValueError):
+                course_audio_plan(ROOT, invalid)
 
     def test_future_prerequisite_and_untaught_test_are_rejected(self):
         bad = copy.deepcopy(self.course)

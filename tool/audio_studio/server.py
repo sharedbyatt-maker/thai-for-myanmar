@@ -25,6 +25,18 @@ from generate_thai_audio import make_plan, build_bundle, write_json
 from course_audio_plan import course_audio_plan
 
 
+def course_sample(plan):
+    """Short words and complete sentences in both polite forms; same cache IDs."""
+    picked = []
+    for form in ('male', 'female', 'shared'):
+        rows = [r for r in plan['requests'] if r['form'] == form]
+        for row in rows[:1] + sorted(rows, key=lambda r: len(r['thai']), reverse=True)[:1]:
+            if row not in picked:
+                picked.append(row)
+    return {**plan, 'selection': 'sample', 'requests': picked,
+            'newRecordings': len(picked), 'missingBindings': sum(len(r['targets']) for r in picked)}
+
+
 class Studio:
     def __init__(self, root=ROOT, work=None, engine=None, verify=verify_mp3):
         self.root = Path(root)
@@ -46,13 +58,32 @@ class Studio:
         with self.guard:
             return dict(self.state)
 
+    def settings(self):
+        defaults = {'male': 9, 'female': 2, 'speed': 1.0}
+        try:
+            saved = json.loads((self.work / 'settings.json').read_text(encoding='utf-8'))
+            validate_choices(saved['male'], saved['female'], saved['speed'])
+            return {key: saved[key] for key in defaults}
+        except (OSError, ValueError, KeyError, TypeError):
+            return defaults
+
+    def course_plan(self, scope='first-five'):
+        if scope not in ('first-five', 'all'):
+            raise ValueError('Choose Units 1–5 or the whole course')
+        path = self.root / 'assets/data/course_v2.json'
+        if not path.is_file():
+            raise ValueError('Course data is not available in this checkout')
+        units = [u['id'] for u in json.loads(path.read_text(encoding='utf-8')).get('units', [])[:5]]
+        return course_audio_plan(self.root, units if units and scope == 'first-five' else None)
+
     def start(self, data):
         mode = data.get("mode")
-        if mode not in {"preview", "sample", "all", "course"}:
-            raise ValueError("Choose preview, sample, all or course")
-        if mode == "course" and not (self.root / "assets/data/course_v2.json").is_file():
-            raise ValueError("Course data is not available in this checkout")
-        course = course_audio_plan(self.root) if mode == "course" else None
+        if mode not in {"preview", "sample", "all", "course", "course-sample"}:
+            raise ValueError("Choose preview, sample, all, course-sample or course")
+        scope = data.get('scope', 'first-five')
+        course = self.course_plan(scope) if mode in ('course', 'course-sample') else None
+        if course is not None and mode == 'course-sample':
+            course = course_sample(course)
         if course is not None and not course["requests"]:
             raise ValueError("No missing course recordings. Existing files are retained.")
         male, female, speed = data.get("male", 9), data.get("female", 2), data.get("speed", 1.0)
@@ -64,11 +95,14 @@ class Studio:
         with self.guard:
             if self.thread is not None and self.thread.is_alive():
                 raise ValueError("A job is already running. Wait or press Stop.")
+            write_json(self.work / 'settings.json', {'male': male, 'female': female, 'speed': speed})
             job_id = uuid.uuid4().hex
             self.cancel.clear()
             total = len(course["requests"]) if course else (1 if mode == "preview" else len(make_plan(self.phrases, mode)))
             self.state = {"status": "running", "message": "Preparing local engine...", "done": 0,
-                          "total": total, "job": job_id, "mode": mode}
+                          "total": total, "job": job_id, "mode": mode,
+                          "settings": {"male": male, "female": female, "speed": speed},
+                          "scope": scope if course else None}
             self.thread = threading.Thread(target=self.run, args=(job_id, mode, text, speaker, male, female, speed, course), daemon=True)
             self.thread.start()
         return job_id
@@ -77,6 +111,10 @@ class Studio:
         job = self.work / "jobs" / job_id
         try:
             job.mkdir(parents=True)
+            download_name = (f"thai-course-{'units-1-5' if self.snapshot().get('scope') == 'first-five' else 'all-units'}{'-sample' if mode == 'course-sample' else ''}.zip"
+                             if course else f"thai-audio{'-sample' if mode == 'sample' else ''}.zip")
+            (job / 'download-name.txt').write_text(download_name, encoding='utf-8')
+            self.update(downloadName=download_name)
             self.engine.prepare(lambda message: self.update(message=message), self.cancel.is_set)
             if self.cancel.is_set():
                 raise ValueError("Stopped before generation")
@@ -150,7 +188,7 @@ def make_handler(studio):
         def log_message(self, *args):
             pass  # Keep the session token out of access logs.
 
-        def send(self, status, body, content_type="application/json; charset=utf-8", download=False):
+        def send(self, status, body, content_type="application/json; charset=utf-8", download=False, filename="thai-audio.zip"):
             if isinstance(body, dict):
                 body = json.dumps(body, ensure_ascii=False).encode("utf-8")
             self.send_response(status)
@@ -161,7 +199,7 @@ def make_handler(studio):
             self.send_header("Referrer-Policy", "no-referrer")
             self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'")
             if download:
-                self.send_header("Content-Disposition", 'attachment; filename="thai-audio.zip"')
+                self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
             self.end_headers()
             self.wfile.write(body)
 
@@ -189,16 +227,26 @@ def make_handler(studio):
             elif path == "/api/state":
                 self.send(200, studio.snapshot())
             elif path == "/api/config":
-                course_count = course_audio_plan(studio.root)["newRecordings"] if (studio.root / "assets/data/course_v2.json").exists() else 0
+                plans = {scope: studio.course_plan(scope) for scope in ('first-five', 'all')} if (studio.root / "assets/data/course_v2.json").exists() else {}
+                course_count = plans['all']['newRecordings'] if plans else 0
                 self.send(200, {"speakers": SPEAKERS, "phrases": studio.phrases[:5],
-                                "files": len(make_plan(studio.phrases)), "phraseCount": len(studio.phrases), "courseFiles": course_count})
+                                "files": len(make_plan(studio.phrases)), "phraseCount": len(studio.phrases), "courseFiles": course_count,
+                                "settings": studio.settings(),
+                                "existingFiles": len(json.loads((studio.root / "assets/data/thai_audio_manifest.json").read_text(encoding='utf-8'))['entries']) if (studio.root / "assets/data/thai_audio_manifest.json").exists() else 0,
+                                "courseScopes": {scope: {"files": plan['newRecordings'],
+                                  "sampleFiles": course_sample(plan)['newRecordings'],
+                                  "unitIds": plan.get('unitIds', [])} for scope, plan in plans.items()}})
             elif re.fullmatch(r"/(audio|download)/[a-f0-9]{32}", path):
                 kind, job = path.strip("/").split("/")
                 file = studio.work / "jobs" / job / ("preview.mp3" if kind == "audio" else "audio.zip")
                 if not file.is_file():
                     self.send(404, {"error": "File is not ready"})
                     return
-                self.send(200, file.read_bytes(), "audio/mpeg" if kind == "audio" else "application/zip", kind == "download")
+                name_path = file.parent / 'download-name.txt'
+                name = name_path.read_text(encoding='utf-8') if name_path.is_file() else 'thai-audio.zip'
+                if not re.fullmatch(r'thai-[a-z0-9-]+\.zip', name):
+                    name = 'thai-audio.zip'
+                self.send(200, file.read_bytes(), "audio/mpeg" if kind == "audio" else "application/zip", kind == "download", name)
             else:
                 self.send(404, {"error": "Not found"})
 

@@ -5,7 +5,7 @@
 <script defer src="/ui.js?token=__TOKEN__"></script></head>
 <body><main>
 <header><a class="brand" href="#">ก<span>THAI AUDIO STUDIO<small>Thai for Myanmar · Local edition</small></span></a><span class="badge">● No card · No API key</span></header>
-<section class="hero"><p class="eyebrow">YOUR WORDS. YOUR AUDIO.</p><h1>ထိုင်းအသံ ထုတ်ရတာ<br><em>လွယ်သွားပါပြီ။</em></h1><p>အသံစမ်းနားထောင်ပါ။ ကြိုက်တဲ့ voice ကိုရွေးပါ။<br>စကားစုအားလုံးကို MP3 နဲ့ ထုတ်ယူပါ။</p><div class="stats"><span><b id="phraseCount">502</b> စကားစု</span><span><b id="fileCount">990</b> audio files</span><span><b>CPU</b> သင့်စက်မှာ အလုပ်လုပ်မည်</span></div></section>
+<section class="hero"><p class="eyebrow">YOUR WORDS. YOUR AUDIO.</p><h1>ထိုင်းအသံ ထုတ်ရတာ<br><em>လွယ်သွားပါပြီ။</em></h1><p>အသံစမ်းနားထောင်ပါ။ ကြိုက်တဲ့ voice ကိုရွေးပါ။<br>စကားစုအားလုံးကို MP3 နဲ့ ထုတ်ယူပါ။</p><div class="stats"><span><b id="phraseCount">502</b> အရင်စကားစု</span><span><b id="fileCount">990</b> app ထဲရှိပြီးသား အသံ</span><span><b>CPU</b> သင့်စက်မှာ အလုပ်လုပ်မည်</span></div></section>
 <div class="grid">
 <section class="card"><div class="cardhead"><span class="number">01</span><div><h2>အသံရွေးပြီး စမ်းပါ</h2><p>Choose your voices</p></div></div>
 <div class="fields"><label>အမျိုးသားအသံ<select id="male"></select></label><label>အမျိုးသမီးအသံ<select id="female"></select></label></div>
@@ -16,12 +16,17 @@
 <audio id="player" controls hidden aria-label="Generated Thai preview"></audio>
 <p class="hint">ပထမဆုံးအသုံးပြုချိန် model 330 MB ခန့် download လုပ်ပါမယ်။ Voice နာမည်တွေက model author ရဲ့ description ဖြစ်ပါတယ်။</p></section>
 <section class="card"><div class="cardhead"><span class="number">02</span><div><h2>MP3 ဖိုင်တွေ ထုတ်ယူပါ</h2><p>Generate your audio pack</p></div></div>
+<p class="hint">အရင်ထည့်ထားတဲ့ အသံ <b id="existingCount">990</b> ဖိုင်ကို ပြန်ထုတ်ဖို့ မလိုပါ။ အောက်မှာ လိုနေသေးတဲ့ သင်ရိုးအသံတွေကိုပဲ ထုတ်ပါ။</p>
+<label>အသံထုတ်မယ့် သင်ခန်းစာ<select id="scope"><option value="first-five">ယူနစ် ၁–၅ · အရင်ထုတ်မယ်</option><option value="all">ယူနစ် ၁–၂၆ · သင်ရိုးအားလုံး</option></select></label>
+<div class="pack"><span class="packicon">♪</span><div><h3>သင်ရိုးအသံ နမူနာစမ်းမယ်</h3><p>အသံအသစ် <span id="courseSampleCount">…</span> ဖိုင် · စကားလုံးနဲ့ ဝါကျ<br>Male / female နှစ်မျိုးနားထောင်စစ်ပါ။</p></div><button id="course-sample" class="secondary">နမူနာ ထုတ်မယ်</button></div>
+<div class="pack all"><span class="packicon">♫</span><div><h3>လိုနေတဲ့ သင်ရိုးအသံ ထုတ်မယ်</h3><p>အသံအသစ် <span id="courseCount">…</span> ဖိုင်သာ ထုတ်မယ်။<br>အရင်အသံဖိုင်တွေကို မပြောင်းပါ။</p></div><button id="course" class="primary">သင်ရိုးအသံ ထုတ်မယ်</button></div>
+<details><summary>အရင် စကားစု ၉၉၀ ဖိုင်ကို ပြန်ထုတ်ရန်သာ</summary>
 <div class="pack"><span class="packicon">♪</span><div><h3>အရင် နမူနာစမ်းမယ်</h3><p>စကားစု ၅ ခု · လက်ရှိ ၉ ဖိုင်<br>အသံစစ်ပြီးမှ အားလုံးထုတ်ပါ။</p></div><button id="sample" class="secondary">Sample ထုတ်မယ်</button></div>
 <div class="pack all"><span class="packicon">↗</span><div><h3>စကားစုအားလုံး</h3><p>Male / female form အလိုက် ခွဲထုတ်မယ်။<br>စာသားနဲ့ကိုက်တဲ့ app manifest ပါမယ်။</p></div><button id="all" class="primary">အားလုံးထုတ်မယ်</button></div>
-<div class="pack"><span class="packicon">♫</span><div><h3>သင်ရိုးအသစ် အသံများ</h3><p>လိုနေသေးတဲ့ အသံ <span id="courseCount">…</span> ဖိုင်သာ ထုတ်မယ်။<br>အသံဟောင်းတွေကို မပြောင်းပါ။</p></div><button id="course" class="primary">သင်ရိုးအသံ ထုတ်မယ်</button></div>
+</details>
 <p class="hint">အချိန်က သင့် CPU ပေါ်မူတည်ပါတယ်။ Browser tab နဲ့ launcher window ကို ဖွင့်ထားပါ။ ပြီးသားဖိုင်တွေကို နောက်တစ်ကြိမ် ပြန်သုံးနိုင်ပါတယ်။</p>
-<div class="statusbox" aria-live="polite"><div class="statushead"><b id="statusLabel">အဆင်သင့်ပါ</b><span id="counter">0 / 0</span></div><progress id="progress" max="1" value="0"></progress><p id="message">အရင် အသံစမ်းနားထောင်ပါ။</p><button id="stop" class="quiet" disabled>ရပ်မယ် · Stop</button></div>
-<a id="download" class="download" hidden>↓ Audio ZIP download</a>
+<div class="statusbox" aria-live="polite"><div class="statushead"><b id="statusLabel">အဆင်သင့်ပါ</b><span id="counter">0 / 0</span></div><progress id="progress" max="1" value="0"></progress><p id="activeSettings"></p><p id="message">အရင် အသံစမ်းနားထောင်ပါ။</p><button id="stop" class="quiet" disabled>ရပ်မယ် · Stop</button></div>
+<a id="download" class="download" hidden download>↓ Audio ZIP download</a>
 <p id="partial" class="hint" hidden>မပြီးသေးတဲ့ ZIP ဖြစ်ပါတယ်။ generation-report.json ကို စစ်ပါ။</p>
 </section></div>
 <footer><p>အသံဖိုင်ထုတ်ခြင်းက သင့်စက်ထဲမှာပဲ အလုပ်လုပ်ပါတယ်။ Cloud synthesis မခေါ်ပါ။<br>ထွက်လာတဲ့အသံတွေကို နားထောင်စစ်ပြီးမှ public app ထဲ ထည့်ပါ။ ဒီ tool က app ကို အလိုအလျောက်မပြင်ပါ။</p><button id="shutdown" class="quiet">Studio ပိတ်မယ်</button></footer>
