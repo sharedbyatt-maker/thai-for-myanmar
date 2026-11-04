@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../learning/course_catalog.dart';
 import '../learning/course_insights.dart';
-import '../learning/unit_one_practice.dart';
+import '../learning/course_practice.dart';
 import 'course_outcomes.dart';
 import '../data/phrase_repository.dart';
 import 'learn_support.dart';
@@ -276,7 +276,7 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
               count: insights.dueItems,
               resuming:
                   (progress.cursors[_currentId] ?? 0) > 0 ||
-                  UnitOnePractice.steps(currentUnit, currentLesson).any(
+                  CoursePractice.steps(currentUnit, currentLesson).any(
                     (s) =>
                         s['pilotKey'] != null &&
                         s['pilotKey'] == progress.stepBookmarks[_currentId],
