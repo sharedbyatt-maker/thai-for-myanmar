@@ -183,7 +183,11 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       } else if (_kind == 'gap') {
         final ids = {
           _gapAnswer!,
-          if (_step['gapAlternatives'] is List)
+          if (_step['gapAlternateLine'] is String)
+            widget.course.lines[_step['gapAlternateLine']]!.parts(
+              _style,
+            )[_step['gapAlternatePart'] as int]
+          else if (_step['gapAlternatives'] is List)
             ...List<String>.from(_step['gapAlternatives'] as List)
           else if (_step['gapDistractorIndices'] is List)
             for (final index in _step['gapDistractorIndices'] as List)
@@ -486,7 +490,10 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     final line = _line!;
     return [
       Text(
-        _step['instruction'] as String? ?? 'နာမည်အသစ်နဲ့ အပိုင်းတစ်ခု ဖြည့်ပါ',
+        _step['instruction'] as String? ??
+            (_kind == 'situation'
+                ? line.scene
+                : 'နာမည်အသစ်နဲ့ အပိုင်းတစ်ခု ဖြည့်ပါ'),
         style: Theme.of(context).textTheme.titleLarge,
       ),
       const SizedBox(height: 12),

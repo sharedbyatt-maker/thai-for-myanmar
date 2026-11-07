@@ -26,14 +26,14 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test(
-    'only Units 2–5 change; authored content, Unit 1, later units and all old cursors survive',
+    'released Unit 1 and Units 2–5 retain their original steps and cursors',
     () {
       final before = jsonEncode(course.units.map((u) => u.data).toList());
       var changed = 0;
-      for (final unit in course.units) {
+      for (final unit in course.units.take(5)) {
         for (final lesson in unit.lessons) {
           final steps = CoursePractice.steps(unit, lesson);
-          if (unit.id == 'u01' || int.parse(unit.id.substring(1)) > 5) {
+          if (unit.id == 'u01') {
             expect(steps, UnitOnePractice.steps(unit, lesson));
             continue;
           }
@@ -87,6 +87,54 @@ void main() {
       expect(jsonEncode(course.units.map((u) => u.data).toList()), before);
     },
   );
+
+  test('later units reuse known lines and preserve every base position', () {
+    final earlier = course.units.take(5).expand((u) => u.models).toSet();
+    for (final unit in course.units.skip(5)) {
+      final kinds = <String>{};
+      for (final lesson in unit.lessons) {
+        final steps = CoursePractice.steps(unit, lesson);
+        kinds.addAll(steps.map((s) => s['kind'] as String));
+        for (final (i, original) in lesson.steps.indexed) {
+          final resumed = steps[CoursePractice.resumeIndex(steps, i, 'old')];
+          expect(resumed['baseIndex'], i);
+          expect(resumed['original'], true);
+          expect(
+            resumed['kind'],
+            original['kind'] == 'dialogue' ? 'reply' : original['kind'],
+          );
+        }
+        for (final (i, step) in steps.indexed) {
+          final base = step['baseIndex'] as int;
+          final bookmark = step['pilotKey'] as String;
+          expect(CoursePractice.resumeIndex(steps, base, bookmark), i);
+          if (bookmark == 'connected-v1:prior-situation') {
+            expect(earlier, contains(step['line']));
+            expect(step['instruction'], isNotEmpty);
+          }
+          if (step['kind'] == 'gap') {
+            for (final style in ['male', 'female']) {
+              final answer = course.lines[step['line']]!.parts(style);
+              final alternate = course.lines[step['gapAlternateLine']]!.parts(
+                style,
+              );
+              expect(
+                course.lines[answer[step['gapIndex'] as int]]!.myFor(style),
+                isNot(
+                  course.lines[alternate[step['gapAlternatePart'] as int]]!
+                      .myFor(style),
+                ),
+              );
+            }
+          }
+        }
+      }
+      expect(kinds, containsAll(['choice', 'gap', 'reply', 'situation']));
+      final checkpoint = CoursePractice.steps(unit, unit.lessons.last);
+      expect(checkpoint.where((s) => s['kind'] == 'situation'), hasLength(2));
+      earlier.addAll(unit.models);
+    }
+  });
 
   test(
     'new step bookmarks round trip alongside old Unit 1 data and clear on finish',
@@ -288,6 +336,37 @@ void main() {
       );
     }
   }
+
+  testWidgets(
+    'Unit 6 checkpoint resumes at a Unit 4 request in a new context',
+    (t) async {
+      final unit = course.units[5], lesson = unit.lessons.last;
+      final steps = CoursePractice.steps(unit, lesson);
+      final index = steps.indexWhere(
+        (step) => step['pilotKey'] == 'connected-v1:prior-situation',
+      );
+      final step = steps[index];
+      final seed = AppState();
+      await seed.load();
+      seed.learning.course.cursors[lesson.id] = step['baseIndex'] as int;
+      seed.learning.course.stepBookmarks[lesson.id] =
+          step['pilotKey'] as String;
+      await seed.saveCourse();
+
+      final state = await open(t, 5, unit.lessons.length - 1);
+      expect(find.text(step['instruction'] as String), findsOneWidget);
+      await tap(t, find.byKey(const ValueKey('course-option-c2_u04_05')));
+      await next(t);
+      final event = state.learning.course.events.single;
+      expect(event['correct'], true);
+      expect(event['assisted'], true);
+      expect(event['listened'], false);
+      expect(state.learning.course.memory, isEmpty);
+      await next(t);
+      expect(find.text('${index + 2} / ${steps.length}'), findsOneWidget);
+      expect(t.takeException(), isNull);
+    },
+  );
 
   for (final dark in [false, true]) {
     testWidgets(

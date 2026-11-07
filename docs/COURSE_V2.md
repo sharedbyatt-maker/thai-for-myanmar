@@ -1,4 +1,4 @@
-# Connected Learn course, with audio intentionally deferred
+# Connected Learn course
 
 The primary Learn tab now uses the authored course-v2.1: 26 units in six sections,
 178 lessons and 402 utterance/chunk records. It replaces the five-phrase category
@@ -69,7 +69,19 @@ namespaced. Malformed optional course entries do not erase legacy progress.
 The last 600 course events are retained as bounded diagnostics, not a research
 or speech dataset. A production curriculum change must version lesson identity.
 
-## Deferred audio pack — no generation was run for this release
+## Guided practice and remaining audio
+
+Units 1–5 have guided vocabulary checks, gaps, dialogue replies and scenarios.
+Units 6–26 build on that structure with word checks, a substitution gap, two
+guided replies and two checkpoint scenarios. One scenario reuses a model from a
+specific earlier unit. For example, Unit 6 reuses Unit 4’s rice request after a
+bottled-water order. These are supported exercises. The day-one and day-seven
+reviews use different models from the same unit.
+
+The first five units now bundle all 101 required bindings. The imported pack
+added 79 MP3 files and 102 exact bindings, including aliases elsewhere in the
+course. The original phrase pack retains its 990 files. Human listening review
+is still pending.
 
 Run from the repository root:
 
@@ -77,11 +89,10 @@ Run from the repository root:
     python3 tool/validate_course_v2.py
     python3 tool/course_audio_plan.py --output docs/audio/course-v2-required.json
 
-The checked-in deterministic plan currently contains 535 required bindings,
-53 existing exact bindings, and 482 missing bindings grouped into **426 unique
-recordings**. A binding is not necessarily a distinct MP3: aliases reuse an
-identical text/form recording. This is the full 26-unit inventory, not the
-previous first-unit-only estimate. Adding/editing lessons changes these counts.
+The checked-in deterministic plan contains 535 required bindings, 155 already
+resolved, and 380 missing bindings grouped into **347 unique recordings**. A
+binding is not necessarily a distinct MP3: aliases reuse identical text and form.
+Adding or editing course text can change these counts.
 
 Finish language/exercise text review before generating. Later, download the
 current repository on Windows, open `Start_Audio_Studio.bat`, choose the preferred

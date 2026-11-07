@@ -90,6 +90,13 @@ void main() {
       )?['probeStage'],
       1,
     );
+    expect(
+      course.dueUnitProbe(
+        progress,
+        start.add(const Duration(days: 1)),
+      )?['line'],
+      course.units.first.models.first,
+    );
     progress.probeStages['u01'] = 1;
     final restored = CourseProgress.fromJson(
       jsonDecode(jsonEncode(progress.toJson())),
@@ -104,6 +111,13 @@ void main() {
         start.add(const Duration(days: 7)),
       )?['probeStage'],
       2,
+    );
+    expect(
+      course.dueUnitProbe(
+        restored,
+        start.add(const Duration(days: 7)),
+      )?['line'],
+      course.units.first.models.last,
     );
     restored.probeStages['u01'] = 2;
     expect(

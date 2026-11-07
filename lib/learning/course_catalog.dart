@@ -118,7 +118,7 @@ class CourseCatalog {
       }
       return {
         'kind': 'choice',
-        'line': unit.models.last,
+        'line': stage == 0 ? unit.models.first : unit.models.last,
         'review': true,
         'probeUnit': unit.id,
         'probeStage': stage + 1,
