@@ -114,7 +114,8 @@ class CourseProgress {
         if (row.key is String &&
             row.value is String &&
             ((row.value as String).startsWith('u01-practice-v1:') ||
-                (row.value as String).startsWith('u02-u05-practice-v1:')) &&
+                (row.value as String).startsWith('u02-u05-practice-v1:') ||
+                (row.value as String).startsWith('connected-v1:')) &&
             (row.value as String).length < 100) {
           result.stepBookmarks[row.key as String] = row.value as String;
         }
