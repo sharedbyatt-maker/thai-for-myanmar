@@ -1,17 +1,20 @@
+import 'connected_practice.dart';
 import 'course_catalog.dart';
 import 'unit_one_practice.dart';
 
-/// Additive practice in Units 2–5; the released Unit 1 overlay is unchanged.
+/// Guided practice over the authored course, retaining released step bookmarks.
 class CoursePractice {
   static const revision = 'u02-u05-practice-v1';
   static const _units = {'u02', 'u03', 'u04', 'u05'};
   static bool enabled(CourseUnit unit) =>
-      UnitOnePractice.enabled(unit) || _units.contains(unit.id);
+      UnitOnePractice.enabled(unit) ||
+      _units.contains(unit.id) ||
+      ConnectedPractice.enabled(unit);
 
   static String teachingTip(CourseUnit unit, String lineId) =>
       UnitOnePractice.enabled(unit)
       ? UnitOnePractice.teachingTip(lineId)
-      : _units.contains(unit.id)
+      : enabled(unit)
       ? unit.tips
       : '';
 
@@ -50,6 +53,9 @@ class CoursePractice {
     CourseUnit unit,
     CourseLesson lesson,
   ) {
+    if (ConnectedPractice.enabled(unit)) {
+      return ConnectedPractice.steps(unit, lesson);
+    }
     if (!_units.contains(unit.id)) return UnitOnePractice.steps(unit, lesson);
     final original = lesson.steps;
     final models = unit.models;
