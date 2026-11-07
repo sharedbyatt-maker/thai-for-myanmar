@@ -36,6 +36,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
   late final String _style;
   late final List<Map<String, dynamic>> _steps;
   int _index = 0, _generation = 0, _attempts = 0, _replays = 0;
+  int _partRequest = 0;
   bool _heard = false,
       _busy = false,
       _text = false,
@@ -204,6 +205,29 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     }
   }
 
+  Future<void> _playBuildPart(CourseLine part) async {
+    final phrase = part.phrase(_style);
+    final volume = widget.appState.audioVolume;
+    if (_busy ||
+        _moving ||
+        volume == 0 ||
+        !widget.playbackService.hasBundledAudio(phrase, _style)) {
+      return;
+    }
+    final generation = _generation;
+    final request = ++_partRequest;
+    await widget.playbackService.setVolume(volume);
+    if (!mounted ||
+        _moving ||
+        generation != _generation ||
+        request != _partRequest) {
+      return;
+    }
+    // Use the shared player's latest-request cancellation without setting
+    // listening evidence or blocking another chip selection.
+    await widget.playbackService.playThai(phrase, _style);
+  }
+
   Future<void> _play(CourseLine line) async {
     if (_busy ||
         widget.appState.audioVolume == 0 ||
@@ -211,6 +235,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       return;
     }
     final generation = _generation;
+    _partRequest++;
     setState(() => _busy = true);
     await widget.playbackService.setVolume(widget.appState.audioVolume);
     if (!mounted || generation != _generation) return;
@@ -597,6 +622,10 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
   @override
   Widget build(BuildContext context) {
     final line = _line;
+    final parts = _kind == 'build' ? line!.parts(_style) : const <String>[];
+    CourseLine part(int i) => widget.course.lines[parts[i]]!;
+    Text partLabel(int i) =>
+        Text(_showThai ? part(i).thai(_style) : part(i).my);
     final interactive = _needsSelection || _kind == 'build';
     return Scaffold(
       appBar: AppBar(
@@ -836,20 +865,12 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                         const Text('ဒီနေရာမှာ ဝါကျဖွဲ့မယ်'),
                                       for (final i in _selectedParts)
                                         InputChip(
-                                          label: Text(
-                                            _showThai
-                                                ? widget
-                                                      .course
-                                                      .lines[line.parts(
-                                                        _style,
-                                                      )[i]]!
-                                                      .thai(_style)
-                                                : widget
-                                                      .course
-                                                      .lines[line.parts(
-                                                        _style,
-                                                      )[i]]!
-                                                      .my,
+                                          key: ValueKey(
+                                            'course-selected-part-$i',
+                                          ),
+                                          label: partLabel(i),
+                                          onPressed: () => unawaited(
+                                            _playBuildPart(part(i)),
                                           ),
                                           onDeleted: _answered
                                               ? null
@@ -870,24 +891,19 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                   for (final i in _order)
                                     ActionChip(
                                       key: ValueKey('course-part-$i'),
-                                      label: Text(
-                                        _showThai
-                                            ? widget
-                                                  .course
-                                                  .lines[line.parts(_style)[i]]!
-                                                  .thai(_style)
-                                            : widget
-                                                  .course
-                                                  .lines[line.parts(_style)[i]]!
-                                                  .my,
-                                      ),
+                                      label: partLabel(i),
                                       onPressed:
                                           _answered ||
                                               _selectedParts.contains(i)
                                           ? null
-                                          : () => setState(
-                                              () => _selectedParts.add(i),
-                                            ),
+                                          : () {
+                                              setState(
+                                                () => _selectedParts.add(i),
+                                              );
+                                              unawaited(
+                                                _playBuildPart(part(i)),
+                                              );
+                                            },
                                     ),
                                 ],
                               ),
