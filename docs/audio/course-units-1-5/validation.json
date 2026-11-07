@@ -1,0 +1,607 @@
+{
+  "sourceZipSha256": "5e8abda399bd33a6f46d72ca6d3d940f7702255cd75145466c02865afdcc148b",
+  "sourceCourseSha256": "624e010a37ab25772f8df3aaf6abde9a193afcd832a8689df223408271700dc4",
+  "unitIds": [
+    "u01",
+    "u02",
+    "u03",
+    "u04",
+    "u05"
+  ],
+  "newFiles": 79,
+  "newBindings": 85,
+  "previousBindings": 16,
+  "unitBindings": 101,
+  "decodedFiles": 79,
+  "humanListeningReview": "pending",
+  "engine": {
+    "model": "kunato/wayu-kokoro-thai-v1",
+    "revision": "abf63dc118365bea784fa881bdd1dce4b2cc1fd4",
+    "licenseDeclaration": "Apache-2.0 (model-card declaration)",
+    "humanListeningReview": "pending",
+    "maleSpeaker": 9,
+    "femaleSpeaker": 2,
+    "speed": 1
+  },
+  "files": [
+    {
+      "asset": "audio/thai/c2_u01_03_female_0d0abf66a49a5b3a.mp3",
+      "sha256": "25ace0f031c18f6cf7c781b92a34deca1c72c85d6e884e28d310286e8dff2ab9",
+      "bytes": 24960,
+      "seconds": 1.56
+    },
+    {
+      "asset": "audio/thai/c2_u01_03_male_e5af0dae98955328.mp3",
+      "sha256": "fb8e1f1a9fc85bf1127d57f8700d2a7ec8fd2fb79a66b26cd9ba281314f17362",
+      "bytes": 22656,
+      "seconds": 1.416
+    },
+    {
+      "asset": "audio/thai/c2_u01_05_female_33ec6278af2c2b03.mp3",
+      "sha256": "20a24daefd9253995b21d6aa6f5e0c8f12ce4877675a7bb1f29b1e516827de58",
+      "bytes": 24192,
+      "seconds": 1.512
+    },
+    {
+      "asset": "audio/thai/c2_u01_05_male_e299ba768c9e530e.mp3",
+      "sha256": "c2047ea2b280f6693303c602b27549211d3d389604c035b682dd2493ebf52840",
+      "bytes": 22272,
+      "seconds": 1.392
+    },
+    {
+      "asset": "audio/thai/c2_u02_03_female_22df24df23df61d4.mp3",
+      "sha256": "6ff0d9abd16197e4fbc467a4c941872cba2698bceaf8a1e668a898cd445ca358",
+      "bytes": 23808,
+      "seconds": 1.488
+    },
+    {
+      "asset": "audio/thai/c2_u02_03_male_3731822a0c32256a.mp3",
+      "sha256": "129eb4f7bb025f7be44575ccc1c769ac1637358afb15e3c020d1177338cc74bb",
+      "bytes": 24576,
+      "seconds": 1.536
+    },
+    {
+      "asset": "audio/thai/c2_u02_04_female_d819f3620ab0b589.mp3",
+      "sha256": "4157aaaf89eb2f32e8eaa45b6f6126f0398194af0ab9eaef4c15176696cbedef",
+      "bytes": 32640,
+      "seconds": 2.04
+    },
+    {
+      "asset": "audio/thai/c2_u02_04_male_4f5b8a788dcbe34f.mp3",
+      "sha256": "805cc8a93efa2462b20c1d285b4ae680992b9bb424eca962accfb494ee0d5635",
+      "bytes": 31104,
+      "seconds": 1.944
+    },
+    {
+      "asset": "audio/thai/c2_u02_05_female_e15cf31327092693.mp3",
+      "sha256": "d8bc1dc7779aef3d7e20c36638e0345850debc707dcffa7e1d279c243f6f18d3",
+      "bytes": 32256,
+      "seconds": 2.016
+    },
+    {
+      "asset": "audio/thai/c2_u02_05_male_af98afe219f42ae8.mp3",
+      "sha256": "b089421c2b671f979cfcf88c6ed10dec7cbd967af31e51ef7f10994e08d4e2c8",
+      "bytes": 31104,
+      "seconds": 1.944
+    },
+    {
+      "asset": "audio/thai/c2_u03_01_female_4a2741c546fb75b0.mp3",
+      "sha256": "7d418058ebda36daaf36322d1784220335fdb595406cc41fb2d8a4d87f089f8f",
+      "bytes": 23424,
+      "seconds": 1.464
+    },
+    {
+      "asset": "audio/thai/c2_u03_01_male_d216bc77d1fac984.mp3",
+      "sha256": "1740e13325dbeae8080c3fe6c74e4bc3fd1d66ee12a58c2e8545f299f4c0a22e",
+      "bytes": 24960,
+      "seconds": 1.56
+    },
+    {
+      "asset": "audio/thai/c2_u03_03_female_31fab0a250cb39f6.mp3",
+      "sha256": "754ecd7e93842d5b021e5ea2dcd2c225f7bbbae5188cf1e257afbe55f7d19786",
+      "bytes": 31872,
+      "seconds": 1.992
+    },
+    {
+      "asset": "audio/thai/c2_u03_03_male_a22d36dee8b48eba.mp3",
+      "sha256": "eac9038b92196102a55ec2a67aad3d13807615cab9a1c8310d4796d201fe6932",
+      "bytes": 31488,
+      "seconds": 1.968
+    },
+    {
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3",
+      "sha256": "0466e92d5745c5ad17c78f4980982bc4cd2166cfd60ec6c0ac535f7e76110a6b",
+      "bytes": 15360,
+      "seconds": 0.96
+    },
+    {
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3",
+      "sha256": "b08ced186297a8bedb2f2b24e94747feafc607240a4340a95dd8bce460871982",
+      "bytes": 14592,
+      "seconds": 0.912
+    },
+    {
+      "asset": "audio/thai/c2_u04_01_female_8760b98bbf21f196.mp3",
+      "sha256": "6091ead182051ac0cf785f6c3222b958eb393009575306f3e7084ba7a289c4ad",
+      "bytes": 22656,
+      "seconds": 1.416
+    },
+    {
+      "asset": "audio/thai/c2_u04_01_male_b4ef1beb96fcdd79.mp3",
+      "sha256": "ece1c1f8a26f5c5a53721ee412bbfcc1f1d322a83060d459c1a9b5ef76c18e43",
+      "bytes": 22656,
+      "seconds": 1.416
+    },
+    {
+      "asset": "audio/thai/c2_u04_02_female_7a4cd1ae7a74e683.mp3",
+      "sha256": "e10de8f4afe27d97409a457e7448a554b6eb97d0eb4160a43e805725103011b5",
+      "bytes": 19584,
+      "seconds": 1.224
+    },
+    {
+      "asset": "audio/thai/c2_u04_02_male_a76fe0807942ed5d.mp3",
+      "sha256": "ffbe7bfd997665aa875b1f4f86f929d7f2a8649344a840ad9ce26ea1483ea914",
+      "bytes": 19968,
+      "seconds": 1.248
+    },
+    {
+      "asset": "audio/thai/c2_u04_03_female_7455411b2044e34f.mp3",
+      "sha256": "62a8a312d0e3402c02cb01e3ef6e2643562d352f30d72a538ed4627b6a636f5a",
+      "bytes": 23040,
+      "seconds": 1.44
+    },
+    {
+      "asset": "audio/thai/c2_u04_03_male_26da01279726dad2.mp3",
+      "sha256": "d7b5ca7e9282a95c044ac4c34feaa1f6b08cd6953adb4b6631fb12a00c4f6134",
+      "bytes": 23040,
+      "seconds": 1.44
+    },
+    {
+      "asset": "audio/thai/c2_u04_04_female_be7d2fdd243ef370.mp3",
+      "sha256": "7ae826e0047a8040bfc1ccfc1a973dc0f12f6ff5fbee01e989e8c24a5813b59e",
+      "bytes": 23808,
+      "seconds": 1.488
+    },
+    {
+      "asset": "audio/thai/c2_u04_04_male_042cb47b6d12a374.mp3",
+      "sha256": "2c49a4f29c0b287eb04490c0a80418ca2ea2f7691fb54109c9b9008f61bc9a97",
+      "bytes": 23040,
+      "seconds": 1.44
+    },
+    {
+      "asset": "audio/thai/c2_u04_05_female_11cdcf9118bb995b.mp3",
+      "sha256": "66351ecd8719d32cf16ffa9c92ad7eb3c85463b81bfc1d7367c183227cadb573",
+      "bytes": 20736,
+      "seconds": 1.296
+    },
+    {
+      "asset": "audio/thai/c2_u04_05_male_d8fc4fd42a61b152.mp3",
+      "sha256": "e19f8565627d6639069677beae28f55a395e0d674af14961d4faadeb94dcb85e",
+      "bytes": 19200,
+      "seconds": 1.2
+    },
+    {
+      "asset": "audio/thai/c2_u05_01_female_685ef7c8b6f4b012.mp3",
+      "sha256": "1a998f714db60ec7bba4fd86d82d0de41fa9994a492bb817c4c4913dd37ea8d9",
+      "bytes": 33024,
+      "seconds": 2.064
+    },
+    {
+      "asset": "audio/thai/c2_u05_01_male_8f6075b04c5dd817.mp3",
+      "sha256": "0679001da385fc5f3bf0d118e3dc4d655c3c4ff3cbd43f94a2d7ed03cf74ddc8",
+      "bytes": 32256,
+      "seconds": 2.016
+    },
+    {
+      "asset": "audio/thai/c2_u05_02_female_b1953d36a7a96f18.mp3",
+      "sha256": "b19dd3fa058c25b89cff7be2995771ce83b88231e22c503558130ebb768bb048",
+      "bytes": 26112,
+      "seconds": 1.632
+    },
+    {
+      "asset": "audio/thai/c2_u05_02_male_9f40a540a401f7ac.mp3",
+      "sha256": "422ae66ca0498d3198b7f1ced8bff9ba648b1977da17acbee6b2cdd60479dbd0",
+      "bytes": 26496,
+      "seconds": 1.656
+    },
+    {
+      "asset": "audio/thai/c2_u05_03_female_945a73c364b623e0.mp3",
+      "sha256": "4e32165f8927c01419dc1b7addb5332361fe48b3a93e24cc71087a35b08b1779",
+      "bytes": 26496,
+      "seconds": 1.656
+    },
+    {
+      "asset": "audio/thai/c2_u05_03_male_d11af2e9aedefe0d.mp3",
+      "sha256": "5ab19de43374e405990fc1f0b966493ffba6ca8fbc11750d2b5ba05a7dc7bdd3",
+      "bytes": 27264,
+      "seconds": 1.704
+    },
+    {
+      "asset": "audio/thai/c2_u05_05_female_3fe0fd3222e0372e.mp3",
+      "sha256": "d7b6cb3e28562e957222105328ba681343cafab1f8bf334f5945df315fb70072",
+      "bytes": 24576,
+      "seconds": 1.536
+    },
+    {
+      "asset": "audio/thai/c2_u05_05_male_c9160f9e8a082619.mp3",
+      "sha256": "6341a2b4a364383e8c02d38d0fb701cc7adb93ad5f75064c11d36a56fe3bd06c",
+      "bytes": 23808,
+      "seconds": 1.488
+    },
+    {
+      "asset": "audio/thai/c2_w_19eee6e4ebe1_shared_b3ba8d7d0149778b.mp3",
+      "sha256": "334c8fec65a14f4df51fa0b212145bd057c499d717468f445a3f2b3f9fd39558",
+      "bytes": 17664,
+      "seconds": 1.104
+    },
+    {
+      "asset": "audio/thai/c2_w_2341ccdc2185_shared_ee8c2cf7d711b143.mp3",
+      "sha256": "1760198372cd27def9c916fbe988b6f3a3f738e7f18fa04088d6e74bc1ad31f7",
+      "bytes": 18432,
+      "seconds": 1.152
+    },
+    {
+      "asset": "audio/thai/c2_w_2ac4ef7537ab_shared_41f4ab5836e3f3a8.mp3",
+      "sha256": "d24bc255ea0b3e7eb282c1edc65f6b2f310dced4b35b1b9bbff04c2a9629a7bc",
+      "bytes": 9984,
+      "seconds": 0.624
+    },
+    {
+      "asset": "audio/thai/c2_w_2bf79f2dc7be_shared_aa849db6ad7b63fb.mp3",
+      "sha256": "fd02d17e31fd4f15c9e5832128864a29ecfb901e6abec1c5fb583b260b0dfeb2",
+      "bytes": 15744,
+      "seconds": 0.984
+    },
+    {
+      "asset": "audio/thai/c2_w_34080cd54fa5_shared_7bd9b803d0932a8b.mp3",
+      "sha256": "395633549921b27710f7d5136f6fa7d42568895469725c98b4f1706f2b8dca7c",
+      "bytes": 12672,
+      "seconds": 0.792
+    },
+    {
+      "asset": "audio/thai/c2_w_3f888e65dc9f_shared_76792d54a10e1315.mp3",
+      "sha256": "f6be2942d4c670a742012ead457ee679776dccf6877d953a1158ce81c710f9e4",
+      "bytes": 15360,
+      "seconds": 0.96
+    },
+    {
+      "asset": "audio/thai/c2_w_440ad7637541_shared_5ae2674f1e3fd0e7.mp3",
+      "sha256": "efe6ceb6d34b164b610ce712b9cf2aa45e957ef0180f86ab575ceffa43fd0a03",
+      "bytes": 13824,
+      "seconds": 0.864
+    },
+    {
+      "asset": "audio/thai/c2_w_476f51749842_shared_f3960cd62d10a001.mp3",
+      "sha256": "c2409dd937123f3fe7f05817815db0eacb2495e48b467ad7343277c93b67be53",
+      "bytes": 15744,
+      "seconds": 0.984
+    },
+    {
+      "asset": "audio/thai/c2_w_4d80a50902ab_shared_8652d04bbe13f7e7.mp3",
+      "sha256": "c2f5d82b2859a29d3816b3f597f416cb7fdbae76765a0ba00169d4b232d904ad",
+      "bytes": 16512,
+      "seconds": 1.032
+    },
+    {
+      "asset": "audio/thai/c2_w_4dd9e038335d_shared_cc4aa598bf38b9ed.mp3",
+      "sha256": "0d00653d30d0b73fff0c9721bd67e98e091280bf7ee761ac8748f16e4579fb5b",
+      "bytes": 13440,
+      "seconds": 0.84
+    },
+    {
+      "asset": "audio/thai/c2_w_4f6908c93cb3_shared_3f662d2582f6eaf6.mp3",
+      "sha256": "c07ef1246e32b4ead1117d3d0b53aa8e837cce1de5ab97212391a8a09118ae29",
+      "bytes": 17280,
+      "seconds": 1.08
+    },
+    {
+      "asset": "audio/thai/c2_w_51b2cd4ece91_shared_7d12442e39bcba0f.mp3",
+      "sha256": "e62601b59a3e990e0cb714805a2e4cf69b0142ac2a2325eb9d5b8f761e27230b",
+      "bytes": 11520,
+      "seconds": 0.72
+    },
+    {
+      "asset": "audio/thai/c2_w_5634585f91a7_shared_619e9b11706a873e.mp3",
+      "sha256": "a44aa298ccb3bf692795db94f954de3af3a25e2483801ceeb149d466cb14deea",
+      "bytes": 14592,
+      "seconds": 0.912
+    },
+    {
+      "asset": "audio/thai/c2_w_65215d7ecd0c_shared_aae6aa5c01294622.mp3",
+      "sha256": "87252484e968f0e34c9ee8712f95d73bc079d5512ea1e5c0769b815d24037987",
+      "bytes": 16896,
+      "seconds": 1.056
+    },
+    {
+      "asset": "audio/thai/c2_w_6a1935835881_shared_5c21276b363c0b6c.mp3",
+      "sha256": "16824ff6d45aa6744b8e9627f128a60738029132c34aae7cca925adaea24e9eb",
+      "bytes": 14208,
+      "seconds": 0.888
+    },
+    {
+      "asset": "audio/thai/c2_w_70450f6834da_shared_1d06bef9bfb3fd29.mp3",
+      "sha256": "0437a816c07d0b72c5e5df05ae74877e6bff67387cef7cbd93164afd9581293a",
+      "bytes": 11904,
+      "seconds": 0.744
+    },
+    {
+      "asset": "audio/thai/c2_w_86cf5c9a49d7_shared_3a1f543f96299786.mp3",
+      "sha256": "b0eef5d95b692569b04187a8c003175324abc9ced6558c9de0df2700fc3b5af9",
+      "bytes": 15360,
+      "seconds": 0.96
+    },
+    {
+      "asset": "audio/thai/c2_w_8e50b1e34e51_shared_8aee8e0473cf5d1c.mp3",
+      "sha256": "44b6f5129a16cbc6197e4217ce617c4a0ed63d31dba40dc0d80f9d5053e209d5",
+      "bytes": 13056,
+      "seconds": 0.816
+    },
+    {
+      "asset": "audio/thai/c2_w_96d1fa73f6f3_shared_c3f7d28dc136d104.mp3",
+      "sha256": "7f782727adcbbd24289e6fe9f8b94e3f787cfa186a23c4c016d367e5613c96e6",
+      "bytes": 17664,
+      "seconds": 1.104
+    },
+    {
+      "asset": "audio/thai/c2_w_986dbf052d9e_shared_5ce2d231b056f4cf.mp3",
+      "sha256": "ef52694620afc4d53765f52ad641272a0be7bccf0d4739a6490358555815fceb",
+      "bytes": 16128,
+      "seconds": 1.008
+    },
+    {
+      "asset": "audio/thai/c2_w_98c87233d884_shared_d4ac9e9f7e46d963.mp3",
+      "sha256": "9261e1c452753572a1685aafc4d01092e3c64d6549acf14eba5823223638abff",
+      "bytes": 17280,
+      "seconds": 1.08
+    },
+    {
+      "asset": "audio/thai/c2_w_a175e10c1ecd_shared_fefd1522bfa715c7.mp3",
+      "sha256": "a78487933a565f6ebef5bed28af98c9866e8b45e5a3d51c3f065aca0a6b93e9c",
+      "bytes": 14592,
+      "seconds": 0.912
+    },
+    {
+      "asset": "audio/thai/c2_w_a36ac9a27aa0_shared_ba7fee96e4e82fd7.mp3",
+      "sha256": "a6ca5ce6eb1b0ab64245cd4918cc0276f63c3fc549ce99d636992a1c3a1a51ac",
+      "bytes": 13824,
+      "seconds": 0.864
+    },
+    {
+      "asset": "audio/thai/c2_w_a579f058c936_shared_5f7a5f74709c4d80.mp3",
+      "sha256": "778f0082fc288628be2c0ae7d693f6b3eef8cc6b7b6fdf3994b45e4d8183a323",
+      "bytes": 11136,
+      "seconds": 0.696
+    },
+    {
+      "asset": "audio/thai/c2_w_a5f0489be117_shared_132192059025fffe.mp3",
+      "sha256": "40b5d63665f2e1d611ec44262a0adec490bda501731fd5b9780d23998a1fc413",
+      "bytes": 17280,
+      "seconds": 1.08
+    },
+    {
+      "asset": "audio/thai/c2_w_a953bdf3d91d_shared_223aa210fa53d050.mp3",
+      "sha256": "27c5899f8dc4c69617653031fbc70ff3151921287430f46917b118b296ceba2e",
+      "bytes": 12672,
+      "seconds": 0.792
+    },
+    {
+      "asset": "audio/thai/c2_w_b02c16019b32_shared_b811b172bb881753.mp3",
+      "sha256": "ccf9f3facd49f9fc56143d81305754a01a9bede23734a0df11818a60f9a046b4",
+      "bytes": 13056,
+      "seconds": 0.816
+    },
+    {
+      "asset": "audio/thai/c2_w_b0b410de7096_shared_239892f48b12c82f.mp3",
+      "sha256": "d1e4febcfa2f6e618316452f74c5399849fe12e5e8014758e60140b004ca0c83",
+      "bytes": 12672,
+      "seconds": 0.792
+    },
+    {
+      "asset": "audio/thai/c2_w_bc5335a946ea_shared_39dc5631eba1c7a8.mp3",
+      "sha256": "4b78216e3972477398267145ae18002cea5e63850b6514ba586eaefb72038f8b",
+      "bytes": 21120,
+      "seconds": 1.32
+    },
+    {
+      "asset": "audio/thai/c2_w_c0db4c88743d_shared_c65ef816bba0c910.mp3",
+      "sha256": "1c0ec32f339f29866b48d80f78ae7f2c4c102df477bbd0e09e83bd435b2a02c1",
+      "bytes": 13824,
+      "seconds": 0.864
+    },
+    {
+      "asset": "audio/thai/c2_w_c0ffcad7fc79_shared_d3eca2df466833e0.mp3",
+      "sha256": "2c6319ced2aad1fa695b2563ddf7f3f9fcdc25c7d263409fba92574347824ab9",
+      "bytes": 15744,
+      "seconds": 0.984
+    },
+    {
+      "asset": "audio/thai/c2_w_c13bf5e3db75_shared_1f840d0dfcc96f2c.mp3",
+      "sha256": "ff003bea1f4bb764b5ab0790f1f81339d5f649e509cd3049041d7804cda03cf8",
+      "bytes": 12288,
+      "seconds": 0.768
+    },
+    {
+      "asset": "audio/thai/c2_w_c59f91fee2c2_shared_38b10676440d43f2.mp3",
+      "sha256": "b97b42271f637ff8db144aae71335973c8f69f596d5a0c8cbaf259859ecee966",
+      "bytes": 21888,
+      "seconds": 1.368
+    },
+    {
+      "asset": "audio/thai/c2_w_c6301ed7cf50_shared_8043dd7eca822c93.mp3",
+      "sha256": "21be768f0fce176d31d8dd1e3015ab0cce603257adb684d1505e18a4f36ac328",
+      "bytes": 16128,
+      "seconds": 1.008
+    },
+    {
+      "asset": "audio/thai/c2_w_c6b37d8ef5fc_shared_1ffaa144544e8e62.mp3",
+      "sha256": "fd035a956fc30d6d6965a4ceb870770ace3921f82a856fa9a8167d4924d1527e",
+      "bytes": 11136,
+      "seconds": 0.696
+    },
+    {
+      "asset": "audio/thai/c2_w_c7f7ed66b94f_shared_f9abec583bb202b1.mp3",
+      "sha256": "22106602bd7884ada425417d26bfb25c022d113f261e258036cc7d6a7ea8c900",
+      "bytes": 13440,
+      "seconds": 0.84
+    },
+    {
+      "asset": "audio/thai/c2_w_cbc68b72752a_shared_1ac061670240c324.mp3",
+      "sha256": "ee0a7e17fa22c1db08f68604f6eada8f6f8c28262da5c2d2d27764d0419b73e9",
+      "bytes": 13440,
+      "seconds": 0.84
+    },
+    {
+      "asset": "audio/thai/c2_w_ccbbd01dc9a6_shared_a246248e1ef575ba.mp3",
+      "sha256": "b95ea4bda9d1622c015617666a4e3abb57485909475ad4de7ac8ad690f63da37",
+      "bytes": 14208,
+      "seconds": 0.888
+    },
+    {
+      "asset": "audio/thai/c2_w_d06eb7887210_shared_30832374267199e4.mp3",
+      "sha256": "9cb9304356039679df48d2c26c25bdc2f10cf0be20cfda3981fe327c9a40bec0",
+      "bytes": 17664,
+      "seconds": 1.104
+    },
+    {
+      "asset": "audio/thai/c2_w_d1b98c83cd4e_shared_b08bedb4183b25b8.mp3",
+      "sha256": "6c7179e93ecb75079aec15bead5f86a419a6f02188accb95d5c34b499f688f62",
+      "bytes": 16896,
+      "seconds": 1.056
+    },
+    {
+      "asset": "audio/thai/c2_w_d69e67f3ed4f_shared_b611ef8b5a6c5c43.mp3",
+      "sha256": "9ac6a109688ff929bb3e23131e5e2641a234cab0dd63c2094ed7b1c255983015",
+      "bytes": 14208,
+      "seconds": 0.888
+    },
+    {
+      "asset": "audio/thai/c2_w_f39e8e823d21_shared_4f0c9c28a311e4e3.mp3",
+      "sha256": "be70bac6f2cd3bed0015e6fbeb8b8ec86262d41cd0257d8775149f643aec684d",
+      "bytes": 11520,
+      "seconds": 0.72
+    },
+    {
+      "asset": "audio/thai/c2_w_f40da9b0d15a_shared_e9f7b2af5eedaadb.mp3",
+      "sha256": "2d59cf4ed5d295f4d5bb983bac6db04cbf6d3e7033765e6acebe40baf5ca94d8",
+      "bytes": 15360,
+      "seconds": 0.96
+    },
+    {
+      "asset": "audio/thai/c2_w_f7f0b19f80ef_shared_83fb926355037b01.mp3",
+      "sha256": "f71c3e041159201b57a752452aa9baecebf099cbffe363aa62a8e242ebda6222",
+      "bytes": 10368,
+      "seconds": 0.648
+    },
+    {
+      "asset": "audio/thai/c2_w_fa43b89ded79_shared_82623b90f45695b6.mp3",
+      "sha256": "516b70a4ab468fbf3077f2e07b0e8fc75d4daf03c204e7bc014c36a6f99e4c4c",
+      "bytes": 15360,
+      "seconds": 0.96
+    }
+  ],
+  "additionalExactTextAliases": [
+    {
+      "phraseId": "c2_u09_02",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u12_04",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u15_04",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u18_02",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u20_04",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u22_02",
+      "form": "female",
+      "thai": "ได้ค่ะ",
+      "asset": "audio/thai/c2_u03_04_female_a1a2c5d62e7108ec.mp3"
+    },
+    {
+      "phraseId": "c2_u09_02",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u12_04",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u15_04",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u18_02",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u20_04",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u22_02",
+      "form": "male",
+      "thai": "ได้ครับ",
+      "asset": "audio/thai/c2_u03_04_male_ca57e04046390886.mp3"
+    },
+    {
+      "phraseId": "c2_u22_03",
+      "form": "female",
+      "thai": "เข้าใจไหมคะ",
+      "asset": "audio/thai/c2_u03_01_female_4a2741c546fb75b0.mp3"
+    },
+    {
+      "phraseId": "c2_u22_03",
+      "form": "male",
+      "thai": "เข้าใจไหมครับ",
+      "asset": "audio/thai/c2_u03_01_male_d216bc77d1fac984.mp3"
+    },
+    {
+      "phraseId": "c2_w_17591fc78184",
+      "form": "shared",
+      "thai": "อยู่",
+      "asset": "audio/thai/c2_w_70450f6834da_shared_1d06bef9bfb3fd29.mp3"
+    },
+    {
+      "phraseId": "c2_w_4bfd5e4bda58",
+      "form": "shared",
+      "thai": "ขอ",
+      "asset": "audio/thai/c2_w_c0db4c88743d_shared_c65ef816bba0c910.mp3"
+    },
+    {
+      "phraseId": "c2_w_0155290e7651",
+      "form": "shared",
+      "thai": "ขอ",
+      "asset": "audio/thai/c2_w_c0db4c88743d_shared_c65ef816bba0c910.mp3"
+    }
+  ],
+  "totalImportedBindings": 102
+}

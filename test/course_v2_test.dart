@@ -34,6 +34,44 @@ void main() {
     audio = await ThaiAudioCatalog.load(rootBundle);
   });
   setUp(() => SharedPreferences.setMockInitialValues({}));
+  test(
+    'Units 1–5 models, words and spoken parts resolve to bundled MP3s in both styles',
+    () async {
+      final ids = <String>{};
+      for (final unit in course.units.take(5)) {
+        ids.addAll(unit.models);
+        ids.addAll(List<String>.from(unit.data['words'] as List));
+        for (final lesson in unit.lessons) {
+          for (final step in lesson.steps) {
+            if (step['line'] is String) {
+              ids.add(step['line'] as String);
+            }
+            ids.addAll(List<String>.from(step['lines'] as List? ?? []));
+          }
+        }
+      }
+      final pending = ids.toList();
+      while (pending.isNotEmpty) {
+        final line = course.lines[pending.removeLast()]!;
+        for (final style in ['male', 'female']) {
+          for (final part in line.parts(style)) {
+            if (ids.add(part)) {
+              pending.add(part);
+            }
+          }
+        }
+      }
+      for (final id in ids) {
+        for (final style in ['male', 'female']) {
+          final entry = audio.match(course.lines[id]!.phrase(style), style);
+          expect(entry, isNotNull, reason: '$id/$style');
+          final bytes = await rootBundle.load('assets/${entry!.assetPath}');
+          expect(bytes.lengthInBytes, greaterThan(100), reason: '$id/$style');
+        }
+      }
+    },
+  );
+
   test('unit probes respect day and week boundaries and survive reload', () {
     final progress = CourseProgress();
     final start = DateTime.utc(2026, 10, 1);
@@ -140,7 +178,7 @@ void main() {
       }
       final intro = course.lines['c2_u01_03']!;
       expect(intro.thai('male'), 'ผมชื่อเอกครับ');
-      expect(audio.match(intro.phrase('male'), 'male'), isNull);
+      expect(audio.match(intro.phrase('male'), 'male'), isNotNull);
       expect(
         audio.match(course.lines['c2_u01_01']!.phrase('female'), 'female'),
         isNotNull,
@@ -726,7 +764,7 @@ void main() {
   });
 
   testWidgets(
-    'new named models stay audio-pending and aided construction works at 2x text',
+    'missing-audio fallback and aided named construction work at 2x text',
     (t) async {
       t.view.physicalSize = const Size(320, 760);
       t.view.devicePixelRatio = 1;
@@ -734,7 +772,7 @@ void main() {
       addTearDown(t.view.resetDevicePixelRatio);
       t.view.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(t.view.platformDispatcher.clearTextScaleFactorTestValue);
-      final state = await show(t, lesson: 1, catalog: audio);
+      final state = await show(t, lesson: 1, catalog: ThaiAudioCatalog.empty());
       expect(find.text('အသံထည့်ရန် ကျန်'), findsOneWidget);
       await primary(t);
       final model = course.lines['c2_u01_03']!;

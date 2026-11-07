@@ -1,0 +1,5 @@
+Thai Kokoro: https://huggingface.co/kunato/wayu-kokoro-thai-v1
+Revision: abf63dc118365bea784fa881bdd1dce4b2cc1fd4
+Model-card license: Apache-2.0.
+Generated locally. Human listening review and source/voice rights review remain pending.
+This tool does not import or publish audio automatically.

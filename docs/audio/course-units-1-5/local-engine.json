@@ -1,0 +1,9 @@
+{
+  "model": "kunato/wayu-kokoro-thai-v1",
+  "revision": "abf63dc118365bea784fa881bdd1dce4b2cc1fd4",
+  "licenseDeclaration": "Apache-2.0 (model-card declaration)",
+  "humanListeningReview": "pending",
+  "maleSpeaker": 9,
+  "femaleSpeaker": 2,
+  "speed": 1
+}

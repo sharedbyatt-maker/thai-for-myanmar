@@ -1,4 +1,5 @@
 import importlib.util
+import shutil
 import json
 from pathlib import Path
 import sys
@@ -89,7 +90,13 @@ class StudioTests(unittest.TestCase):
             self.assertEqual(json.loads(z.read('course-source.json'))['newRecordings'], 1)
 
     def test_real_first_five_sample_full_resume_and_settings_without_synthesis_network(self):
-        root = Path(__file__).resolve().parents[2]
+        source_root = Path(__file__).resolve().parents[2]
+        root = self.root / 'unrecorded'
+        data = root / 'assets/data'
+        data.mkdir(parents=True)
+        for name in ('phrases.json', 'phrase_categories.json', 'course_v2.json', 'thai_audio_manifest.json'):
+            (data / name).write_bytes((source_root / 'assets/data' / name).read_bytes())
+        (data / 'course_audio_manifest.json').write_text('{"schemaVersion":1,"entries":[]}')
         calls = []
         class Recording(FakeEngine):
             def synthesize(self, text, speaker, speed):
@@ -158,7 +165,7 @@ class StudioTests(unittest.TestCase):
         from package_audio_studio import package, ROOT, FILES
         path = self.root / 'windows.zip'
         snapshot = package(ROOT, path)
-        self.assertEqual(snapshot['newRecordings'], 79)
+        self.assertEqual(snapshot['newRecordings'], 0)
         import hashlib
         with zipfile.ZipFile(path) as z:
             prefix = 'Thai_Audio_Studio_Units_1-5/'

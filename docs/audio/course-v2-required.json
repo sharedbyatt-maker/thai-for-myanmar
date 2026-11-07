@@ -5,440 +5,10 @@
   "status": "audio-deferred",
   "humanListeningReview": "pending",
   "requiredBindings": 535,
-  "reusedBindings": 53,
-  "missingBindings": 482,
-  "newRecordings": 426,
+  "reusedBindings": 155,
+  "missingBindings": 380,
+  "newRecordings": 347,
   "requests": [
-    {
-      "phraseId": "c2_u01_03",
-      "form": "female",
-      "thai": "ฉันชื่อมาลีค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u01_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u01_03",
-      "form": "male",
-      "thai": "ผมชื่อเอกครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u01_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u01_05",
-      "form": "female",
-      "thai": "ฉันชื่อนิดาค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u01_05",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u01_05",
-      "form": "male",
-      "thai": "ผมชื่อต้นครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u01_05",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_03",
-      "form": "female",
-      "thai": "คุณอยู่ที่ไหนคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_03",
-      "form": "male",
-      "thai": "คุณอยู่ที่ไหนครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_04",
-      "form": "female",
-      "thai": "ฉันอยู่ที่ประเทศไทยค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_04",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_04",
-      "form": "male",
-      "thai": "ผมอยู่ที่ประเทศไทยครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_04",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_05",
-      "form": "female",
-      "thai": "ฉันมาจากประเทศไทยค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_05",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u02_05",
-      "form": "male",
-      "thai": "ผมมาจากประเทศไทยครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u02_05",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_01",
-      "form": "female",
-      "thai": "เข้าใจไหมคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_01",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u22_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_01",
-      "form": "male",
-      "thai": "เข้าใจไหมครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_01",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u22_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_03",
-      "form": "female",
-      "thai": "ช่วยพูดช้าๆได้ไหมคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_03",
-      "form": "male",
-      "thai": "ช่วยพูดช้าๆได้ไหมครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_04",
-      "form": "female",
-      "thai": "ได้ค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_04",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u09_02",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u12_04",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u15_04",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u18_02",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u20_04",
-          "form": "female"
-        },
-        {
-          "phraseId": "c2_u22_02",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u03_04",
-      "form": "male",
-      "thai": "ได้ครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u03_04",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u09_02",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u12_04",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u15_04",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u18_02",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u20_04",
-          "form": "male"
-        },
-        {
-          "phraseId": "c2_u22_02",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_01",
-      "form": "female",
-      "thai": "เอาอะไรคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_01",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_01",
-      "form": "male",
-      "thai": "เอาอะไรครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_01",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_02",
-      "form": "female",
-      "thai": "ขอน้ำค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_02",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_02",
-      "form": "male",
-      "thai": "ขอน้ำครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_02",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_03",
-      "form": "female",
-      "thai": "เอาชาไหมคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_03",
-      "form": "male",
-      "thai": "เอาชาไหมครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_04",
-      "form": "female",
-      "thai": "ไม่เอาชาค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_04",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_04",
-      "form": "male",
-      "thai": "ไม่เอาชาครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_04",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_05",
-      "form": "female",
-      "thai": "ขอข้าวค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_05",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u04_05",
-      "form": "male",
-      "thai": "ขอข้าวครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u04_05",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_01",
-      "form": "female",
-      "thai": "เอากาแฟร้อนหรือเย็นคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_01",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_01",
-      "form": "male",
-      "thai": "เอากาแฟร้อนหรือเย็นครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_01",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_02",
-      "form": "female",
-      "thai": "ขอกาแฟเย็นค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_02",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_02",
-      "form": "male",
-      "thai": "ขอกาแฟเย็นครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_02",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_03",
-      "form": "female",
-      "thai": "ใส่น้ำตาลไหมคะ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_03",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_03",
-      "form": "male",
-      "thai": "ใส่น้ำตาลไหมครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_03",
-          "form": "male"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_05",
-      "form": "female",
-      "thai": "ขอชาร้อนค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_05",
-          "form": "female"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_u05_05",
-      "form": "male",
-      "thai": "ขอชาร้อนครับ",
-      "targets": [
-        {
-          "phraseId": "c2_u05_05",
-          "form": "male"
-        }
-      ]
-    },
     {
       "phraseId": "c2_u06_01",
       "form": "female",
@@ -2590,17 +2160,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_19eee6e4ebe1",
-      "form": "shared",
-      "thai": "น้ำตาล",
-      "targets": [
-        {
-          "phraseId": "c2_w_19eee6e4ebe1",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_1feb960e2732",
       "form": "shared",
       "thai": "หรือยัง",
@@ -2622,17 +2181,6 @@
       "targets": [
         {
           "phraseId": "c2_w_210710b5cd46",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_2341ccdc2185",
-      "form": "shared",
-      "thai": "ช้าๆ",
-      "targets": [
-        {
-          "phraseId": "c2_w_2341ccdc2185",
           "form": "shared"
         }
       ]
@@ -2693,38 +2241,12 @@
       ]
     },
     {
-      "phraseId": "c2_w_2ac4ef7537ab",
-      "form": "shared",
-      "thai": "เผ็ด",
-      "targets": [
-        {
-          "phraseId": "c2_w_2ac4ef7537ab",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_2b5ab8c5161a",
       "form": "shared",
       "thai": "อันนั้น",
       "targets": [
         {
           "phraseId": "c2_w_2b5ab8c5161a",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_2bf79f2dc7be",
-      "form": "shared",
-      "thai": "ช่วย",
-      "targets": [
-        {
-          "phraseId": "c2_w_2bf79f2dc7be",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_2e538aca4832",
           "form": "shared"
         }
       ]
@@ -2773,17 +2295,6 @@
       "targets": [
         {
           "phraseId": "c2_w_33892053f604",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_34080cd54fa5",
-      "form": "shared",
-      "thai": "ฉัน",
-      "targets": [
-        {
-          "phraseId": "c2_w_34080cd54fa5",
           "form": "shared"
         }
       ]
@@ -2863,17 +2374,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_3f888e65dc9f",
-      "form": "shared",
-      "thai": "ขอบคุณ",
-      "targets": [
-        {
-          "phraseId": "c2_w_3f888e65dc9f",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_40bd4b85cc43",
       "form": "shared",
       "thai": "ซ้าย",
@@ -2918,21 +2418,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_440ad7637541",
-      "form": "shared",
-      "thai": "ชื่อ",
-      "targets": [
-        {
-          "phraseId": "c2_w_440ad7637541",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_b593b8bda7a9",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_452811ca42cc",
       "form": "shared",
       "thai": "ใคร",
@@ -2950,21 +2435,6 @@
       "targets": [
         {
           "phraseId": "c2_w_46bad44ff4d8",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_476f51749842",
-      "form": "shared",
-      "thai": "ที่ไหน",
-      "targets": [
-        {
-          "phraseId": "c2_w_476f51749842",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_83c127abd091",
           "form": "shared"
         }
       ]
@@ -3022,28 +2492,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_4d80a50902ab",
-      "form": "shared",
-      "thai": "ไม่ใส่",
-      "targets": [
-        {
-          "phraseId": "c2_w_4d80a50902ab",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_4dd9e038335d",
-      "form": "shared",
-      "thai": "ผม",
-      "targets": [
-        {
-          "phraseId": "c2_w_4dd9e038335d",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_4e84ec988199",
       "form": "shared",
       "thai": "อาการ",
@@ -3061,17 +2509,6 @@
       "targets": [
         {
           "phraseId": "c2_w_4f609b96b3a4",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_4f6908c93cb3",
-      "form": "shared",
-      "thai": "สวัสดี",
-      "targets": [
-        {
-          "phraseId": "c2_w_4f6908c93cb3",
           "form": "shared"
         }
       ]
@@ -3125,17 +2562,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_51b2cd4ece91",
-      "form": "shared",
-      "thai": "คะ",
-      "targets": [
-        {
-          "phraseId": "c2_w_51b2cd4ece91",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_520db3803760",
       "form": "shared",
       "thai": "ทำไม",
@@ -3153,17 +2579,6 @@
       "targets": [
         {
           "phraseId": "c2_w_521d5a0981a8",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_5634585f91a7",
-      "form": "shared",
-      "thai": "ชา",
-      "targets": [
-        {
-          "phraseId": "c2_w_5634585f91a7",
           "form": "shared"
         }
       ]
@@ -3294,17 +2709,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_65215d7ecd0c",
-      "form": "shared",
-      "thai": "ไม่เอา",
-      "targets": [
-        {
-          "phraseId": "c2_w_65215d7ecd0c",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_66eebaf3f1e8",
       "form": "shared",
       "thai": "ค่าไฟ",
@@ -3368,17 +2772,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_6a1935835881",
-      "form": "shared",
-      "thai": "ที่",
-      "targets": [
-        {
-          "phraseId": "c2_w_6a1935835881",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_6ba07ece9157",
       "form": "shared",
       "thai": "อยาก",
@@ -3396,21 +2789,6 @@
       "targets": [
         {
           "phraseId": "c2_w_6fb8146a21eb",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_70450f6834da",
-      "form": "shared",
-      "thai": "อยู่",
-      "targets": [
-        {
-          "phraseId": "c2_w_70450f6834da",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_17591fc78184",
           "form": "shared"
         }
       ]
@@ -3626,17 +3004,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_86cf5c9a49d7",
-      "form": "shared",
-      "thai": "ร้อน",
-      "targets": [
-        {
-          "phraseId": "c2_w_86cf5c9a49d7",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_8715899c04c8",
       "form": "shared",
       "thai": "แล้ว",
@@ -3685,17 +3052,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_8e50b1e34e51",
-      "form": "shared",
-      "thai": "ต้น",
-      "targets": [
-        {
-          "phraseId": "c2_w_8e50b1e34e51",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_92fa6d845b6d",
       "form": "shared",
       "thai": "พ่อ",
@@ -3728,17 +3084,6 @@
       "targets": [
         {
           "phraseId": "c2_w_9633f6efc90c",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_96d1fa73f6f3",
-      "form": "shared",
-      "thai": "เมียนมา",
-      "targets": [
-        {
-          "phraseId": "c2_w_96d1fa73f6f3",
           "form": "shared"
         }
       ]
@@ -3781,17 +3126,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_986dbf052d9e",
-      "form": "shared",
-      "thai": "กาแฟ",
-      "targets": [
-        {
-          "phraseId": "c2_w_986dbf052d9e",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_98a2c8fbb0dd",
       "form": "shared",
       "thai": "เคยไป",
@@ -3802,17 +3136,6 @@
         },
         {
           "phraseId": "c2_w_3693aa021421",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_98c87233d884",
-      "form": "shared",
-      "thai": "ได้ไหม",
-      "targets": [
-        {
-          "phraseId": "c2_w_98c87233d884",
           "form": "shared"
         }
       ]
@@ -3895,34 +3218,12 @@
       ]
     },
     {
-      "phraseId": "c2_w_a175e10c1ecd",
-      "form": "shared",
-      "thai": "อีกครั้ง",
-      "targets": [
-        {
-          "phraseId": "c2_w_a175e10c1ecd",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_a184584fd06e",
       "form": "shared",
       "thai": "สามพัน",
       "targets": [
         {
           "phraseId": "c2_w_a184584fd06e",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_a36ac9a27aa0",
-      "form": "shared",
-      "thai": "เย็น",
-      "targets": [
-        {
-          "phraseId": "c2_w_a36ac9a27aa0",
           "form": "shared"
         }
       ]
@@ -3965,28 +3266,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_a579f058c936",
-      "form": "shared",
-      "thai": "คุณ",
-      "targets": [
-        {
-          "phraseId": "c2_w_a579f058c936",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_a5f0489be117",
-      "form": "shared",
-      "thai": "อยู่ที่",
-      "targets": [
-        {
-          "phraseId": "c2_w_a5f0489be117",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_a87bc6019024",
       "form": "shared",
       "thai": "ให้หน่อย",
@@ -4004,21 +3283,6 @@
       "targets": [
         {
           "phraseId": "c2_w_a8ce074944e6",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_a953bdf3d91d",
-      "form": "shared",
-      "thai": "พูด",
-      "targets": [
-        {
-          "phraseId": "c2_w_a953bdf3d91d",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_c709954e509c",
           "form": "shared"
         }
       ]
@@ -4061,17 +3325,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_b02c16019b32",
-      "form": "shared",
-      "thai": "เอา",
-      "targets": [
-        {
-          "phraseId": "c2_w_b02c16019b32",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_b053320ced1b",
       "form": "shared",
       "thai": "เมื่อไร",
@@ -4093,17 +3346,6 @@
         },
         {
           "phraseId": "c2_w_ec60bcd44903",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_b0b410de7096",
-      "form": "shared",
-      "thai": "ใส่",
-      "targets": [
-        {
-          "phraseId": "c2_w_b0b410de7096",
           "form": "shared"
         }
       ]
@@ -4212,17 +3454,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_bc5335a946ea",
-      "form": "shared",
-      "thai": "ประเทศไทย",
-      "targets": [
-        {
-          "phraseId": "c2_w_bc5335a946ea",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_bd284b5e34d3",
       "form": "shared",
       "thai": "เคาน์เตอร์",
@@ -4245,47 +3476,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_c0db4c88743d",
-      "form": "shared",
-      "thai": "ขอ",
-      "targets": [
-        {
-          "phraseId": "c2_w_c0db4c88743d",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_4bfd5e4bda58",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_0155290e7651",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c0ffcad7fc79",
-      "form": "shared",
-      "thai": "นิดา",
-      "targets": [
-        {
-          "phraseId": "c2_w_c0ffcad7fc79",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c13bf5e3db75",
-      "form": "shared",
-      "thai": "ค่ะ",
-      "targets": [
-        {
-          "phraseId": "c2_w_c13bf5e3db75",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_c1704ef65a06",
       "form": "shared",
       "thai": "รอ",
@@ -4303,50 +3493,6 @@
       "targets": [
         {
           "phraseId": "c2_w_c2a734306c0c",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c59f91fee2c2",
-      "form": "shared",
-      "thai": "พูดช้าๆ",
-      "targets": [
-        {
-          "phraseId": "c2_w_c59f91fee2c2",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c6301ed7cf50",
-      "form": "shared",
-      "thai": "อะไร",
-      "targets": [
-        {
-          "phraseId": "c2_w_c6301ed7cf50",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c6b37d8ef5fc",
-      "form": "shared",
-      "thai": "เอก",
-      "targets": [
-        {
-          "phraseId": "c2_w_c6b37d8ef5fc",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_c7f7ed66b94f",
-      "form": "shared",
-      "thai": "ข้าว",
-      "targets": [
-        {
-          "phraseId": "c2_w_c7f7ed66b94f",
           "form": "shared"
         }
       ]
@@ -4393,28 +3539,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_cbc68b72752a",
-      "form": "shared",
-      "thai": "ไม่",
-      "targets": [
-        {
-          "phraseId": "c2_w_cbc68b72752a",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_ccbbd01dc9a6",
-      "form": "shared",
-      "thai": "ไหม",
-      "targets": [
-        {
-          "phraseId": "c2_w_ccbbd01dc9a6",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_cffe7de7d90b",
       "form": "shared",
       "thai": "วันไหน",
@@ -4432,17 +3556,6 @@
       "targets": [
         {
           "phraseId": "c2_w_d00fc6c31efe",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_d06eb7887210",
-      "form": "shared",
-      "thai": "เข้าใจ",
-      "targets": [
-        {
-          "phraseId": "c2_w_d06eb7887210",
           "form": "shared"
         }
       ]
@@ -4474,17 +3587,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_d1b98c83cd4e",
-      "form": "shared",
-      "thai": "มาลี",
-      "targets": [
-        {
-          "phraseId": "c2_w_d1b98c83cd4e",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_d24cc205ded2",
       "form": "shared",
       "thai": "แก้ว",
@@ -4502,21 +3604,6 @@
       "targets": [
         {
           "phraseId": "c2_w_d5ab5fb63485",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_d69e67f3ed4f",
-      "form": "shared",
-      "thai": "มาจาก",
-      "targets": [
-        {
-          "phraseId": "c2_w_d69e67f3ed4f",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_64c70184d63f",
           "form": "shared"
         }
       ]
@@ -4742,28 +3829,6 @@
       ]
     },
     {
-      "phraseId": "c2_w_f39e8e823d21",
-      "form": "shared",
-      "thai": "หรือ",
-      "targets": [
-        {
-          "phraseId": "c2_w_f39e8e823d21",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_f40da9b0d15a",
-      "form": "shared",
-      "thai": "น้ำ",
-      "targets": [
-        {
-          "phraseId": "c2_w_f40da9b0d15a",
-          "form": "shared"
-        }
-      ]
-    },
-    {
       "phraseId": "c2_w_f69fc67bc27d",
       "form": "shared",
       "thai": "ข้างหลัง",
@@ -4796,17 +3861,6 @@
         },
         {
           "phraseId": "c2_w_144522d97a0d",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_f7f0b19f80ef",
-      "form": "shared",
-      "thai": "ครับ",
-      "targets": [
-        {
-          "phraseId": "c2_w_f7f0b19f80ef",
           "form": "shared"
         }
       ]
@@ -4848,21 +3902,6 @@
       "targets": [
         {
           "phraseId": "c2_w_f9ede1d198e5",
-          "form": "shared"
-        }
-      ]
-    },
-    {
-      "phraseId": "c2_w_fa43b89ded79",
-      "form": "shared",
-      "thai": "ได้",
-      "targets": [
-        {
-          "phraseId": "c2_w_fa43b89ded79",
-          "form": "shared"
-        },
-        {
-          "phraseId": "c2_w_19227c0b68f1",
           "form": "shared"
         }
       ]

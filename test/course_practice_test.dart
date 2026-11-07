@@ -131,6 +131,11 @@ void main() {
 
   Future<void> reveal(WidgetTester t, Finder f) async {
     if (f.evaluate().isEmpty) {
+      // A retry can leave a lazily built answer above the current viewport.
+      // Search from the top rather than scrolling farther down past it.
+      final scrollable = find.byType(Scrollable).first;
+      t.state<ScrollableState>(scrollable).position.jumpTo(0);
+      await t.pumpAndSettle();
       await t.scrollUntilVisible(
         f,
         120,
