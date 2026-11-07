@@ -778,6 +778,49 @@ void main() {
   });
 
   testWidgets(
+    'sentence chips play exact parts and replay without listening credit',
+    (t) async {
+      final seed = AppState();
+      await seed.load();
+      final lesson = course.units.first.lessons[1];
+      seed.learning.course.cursors[lesson.id] = lesson.steps.length - 1;
+      await seed.saveCourse();
+
+      final player = _Player(wait: true);
+      final state = await show(t, lesson: 1, catalog: audio, player: player);
+      final parts = course.lines['c2_u01_03']!.parts('female');
+      String asset(int i) => audio
+          .match(course.lines[parts[i]]!.phrase('female'), 'female')!
+          .assetPath;
+
+      await tap(t, find.byKey(const ValueKey('course-part-0')));
+      final first = player.pending!;
+      expect(player.played, [asset(0)]);
+      await tap(t, find.byKey(const ValueKey('course-part-1')));
+      expect(first.isCompleted, true);
+      expect(player.played, [asset(0), asset(1)]);
+
+      await tap(
+        t,
+        find.descendant(
+          of: find.byKey(const ValueKey('course-selected-part-0')),
+          matching: find.byType(Text),
+        ),
+      );
+      expect(player.played, [asset(0), asset(1), asset(0)]);
+      for (var i = 2; i < parts.length; i++) {
+        await tap(t, find.byKey(ValueKey('course-part-$i')));
+      }
+      await primary(t);
+      expect(state.learning.course.events.single['listened'], false);
+      expect(state.learning.course.memory, isEmpty);
+      await primary(t);
+      expect(find.byKey(const ValueKey('course-done')), findsOneWidget);
+      expect(player.pending!.isCompleted, true);
+    },
+  );
+
+  testWidgets(
     'missing-audio fallback and aided named construction work at 2x text',
     (t) async {
       t.view.physicalSize = const Size(320, 760);
@@ -820,11 +863,13 @@ class _Player implements ThaiAudioAssetPlayer {
   _Player({this.wait = false});
   final bool wait;
   Completer<void>? pending;
+  final played = <String>[];
   @override
   Future<void> play(
     String assetPath, {
     required void Function() onStarted,
   }) async {
+    played.add(assetPath);
     onStarted();
     if (wait) {
       pending = Completer<void>();
