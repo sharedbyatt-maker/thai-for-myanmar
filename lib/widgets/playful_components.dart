@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 enum CourseMascotPose {
   study('02_reading_study.webp'),
   celebrate('04_celebrating_star.webp'),
-  speak('11_speaking_mic.webp');
+  speak('11_speaking_mic.webp'),
+  greet('01_greeting_wai.webp'),
+  listen('03_listening_audio.webp'),
+  travel('05_travel_map.webp'),
+  food('06_food_noodles.webp'),
+  shop('07_shopping_market.webp'),
+  work('08_work_clipboard.webp'),
+  think('09_thinking_quiz.webp'),
+  encourage('12_encouraging_heart.webp');
 
   const CourseMascotPose(this.file);
   final String file;
