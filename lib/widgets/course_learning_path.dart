@@ -637,7 +637,10 @@ class CoursePathNode extends StatelessWidget {
                 top: 26,
                 right: dx < 0 ? 24 : null,
                 left: dx < 0 ? null : 24,
-                child: const ElephantBuddy(size: 68),
+                child: const CourseMascot(
+                  pose: CourseMascotPose.study,
+                  size: 68,
+                ),
               ),
             Align(
               alignment: Alignment.topCenter,

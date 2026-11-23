@@ -567,7 +567,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               children: [
                 const Row(
                   children: [
-                    ElephantBuddy(size: 40),
+                    CourseMascot(pose: CourseMascotPose.speak, size: 40),
                     SizedBox(width: 10),
                     Expanded(child: Text('တစ်ဖက်လူ')),
                   ],
@@ -594,7 +594,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       ] else if (_kind == 'situation') ...[
         const Row(
           children: [
-            ElephantBuddy(size: 40),
+            CourseMascot(pose: CourseMascotPose.speak, size: 40),
             SizedBox(width: 10),
             Expanded(child: Text('အခြေအနေအသစ်မှာ သုံးကြည့်မယ်')),
           ],
@@ -1162,7 +1162,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           key: const ValueKey('course-summary-scroll'),
           padding: const EdgeInsets.all(24),
           children: [
-            const Center(child: ElephantBuddy(size: 88)),
+            const Center(
+              child: CourseMascot(pose: CourseMascotPose.celebrate, size: 88),
+            ),
             const SizedBox(height: 16),
             Text(
               'ဒီ lesson လေ့ကျင့်ပြီးပါပြီ',
