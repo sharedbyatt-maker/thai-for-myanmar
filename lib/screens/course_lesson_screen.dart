@@ -395,6 +395,32 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     );
   }
 
+  Widget _thaiWithPronunciation(
+    CourseLine line, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) {
+    final pronunciation = line.romanized(_style);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: textAlign == TextAlign.center
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: [
+        Text(line.thai(_style), style: style, textAlign: textAlign),
+        if (pronunciation.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              pronunciation,
+              textAlign: textAlign,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _lineCard(
     CourseLine line, {
     bool partsOnly = false,
@@ -408,8 +434,8 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           Text(line.scene, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 16),
           if (!partsOnly) ...[
-            Text(
-              line.thai(_style),
+            _thaiWithPronunciation(
+              line,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
@@ -429,7 +455,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                   for (final id in line.parts(_style))
                     ListTile(
                       title: Text(widget.course.lines[id]!.myFor(_style)),
-                      subtitle: Text(widget.course.lines[id]!.thai(_style)),
+                      subtitle: _thaiWithPronunciation(
+                        widget.course.lines[id]!,
+                      ),
                       trailing: IconButton(
                         tooltip: 'အပိုင်းအသံ',
                         onPressed:
@@ -455,8 +483,12 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          '${widget.course.lines[id]!.thai(_style)} · ${widget.course.lines[id]!.my}',
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _thaiWithPronunciation(widget.course.lines[id]!),
+                            Text(widget.course.lines[id]!.my),
+                          ],
                         ),
                       ),
                       IconButton(
@@ -543,7 +575,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                 const SizedBox(height: 8),
                 _audio(_prompt!),
                 if (_text) Text(_prompt!.myFor(_style)),
-                if (_showThai) Text(_prompt!.thai(_style)),
+                if (_showThai) _thaiWithPronunciation(_prompt!),
               ],
             ),
           ),
@@ -610,7 +642,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       if (_answered && (_kind == 'reply' || _kind == 'situation')) ...[
         Text('ကိုယ်ပြန်ပြောမယ့် စကား · ${line.myFor(_style)}'),
         _audio(line),
-        if (_showThai) Text(line.thai(_style)),
+        if (_showThai) _thaiWithPronunciation(line),
       ],
       Text(
         'အကူအညီနဲ့ လေ့ကျင့်မှုပါ။ နားထောင်/စကားပြောကျွမ်းကျင်မှု စစ်ဆေးချက် မဟုတ်ပါ။',
@@ -624,8 +656,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     final line = _line;
     final parts = _kind == 'build' ? line!.parts(_style) : const <String>[];
     CourseLine part(int i) => widget.course.lines[parts[i]]!;
-    Text partLabel(int i) =>
-        Text(_showThai ? part(i).thai(_style) : part(i).my);
+    Widget partLabel(int i) => _showThai
+        ? _thaiWithPronunciation(part(i), textAlign: TextAlign.center)
+        : Text(part(i).my);
     final interactive = _needsSelection || _kind == 'build';
     return Scaffold(
       appBar: AppBar(
@@ -817,8 +850,8 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 16,
                                   ),
-                                  child: Text(
-                                    line.thai(_style),
+                                  child: _thaiWithPronunciation(
+                                    line,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.headlineSmall,
