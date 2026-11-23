@@ -455,7 +455,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                   for (final id in line.parts(_style))
                     ListTile(
                       title: Text(widget.course.lines[id]!.myFor(_style)),
-                      subtitle: _thaiWithPronunciation(widget.course.lines[id]!),
+                      subtitle: _thaiWithPronunciation(
+                        widget.course.lines[id]!,
+                      ),
                       trailing: IconButton(
                         tooltip: 'အပိုင်းအသံ',
                         onPressed:
