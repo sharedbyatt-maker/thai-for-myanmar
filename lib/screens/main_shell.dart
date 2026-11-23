@@ -6,6 +6,8 @@ import 'package:app_links/app_links.dart';
 
 import '../data/phrase_repository.dart';
 import '../widgets/content_frame.dart';
+import '../widgets/remote_notices.dart';
+import '../services/ad_slot.dart';
 import '../widgets/playful_components.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
@@ -250,10 +252,23 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     ),
                   ),
                   const VerticalDivider(width: 1),
-                  Expanded(child: content),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const RemoteNotices(),
+                        Expanded(child: content),
+                      ],
+                    ),
+                  ),
                 ],
               )
-            : content,
+            : Column(
+                children: [
+                  const RemoteNotices(),
+                  Expanded(child: content),
+                  if (_selectedIndex == 5) const AdBannerSlot(),
+                ],
+              ),
       ),
       bottomNavigationBar: wide
           ? null

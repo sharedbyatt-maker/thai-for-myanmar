@@ -234,7 +234,13 @@ class AudioPlayersThaiAssetPlayer
     );
 
     try {
-      await _player.play(AssetSource(assetPath));
+      final uri = Uri.tryParse(assetPath);
+      final source = switch (uri?.scheme) {
+        'file' => DeviceFileSource(uri!.toFilePath()),
+        'https' => UrlSource(assetPath),
+        _ => AssetSource(assetPath),
+      };
+      await _player.play(source);
       await pending.started.future.timeout(const Duration(seconds: 5));
       pending.throwIfFailed();
       if (pending.cancelled) throw const _AssetPlaybackCancelled();

@@ -6,11 +6,13 @@ import 'data/phrase_repository.dart';
 import 'services/ad_slot.dart';
 import 'services/app_state.dart';
 import 'services/speech_service.dart';
+import 'services/remote_controls.dart';
 import 'services/thai_audio_catalog.dart';
 import 'services/thai_playback_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await RemoteControls.instance.load(rootBundle);
   final repository = await PhraseRepository.load(rootBundle);
   final audioCatalog = await ThaiAudioCatalog.load(rootBundle);
   final appState = AppState();
