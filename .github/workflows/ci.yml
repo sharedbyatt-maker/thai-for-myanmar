@@ -60,6 +60,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.47.5'
           cache: true
 
       - name: Resolve packages
@@ -133,6 +134,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.47.5'
           cache: true
 
       - name: Generate Android platform scaffolding
@@ -266,6 +268,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.47.5'
           cache: true
 
       - name: Generate Web platform scaffolding
