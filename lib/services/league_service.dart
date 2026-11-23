@@ -78,16 +78,6 @@ class LeagueService implements LeagueGateway {
   @override
   Future<void> signOut() => client.auth.signOut();
 
-  bool get canSetAdminPassword =>
-      _client?.auth.currentUser?.appMetadata['chang_thai_admin'] == true;
-
-  Future<void> setAdminPassword(String password) async {
-    if (!canSetAdminPassword || password.length < 16) {
-      throw StateError('Owner password setup is not available');
-    }
-    await client.auth.updateUser(UserAttributes(password: password));
-  }
-
   @override
   Future<void> deleteAccount() async {
     final response = await client.functions

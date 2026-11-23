@@ -19,6 +19,7 @@
     <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
     <button type="submit">ဝင်မယ်</button>
   </form>
+  <button class="quiet" id="owner-setup" type="button">Google နဲ့ owner password သတ်မှတ်မယ်</button>
 </main>
 <div id="workspace" class="workspace" hidden>
   <aside>
@@ -29,6 +30,7 @@
       <button type="button" data-page="lessons">သင်ခန်းစာ</button>
       <button type="button" data-page="announcements">ကြေညာချက်</button>
       <button type="button" data-page="updates">App update</button>
+      <button type="button" data-page="profile">Profile</button>
     </nav>
     <button class="quiet" id="sign-out" type="button">ထွက်မယ်</button>
   </aside>
@@ -92,6 +94,16 @@
         <button id="publish" type="button">Publish</button>
       </footer>
     </form>
+    <section id="profile" hidden>
+      <h2>Change password</h2>
+      <p id="profile-email"></p>
+      <form id="change-password">
+        <label id="current-password-label">လက်ရှိ password<input name="current" type="password" autocomplete="current-password" required></label>
+        <label>Password အသစ်<input name="next" type="password" autocomplete="new-password" minlength="16" required></label>
+        <label>Password အသစ် ပြန်ရိုက်ပါ<input name="confirm" type="password" autocomplete="new-password" minlength="16" required></label>
+        <button type="submit">Password သိမ်းမယ်</button>
+      </form>
+    </section>
   </main>
 </div>
 <p id="status" role="status" aria-live="polite"></p>
