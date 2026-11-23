@@ -1,5 +1,30 @@
 import 'package:flutter/material.dart';
 
+enum CourseMascotPose {
+  study('02_reading_study.webp'),
+  celebrate('04_celebrating_star.webp'),
+  speak('11_speaking_mic.webp');
+
+  const CourseMascotPose(this.file);
+  final String file;
+}
+
+class CourseMascot extends StatelessWidget {
+  const CourseMascot({required this.pose, required this.size, super.key});
+
+  final CourseMascotPose pose;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Image.asset(
+    'assets/images/course_mascots/${pose.file}',
+    width: size,
+    height: size,
+    fit: BoxFit.contain,
+    excludeFromSemantics: true,
+  );
+}
+
 /// Original elephant companion, drawn locally; no remote images or font icons.
 class ElephantBuddy extends StatelessWidget {
   const ElephantBuddy({this.size = 88, super.key});
