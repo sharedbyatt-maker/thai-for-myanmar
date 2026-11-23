@@ -17,7 +17,9 @@ def configure_brand_resources() -> None:
     res = ANDROID / "app/src/main/res"
     shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
     launch_background = """<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="#111431" />
+    <item>
+        <shape><solid android:color="#111431" /></shape>
+    </item>
     <item>
         <bitmap android:gravity="fill" android:src="@drawable/chang_thai_splash" />
     </item>
