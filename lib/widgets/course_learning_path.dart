@@ -639,7 +639,7 @@ class CoursePathNode extends StatelessWidget {
                 left: dx < 0 ? null : 24,
                 child: const CourseMascot(
                   pose: CourseMascotPose.study,
-                  size: 68,
+                  size: 76,
                 ),
               ),
             Align(

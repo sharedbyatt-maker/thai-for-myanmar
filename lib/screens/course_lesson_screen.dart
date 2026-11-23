@@ -567,7 +567,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               children: [
                 const Row(
                   children: [
-                    CourseMascot(pose: CourseMascotPose.speak, size: 40),
+                    CourseMascot(pose: CourseMascotPose.speak, size: 44),
                     SizedBox(width: 10),
                     Expanded(child: Text('တစ်ဖက်လူ')),
                   ],
@@ -594,7 +594,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
       ] else if (_kind == 'situation') ...[
         const Row(
           children: [
-            CourseMascot(pose: CourseMascotPose.speak, size: 40),
+            CourseMascot(pose: CourseMascotPose.speak, size: 44),
             SizedBox(width: 10),
             Expanded(child: Text('အခြေအနေအသစ်မှာ သုံးကြည့်မယ်')),
           ],
@@ -1163,7 +1163,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           padding: const EdgeInsets.all(24),
           children: [
             const Center(
-              child: CourseMascot(pose: CourseMascotPose.celebrate, size: 88),
+              child: CourseMascot(pose: CourseMascotPose.celebrate, size: 96),
             ),
             const SizedBox(height: 16),
             Text(
