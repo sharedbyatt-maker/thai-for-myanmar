@@ -86,7 +86,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'THAI FOR MYANMAR',
+                'Chang Thai',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimary,
                   letterSpacing: 1.5,

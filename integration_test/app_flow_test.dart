@@ -72,7 +72,7 @@ void main() {
       await binding.takeScreenshot('${width.round()}-course-listening');
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
+      await tester.tap(find.byIcon(Icons.chat_bubble_outline_rounded));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-everyday');
       await tester.enterText(
@@ -84,7 +84,7 @@ void main() {
       await binding.takeScreenshot('${width.round()}-inline-search');
       await tester.enterText(find.byKey(const ValueKey('everyday-search')), '');
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.route_rounded));
+      await tester.tap(find.byIcon(Icons.menu_book_outlined));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('home-search')));
       await tester.pumpAndSettle();
@@ -113,7 +113,7 @@ void main() {
           .position
           .jumpTo(0);
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.inventory_2_outlined));
+      await tester.tap(find.byIcon(Icons.task_alt_rounded));
       await tester.pumpAndSettle();
       expect(find.text('ဒီလရဲ့ စိန်ခေါ်မှု'), findsOneWidget);
       await binding.takeScreenshot('${width.round()}-quests');
@@ -121,10 +121,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('သင်ခန်းစာ ဆက်သင်မယ်'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.person_outline_rounded));
+      await tester.tap(find.byIcon(Icons.account_circle_outlined));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-profile');
-      await tester.tap(find.byIcon(Icons.replay_rounded));
+      await tester.tap(find.byIcon(Icons.published_with_changes_rounded));
       await tester.pumpAndSettle();
       await binding.takeScreenshot('${width.round()}-practice');
     });
@@ -533,7 +533,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pageBack();
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.replay_rounded));
+    await tester.tap(find.byIcon(Icons.published_with_changes_rounded));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('scheduled-review')), findsOneWidget);
     expect(find.byKey(const ValueKey('start-scheduled-review')), findsNothing);
@@ -562,7 +562,7 @@ void main() {
     await _pumpUi(tester);
     expect(find.text('သင်ယူ'), findsWidgets);
 
-    await tester.tap(find.byIcon(Icons.record_voice_over_outlined));
+    await tester.tap(find.byIcon(Icons.chat_bubble_outline_rounded));
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
     await tester.scrollUntilVisible(

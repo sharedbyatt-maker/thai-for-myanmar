@@ -25,7 +25,7 @@ def main() -> int:
 
     manifest_text = manifest.read_text(encoding="utf-8")
     manifest_text = manifest_text.replace('android:label="thai_for_myanmar"',
-                                          'android:label="Thai for Myanmar"')
+                                          'android:label="Chang Thai"')
     manifest_text = manifest_text.replace(OLD_PACKAGE, APP_PACKAGE)
     if 'android.intent.action.TTS_SERVICE' not in manifest_text:
         tts_intent = ('<intent><action android:name="android.intent.action.TTS_SERVICE" />'

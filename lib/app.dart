@@ -31,7 +31,7 @@ class ThaiForMyanmarApp extends StatelessWidget {
           _ => ThemeMode.system,
         };
         return MaterialApp(
-          title: 'Thai for Myanmar',
+          title: 'Chang Thai',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),

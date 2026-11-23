@@ -54,7 +54,7 @@ class PhraseIssue {
   }
 
   String get shareText =>
-      'Thai for Myanmar — စကားစုအမှားထောက်ပြချက်\n'
+      'Chang Thai — စကားစုအမှားထောက်ပြချက်\n'
       'Phrase ID: $phraseId\n'
       'Thai: $thai\n'
       'Myanmar: $myanmar\n'
