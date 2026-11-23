@@ -55,13 +55,16 @@ class CourseToolsTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 course_audio_plan(self.unrecorded, invalid)
 
-    def test_imported_first_five_have_complete_exact_audio_coverage(self):
+    def test_imported_course_has_complete_exact_audio_coverage(self):
         scoped = course_audio_plan(ROOT, ['u01', 'u02', 'u03', 'u04', 'u05'])
         self.assertEqual((scoped['requiredBindings'], scoped['reusedBindings'], scoped['newRecordings']), (101, 101, 0))
         self.assertEqual(scoped['requests'], [])
         from validate_audio_manifest import validate_course_manifest
         manifest = json.loads((ROOT / 'assets/data/course_audio_manifest.json').read_text())
-        self.assertEqual(len(validate_course_manifest(self.course, manifest)), 79)
+        self.assertEqual(len(validate_course_manifest(self.course, manifest)), 426)
+        full = course_audio_plan(ROOT)
+        self.assertEqual((full['requiredBindings'], full['reusedBindings']), (535, 535))
+        self.assertEqual(full['requests'], [])
 
     def test_course_audio_validator_rejects_stale_shared_duplicate_and_unsafe_entries(self):
         from validate_audio_manifest import validate_course_manifest

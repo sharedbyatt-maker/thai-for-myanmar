@@ -612,6 +612,2286 @@
       "form": "shared",
       "thai": "ขอ",
       "asset": "audio/thai/c2_w_c0db4c88743d_shared_c65ef816bba0c910.mp3"
+    },
+    {
+      "phraseId": "c2_u06_01",
+      "form": "female",
+      "thai": "เอาน้ำกี่ขวดคะ",
+      "asset": "audio/thai/course_pack_02_001.mp3"
+    },
+    {
+      "phraseId": "c2_u06_01",
+      "form": "male",
+      "thai": "เอาน้ำกี่ขวดครับ",
+      "asset": "audio/thai/course_pack_02_002.mp3"
+    },
+    {
+      "phraseId": "c2_u06_02",
+      "form": "female",
+      "thai": "ขอน้ำหนึ่งขวดค่ะ",
+      "asset": "audio/thai/course_pack_02_003.mp3"
+    },
+    {
+      "phraseId": "c2_u06_02",
+      "form": "male",
+      "thai": "ขอน้ำหนึ่งขวดครับ",
+      "asset": "audio/thai/course_pack_02_004.mp3"
+    },
+    {
+      "phraseId": "c2_u06_03",
+      "form": "female",
+      "thai": "ขอชาสองแก้วค่ะ",
+      "asset": "audio/thai/course_pack_02_005.mp3"
+    },
+    {
+      "phraseId": "c2_u06_03",
+      "form": "male",
+      "thai": "ขอชาสองแก้วครับ",
+      "asset": "audio/thai/course_pack_02_006.mp3"
+    },
+    {
+      "phraseId": "c2_u06_04",
+      "form": "female",
+      "thai": "ขอข้าวสามจานค่ะ",
+      "asset": "audio/thai/course_pack_02_007.mp3"
+    },
+    {
+      "phraseId": "c2_u06_04",
+      "form": "male",
+      "thai": "ขอข้าวสามจานครับ",
+      "asset": "audio/thai/course_pack_02_008.mp3"
+    },
+    {
+      "phraseId": "c2_u06_05",
+      "form": "female",
+      "thai": "ขอน้ำสองขวดค่ะ",
+      "asset": "audio/thai/course_pack_02_009.mp3"
+    },
+    {
+      "phraseId": "c2_u06_05",
+      "form": "male",
+      "thai": "ขอน้ำสองขวดครับ",
+      "asset": "audio/thai/course_pack_02_010.mp3"
+    },
+    {
+      "phraseId": "c2_u07_01",
+      "form": "female",
+      "thai": "ราคาเท่าไรคะ",
+      "asset": "audio/thai/course_pack_02_011.mp3"
+    },
+    {
+      "phraseId": "c2_u07_01",
+      "form": "male",
+      "thai": "ราคาเท่าไรครับ",
+      "asset": "audio/thai/course_pack_02_012.mp3"
+    },
+    {
+      "phraseId": "c2_u07_02",
+      "form": "female",
+      "thai": "ยี่สิบบาทค่ะ",
+      "asset": "audio/thai/course_pack_02_013.mp3"
+    },
+    {
+      "phraseId": "c2_u07_02",
+      "form": "male",
+      "thai": "ยี่สิบบาทครับ",
+      "asset": "audio/thai/course_pack_02_014.mp3"
+    },
+    {
+      "phraseId": "c2_u07_03",
+      "form": "female",
+      "thai": "แพงไหมคะ",
+      "asset": "audio/thai/course_pack_02_015.mp3"
+    },
+    {
+      "phraseId": "c2_u07_03",
+      "form": "male",
+      "thai": "แพงไหมครับ",
+      "asset": "audio/thai/course_pack_02_016.mp3"
+    },
+    {
+      "phraseId": "c2_u07_04",
+      "form": "female",
+      "thai": "ไม่แพงค่ะ",
+      "asset": "audio/thai/course_pack_02_017.mp3"
+    },
+    {
+      "phraseId": "c2_u07_04",
+      "form": "male",
+      "thai": "ไม่แพงครับ",
+      "asset": "audio/thai/course_pack_02_018.mp3"
+    },
+    {
+      "phraseId": "c2_u07_05",
+      "form": "female",
+      "thai": "สามสิบบาทค่ะ",
+      "asset": "audio/thai/course_pack_02_019.mp3"
+    },
+    {
+      "phraseId": "c2_u07_05",
+      "form": "male",
+      "thai": "สามสิบบาทครับ",
+      "asset": "audio/thai/course_pack_02_020.mp3"
+    },
+    {
+      "phraseId": "c2_u08_01",
+      "form": "female",
+      "thai": "มีสีแดงไหมคะ",
+      "asset": "audio/thai/course_pack_02_021.mp3"
+    },
+    {
+      "phraseId": "c2_u08_01",
+      "form": "male",
+      "thai": "มีสีแดงไหมครับ",
+      "asset": "audio/thai/course_pack_02_022.mp3"
+    },
+    {
+      "phraseId": "c2_u08_02",
+      "form": "female",
+      "thai": "มีค่ะ",
+      "asset": "audio/thai/course_pack_02_023.mp3"
+    },
+    {
+      "phraseId": "c2_u08_02",
+      "form": "male",
+      "thai": "มีครับ",
+      "asset": "audio/thai/course_pack_02_024.mp3"
+    },
+    {
+      "phraseId": "c2_u08_03",
+      "form": "female",
+      "thai": "ขออันนี้ค่ะ",
+      "asset": "audio/thai/course_pack_02_025.mp3"
+    },
+    {
+      "phraseId": "c2_u08_03",
+      "form": "male",
+      "thai": "ขออันนี้ครับ",
+      "asset": "audio/thai/course_pack_02_026.mp3"
+    },
+    {
+      "phraseId": "c2_u08_04",
+      "form": "female",
+      "thai": "เอาอันเล็กหรืออันใหญ่คะ",
+      "asset": "audio/thai/course_pack_02_027.mp3"
+    },
+    {
+      "phraseId": "c2_u08_04",
+      "form": "male",
+      "thai": "เอาอันเล็กหรืออันใหญ่ครับ",
+      "asset": "audio/thai/course_pack_02_028.mp3"
+    },
+    {
+      "phraseId": "c2_u08_05",
+      "form": "female",
+      "thai": "ขออันใหญ่ค่ะ",
+      "asset": "audio/thai/course_pack_02_029.mp3"
+    },
+    {
+      "phraseId": "c2_u08_05",
+      "form": "male",
+      "thai": "ขออันใหญ่ครับ",
+      "asset": "audio/thai/course_pack_02_030.mp3"
+    },
+    {
+      "phraseId": "c2_u09_01",
+      "form": "female",
+      "thai": "จ่ายเงินสดได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_031.mp3"
+    },
+    {
+      "phraseId": "c2_u09_01",
+      "form": "male",
+      "thai": "จ่ายเงินสดได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_032.mp3"
+    },
+    {
+      "phraseId": "c2_u09_04",
+      "form": "female",
+      "thai": "มีเงินทอนค่ะ",
+      "asset": "audio/thai/course_pack_02_033.mp3"
+    },
+    {
+      "phraseId": "c2_u09_04",
+      "form": "male",
+      "thai": "มีเงินทอนครับ",
+      "asset": "audio/thai/course_pack_02_034.mp3"
+    },
+    {
+      "phraseId": "c2_u09_05",
+      "form": "female",
+      "thai": "โอนได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_035.mp3"
+    },
+    {
+      "phraseId": "c2_u09_05",
+      "form": "male",
+      "thai": "โอนได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_036.mp3"
+    },
+    {
+      "phraseId": "c2_u10_02",
+      "form": "female",
+      "thai": "อยู่ที่นี่ค่ะ",
+      "asset": "audio/thai/course_pack_02_037.mp3"
+    },
+    {
+      "phraseId": "c2_u10_02",
+      "form": "male",
+      "thai": "อยู่ที่นี่ครับ",
+      "asset": "audio/thai/course_pack_02_038.mp3"
+    },
+    {
+      "phraseId": "c2_u10_03",
+      "form": "female",
+      "thai": "โรงพยาบาลอยู่ไกลไหมคะ",
+      "asset": "audio/thai/course_pack_02_039.mp3"
+    },
+    {
+      "phraseId": "c2_u10_03",
+      "form": "male",
+      "thai": "โรงพยาบาลอยู่ไกลไหมครับ",
+      "asset": "audio/thai/course_pack_02_040.mp3"
+    },
+    {
+      "phraseId": "c2_u10_04",
+      "form": "female",
+      "thai": "อยู่ใกล้ค่ะ",
+      "asset": "audio/thai/course_pack_02_041.mp3"
+    },
+    {
+      "phraseId": "c2_u10_04",
+      "form": "male",
+      "thai": "อยู่ใกล้ครับ",
+      "asset": "audio/thai/course_pack_02_042.mp3"
+    },
+    {
+      "phraseId": "c2_u10_05",
+      "form": "female",
+      "thai": "ร้านอยู่ที่ไหนคะ",
+      "asset": "audio/thai/course_pack_02_043.mp3"
+    },
+    {
+      "phraseId": "c2_u10_05",
+      "form": "male",
+      "thai": "ร้านอยู่ที่ไหนครับ",
+      "asset": "audio/thai/course_pack_02_044.mp3"
+    },
+    {
+      "phraseId": "c2_u11_01",
+      "form": "female",
+      "thai": "ไปทางไหนคะ",
+      "asset": "audio/thai/course_pack_02_045.mp3"
+    },
+    {
+      "phraseId": "c2_u11_01",
+      "form": "male",
+      "thai": "ไปทางไหนครับ",
+      "asset": "audio/thai/course_pack_02_046.mp3"
+    },
+    {
+      "phraseId": "c2_u11_04",
+      "form": "female",
+      "thai": "อยู่ข้างหน้าค่ะ",
+      "asset": "audio/thai/course_pack_02_047.mp3"
+    },
+    {
+      "phraseId": "c2_u11_04",
+      "form": "male",
+      "thai": "อยู่ข้างหน้าครับ",
+      "asset": "audio/thai/course_pack_02_048.mp3"
+    },
+    {
+      "phraseId": "c2_u12_01",
+      "form": "female",
+      "thai": "ไปสถานีไหนคะ",
+      "asset": "audio/thai/course_pack_02_049.mp3"
+    },
+    {
+      "phraseId": "c2_u12_01",
+      "form": "male",
+      "thai": "ไปสถานีไหนครับ",
+      "asset": "audio/thai/course_pack_02_050.mp3"
+    },
+    {
+      "phraseId": "c2_u12_02",
+      "form": "female",
+      "thai": "ไปสถานีนี้ค่ะ",
+      "asset": "audio/thai/course_pack_02_051.mp3"
+    },
+    {
+      "phraseId": "c2_u12_02",
+      "form": "male",
+      "thai": "ไปสถานีนี้ครับ",
+      "asset": "audio/thai/course_pack_02_052.mp3"
+    },
+    {
+      "phraseId": "c2_u12_03",
+      "form": "female",
+      "thai": "ลงที่นี่ได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_053.mp3"
+    },
+    {
+      "phraseId": "c2_u12_03",
+      "form": "male",
+      "thai": "ลงที่นี่ได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_054.mp3"
+    },
+    {
+      "phraseId": "c2_u12_05",
+      "form": "female",
+      "thai": "ไปโรงพยาบาลค่ะ",
+      "asset": "audio/thai/course_pack_02_055.mp3"
+    },
+    {
+      "phraseId": "c2_u12_05",
+      "form": "male",
+      "thai": "ไปโรงพยาบาลครับ",
+      "asset": "audio/thai/course_pack_02_056.mp3"
+    },
+    {
+      "phraseId": "c2_u13_02",
+      "form": "female",
+      "thai": "นัดวันจันทร์ค่ะ",
+      "asset": "audio/thai/course_pack_02_057.mp3"
+    },
+    {
+      "phraseId": "c2_u13_02",
+      "form": "male",
+      "thai": "นัดวันจันทร์ครับ",
+      "asset": "audio/thai/course_pack_02_058.mp3"
+    },
+    {
+      "phraseId": "c2_u13_03",
+      "form": "female",
+      "thai": "กี่โมงคะ",
+      "asset": "audio/thai/course_pack_02_059.mp3"
+    },
+    {
+      "phraseId": "c2_u13_03",
+      "form": "male",
+      "thai": "กี่โมงครับ",
+      "asset": "audio/thai/course_pack_02_060.mp3"
+    },
+    {
+      "phraseId": "c2_u13_04",
+      "form": "female",
+      "thai": "เก้าโมงเช้าค่ะ",
+      "asset": "audio/thai/course_pack_02_061.mp3"
+    },
+    {
+      "phraseId": "c2_u13_04",
+      "form": "male",
+      "thai": "เก้าโมงเช้าครับ",
+      "asset": "audio/thai/course_pack_02_062.mp3"
+    },
+    {
+      "phraseId": "c2_u13_05",
+      "form": "female",
+      "thai": "นัดพรุ่งนี้ค่ะ",
+      "asset": "audio/thai/course_pack_02_063.mp3"
+    },
+    {
+      "phraseId": "c2_u13_05",
+      "form": "male",
+      "thai": "นัดพรุ่งนี้ครับ",
+      "asset": "audio/thai/course_pack_02_064.mp3"
+    },
+    {
+      "phraseId": "c2_u13_06",
+      "form": "female",
+      "thai": "บ่ายสองโมงค่ะ",
+      "asset": "audio/thai/course_pack_02_065.mp3"
+    },
+    {
+      "phraseId": "c2_u13_06",
+      "form": "male",
+      "thai": "บ่ายสองโมงครับ",
+      "asset": "audio/thai/course_pack_02_066.mp3"
+    },
+    {
+      "phraseId": "c2_u14_01",
+      "form": "female",
+      "thai": "ต้องทำอะไรคะ",
+      "asset": "audio/thai/course_pack_02_067.mp3"
+    },
+    {
+      "phraseId": "c2_u14_01",
+      "form": "male",
+      "thai": "ต้องทำอะไรครับ",
+      "asset": "audio/thai/course_pack_02_068.mp3"
+    },
+    {
+      "phraseId": "c2_u14_02",
+      "form": "female",
+      "thai": "เปิดประตูค่ะ",
+      "asset": "audio/thai/course_pack_02_069.mp3"
+    },
+    {
+      "phraseId": "c2_u14_02",
+      "form": "male",
+      "thai": "เปิดประตูครับ",
+      "asset": "audio/thai/course_pack_02_070.mp3"
+    },
+    {
+      "phraseId": "c2_u14_03",
+      "form": "female",
+      "thai": "ปิดประตูค่ะ",
+      "asset": "audio/thai/course_pack_02_071.mp3"
+    },
+    {
+      "phraseId": "c2_u14_03",
+      "form": "male",
+      "thai": "ปิดประตูครับ",
+      "asset": "audio/thai/course_pack_02_072.mp3"
+    },
+    {
+      "phraseId": "c2_u14_04",
+      "form": "female",
+      "thai": "วางอุปกรณ์ที่นี่ค่ะ",
+      "asset": "audio/thai/course_pack_02_073.mp3"
+    },
+    {
+      "phraseId": "c2_u14_04",
+      "form": "male",
+      "thai": "วางอุปกรณ์ที่นี่ครับ",
+      "asset": "audio/thai/course_pack_02_074.mp3"
+    },
+    {
+      "phraseId": "c2_u14_05",
+      "form": "female",
+      "thai": "หยิบอุปกรณ์ค่ะ",
+      "asset": "audio/thai/course_pack_02_075.mp3"
+    },
+    {
+      "phraseId": "c2_u14_05",
+      "form": "male",
+      "thai": "หยิบอุปกรณ์ครับ",
+      "asset": "audio/thai/course_pack_02_076.mp3"
+    },
+    {
+      "phraseId": "c2_u15_01",
+      "form": "female",
+      "thai": "ทำแบบนี้ถูกไหมคะ",
+      "asset": "audio/thai/course_pack_02_077.mp3"
+    },
+    {
+      "phraseId": "c2_u15_01",
+      "form": "male",
+      "thai": "ทำแบบนี้ถูกไหมครับ",
+      "asset": "audio/thai/course_pack_02_078.mp3"
+    },
+    {
+      "phraseId": "c2_u15_02",
+      "form": "female",
+      "thai": "ถูกค่ะ",
+      "asset": "audio/thai/course_pack_02_079.mp3"
+    },
+    {
+      "phraseId": "c2_u15_02",
+      "form": "male",
+      "thai": "ถูกครับ",
+      "asset": "audio/thai/course_pack_02_080.mp3"
+    },
+    {
+      "phraseId": "c2_u15_05",
+      "form": "female",
+      "thai": "ต้องปิดประตูไหมคะ",
+      "asset": "audio/thai/course_pack_02_081.mp3"
+    },
+    {
+      "phraseId": "c2_u15_05",
+      "form": "male",
+      "thai": "ต้องปิดประตูไหมครับ",
+      "asset": "audio/thai/course_pack_02_082.mp3"
+    },
+    {
+      "phraseId": "c2_u16_01",
+      "form": "female",
+      "thai": "งานเสร็จหรือยังคะ",
+      "asset": "audio/thai/course_pack_02_083.mp3"
+    },
+    {
+      "phraseId": "c2_u16_01",
+      "form": "male",
+      "thai": "งานเสร็จหรือยังครับ",
+      "asset": "audio/thai/course_pack_02_084.mp3"
+    },
+    {
+      "phraseId": "c2_u16_03",
+      "form": "female",
+      "thai": "กำลังทำงานค่ะ",
+      "asset": "audio/thai/course_pack_02_085.mp3"
+    },
+    {
+      "phraseId": "c2_u16_03",
+      "form": "male",
+      "thai": "กำลังทำงานครับ",
+      "asset": "audio/thai/course_pack_02_086.mp3"
+    },
+    {
+      "phraseId": "c2_u16_05",
+      "form": "female",
+      "thai": "กำลังรอค่ะ",
+      "asset": "audio/thai/course_pack_02_087.mp3"
+    },
+    {
+      "phraseId": "c2_u16_05",
+      "form": "male",
+      "thai": "กำลังรอครับ",
+      "asset": "audio/thai/course_pack_02_088.mp3"
+    },
+    {
+      "phraseId": "c2_u17_01",
+      "form": "female",
+      "thai": "เริ่มงานกี่โมงคะ",
+      "asset": "audio/thai/course_pack_02_089.mp3"
+    },
+    {
+      "phraseId": "c2_u17_01",
+      "form": "male",
+      "thai": "เริ่มงานกี่โมงครับ",
+      "asset": "audio/thai/course_pack_02_090.mp3"
+    },
+    {
+      "phraseId": "c2_u17_02",
+      "form": "female",
+      "thai": "เริ่มงานเก้าโมงเช้าค่ะ",
+      "asset": "audio/thai/course_pack_02_091.mp3"
+    },
+    {
+      "phraseId": "c2_u17_02",
+      "form": "male",
+      "thai": "เริ่มงานเก้าโมงเช้าครับ",
+      "asset": "audio/thai/course_pack_02_092.mp3"
+    },
+    {
+      "phraseId": "c2_u17_03",
+      "form": "female",
+      "thai": "ค่าล่วงเวลาเท่าไรคะ",
+      "asset": "audio/thai/course_pack_02_093.mp3"
+    },
+    {
+      "phraseId": "c2_u17_03",
+      "form": "male",
+      "thai": "ค่าล่วงเวลาเท่าไรครับ",
+      "asset": "audio/thai/course_pack_02_094.mp3"
+    },
+    {
+      "phraseId": "c2_u17_04",
+      "form": "female",
+      "thai": "ชั่วโมงละหนึ่งร้อยบาทค่ะ",
+      "asset": "audio/thai/course_pack_02_095.mp3"
+    },
+    {
+      "phraseId": "c2_u17_04",
+      "form": "male",
+      "thai": "ชั่วโมงละหนึ่งร้อยบาทครับ",
+      "asset": "audio/thai/course_pack_02_096.mp3"
+    },
+    {
+      "phraseId": "c2_u17_05",
+      "form": "female",
+      "thai": "เลิกงานกี่โมงคะ",
+      "asset": "audio/thai/course_pack_02_097.mp3"
+    },
+    {
+      "phraseId": "c2_u17_05",
+      "form": "male",
+      "thai": "เลิกงานกี่โมงครับ",
+      "asset": "audio/thai/course_pack_02_098.mp3"
+    },
+    {
+      "phraseId": "c2_u18_01",
+      "form": "female",
+      "thai": "ขอลาวันนี้ได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_099.mp3"
+    },
+    {
+      "phraseId": "c2_u18_01",
+      "form": "male",
+      "thai": "ขอลาวันนี้ได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_100.mp3"
+    },
+    {
+      "phraseId": "c2_u18_03",
+      "form": "female",
+      "thai": "ลาเพราะอะไรคะ",
+      "asset": "audio/thai/course_pack_02_101.mp3"
+    },
+    {
+      "phraseId": "c2_u18_03",
+      "form": "male",
+      "thai": "ลาเพราะอะไรครับ",
+      "asset": "audio/thai/course_pack_02_102.mp3"
+    },
+    {
+      "phraseId": "c2_u18_04",
+      "form": "female",
+      "thai": "ลาเพราะป่วยค่ะ",
+      "asset": "audio/thai/course_pack_02_103.mp3"
+    },
+    {
+      "phraseId": "c2_u18_04",
+      "form": "male",
+      "thai": "ลาเพราะป่วยครับ",
+      "asset": "audio/thai/course_pack_02_104.mp3"
+    },
+    {
+      "phraseId": "c2_u18_05",
+      "form": "female",
+      "thai": "ขอลาพรุ่งนี้ได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_105.mp3"
+    },
+    {
+      "phraseId": "c2_u18_05",
+      "form": "male",
+      "thai": "ขอลาพรุ่งนี้ได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_106.mp3"
+    },
+    {
+      "phraseId": "c2_u19_01",
+      "form": "female",
+      "thai": "ค่าเช่าเท่าไรคะ",
+      "asset": "audio/thai/course_pack_02_107.mp3"
+    },
+    {
+      "phraseId": "c2_u19_01",
+      "form": "male",
+      "thai": "ค่าเช่าเท่าไรครับ",
+      "asset": "audio/thai/course_pack_02_108.mp3"
+    },
+    {
+      "phraseId": "c2_u19_02",
+      "form": "female",
+      "thai": "สามพันบาทค่ะ",
+      "asset": "audio/thai/course_pack_02_109.mp3"
+    },
+    {
+      "phraseId": "c2_u19_02",
+      "form": "male",
+      "thai": "สามพันบาทครับ",
+      "asset": "audio/thai/course_pack_02_110.mp3"
+    },
+    {
+      "phraseId": "c2_u19_03",
+      "form": "female",
+      "thai": "จ่ายค่าเช่าเมื่อไรคะ",
+      "asset": "audio/thai/course_pack_02_111.mp3"
+    },
+    {
+      "phraseId": "c2_u19_03",
+      "form": "male",
+      "thai": "จ่ายค่าเช่าเมื่อไรครับ",
+      "asset": "audio/thai/course_pack_02_112.mp3"
+    },
+    {
+      "phraseId": "c2_u19_04",
+      "form": "female",
+      "thai": "จ่ายพรุ่งนี้ค่ะ",
+      "asset": "audio/thai/course_pack_02_113.mp3"
+    },
+    {
+      "phraseId": "c2_u19_04",
+      "form": "male",
+      "thai": "จ่ายพรุ่งนี้ครับ",
+      "asset": "audio/thai/course_pack_02_114.mp3"
+    },
+    {
+      "phraseId": "c2_u19_05",
+      "form": "female",
+      "thai": "ค่าน้ำเท่าไรคะ",
+      "asset": "audio/thai/course_pack_02_115.mp3"
+    },
+    {
+      "phraseId": "c2_u19_05",
+      "form": "male",
+      "thai": "ค่าน้ำเท่าไรครับ",
+      "asset": "audio/thai/course_pack_02_116.mp3"
+    },
+    {
+      "phraseId": "c2_u20_01",
+      "form": "female",
+      "thai": "อะไรเสียคะ",
+      "asset": "audio/thai/course_pack_02_117.mp3"
+    },
+    {
+      "phraseId": "c2_u20_01",
+      "form": "male",
+      "thai": "อะไรเสียครับ",
+      "asset": "audio/thai/course_pack_02_118.mp3"
+    },
+    {
+      "phraseId": "c2_u20_02",
+      "form": "female",
+      "thai": "ก๊อกน้ำเสียค่ะ",
+      "asset": "audio/thai/course_pack_02_119.mp3"
+    },
+    {
+      "phraseId": "c2_u20_02",
+      "form": "male",
+      "thai": "ก๊อกน้ำเสียครับ",
+      "asset": "audio/thai/course_pack_02_120.mp3"
+    },
+    {
+      "phraseId": "c2_u20_03",
+      "form": "female",
+      "thai": "ช่วยซ่อมได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_121.mp3"
+    },
+    {
+      "phraseId": "c2_u20_03",
+      "form": "male",
+      "thai": "ช่วยซ่อมได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_122.mp3"
+    },
+    {
+      "phraseId": "c2_u20_05",
+      "form": "female",
+      "thai": "ก๊อกน้ำใช้ไม่ได้ค่ะ",
+      "asset": "audio/thai/course_pack_02_123.mp3"
+    },
+    {
+      "phraseId": "c2_u20_05",
+      "form": "male",
+      "thai": "ก๊อกน้ำใช้ไม่ได้ครับ",
+      "asset": "audio/thai/course_pack_02_124.mp3"
+    },
+    {
+      "phraseId": "c2_u21_01",
+      "form": "female",
+      "thai": "เป็นอะไรคะ",
+      "asset": "audio/thai/course_pack_02_125.mp3"
+    },
+    {
+      "phraseId": "c2_u21_01",
+      "form": "male",
+      "thai": "เป็นอะไรครับ",
+      "asset": "audio/thai/course_pack_02_126.mp3"
+    },
+    {
+      "phraseId": "c2_u21_03",
+      "form": "female",
+      "thai": "มีไข้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_127.mp3"
+    },
+    {
+      "phraseId": "c2_u21_03",
+      "form": "male",
+      "thai": "มีไข้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_128.mp3"
+    },
+    {
+      "phraseId": "c2_u21_04",
+      "form": "female",
+      "thai": "มีไข้ค่ะ",
+      "asset": "audio/thai/course_pack_02_129.mp3"
+    },
+    {
+      "phraseId": "c2_u21_04",
+      "form": "male",
+      "thai": "มีไข้ครับ",
+      "asset": "audio/thai/course_pack_02_130.mp3"
+    },
+    {
+      "phraseId": "c2_u21_05",
+      "form": "female",
+      "thai": "เจ็บคอค่ะ",
+      "asset": "audio/thai/course_pack_02_131.mp3"
+    },
+    {
+      "phraseId": "c2_u21_05",
+      "form": "male",
+      "thai": "เจ็บคอครับ",
+      "asset": "audio/thai/course_pack_02_132.mp3"
+    },
+    {
+      "phraseId": "c2_u21_07",
+      "form": "female",
+      "thai": "แพ้กุ้งค่ะ",
+      "asset": "audio/thai/course_pack_02_133.mp3"
+    },
+    {
+      "phraseId": "c2_u21_07",
+      "form": "male",
+      "thai": "แพ้กุ้งครับ",
+      "asset": "audio/thai/course_pack_02_134.mp3"
+    },
+    {
+      "phraseId": "c2_u22_04",
+      "form": "female",
+      "thai": "ยังไม่เข้าใจค่ะ",
+      "asset": "audio/thai/course_pack_02_135.mp3"
+    },
+    {
+      "phraseId": "c2_u22_04",
+      "form": "male",
+      "thai": "ยังไม่เข้าใจครับ",
+      "asset": "audio/thai/course_pack_02_136.mp3"
+    },
+    {
+      "phraseId": "c2_u23_01",
+      "form": "female",
+      "thai": "คุณอยู่กับใครคะ",
+      "asset": "audio/thai/course_pack_02_137.mp3"
+    },
+    {
+      "phraseId": "c2_u23_01",
+      "form": "male",
+      "thai": "คุณอยู่กับใครครับ",
+      "asset": "audio/thai/course_pack_02_138.mp3"
+    },
+    {
+      "phraseId": "c2_u23_02",
+      "form": "female",
+      "thai": "อยู่กับครอบครัวค่ะ",
+      "asset": "audio/thai/course_pack_02_139.mp3"
+    },
+    {
+      "phraseId": "c2_u23_02",
+      "form": "male",
+      "thai": "อยู่กับครอบครัวครับ",
+      "asset": "audio/thai/course_pack_02_140.mp3"
+    },
+    {
+      "phraseId": "c2_u23_03",
+      "form": "female",
+      "thai": "ตื่นกี่โมงคะ",
+      "asset": "audio/thai/course_pack_02_141.mp3"
+    },
+    {
+      "phraseId": "c2_u23_03",
+      "form": "male",
+      "thai": "ตื่นกี่โมงครับ",
+      "asset": "audio/thai/course_pack_02_142.mp3"
+    },
+    {
+      "phraseId": "c2_u23_04",
+      "form": "female",
+      "thai": "ตื่นหกโมงเช้าค่ะ",
+      "asset": "audio/thai/course_pack_02_143.mp3"
+    },
+    {
+      "phraseId": "c2_u23_04",
+      "form": "male",
+      "thai": "ตื่นหกโมงเช้าครับ",
+      "asset": "audio/thai/course_pack_02_144.mp3"
+    },
+    {
+      "phraseId": "c2_u23_05",
+      "form": "female",
+      "thai": "นอนกี่โมงคะ",
+      "asset": "audio/thai/course_pack_02_145.mp3"
+    },
+    {
+      "phraseId": "c2_u23_05",
+      "form": "male",
+      "thai": "นอนกี่โมงครับ",
+      "asset": "audio/thai/course_pack_02_146.mp3"
+    },
+    {
+      "phraseId": "c2_u24_01",
+      "form": "female",
+      "thai": "ชอบชาไหมคะ",
+      "asset": "audio/thai/course_pack_02_147.mp3"
+    },
+    {
+      "phraseId": "c2_u24_01",
+      "form": "male",
+      "thai": "ชอบชาไหมครับ",
+      "asset": "audio/thai/course_pack_02_148.mp3"
+    },
+    {
+      "phraseId": "c2_u24_02",
+      "form": "female",
+      "thai": "ชอบชาค่ะ",
+      "asset": "audio/thai/course_pack_02_149.mp3"
+    },
+    {
+      "phraseId": "c2_u24_02",
+      "form": "male",
+      "thai": "ชอบชาครับ",
+      "asset": "audio/thai/course_pack_02_150.mp3"
+    },
+    {
+      "phraseId": "c2_u24_03",
+      "form": "female",
+      "thai": "ทำไมคะ",
+      "asset": "audio/thai/course_pack_02_151.mp3"
+    },
+    {
+      "phraseId": "c2_u24_03",
+      "form": "male",
+      "thai": "ทำไมครับ",
+      "asset": "audio/thai/course_pack_02_152.mp3"
+    },
+    {
+      "phraseId": "c2_u24_04",
+      "form": "female",
+      "thai": "ชอบชาเพราะไม่หวานค่ะ",
+      "asset": "audio/thai/course_pack_02_153.mp3"
+    },
+    {
+      "phraseId": "c2_u24_04",
+      "form": "male",
+      "thai": "ชอบชาเพราะไม่หวานครับ",
+      "asset": "audio/thai/course_pack_02_154.mp3"
+    },
+    {
+      "phraseId": "c2_u24_05",
+      "form": "female",
+      "thai": "อยากดื่มกาแฟแต่ไม่ใส่น้ำตาลค่ะ",
+      "asset": "audio/thai/course_pack_02_155.mp3"
+    },
+    {
+      "phraseId": "c2_u24_05",
+      "form": "male",
+      "thai": "อยากดื่มกาแฟแต่ไม่ใส่น้ำตาลครับ",
+      "asset": "audio/thai/course_pack_02_156.mp3"
+    },
+    {
+      "phraseId": "c2_u25_01",
+      "form": "female",
+      "thai": "พรุ่งนี้จะไปไหนคะ",
+      "asset": "audio/thai/course_pack_02_157.mp3"
+    },
+    {
+      "phraseId": "c2_u25_01",
+      "form": "male",
+      "thai": "พรุ่งนี้จะไปไหนครับ",
+      "asset": "audio/thai/course_pack_02_158.mp3"
+    },
+    {
+      "phraseId": "c2_u25_02",
+      "form": "female",
+      "thai": "จะไปร้านค่ะ",
+      "asset": "audio/thai/course_pack_02_159.mp3"
+    },
+    {
+      "phraseId": "c2_u25_02",
+      "form": "male",
+      "thai": "จะไปร้านครับ",
+      "asset": "audio/thai/course_pack_02_160.mp3"
+    },
+    {
+      "phraseId": "c2_u25_03",
+      "form": "female",
+      "thai": "เคยไปประเทศไทยไหมคะ",
+      "asset": "audio/thai/course_pack_02_161.mp3"
+    },
+    {
+      "phraseId": "c2_u25_03",
+      "form": "male",
+      "thai": "เคยไปประเทศไทยไหมครับ",
+      "asset": "audio/thai/course_pack_02_162.mp3"
+    },
+    {
+      "phraseId": "c2_u25_04",
+      "form": "female",
+      "thai": "เคยไปค่ะ",
+      "asset": "audio/thai/course_pack_02_163.mp3"
+    },
+    {
+      "phraseId": "c2_u25_04",
+      "form": "male",
+      "thai": "เคยไปครับ",
+      "asset": "audio/thai/course_pack_02_164.mp3"
+    },
+    {
+      "phraseId": "c2_u25_05",
+      "form": "female",
+      "thai": "เมื่อวานไปทำงานค่ะ",
+      "asset": "audio/thai/course_pack_02_165.mp3"
+    },
+    {
+      "phraseId": "c2_u25_05",
+      "form": "male",
+      "thai": "เมื่อวานไปทำงานครับ",
+      "asset": "audio/thai/course_pack_02_166.mp3"
+    },
+    {
+      "phraseId": "c2_u26_01",
+      "form": "female",
+      "thai": "ต้องกรอกอะไรคะ",
+      "asset": "audio/thai/course_pack_02_167.mp3"
+    },
+    {
+      "phraseId": "c2_u26_01",
+      "form": "male",
+      "thai": "ต้องกรอกอะไรครับ",
+      "asset": "audio/thai/course_pack_02_168.mp3"
+    },
+    {
+      "phraseId": "c2_u26_02",
+      "form": "female",
+      "thai": "กรอกชื่อค่ะ",
+      "asset": "audio/thai/course_pack_02_169.mp3"
+    },
+    {
+      "phraseId": "c2_u26_02",
+      "form": "male",
+      "thai": "กรอกชื่อครับ",
+      "asset": "audio/thai/course_pack_02_170.mp3"
+    },
+    {
+      "phraseId": "c2_u26_04",
+      "form": "female",
+      "thai": "ไปเคาน์เตอร์หนึ่งค่ะ",
+      "asset": "audio/thai/course_pack_02_171.mp3"
+    },
+    {
+      "phraseId": "c2_u26_04",
+      "form": "male",
+      "thai": "ไปเคาน์เตอร์หนึ่งครับ",
+      "asset": "audio/thai/course_pack_02_172.mp3"
+    },
+    {
+      "phraseId": "c2_u26_05",
+      "form": "female",
+      "thai": "ขอล่ามได้ไหมคะ",
+      "asset": "audio/thai/course_pack_02_173.mp3"
+    },
+    {
+      "phraseId": "c2_u26_05",
+      "form": "male",
+      "thai": "ขอล่ามได้ไหมครับ",
+      "asset": "audio/thai/course_pack_02_174.mp3"
+    },
+    {
+      "phraseId": "c2_w_060b9e72da4a",
+      "form": "shared",
+      "thai": "ไหน",
+      "asset": "audio/thai/course_pack_02_175.mp3"
+    },
+    {
+      "phraseId": "c2_w_6d3fb50fd76b",
+      "form": "shared",
+      "thai": "ไหน",
+      "asset": "audio/thai/course_pack_02_175.mp3"
+    },
+    {
+      "phraseId": "c2_w_084f6f269092",
+      "form": "shared",
+      "thai": "สามสิบ",
+      "asset": "audio/thai/course_pack_02_176.mp3"
+    },
+    {
+      "phraseId": "c2_w_08e8ab7ac890",
+      "form": "shared",
+      "thai": "แท็กซี่",
+      "asset": "audio/thai/course_pack_02_177.mp3"
+    },
+    {
+      "phraseId": "c2_w_09c01ef79f7d",
+      "form": "shared",
+      "thai": "นิดหน่อย",
+      "asset": "audio/thai/course_pack_02_178.mp3"
+    },
+    {
+      "phraseId": "c2_w_0aca7b58e451",
+      "form": "shared",
+      "thai": "เลี้ยว",
+      "asset": "audio/thai/course_pack_02_179.mp3"
+    },
+    {
+      "phraseId": "c2_w_ffc7b9f802c0",
+      "form": "shared",
+      "thai": "เลี้ยว",
+      "asset": "audio/thai/course_pack_02_179.mp3"
+    },
+    {
+      "phraseId": "c2_w_0b8f13690d75",
+      "form": "shared",
+      "thai": "กี่โมง",
+      "asset": "audio/thai/course_pack_02_180.mp3"
+    },
+    {
+      "phraseId": "c2_w_0e4a7bb7161a",
+      "form": "shared",
+      "thai": "เล็ก",
+      "asset": "audio/thai/course_pack_02_181.mp3"
+    },
+    {
+      "phraseId": "c2_w_0fb1a823cd05",
+      "form": "shared",
+      "thai": "ชอบชา",
+      "asset": "audio/thai/course_pack_02_182.mp3"
+    },
+    {
+      "phraseId": "c2_w_124b7d4e6264",
+      "form": "shared",
+      "thai": "ค่าล่วงเวลา",
+      "asset": "audio/thai/course_pack_02_183.mp3"
+    },
+    {
+      "phraseId": "c2_w_129af3362f6f",
+      "form": "shared",
+      "thai": "ขออนุญาต",
+      "asset": "audio/thai/course_pack_02_184.mp3"
+    },
+    {
+      "phraseId": "c2_w_12e3dc60eb76",
+      "form": "shared",
+      "thai": "เสร็จ",
+      "asset": "audio/thai/course_pack_02_185.mp3"
+    },
+    {
+      "phraseId": "c2_w_8f9c191c3d23",
+      "form": "shared",
+      "thai": "เสร็จ",
+      "asset": "audio/thai/course_pack_02_185.mp3"
+    },
+    {
+      "phraseId": "c2_w_13358f94bda9",
+      "form": "shared",
+      "thai": "สี",
+      "asset": "audio/thai/course_pack_02_186.mp3"
+    },
+    {
+      "phraseId": "c2_w_13a9378457ce",
+      "form": "shared",
+      "thai": "ก๊อกน้ำ",
+      "asset": "audio/thai/course_pack_02_187.mp3"
+    },
+    {
+      "phraseId": "c2_w_13ed49d84b29",
+      "form": "shared",
+      "thai": "ชอบ",
+      "asset": "audio/thai/course_pack_02_188.mp3"
+    },
+    {
+      "phraseId": "c2_w_689f9e97dd7d",
+      "form": "shared",
+      "thai": "ชอบ",
+      "asset": "audio/thai/course_pack_02_188.mp3"
+    },
+    {
+      "phraseId": "c2_w_1473977c06d3",
+      "form": "shared",
+      "thai": "เพราะ",
+      "asset": "audio/thai/course_pack_02_189.mp3"
+    },
+    {
+      "phraseId": "c2_w_158071493225",
+      "form": "shared",
+      "thai": "สถานี",
+      "asset": "audio/thai/course_pack_02_190.mp3"
+    },
+    {
+      "phraseId": "c2_w_16fb17c334ea",
+      "form": "shared",
+      "thai": "หกโมงเช้า",
+      "asset": "audio/thai/course_pack_02_191.mp3"
+    },
+    {
+      "phraseId": "c2_w_17527a3fa82d",
+      "form": "shared",
+      "thai": "ต้องไป",
+      "asset": "audio/thai/course_pack_02_192.mp3"
+    },
+    {
+      "phraseId": "c2_w_1791b8d2d813",
+      "form": "shared",
+      "thai": "ไม่ใส่น้ำตาล",
+      "asset": "audio/thai/course_pack_02_193.mp3"
+    },
+    {
+      "phraseId": "c2_w_19ac0f00d310",
+      "form": "shared",
+      "thai": "ตรงไหน",
+      "asset": "audio/thai/course_pack_02_194.mp3"
+    },
+    {
+      "phraseId": "c2_w_1feb960e2732",
+      "form": "shared",
+      "thai": "หรือยัง",
+      "asset": "audio/thai/course_pack_02_195.mp3"
+    },
+    {
+      "phraseId": "c2_w_e28ba965c914",
+      "form": "shared",
+      "thai": "หรือยัง",
+      "asset": "audio/thai/course_pack_02_195.mp3"
+    },
+    {
+      "phraseId": "c2_w_210710b5cd46",
+      "form": "shared",
+      "thai": "ค่าเช่า",
+      "asset": "audio/thai/course_pack_02_196.mp3"
+    },
+    {
+      "phraseId": "c2_w_23534a7335b8",
+      "form": "shared",
+      "thai": "ครอบครัว",
+      "asset": "audio/thai/course_pack_02_197.mp3"
+    },
+    {
+      "phraseId": "c2_w_257f1e42c94b",
+      "form": "shared",
+      "thai": "แบบนี้",
+      "asset": "audio/thai/course_pack_02_198.mp3"
+    },
+    {
+      "phraseId": "c2_w_25b3a461f2ae",
+      "form": "shared",
+      "thai": "เงินเดือน",
+      "asset": "audio/thai/course_pack_02_199.mp3"
+    },
+    {
+      "phraseId": "c2_w_270ae1c5285a",
+      "form": "shared",
+      "thai": "เขียน",
+      "asset": "audio/thai/course_pack_02_200.mp3"
+    },
+    {
+      "phraseId": "c2_w_27c996c88d5e",
+      "form": "shared",
+      "thai": "โมงเช้า",
+      "asset": "audio/thai/course_pack_02_201.mp3"
+    },
+    {
+      "phraseId": "c2_w_2b5ab8c5161a",
+      "form": "shared",
+      "thai": "อันนั้น",
+      "asset": "audio/thai/course_pack_02_202.mp3"
+    },
+    {
+      "phraseId": "c2_w_2c49962d29e5",
+      "form": "shared",
+      "thai": "รวม",
+      "asset": "audio/thai/course_pack_02_203.mp3"
+    },
+    {
+      "phraseId": "c2_w_2d414af02d41",
+      "form": "shared",
+      "thai": "ร้าน",
+      "asset": "audio/thai/course_pack_02_204.mp3"
+    },
+    {
+      "phraseId": "c2_w_2de9b9c5b8ab",
+      "form": "shared",
+      "thai": "จ่าย",
+      "asset": "audio/thai/course_pack_02_205.mp3"
+    },
+    {
+      "phraseId": "c2_w_95ce1148041f",
+      "form": "shared",
+      "thai": "จ่าย",
+      "asset": "audio/thai/course_pack_02_205.mp3"
+    },
+    {
+      "phraseId": "c2_w_33892053f604",
+      "form": "shared",
+      "thai": "คุยกับ",
+      "asset": "audio/thai/course_pack_02_206.mp3"
+    },
+    {
+      "phraseId": "c2_w_3649126ac3b1",
+      "form": "shared",
+      "thai": "ตื่น",
+      "asset": "audio/thai/course_pack_02_207.mp3"
+    },
+    {
+      "phraseId": "c2_w_83df476c29de",
+      "form": "shared",
+      "thai": "ตื่น",
+      "asset": "audio/thai/course_pack_02_207.mp3"
+    },
+    {
+      "phraseId": "c2_w_3825a09970c2",
+      "form": "shared",
+      "thai": "แม่",
+      "asset": "audio/thai/course_pack_02_208.mp3"
+    },
+    {
+      "phraseId": "c2_w_39018677b049",
+      "form": "shared",
+      "thai": "ทำ",
+      "asset": "audio/thai/course_pack_02_209.mp3"
+    },
+    {
+      "phraseId": "c2_w_d9bd432d23c2",
+      "form": "shared",
+      "thai": "ทำ",
+      "asset": "audio/thai/course_pack_02_209.mp3"
+    },
+    {
+      "phraseId": "c2_w_3c777c8db729",
+      "form": "shared",
+      "thai": "ขอลา",
+      "asset": "audio/thai/course_pack_02_210.mp3"
+    },
+    {
+      "phraseId": "c2_w_3dc536cecdbf",
+      "form": "shared",
+      "thai": "เก้าโมงเช้า",
+      "asset": "audio/thai/course_pack_02_211.mp3"
+    },
+    {
+      "phraseId": "c2_w_3f70be99efb4",
+      "form": "shared",
+      "thai": "ดำ",
+      "asset": "audio/thai/course_pack_02_212.mp3"
+    },
+    {
+      "phraseId": "c2_w_40bd4b85cc43",
+      "form": "shared",
+      "thai": "ซ้าย",
+      "asset": "audio/thai/course_pack_02_213.mp3"
+    },
+    {
+      "phraseId": "c2_w_417f1c73bd6a",
+      "form": "shared",
+      "thai": "ห้อง",
+      "asset": "audio/thai/course_pack_02_214.mp3"
+    },
+    {
+      "phraseId": "c2_w_4322b7157843",
+      "form": "shared",
+      "thai": "ห้องน้ำ",
+      "asset": "audio/thai/course_pack_02_215.mp3"
+    },
+    {
+      "phraseId": "c2_w_43731285aec9",
+      "form": "shared",
+      "thai": "นี้",
+      "asset": "audio/thai/course_pack_02_216.mp3"
+    },
+    {
+      "phraseId": "c2_w_452811ca42cc",
+      "form": "shared",
+      "thai": "ใคร",
+      "asset": "audio/thai/course_pack_02_217.mp3"
+    },
+    {
+      "phraseId": "c2_w_46bad44ff4d8",
+      "form": "shared",
+      "thai": "ครั้งก่อน",
+      "asset": "audio/thai/course_pack_02_218.mp3"
+    },
+    {
+      "phraseId": "c2_w_48c3d16bc651",
+      "form": "shared",
+      "thai": "หยิบ",
+      "asset": "audio/thai/course_pack_02_219.mp3"
+    },
+    {
+      "phraseId": "c2_w_6564d007b964",
+      "form": "shared",
+      "thai": "หยิบ",
+      "asset": "audio/thai/course_pack_02_219.mp3"
+    },
+    {
+      "phraseId": "c2_w_4b237f19d3f8",
+      "form": "shared",
+      "thai": "วันจันทร์",
+      "asset": "audio/thai/course_pack_02_220.mp3"
+    },
+    {
+      "phraseId": "c2_w_cd4e8ba7e46c",
+      "form": "shared",
+      "thai": "วันจันทร์",
+      "asset": "audio/thai/course_pack_02_220.mp3"
+    },
+    {
+      "phraseId": "c2_w_4c6a9c9c33e4",
+      "form": "shared",
+      "thai": "อุปกรณ์",
+      "asset": "audio/thai/course_pack_02_221.mp3"
+    },
+    {
+      "phraseId": "c2_w_4d0ef9f58407",
+      "form": "shared",
+      "thai": "ที่นี่",
+      "asset": "audio/thai/course_pack_02_222.mp3"
+    },
+    {
+      "phraseId": "c2_w_4e84ec988199",
+      "form": "shared",
+      "thai": "อาการ",
+      "asset": "audio/thai/course_pack_02_223.mp3"
+    },
+    {
+      "phraseId": "c2_w_4f609b96b3a4",
+      "form": "shared",
+      "thai": "โรงพยาบาล",
+      "asset": "audio/thai/course_pack_02_224.mp3"
+    },
+    {
+      "phraseId": "c2_w_4f988f7bafd2",
+      "form": "shared",
+      "thai": "ใช้ไม่ได้",
+      "asset": "audio/thai/course_pack_02_225.mp3"
+    },
+    {
+      "phraseId": "c2_w_4117c498ac82",
+      "form": "shared",
+      "thai": "ใช้ไม่ได้",
+      "asset": "audio/thai/course_pack_02_225.mp3"
+    },
+    {
+      "phraseId": "c2_w_507ef2321c8c",
+      "form": "shared",
+      "thai": "จะ",
+      "asset": "audio/thai/course_pack_02_226.mp3"
+    },
+    {
+      "phraseId": "c2_w_509083173ba5",
+      "form": "shared",
+      "thai": "หลัง",
+      "asset": "audio/thai/course_pack_02_227.mp3"
+    },
+    {
+      "phraseId": "c2_w_51486f4916fd",
+      "form": "shared",
+      "thai": "แดง",
+      "asset": "audio/thai/course_pack_02_228.mp3"
+    },
+    {
+      "phraseId": "c2_w_520db3803760",
+      "form": "shared",
+      "thai": "ทำไม",
+      "asset": "audio/thai/course_pack_02_229.mp3"
+    },
+    {
+      "phraseId": "c2_w_521d5a0981a8",
+      "form": "shared",
+      "thai": "คอ",
+      "asset": "audio/thai/course_pack_02_230.mp3"
+    },
+    {
+      "phraseId": "c2_w_5759ac765479",
+      "form": "shared",
+      "thai": "ท้อง",
+      "asset": "audio/thai/course_pack_02_231.mp3"
+    },
+    {
+      "phraseId": "c2_w_58f4abe29c75",
+      "form": "shared",
+      "thai": "และ",
+      "asset": "audio/thai/course_pack_02_232.mp3"
+    },
+    {
+      "phraseId": "c2_w_5a59e226b05d",
+      "form": "shared",
+      "thai": "จะไป",
+      "asset": "audio/thai/course_pack_02_233.mp3"
+    },
+    {
+      "phraseId": "c2_w_5d60e1d8e671",
+      "form": "shared",
+      "thai": "แพ้",
+      "asset": "audio/thai/course_pack_02_234.mp3"
+    },
+    {
+      "phraseId": "c2_w_5f9b94f3c9d8",
+      "form": "shared",
+      "thai": "กุ้ง",
+      "asset": "audio/thai/course_pack_02_235.mp3"
+    },
+    {
+      "phraseId": "c2_w_5faa452c516f",
+      "form": "shared",
+      "thai": "ไป",
+      "asset": "audio/thai/course_pack_02_236.mp3"
+    },
+    {
+      "phraseId": "c2_w_5b1e5f4b58ef",
+      "form": "shared",
+      "thai": "ไป",
+      "asset": "audio/thai/course_pack_02_236.mp3"
+    },
+    {
+      "phraseId": "c2_w_606409c3d92d",
+      "form": "shared",
+      "thai": "ขวา",
+      "asset": "audio/thai/course_pack_02_237.mp3"
+    },
+    {
+      "phraseId": "c2_w_60968eb9e975",
+      "form": "shared",
+      "thai": "รถ",
+      "asset": "audio/thai/course_pack_02_238.mp3"
+    },
+    {
+      "phraseId": "c2_w_613c93d0d4a1",
+      "form": "shared",
+      "thai": "ชั่วโมงละ",
+      "asset": "audio/thai/course_pack_02_239.mp3"
+    },
+    {
+      "phraseId": "c2_w_613f2e271bb9",
+      "form": "shared",
+      "thai": "เคย",
+      "asset": "audio/thai/course_pack_02_240.mp3"
+    },
+    {
+      "phraseId": "c2_w_636b32ef01a4",
+      "form": "shared",
+      "thai": "เอกสาร",
+      "asset": "audio/thai/course_pack_02_241.mp3"
+    },
+    {
+      "phraseId": "c2_w_66eebaf3f1e8",
+      "form": "shared",
+      "thai": "ค่าไฟ",
+      "asset": "audio/thai/course_pack_02_242.mp3"
+    },
+    {
+      "phraseId": "c2_w_685b0b1ec595",
+      "form": "shared",
+      "thai": "น้ำรั่ว",
+      "asset": "audio/thai/course_pack_02_243.mp3"
+    },
+    {
+      "phraseId": "c2_w_68679be380b6",
+      "form": "shared",
+      "thai": "เป็นอะไร",
+      "asset": "audio/thai/course_pack_02_244.mp3"
+    },
+    {
+      "phraseId": "c2_w_43443384a503",
+      "form": "shared",
+      "thai": "เป็นอะไร",
+      "asset": "audio/thai/course_pack_02_244.mp3"
+    },
+    {
+      "phraseId": "c2_w_69631e418fb5",
+      "form": "shared",
+      "thai": "ล่าม",
+      "asset": "audio/thai/course_pack_02_245.mp3"
+    },
+    {
+      "phraseId": "c2_w_69a0bc9512d1",
+      "form": "shared",
+      "thai": "ข้างหน้า",
+      "asset": "audio/thai/course_pack_02_246.mp3"
+    },
+    {
+      "phraseId": "c2_w_730f29d30566",
+      "form": "shared",
+      "thai": "ข้างหน้า",
+      "asset": "audio/thai/course_pack_02_246.mp3"
+    },
+    {
+      "phraseId": "c2_w_6ba07ece9157",
+      "form": "shared",
+      "thai": "อยาก",
+      "asset": "audio/thai/course_pack_02_247.mp3"
+    },
+    {
+      "phraseId": "c2_w_6fb8146a21eb",
+      "form": "shared",
+      "thai": "วันอังคาร",
+      "asset": "audio/thai/course_pack_02_248.mp3"
+    },
+    {
+      "phraseId": "c2_w_704e55da5989",
+      "form": "shared",
+      "thai": "เริ่มงาน",
+      "asset": "audio/thai/course_pack_02_249.mp3"
+    },
+    {
+      "phraseId": "c2_w_4e8756b8ca4e",
+      "form": "shared",
+      "thai": "เริ่มงาน",
+      "asset": "audio/thai/course_pack_02_249.mp3"
+    },
+    {
+      "phraseId": "c2_w_71ba744102ad",
+      "form": "shared",
+      "thai": "ไกล",
+      "asset": "audio/thai/course_pack_02_250.mp3"
+    },
+    {
+      "phraseId": "c2_w_71d780599b55",
+      "form": "shared",
+      "thai": "ทางไหน",
+      "asset": "audio/thai/course_pack_02_251.mp3"
+    },
+    {
+      "phraseId": "c2_w_732e29901ec5",
+      "form": "shared",
+      "thai": "เลิก",
+      "asset": "audio/thai/course_pack_02_252.mp3"
+    },
+    {
+      "phraseId": "c2_w_74531d178d6b",
+      "form": "shared",
+      "thai": "สีแดง",
+      "asset": "audio/thai/course_pack_02_253.mp3"
+    },
+    {
+      "phraseId": "c2_w_750c8e9518ac",
+      "form": "shared",
+      "thai": "เท่าไร",
+      "asset": "audio/thai/course_pack_02_254.mp3"
+    },
+    {
+      "phraseId": "c2_w_78612cd61fef",
+      "form": "shared",
+      "thai": "ค่าน้ำ",
+      "asset": "audio/thai/course_pack_02_255.mp3"
+    },
+    {
+      "phraseId": "c2_w_79153a47042d",
+      "form": "shared",
+      "thai": "ปวด",
+      "asset": "audio/thai/course_pack_02_256.mp3"
+    },
+    {
+      "phraseId": "c2_w_79c3f3700718",
+      "form": "shared",
+      "thai": "มี",
+      "asset": "audio/thai/course_pack_02_257.mp3"
+    },
+    {
+      "phraseId": "c2_w_453b22700b7b",
+      "form": "shared",
+      "thai": "มี",
+      "asset": "audio/thai/course_pack_02_257.mp3"
+    },
+    {
+      "phraseId": "c2_w_7a56ad885fb5",
+      "form": "shared",
+      "thai": "ยี่สิบ",
+      "asset": "audio/thai/course_pack_02_258.mp3"
+    },
+    {
+      "phraseId": "c2_w_7c1e417d85e9",
+      "form": "shared",
+      "thai": "อยากดื่ม",
+      "asset": "audio/thai/course_pack_02_259.mp3"
+    },
+    {
+      "phraseId": "c2_w_7daa6d89d6ed",
+      "form": "shared",
+      "thai": "ใกล้",
+      "asset": "audio/thai/course_pack_02_260.mp3"
+    },
+    {
+      "phraseId": "c2_w_7dee4815a039",
+      "form": "shared",
+      "thai": "พัน",
+      "asset": "audio/thai/course_pack_02_261.mp3"
+    },
+    {
+      "phraseId": "c2_w_7f7af6f9aed8",
+      "form": "shared",
+      "thai": "ประตู",
+      "asset": "audio/thai/course_pack_02_262.mp3"
+    },
+    {
+      "phraseId": "c2_w_7ff50929cf60",
+      "form": "shared",
+      "thai": "บิล",
+      "asset": "audio/thai/course_pack_02_263.mp3"
+    },
+    {
+      "phraseId": "c2_w_82a4784cbd83",
+      "form": "shared",
+      "thai": "เงินสด",
+      "asset": "audio/thai/course_pack_02_264.mp3"
+    },
+    {
+      "phraseId": "c2_w_85df6d7613d2",
+      "form": "shared",
+      "thai": "ทำงาน",
+      "asset": "audio/thai/course_pack_02_265.mp3"
+    },
+    {
+      "phraseId": "c2_w_8645936277b2",
+      "form": "shared",
+      "thai": "เสีย",
+      "asset": "audio/thai/course_pack_02_266.mp3"
+    },
+    {
+      "phraseId": "c2_w_926554ab44a2",
+      "form": "shared",
+      "thai": "เสีย",
+      "asset": "audio/thai/course_pack_02_266.mp3"
+    },
+    {
+      "phraseId": "c2_w_8715899c04c8",
+      "form": "shared",
+      "thai": "แล้ว",
+      "asset": "audio/thai/course_pack_02_267.mp3"
+    },
+    {
+      "phraseId": "c2_w_22f3e6c54da9",
+      "form": "shared",
+      "thai": "แล้ว",
+      "asset": "audio/thai/course_pack_02_267.mp3"
+    },
+    {
+      "phraseId": "c2_w_87b92009abbc",
+      "form": "shared",
+      "thai": "ไปทำงาน",
+      "asset": "audio/thai/course_pack_02_268.mp3"
+    },
+    {
+      "phraseId": "c2_w_8800c9cd7001",
+      "form": "shared",
+      "thai": "ขวด",
+      "asset": "audio/thai/course_pack_02_269.mp3"
+    },
+    {
+      "phraseId": "c2_w_8cf9cc068b7c",
+      "form": "shared",
+      "thai": "อันเล็ก",
+      "asset": "audio/thai/course_pack_02_270.mp3"
+    },
+    {
+      "phraseId": "c2_w_92fa6d845b6d",
+      "form": "shared",
+      "thai": "พ่อ",
+      "asset": "audio/thai/course_pack_02_271.mp3"
+    },
+    {
+      "phraseId": "c2_w_9403092ebabe",
+      "form": "shared",
+      "thai": "กรอก",
+      "asset": "audio/thai/course_pack_02_272.mp3"
+    },
+    {
+      "phraseId": "c2_w_30187660c5ca",
+      "form": "shared",
+      "thai": "กรอก",
+      "asset": "audio/thai/course_pack_02_272.mp3"
+    },
+    {
+      "phraseId": "c2_w_9633f6efc90c",
+      "form": "shared",
+      "thai": "ป่วย",
+      "asset": "audio/thai/course_pack_02_273.mp3"
+    },
+    {
+      "phraseId": "c2_w_97647287de46",
+      "form": "shared",
+      "thai": "นอน",
+      "asset": "audio/thai/course_pack_02_274.mp3"
+    },
+    {
+      "phraseId": "c2_w_f955b95875bd",
+      "form": "shared",
+      "thai": "นอน",
+      "asset": "audio/thai/course_pack_02_274.mp3"
+    },
+    {
+      "phraseId": "c2_w_977ca1c897b1",
+      "form": "shared",
+      "thai": "พัก",
+      "asset": "audio/thai/course_pack_02_275.mp3"
+    },
+    {
+      "phraseId": "c2_w_986a7139b812",
+      "form": "shared",
+      "thai": "เมื่อวาน",
+      "asset": "audio/thai/course_pack_02_276.mp3"
+    },
+    {
+      "phraseId": "c2_w_98a2c8fbb0dd",
+      "form": "shared",
+      "thai": "เคยไป",
+      "asset": "audio/thai/course_pack_02_277.mp3"
+    },
+    {
+      "phraseId": "c2_w_3693aa021421",
+      "form": "shared",
+      "thai": "เคยไป",
+      "asset": "audio/thai/course_pack_02_277.mp3"
+    },
+    {
+      "phraseId": "c2_w_9a7423ab0f3f",
+      "form": "shared",
+      "thai": "โอน",
+      "asset": "audio/thai/course_pack_02_278.mp3"
+    },
+    {
+      "phraseId": "c2_w_9a7d42282b52",
+      "form": "shared",
+      "thai": "สำเนา",
+      "asset": "audio/thai/course_pack_02_279.mp3"
+    },
+    {
+      "phraseId": "c2_w_9cbc902a6927",
+      "form": "shared",
+      "thai": "เซ็น",
+      "asset": "audio/thai/course_pack_02_280.mp3"
+    },
+    {
+      "phraseId": "c2_w_9dad291afd3c",
+      "form": "shared",
+      "thai": "ลง",
+      "asset": "audio/thai/course_pack_02_281.mp3"
+    },
+    {
+      "phraseId": "c2_w_9ecd6613ac9a",
+      "form": "shared",
+      "thai": "หวาน",
+      "asset": "audio/thai/course_pack_02_282.mp3"
+    },
+    {
+      "phraseId": "c2_w_9f8c2f66c5ca",
+      "form": "shared",
+      "thai": "กับ",
+      "asset": "audio/thai/course_pack_02_283.mp3"
+    },
+    {
+      "phraseId": "c2_w_a0acddf29427",
+      "form": "shared",
+      "thai": "สิบ",
+      "asset": "audio/thai/course_pack_02_284.mp3"
+    },
+    {
+      "phraseId": "c2_w_a184584fd06e",
+      "form": "shared",
+      "thai": "สามพัน",
+      "asset": "audio/thai/course_pack_02_285.mp3"
+    },
+    {
+      "phraseId": "c2_w_a424e9088ecc",
+      "form": "shared",
+      "thai": "หนึ่งร้อย",
+      "asset": "audio/thai/course_pack_02_286.mp3"
+    },
+    {
+      "phraseId": "c2_w_a4447ef0c54f",
+      "form": "shared",
+      "thai": "บาท",
+      "asset": "audio/thai/course_pack_02_287.mp3"
+    },
+    {
+      "phraseId": "c2_w_a4ebc72c263f",
+      "form": "shared",
+      "thai": "กำลัง",
+      "asset": "audio/thai/course_pack_02_288.mp3"
+    },
+    {
+      "phraseId": "c2_w_a9b6e8a0c9bd",
+      "form": "shared",
+      "thai": "กำลัง",
+      "asset": "audio/thai/course_pack_02_288.mp3"
+    },
+    {
+      "phraseId": "c2_w_a87bc6019024",
+      "form": "shared",
+      "thai": "ให้หน่อย",
+      "asset": "audio/thai/course_pack_02_289.mp3"
+    },
+    {
+      "phraseId": "c2_w_a8ce074944e6",
+      "form": "shared",
+      "thai": "หมอ",
+      "asset": "audio/thai/course_pack_02_290.mp3"
+    },
+    {
+      "phraseId": "c2_w_aa445c4b3230",
+      "form": "shared",
+      "thai": "งาน",
+      "asset": "audio/thai/course_pack_02_291.mp3"
+    },
+    {
+      "phraseId": "c2_w_ade158d3f0fa",
+      "form": "shared",
+      "thai": "ปิด",
+      "asset": "audio/thai/course_pack_02_292.mp3"
+    },
+    {
+      "phraseId": "c2_w_c3a1cb442ae8",
+      "form": "shared",
+      "thai": "ปิด",
+      "asset": "audio/thai/course_pack_02_292.mp3"
+    },
+    {
+      "phraseId": "c2_w_adf8b17053fa",
+      "form": "shared",
+      "thai": "ร้อย",
+      "asset": "audio/thai/course_pack_02_293.mp3"
+    },
+    {
+      "phraseId": "c2_w_b053320ced1b",
+      "form": "shared",
+      "thai": "เมื่อไร",
+      "asset": "audio/thai/course_pack_02_294.mp3"
+    },
+    {
+      "phraseId": "c2_w_b07a3f45b92d",
+      "form": "shared",
+      "thai": "ซ่อม",
+      "asset": "audio/thai/course_pack_02_295.mp3"
+    },
+    {
+      "phraseId": "c2_w_ec60bcd44903",
+      "form": "shared",
+      "thai": "ซ่อม",
+      "asset": "audio/thai/course_pack_02_295.mp3"
+    },
+    {
+      "phraseId": "c2_w_b363d8845b12",
+      "form": "shared",
+      "thai": "เจ็บ",
+      "asset": "audio/thai/course_pack_02_296.mp3"
+    },
+    {
+      "phraseId": "c2_w_b43c165c7b36",
+      "form": "shared",
+      "thai": "ไม่หวาน",
+      "asset": "audio/thai/course_pack_02_297.mp3"
+    },
+    {
+      "phraseId": "c2_w_b4437d62c00f",
+      "form": "shared",
+      "thai": "อยู่ที่ไหน",
+      "asset": "audio/thai/course_pack_02_298.mp3"
+    },
+    {
+      "phraseId": "c2_w_b514b807f9c0",
+      "form": "shared",
+      "thai": "เลิกงาน",
+      "asset": "audio/thai/course_pack_02_299.mp3"
+    },
+    {
+      "phraseId": "c2_w_b6efcdec25d3",
+      "form": "shared",
+      "thai": "แต่",
+      "asset": "audio/thai/course_pack_02_300.mp3"
+    },
+    {
+      "phraseId": "c2_w_b956b0e8eeae",
+      "form": "shared",
+      "thai": "ราคา",
+      "asset": "audio/thai/course_pack_02_301.mp3"
+    },
+    {
+      "phraseId": "c2_w_b9988b04e7a7",
+      "form": "shared",
+      "thai": "อยู่ใกล้",
+      "asset": "audio/thai/course_pack_02_302.mp3"
+    },
+    {
+      "phraseId": "c2_w_ba16ceaeb66f",
+      "form": "shared",
+      "thai": "ตรงไป",
+      "asset": "audio/thai/course_pack_02_303.mp3"
+    },
+    {
+      "phraseId": "c2_w_ef6167d34e16",
+      "form": "shared",
+      "thai": "ตรงไป",
+      "asset": "audio/thai/course_pack_02_303.mp3"
+    },
+    {
+      "phraseId": "c2_w_ba2c30b7a514",
+      "form": "shared",
+      "thai": "โมง",
+      "asset": "audio/thai/course_pack_02_304.mp3"
+    },
+    {
+      "phraseId": "c2_w_bd284b5e34d3",
+      "form": "shared",
+      "thai": "เคาน์เตอร์",
+      "asset": "audio/thai/course_pack_02_305.mp3"
+    },
+    {
+      "phraseId": "c2_w_bda7df4a9f3c",
+      "form": "shared",
+      "thai": "รถเมล์",
+      "asset": "audio/thai/course_pack_02_306.mp3"
+    },
+    {
+      "phraseId": "c2_w_c1704ef65a06",
+      "form": "shared",
+      "thai": "รอ",
+      "asset": "audio/thai/course_pack_02_307.mp3"
+    },
+    {
+      "phraseId": "c2_w_c2a734306c0c",
+      "form": "shared",
+      "thai": "มาก",
+      "asset": "audio/thai/course_pack_02_308.mp3"
+    },
+    {
+      "phraseId": "c2_w_c878c8f90f1d",
+      "form": "shared",
+      "thai": "กี่",
+      "asset": "audio/thai/course_pack_02_309.mp3"
+    },
+    {
+      "phraseId": "c2_w_c9c84d6e214b",
+      "form": "shared",
+      "thai": "อยู่ไกล",
+      "asset": "audio/thai/course_pack_02_310.mp3"
+    },
+    {
+      "phraseId": "c2_w_cac219b4111e",
+      "form": "shared",
+      "thai": "ลา",
+      "asset": "audio/thai/course_pack_02_311.mp3"
+    },
+    {
+      "phraseId": "c2_w_68dadc83d6a7",
+      "form": "shared",
+      "thai": "ลา",
+      "asset": "audio/thai/course_pack_02_311.mp3"
+    },
+    {
+      "phraseId": "c2_w_34b6cca6cdc6",
+      "form": "shared",
+      "thai": "ลา",
+      "asset": "audio/thai/course_pack_02_311.mp3"
+    },
+    {
+      "phraseId": "c2_w_cffe7de7d90b",
+      "form": "shared",
+      "thai": "วันไหน",
+      "asset": "audio/thai/course_pack_02_312.mp3"
+    },
+    {
+      "phraseId": "c2_w_d00fc6c31efe",
+      "form": "shared",
+      "thai": "ทำให้ดู",
+      "asset": "audio/thai/course_pack_02_313.mp3"
+    },
+    {
+      "phraseId": "c2_w_d118c84f5e77",
+      "form": "shared",
+      "thai": "ยังไม่",
+      "asset": "audio/thai/course_pack_02_314.mp3"
+    },
+    {
+      "phraseId": "c2_w_93bfa4bff462",
+      "form": "shared",
+      "thai": "ยังไม่",
+      "asset": "audio/thai/course_pack_02_314.mp3"
+    },
+    {
+      "phraseId": "c2_w_d1420a834d02",
+      "form": "shared",
+      "thai": "เริ่ม",
+      "asset": "audio/thai/course_pack_02_315.mp3"
+    },
+    {
+      "phraseId": "c2_w_d24cc205ded2",
+      "form": "shared",
+      "thai": "แก้ว",
+      "asset": "audio/thai/course_pack_02_316.mp3"
+    },
+    {
+      "phraseId": "c2_w_d5ab5fb63485",
+      "form": "shared",
+      "thai": "ดื่ม",
+      "asset": "audio/thai/course_pack_02_317.mp3"
+    },
+    {
+      "phraseId": "c2_w_d91c64f96e6c",
+      "form": "shared",
+      "thai": "เดือน",
+      "asset": "audio/thai/course_pack_02_318.mp3"
+    },
+    {
+      "phraseId": "c2_w_dac348be5944",
+      "form": "shared",
+      "thai": "หัว",
+      "asset": "audio/thai/course_pack_02_319.mp3"
+    },
+    {
+      "phraseId": "c2_w_db8b5e869fd1",
+      "form": "shared",
+      "thai": "เภสัชกร",
+      "asset": "audio/thai/course_pack_02_320.mp3"
+    },
+    {
+      "phraseId": "c2_w_dc2df6021ab2",
+      "form": "shared",
+      "thai": "สถานีนี้",
+      "asset": "audio/thai/course_pack_02_321.mp3"
+    },
+    {
+      "phraseId": "c2_w_dd731f9fe5e6",
+      "form": "shared",
+      "thai": "แพง",
+      "asset": "audio/thai/course_pack_02_322.mp3"
+    },
+    {
+      "phraseId": "c2_w_dd742916918c",
+      "form": "shared",
+      "thai": "ใหญ่",
+      "asset": "audio/thai/course_pack_02_323.mp3"
+    },
+    {
+      "phraseId": "c2_w_ddb4b7e63ce0",
+      "form": "shared",
+      "thai": "ต้อง",
+      "asset": "audio/thai/course_pack_02_324.mp3"
+    },
+    {
+      "phraseId": "c2_w_ddf8e21b9282",
+      "form": "shared",
+      "thai": "ชั่วโมง",
+      "asset": "audio/thai/course_pack_02_325.mp3"
+    },
+    {
+      "phraseId": "c2_w_e1157a53b84c",
+      "form": "shared",
+      "thai": "ยา",
+      "asset": "audio/thai/course_pack_02_326.mp3"
+    },
+    {
+      "phraseId": "c2_w_e309defa4301",
+      "form": "shared",
+      "thai": "อาทิตย์หน้า",
+      "asset": "audio/thai/course_pack_02_327.mp3"
+    },
+    {
+      "phraseId": "c2_w_e5ad341aa8b1",
+      "form": "shared",
+      "thai": "อันนี้",
+      "asset": "audio/thai/course_pack_02_328.mp3"
+    },
+    {
+      "phraseId": "c2_w_e5b7639cdfc0",
+      "form": "shared",
+      "thai": "จาน",
+      "asset": "audio/thai/course_pack_02_329.mp3"
+    },
+    {
+      "phraseId": "c2_w_e5d5a4c51a50",
+      "form": "shared",
+      "thai": "ก่อน",
+      "asset": "audio/thai/course_pack_02_330.mp3"
+    },
+    {
+      "phraseId": "c2_w_e762821feb8a",
+      "form": "shared",
+      "thai": "อันใหญ่",
+      "asset": "audio/thai/course_pack_02_331.mp3"
+    },
+    {
+      "phraseId": "c2_w_e87e17e946f6",
+      "form": "shared",
+      "thai": "บ่าย",
+      "asset": "audio/thai/course_pack_02_332.mp3"
+    },
+    {
+      "phraseId": "c2_w_e93ca95ed7a3",
+      "form": "shared",
+      "thai": "เช้า",
+      "asset": "audio/thai/course_pack_02_333.mp3"
+    },
+    {
+      "phraseId": "c2_w_e9e486a57423",
+      "form": "shared",
+      "thai": "รับ",
+      "asset": "audio/thai/course_pack_02_334.mp3"
+    },
+    {
+      "phraseId": "c2_w_f16811374367",
+      "form": "shared",
+      "thai": "หน่อย",
+      "asset": "audio/thai/course_pack_02_335.mp3"
+    },
+    {
+      "phraseId": "c2_w_f29e653b3ff5",
+      "form": "shared",
+      "thai": "วันนี้",
+      "asset": "audio/thai/course_pack_02_336.mp3"
+    },
+    {
+      "phraseId": "c2_w_f36d5dd49339",
+      "form": "shared",
+      "thai": "ลูก",
+      "asset": "audio/thai/course_pack_02_337.mp3"
+    },
+    {
+      "phraseId": "c2_w_f69fc67bc27d",
+      "form": "shared",
+      "thai": "ข้างหลัง",
+      "asset": "audio/thai/course_pack_02_338.mp3"
+    },
+    {
+      "phraseId": "c2_w_f6c16ad72424",
+      "form": "shared",
+      "thai": "ทุกวัน",
+      "asset": "audio/thai/course_pack_02_339.mp3"
+    },
+    {
+      "phraseId": "c2_w_f719f6352886",
+      "form": "shared",
+      "thai": "ถูก",
+      "asset": "audio/thai/course_pack_02_340.mp3"
+    },
+    {
+      "phraseId": "c2_w_144522d97a0d",
+      "form": "shared",
+      "thai": "ถูก",
+      "asset": "audio/thai/course_pack_02_340.mp3"
+    },
+    {
+      "phraseId": "c2_w_f9401794e395",
+      "form": "shared",
+      "thai": "นัด",
+      "asset": "audio/thai/course_pack_02_341.mp3"
+    },
+    {
+      "phraseId": "c2_w_7d0f0bbd1d2c",
+      "form": "shared",
+      "thai": "นัด",
+      "asset": "audio/thai/course_pack_02_341.mp3"
+    },
+    {
+      "phraseId": "c2_w_46f142fa1ac1",
+      "form": "shared",
+      "thai": "นัด",
+      "asset": "audio/thai/course_pack_02_341.mp3"
+    },
+    {
+      "phraseId": "c2_w_f9d73bd72a64",
+      "form": "shared",
+      "thai": "เงินทอน",
+      "asset": "audio/thai/course_pack_02_342.mp3"
+    },
+    {
+      "phraseId": "c2_w_f9ede1d198e5",
+      "form": "shared",
+      "thai": "พรุ่งนี้",
+      "asset": "audio/thai/course_pack_02_343.mp3"
+    },
+    {
+      "phraseId": "c2_w_fb3f72f288b9",
+      "form": "shared",
+      "thai": "เปิด",
+      "asset": "audio/thai/course_pack_02_344.mp3"
+    },
+    {
+      "phraseId": "c2_w_63c4870f0fc1",
+      "form": "shared",
+      "thai": "เปิด",
+      "asset": "audio/thai/course_pack_02_344.mp3"
+    },
+    {
+      "phraseId": "c2_w_fc270d7028a9",
+      "form": "shared",
+      "thai": "วาง",
+      "asset": "audio/thai/course_pack_02_345.mp3"
+    },
+    {
+      "phraseId": "c2_w_6cea67c7a6a6",
+      "form": "shared",
+      "thai": "วาง",
+      "asset": "audio/thai/course_pack_02_345.mp3"
+    },
+    {
+      "phraseId": "c2_w_fca6f7f5caa5",
+      "form": "shared",
+      "thai": "ถูกไหม",
+      "asset": "audio/thai/course_pack_02_346.mp3"
+    },
+    {
+      "phraseId": "c2_w_fe089fa86b91",
+      "form": "shared",
+      "thai": "ไข้",
+      "asset": "audio/thai/course_pack_02_347.mp3"
     }
   ]
 }
