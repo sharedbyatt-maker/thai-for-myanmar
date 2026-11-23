@@ -2,6 +2,8 @@
 """Apply the app's safe Android defaults after Flutter creates platform files."""
 
 import re
+import shutil
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,6 +11,45 @@ ANDROID = ROOT / "android"
 OLD_PACKAGE = "com.sharedbyatt.thai_for_myanmar"
 APP_PACKAGE = "com.sharedbyatt.thaiformyanmar"
 TEST_ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
+
+
+def configure_brand_resources() -> None:
+    res = ANDROID / "app/src/main/res"
+    shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
+    launch_background = """<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="#111431" />
+    <item>
+        <bitmap android:gravity="fill" android:src="@drawable/chang_thai_splash" />
+    </item>
+</layer-list>
+"""
+    for qualifier in ("drawable", "drawable-v21"):
+        directory = res / qualifier
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / "launch_background.xml").write_text(
+            launch_background, encoding="utf-8"
+        )
+
+    for qualifier in ("values", "values-night"):
+        styles = res / qualifier / "styles.xml"
+        tree = ET.parse(styles)
+        normal = tree.find("./style[@name='NormalTheme']/item[@name='android:windowBackground']")
+        if normal is None:
+            raise SystemExit(f"NormalTheme window background missing in {styles}.")
+        normal.text = "@drawable/launch_background"
+        tree.write(styles, encoding="utf-8")
+        launch = tree.find("./style[@name='LaunchTheme']")
+        if launch is None:
+            raise SystemExit(f"LaunchTheme missing in {styles}.")
+        for name, value in {
+            "android:windowSplashScreenBackground": "#111431",
+            "android:windowSplashScreenAnimatedIcon": "@mipmap/ic_launcher",
+        }.items():
+            ET.SubElement(launch, "item", name=name).text = value
+        versioned = res / f"{qualifier}-v31"
+        versioned.mkdir(exist_ok=True)
+        ET.indent(tree, space="    ")
+        tree.write(versioned / "styles.xml", encoding="utf-8")
 
 
 def main() -> int:
@@ -36,7 +77,7 @@ def main() -> int:
             manifest_text = manifest_text.replace('</manifest>',
                 '<queries>' + tts_intent + '</queries>\n</manifest>', 1)
     manifest_text = re.sub(
-        r'android:icon="[^"]+"', 'android:icon="@drawable/ic_thai_myanmar"',
+        r'android:icon="[^"]+"', 'android:icon="@mipmap/ic_launcher"',
         manifest_text,
         count=1,
     )
@@ -84,21 +125,7 @@ def main() -> int:
         if old_parent.exists() and not any(old_parent.iterdir()):
             old_parent.rmdir()
 
-    icon = ANDROID / "app/src/main/res/drawable/ic_thai_myanmar.xml"
-    icon.parent.mkdir(parents=True, exist_ok=True)
-    icon.write_text(
-        '''<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-  <path android:fillColor="#167D75" android:pathData="M0,0h108v108h-108z" />
-  <path android:fillColor="#FFFFFF" android:pathData="M23,24c12,-3 22,0 31,7c9,-7 19,-10 31,-7v53c-12,-3 -22,0 -31,7c-9,-7 -19,-10 -31,-7z" />
-  <path android:fillColor="#167D75" android:pathData="M30,34c8,-1 15,1 20,5v35c-6,-4 -12,-5 -20,-4z" />
-  <path android:fillColor="#167D75" android:pathData="M58,39c6,-4 12,-6 20,-5v36c-8,-1 -14,0 -20,4z" />
-</vector>\n''',
-        encoding="utf-8",
-    )
+    configure_brand_resources()
     print(f"Android defaults configured: {APP_PACKAGE}; AdMob remains test-only.")
     return 0
 
