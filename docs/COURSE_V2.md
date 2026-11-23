@@ -89,10 +89,10 @@ Run from the repository root:
     python3 tool/validate_course_v2.py
     python3 tool/course_audio_plan.py --output docs/audio/course-v2-required.json
 
-The checked-in deterministic plan contains 535 required bindings, 155 already
-resolved, and 380 missing bindings grouped into **347 unique recordings**. A
-binding is not necessarily a distinct MP3: aliases reuse identical text and form.
-Adding or editing course text can change these counts.
+The checked-in plan now resolves all 535 required audio bindings. The second
+pack added 347 recordings and 380 exact bindings, including aliases. The full
+authored-course manifest references 426 recordings. Human listening review
+remains pending.
 
 Finish language/exercise text review before generating. Later, download the
 current repository on Windows, open `Start_Audio_Studio.bat`, choose the preferred
