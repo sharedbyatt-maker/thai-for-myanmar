@@ -121,6 +121,40 @@ class _LeagueScreenState extends State<LeagueScreen> {
       _message = 'Google ဖွင့်မရသေးပါ။ ပြန်စမ်းပါ။';
     }
   });
+  Future<void> _confirmDeletion() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('League အကောင့်ဖျက်မယ်'),
+        content: const Text(
+          'League အကောင့်၊ အမှတ်နဲ့ ဖြေဆိုမှုမှတ်တမ်းတွေကို အပြီးဖျက်ပါမယ်။ '
+          'ဖုန်းထဲက သင်ယူမှုမှတ်တမ်းနဲ့ အကြိုက်ဆုံး စကားစုတွေ ကျန်ပါမယ်။',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('မဖျက်တော့ပါ'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('အပြီးဖျက်မယ်'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true || _loading || !_api.signedIn) return;
+    await _run(() async {
+      await _api.deleteAccount();
+      if (!mounted) return;
+      _board = null;
+      _alias.clear();
+      _avatar = 0;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('League အကောင့် ဖျက်ပြီးပါပြီ။')),
+      );
+    });
+  }
+
   Future<void> _practice() async {
     await _run(() async {
       final round = await _api.beginRound();
@@ -291,6 +325,15 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 child: const Text('Account ထွက်မယ်'),
               ),
             ],
+            if (_ready && _api.signedIn)
+              TextButton(
+                key: const ValueKey('league-delete-account'),
+                onPressed: _loading ? null : _confirmDeletion,
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.error,
+                ),
+                child: const Text('League အကောင့်ဖျက်မယ်'),
+              ),
           ],
         ),
       ),
