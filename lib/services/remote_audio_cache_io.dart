@@ -9,8 +9,9 @@ Future<String?> cacheRemoteAudio(Uri url, {required bool online}) async {
   final cache = Directory('${base.path}/chang-thai-audio');
   final filename = url.pathSegments.last;
   final file = File('${cache.path}/$filename');
-  if (await file.exists() && await file.length() > 0)
+  if (await file.exists() && await file.length() > 0) {
     return file.uri.toString();
+  }
   if (!online) return null;
 
   final client = http.Client();

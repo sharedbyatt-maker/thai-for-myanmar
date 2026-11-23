@@ -70,8 +70,9 @@ class RemoteControls {
               headers: {'apikey': key},
             )
             .timeout(const Duration(seconds: 2));
-        if (response.statusCode != 200)
+        if (response.statusCode != 200) {
           throw StateError('Controls unavailable');
+        }
         settings = controlMap(
           (jsonDecode(response.body) as List).single['settings'],
         );
