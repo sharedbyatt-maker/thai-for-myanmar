@@ -1,3 +1,7 @@
+## Start here
+
+Read [the Chang Thai V1 handoff](docs/PROJECT_HANDOFF.md) before changing the project. Scope work to the owner's request and verify current release state against the linked sources.
+
 # Owner's Learn UI requirement
 
 The owner explicitly wants a Duolingo-inspired Learn experience: a winding vertical

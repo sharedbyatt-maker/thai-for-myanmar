@@ -1,5 +1,7 @@
 # Chang Thai
 
+**Start here:** [Chang Thai V1 project and release handoff](docs/PROJECT_HANDOFF.md).
+
 Practical, offline-first Thai for Myanmar speakers living, working, studying, or travelling in Thailand. Android is the primary V1 product; the same Flutter UI also builds as a browser preview for owner review on an iPhone or PC.
 
 ## V1 snapshot
