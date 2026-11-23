@@ -10,6 +10,7 @@ abstract interface class LeagueGateway {
   Stream<bool> get authChanges;
   Future<bool> signInWithGoogle();
   Future<void> signOut();
+  Future<void> deleteAccount();
   Future<void> join(String alias, int avatar);
   Future<void> leave();
   Future<Map<String, dynamic>> board();
@@ -76,6 +77,18 @@ class LeagueService implements LeagueGateway {
 
   @override
   Future<void> signOut() => client.auth.signOut();
+
+  @override
+  Future<void> deleteAccount() async {
+    final response = await client.functions
+        .invoke('delete-league-account')
+        .timeout(const Duration(seconds: 20));
+    final data = response.data;
+    if (response.status != 200 || data is! Map || data['deleted'] != true) {
+      throw StateError('League account deletion failed');
+    }
+    await client.auth.signOut(scope: SignOutScope.local);
+  }
 
   @override
   Future<void> join(String alias, int avatar) async {

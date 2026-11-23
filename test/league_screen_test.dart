@@ -24,6 +24,7 @@ class FakeLeague implements LeagueGateway {
   int submissions = 0;
   bool failSubmit = false;
   int joins = 0;
+  int deletions = 0;
   Future<Map<String, dynamic>> Function()? boardOverride;
   List<Map<String, Object>>? rows;
   @override
@@ -32,6 +33,12 @@ class FakeLeague implements LeagueGateway {
   Future<bool> initialize() async => ready;
   @override
   Future<void> signOut() async {
+    loggedIn = false;
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    deletions++;
     loggedIn = false;
   }
 
@@ -112,6 +119,28 @@ class FakeLeague implements LeagueGateway {
 }
 
 void main() {
+  testWidgets('League deletion requires confirmation and signs out', (
+    tester,
+  ) async {
+    final api = FakeLeague()..joined = false;
+    await tester.pumpWidget(MaterialApp(home: LeagueScreen(gateway: api)));
+    await tester.pumpAndSettle();
+    final delete = find.byKey(const ValueKey('league-delete-account'));
+    await tester.ensureVisible(delete);
+    await tester.tap(delete);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('မဖျက်တော့ပါ'));
+    await tester.pumpAndSettle();
+    expect(api.deletions, 0);
+    await tester.tap(delete);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('အပြီးဖျက်မယ်'));
+    await tester.pumpAndSettle();
+    expect(api.deletions, 1);
+    expect(delete, findsNothing);
+    expect(find.byKey(const ValueKey('league-google-sign-in')), findsOneWidget);
+  });
+
   test('web OAuth callback stays on its initiating origin', () {
     expect(
       LeagueService.webRedirectFor(

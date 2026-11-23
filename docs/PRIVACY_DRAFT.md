@@ -13,7 +13,7 @@ This is an implementation summary for a future owner-reviewed privacy policy, no
 
 ## Optional weekly League
 
-Google sign-in sends the basic identity scopes (openid, email, profile) to Supabase Auth. The app does not receive the Google password. Supabase stores the account identity, selected alias/avatar, membership, submitted challenge answers and competitive scoring records. The leaderboard exposes aliases, avatars, ranks and points, with a flag identifying the current account; it does not expose emails or Auth UUIDs. Opting out hides League participation; it does not delete the account or erase all server records. Offline progress remains device/browser-local and is not synchronized by League login. See [League operations and verification](WEEKLY_LEAGUES.md).
+Google sign-in sends the basic identity scopes (openid, email, profile) to Supabase Auth. The app does not receive the Google password. Supabase stores the account identity, selected alias/avatar, membership, submitted challenge answers and competitive scoring records. The leaderboard exposes aliases, avatars, ranks and points, with a flag identifying the current account; it does not expose emails or Auth UUIDs. Opting out hides League participation. Signed-in users can permanently delete their account from the League screen or follow the public [account deletion page](https://thai-for-myanmar-web-preview.onrender.com/delete-account.html). Deletion removes the Supabase Auth user and cascades to the League profile, memberships, rounds, credits and completions. Offline progress remains device/browser-local and is not synchronized by League login. See [League operations and verification](WEEKLY_LEAGUES.md).
 
 ## Before public release
 
