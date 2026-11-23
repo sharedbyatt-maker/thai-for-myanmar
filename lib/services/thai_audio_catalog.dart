@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../models/phrase.dart';
+import 'remote_controls.dart';
 
 enum ThaiAudioForm { shared, male, female }
 
@@ -118,6 +119,16 @@ class ThaiAudioCatalog {
       'female' => ThaiAudioForm.female,
       _ => ThaiAudioForm.shared,
     };
+    final remote = RemoteControls.instance.audio[(phrase.id, politeStyle)];
+    if (remote != null &&
+        RemoteControls.instance.line(phrase.id, politeStyle)['thai'] == text) {
+      return ThaiAudioEntry(
+        phraseId: phrase.id,
+        form: selectedForm,
+        thai: text,
+        assetPath: remote,
+      );
+    }
     final selected = _entries[(phrase.id, selectedForm)];
     if (selected != null && selected.thai == text) return selected;
 

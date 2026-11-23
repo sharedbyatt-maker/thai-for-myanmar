@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import 'remote_controls.dart';
+
 const _adsEnabled = bool.fromEnvironment('ENABLE_ADS', defaultValue: false);
 const _productionMode = bool.fromEnvironment(
   'ADMOB_PRODUCTION',
@@ -16,7 +18,11 @@ bool get _canShowAds {
       !_adsEnabled) {
     return false;
   }
-  if (kReleaseMode) return _productionMode && _productionBannerId.isNotEmpty;
+  if (kReleaseMode) {
+    return _productionMode &&
+        _productionBannerId.isNotEmpty &&
+        RemoteControls.instance.androidBanner;
+  }
   return true;
 }
 

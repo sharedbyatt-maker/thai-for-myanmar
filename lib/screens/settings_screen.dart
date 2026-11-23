@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/content_frame.dart';
+import '../widgets/push_preference_tile.dart';
 
 import '../services/app_state.dart';
 import '../data/phrase_repository.dart';
@@ -30,6 +31,7 @@ class SettingsScreen extends StatelessWidget {
           builder: (context, _) => ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              const PushPreferenceTile(),
               Text('အသွင်အပြင်', style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
               Card(

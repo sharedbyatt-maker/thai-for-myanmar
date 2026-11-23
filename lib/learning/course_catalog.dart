@@ -1,26 +1,39 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/phrase.dart';
+import '../services/remote_controls.dart';
 import 'course_progress.dart';
 
 class CourseLine {
   CourseLine(this.data, [this._pronunciations = const {}]);
   final Map<String, dynamic> data;
   final Map<String, String> _pronunciations;
-  String romanized(String style) => _pronunciations[thai(style)] ?? '';
+  Map<String, dynamic> _override(String style) =>
+      RemoteControls.instance.line(id, style);
+  String romanized(String style) =>
+      controlText(_override(style)['romanization']) ??
+      _pronunciations[thai(style)] ??
+      '';
   String get id => data['id'] as String;
   String get my => data['my'] as String;
   String myFor(String style) =>
-      data[style == 'male' ? 'myMale' : 'myFemale'] as String? ?? my;
+      controlText(_override(style)['my']) ??
+      data[style == 'male' ? 'myMale' : 'myFemale'] as String? ??
+      my;
   String get scene =>
       data['scene'] as String? ?? 'ဒီစကားလုံးကို အသံ၊ အဓိပ္ပာယ်နဲ့ တွဲလေ့လာပါ။';
-  String thai(String style) => data[style] as String;
+  String thai(String style) =>
+      controlText(_override(style)['thai']) ?? data[style] as String;
   List<String> parts(String style) =>
       List<String>.from((data['parts'] as Map)[style] as List? ?? []);
   String source(String style) =>
       (data['sources'] as Map)[style] as String? ?? '';
   Phrase phrase(String style) => Phrase(
-    id: source(style).isEmpty ? id : source(style),
+    id:
+        RemoteControls.instance.audio.containsKey((id, style)) ||
+            source(style).isEmpty
+        ? id
+        : source(style),
     categoryId: 'course',
     thai: thai(style),
     myanmar: my,
@@ -35,7 +48,11 @@ class CourseLesson {
   CourseLesson(this.data);
   final Map<String, dynamic> data;
   String get id => 'course-v2.1:${data['id']}';
-  String get title => data['title'] as String;
+  String get title =>
+      controlText(
+        RemoteControls.instance.lesson(data['id'] as String)['title'],
+      ) ??
+      data['title'] as String;
   List<Map<String, dynamic>> get steps => (data['steps'] as List)
       .map((e) => Map<String, dynamic>.from(e as Map))
       .toList();
@@ -45,9 +62,15 @@ class CourseUnit {
   CourseUnit(this.data);
   final Map<String, dynamic> data;
   String get id => data['id'] as String;
-  String get title => data['title'] as String;
-  String get goal => data['goal'] as String;
-  String get tips => data['tips'] as String;
+  String get title =>
+      controlText(RemoteControls.instance.unit(id)['title']) ??
+      data['title'] as String;
+  String get goal =>
+      controlText(RemoteControls.instance.unit(id)['goal']) ??
+      data['goal'] as String;
+  String get tips =>
+      controlText(RemoteControls.instance.unit(id)['tips']) ??
+      data['tips'] as String;
   int get section => data['section'] as int;
   List<String> get prerequisites =>
       List<String>.from(data['prerequisites'] as List);

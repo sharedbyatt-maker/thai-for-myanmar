@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Apply the app's safe Android defaults after Flutter creates platform files."""
 
+import json
 import re
 import shutil
 import xml.etree.ElementTree as ET
@@ -52,6 +53,44 @@ def configure_brand_resources() -> None:
         versioned.mkdir(exist_ok=True)
         ET.indent(tree, space="    ")
         tree.write(versioned / "styles.xml", encoding="utf-8")
+
+
+def configure_android_controls(manifest_text: str, gradle: Path) -> str:
+    app = gradle.parent
+    controls = ROOT / "tool/android_controls"
+    firebase = app / "google-services.json"
+    firebase_enabled = firebase.is_file()
+    if firebase_enabled:
+        config = json.loads(firebase.read_text(encoding="utf-8"))
+        if not any(
+            row.get("client_info", {}).get("android_client_info", {}).get("package_name")
+            == APP_PACKAGE
+            for row in config.get("client", [])
+        ):
+            raise SystemExit("google-services.json does not match Chang Thai's package ID.")
+        text = gradle.read_text(encoding="utf-8")
+        if 'id("com.google.gms.google-services")' not in text:
+            text = text.replace(
+                "plugins {",
+                'plugins {\n    id("com.google.gms.google-services") version "4.4.4"',
+                1,
+            )
+            text += '\ndependencies {\n    implementation("com.google.firebase:firebase-messaging:25.0.1")\n}\n'
+            gradle.write_text(text, encoding="utf-8")
+        if 'firebase_messaging_auto_init_enabled' not in manifest_text:
+            manifest_text = manifest_text.replace(
+                "</application>",
+                '    <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />\n'
+                '    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="chang_thai_announcements" />\n'
+                '  </application>',
+                1,
+            )
+    activity = app / "src/main/kotlin/com/sharedbyatt/thaiformyanmar"
+    activity.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(controls / "MainActivity.kt", activity / "MainActivity.kt")
+    implementation = "PushControlsFirebase.kt" if firebase_enabled else "PushControlsStub.kt"
+    shutil.copyfile(controls / implementation, activity / "PushControls.kt")
+    return manifest_text
 
 
 def main() -> int:
@@ -127,6 +166,8 @@ def main() -> int:
         if old_parent.exists() and not any(old_parent.iterdir()):
             old_parent.rmdir()
 
+    manifest_text = configure_android_controls(manifest_text, gradle)
+    manifest.write_text(manifest_text, encoding="utf-8")
     configure_brand_resources()
     print(f"Android defaults configured: {APP_PACKAGE}; AdMob remains test-only.")
     return 0
