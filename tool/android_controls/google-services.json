@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241064328680",
+    "project_id": "chang-thai-b6ff5",
+    "storage_bucket": "chang-thai-b6ff5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241064328680:android:5d2d7dd0031ba53f58b85d",
+        "android_client_info": {
+          "package_name": "com.sharedbyatt.thaiformyanmar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu4WX_bSxcqGoyvqUcho4rpFkSgxSYeMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

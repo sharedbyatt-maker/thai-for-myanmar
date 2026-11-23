@@ -59,6 +59,9 @@ def configure_android_controls(manifest_text: str, gradle: Path) -> str:
     app = gradle.parent
     controls = ROOT / "tool/android_controls"
     firebase = app / "google-services.json"
+    bundled_config = controls / "google-services.json"
+    if not firebase.is_file() and bundled_config.is_file():
+        shutil.copyfile(bundled_config, firebase)
     firebase_enabled = firebase.is_file()
     if firebase_enabled:
         config = json.loads(firebase.read_text(encoding="utf-8"))
