@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/league_service.dart';
@@ -325,6 +326,18 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 child: const Text('Account ထွက်မယ်'),
               ),
             ],
+            if (_api case final LeagueService service
+                when kIsWeb && _ready && service.canSetAdminPassword)
+              TextButton.icon(
+                onPressed: _loading
+                    ? null
+                    : () => showDialog<void>(
+                        context: context,
+                        builder: (_) => _AdminPasswordDialog(service: service),
+                      ),
+                icon: const Icon(Icons.lock_outline),
+                label: const Text('Admin password သတ်မှတ်မယ်'),
+              ),
             if (_ready && _api.signedIn)
               TextButton(
                 key: const ValueKey('league-delete-account'),
@@ -679,4 +692,102 @@ class _TierBadge extends StatelessWidget {
       color: selected ? Colors.white : _colors[tier],
     ),
   );
+}
+
+class _AdminPasswordDialog extends StatefulWidget {
+  const _AdminPasswordDialog({required this.service});
+
+  final LeagueService service;
+
+  @override
+  State<_AdminPasswordDialog> createState() => _AdminPasswordDialogState();
+}
+
+class _AdminPasswordDialogState extends State<_AdminPasswordDialog> {
+  final _password = TextEditingController();
+  final _confirmation = TextEditingController();
+  bool _saving = false;
+  bool _saved = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _password.dispose();
+    _confirmation.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    if (_password.text.length < 16 || _password.text != _confirmation.text) {
+      setState(
+        () => _error = 'အနည်းဆုံး ၁၆ လုံးရှိပြီး နှစ်ကြိမ်လုံး တူရပါမယ်။',
+      );
+      return;
+    }
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
+    try {
+      await widget.service.setAdminPassword(_password.text);
+      if (!mounted) return;
+      _password.clear();
+      _confirmation.clear();
+      setState(() => _saved = true);
+    } catch (_) {
+      if (!mounted) return;
+      setState(
+        () => _error = 'Password သိမ်းမရပါ။ Google နဲ့ ပြန်ဝင်ပြီး စမ်းပါ။',
+      );
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Chang Thai Admin password'),
+      content: _saved
+          ? const Text(
+              'သိမ်းပြီးပါပြီ။ /admin/ မှာ email နဲ့ password သုံးပြီး ဝင်ပါ။',
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _password,
+                    obscureText: true,
+                    enabled: !_saving,
+                    autofillHints: const [AutofillHints.newPassword],
+                    decoration: const InputDecoration(
+                      labelText: 'Password အသစ်',
+                    ),
+                  ),
+                  TextField(
+                    controller: _confirmation,
+                    obscureText: true,
+                    enabled: !_saving,
+                    decoration: InputDecoration(
+                      labelText: 'Password ပြန်ရိုက်ပါ',
+                      errorText: _error,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+      actions: [
+        TextButton(
+          onPressed: _saving ? null : () => Navigator.of(context).pop(),
+          child: const Text('ပိတ်မယ်'),
+        ),
+        if (!_saved)
+          FilledButton(
+            onPressed: _saving ? null : _save,
+            child: const Text('သိမ်းမယ်'),
+          ),
+      ],
+    );
+  }
 }
