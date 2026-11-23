@@ -4,8 +4,10 @@ import '../models/phrase.dart';
 import 'course_progress.dart';
 
 class CourseLine {
-  CourseLine(this.data);
+  CourseLine(this.data, [this._pronunciations = const {}]);
   final Map<String, dynamic> data;
+  final Map<String, String> _pronunciations;
+  String romanized(String style) => _pronunciations[thai(style)] ?? '';
   String get id => data['id'] as String;
   String get my => data['my'] as String;
   String myFor(String style) =>
@@ -56,14 +58,17 @@ class CourseUnit {
 }
 
 class CourseCatalog {
-  CourseCatalog.fromJson(Map<String, dynamic> json) {
+  CourseCatalog.fromJson(
+    Map<String, dynamic> json, [
+    Map<String, String> pronunciations = const {},
+  ]) {
     if (json['schemaVersion'] != 2) {
       throw const FormatException('Invalid course version');
     }
     lines = (json['lines'] as Map).map(
       (k, v) => MapEntry(
         k as String,
-        CourseLine(Map<String, dynamic>.from(v as Map)),
+        CourseLine(Map<String, dynamic>.from(v as Map), pronunciations),
       ),
     );
     units = (json['units'] as List)
@@ -98,13 +103,16 @@ class CourseCatalog {
   late final Map<String, CourseLine> lines;
   late final List<CourseUnit> units;
   late final List<String> sections;
-  static Future<CourseCatalog> load(AssetBundle bundle) async =>
-      CourseCatalog.fromJson(
-        Map<String, dynamic>.from(
-          jsonDecode(await bundle.loadString('assets/data/course_v2.json'))
-              as Map,
-        ),
-      );
+  static Future<CourseCatalog> load(AssetBundle bundle) async {
+    final course = await bundle.loadString('assets/data/course_v2.json');
+    final pronunciations = await bundle.loadString(
+      'assets/data/course_pronunciation.json',
+    );
+    return CourseCatalog.fromJson(
+      Map<String, dynamic>.from(jsonDecode(course) as Map),
+      Map<String, String>.from(jsonDecode(pronunciations) as Map),
+    );
+  }
 
   Map<String, dynamic>? dueUnitProbe(CourseProgress progress, DateTime now) {
     for (final unit in units) {
