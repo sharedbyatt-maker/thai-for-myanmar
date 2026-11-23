@@ -502,6 +502,7 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
                                 locked: !unlocked,
                                 last: i == u.lessons.length - 1,
                                 icon: _lessonIcon(lesson),
+                                mascotPose: _unitMascot(u.id),
                                 onPressed: unlocked
                                     ? (node) => _preview(node, u, lesson)
                                     : (_) => ScaffoldMessenger.of(context)
@@ -576,6 +577,19 @@ IconData _lessonIcon(CourseLesson lesson) =>
     ? Icons.headphones_rounded
     : Icons.star_rounded;
 
+CourseMascotPose _unitMascot(String unitId) => switch (unitId) {
+  'u01' => CourseMascotPose.greet,
+  'u02' || 'u10' || 'u11' || 'u12' => CourseMascotPose.travel,
+  'u03' => CourseMascotPose.listen,
+  'u04' || 'u05' || 'u06' => CourseMascotPose.food,
+  'u07' || 'u08' || 'u09' || 'u19' => CourseMascotPose.shop,
+  'u14' || 'u15' || 'u16' || 'u17' || 'u18' => CourseMascotPose.work,
+  'u13' || 'u20' || 'u25' => CourseMascotPose.think,
+  'u21' || 'u22' => CourseMascotPose.encourage,
+  'u23' || 'u24' || 'u26' => CourseMascotPose.speak,
+  _ => CourseMascotPose.study,
+};
+
 class CoursePathNode extends StatelessWidget {
   const CoursePathNode({
     required this.index,
@@ -588,10 +602,12 @@ class CoursePathNode extends StatelessWidget {
     required this.last,
     required this.icon,
     required this.onPressed,
+    this.mascotPose = CourseMascotPose.study,
     this.nodeKey,
     super.key,
   });
   final Key? nodeKey;
+  final CourseMascotPose mascotPose;
   final int index;
   final double height;
   final String title;
@@ -606,6 +622,12 @@ class CoursePathNode extends StatelessWidget {
       final width = constraints.maxWidth;
       final travel = math.max(0.0, (width - 140) / 2);
       final dx = positions[index % positions.length] * travel;
+      const mascotInset = 12.0;
+      // Leave room for the 102px current-node ring plus a visual gap.
+      final mascotSize = math.min(
+        116.0,
+        width / 2 + dx.abs() - mascotInset - 51 - 8,
+      );
       final fill = locked
           ? Theme.of(context).colorScheme.surfaceContainerHighest
           : completed
@@ -634,13 +656,10 @@ class CoursePathNode extends StatelessWidget {
               ),
             if (index % 4 == 2 && width >= 280)
               Positioned(
-                top: 26,
-                right: dx < 0 ? 24 : null,
-                left: dx < 0 ? null : 24,
-                child: const CourseMascot(
-                  pose: CourseMascotPose.study,
-                  size: 76,
-                ),
+                top: (height - mascotSize) / 2,
+                right: dx <= 0 ? mascotInset : null,
+                left: dx <= 0 ? null : mascotInset,
+                child: CourseMascot(pose: mascotPose, size: mascotSize),
               ),
             Align(
               alignment: Alignment.topCenter,
