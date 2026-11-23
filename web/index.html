@@ -51,6 +51,15 @@
       }, true);
     })();
   </script>
+  <script>
+    const adminCallback = new URLSearchParams(location.search);
+    if (adminCallback.get("league-auth") === "1" &&
+        sessionStorage.getItem("chang-thai-admin-pkce") &&
+        (adminCallback.has("code") || adminCallback.has("error"))) {
+      sessionStorage.setItem("chang-thai-admin-code", adminCallback.get("code") || "");
+      location.replace("/admin/");
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

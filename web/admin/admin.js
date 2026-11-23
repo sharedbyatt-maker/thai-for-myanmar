@@ -5,6 +5,8 @@ const course = await fetch("/assets/assets/data/course_v2.json").then(r => r.jso
 const romanizations = await fetch("/assets/assets/data/course_pronunciation.json").then(r => r.json());
 let token, draft, published, settings, previewUrl;
 let busy = false;
+let ownerEmail, setupOnly = false;
+const ownerRole = user => user?.app_metadata?.chang_thai_admin === true;
 const status = message => { $("status").textContent = message; };
 const options = (element, rows) => {
   element.replaceChildren(...rows.map(([id, text]) => new Option(text, id)));
@@ -62,7 +64,8 @@ function revision() {
 }
 
 function showPage(id) {
-  $("publish-bar").hidden = id === "overview";
+  $("controls").hidden = id === "profile";
+  $("publish-bar").hidden = id === "overview" || id === "profile";
   for (const button of document.querySelectorAll("[data-page]")) {
     const active = button.dataset.page === id;
     $(button.dataset.page).hidden = !active;
@@ -137,6 +140,9 @@ $("sign-in").addEventListener("submit", run(async event => {
     const session = await api("/auth/v1/token?grant_type=password", {
       method: "POST", body: { email: form.elements.email.value.trim(), password: form.elements.password.value },
     });
+    if (!ownerRole(session.user)) throw new Error("Owner access required");
+    ownerEmail = session.user.email;
+    $("profile-email").textContent = ownerEmail;
     token = session.access_token;
     draft = await readRow("chang_thai_admin_draft");
     published = await readRow("chang_thai_controls");
@@ -158,6 +164,12 @@ $("sign-out").addEventListener("click", run(async () => {
   try { await api("/auth/v1/logout?scope=local", { method: "POST" }); }
   finally {
     token = null;
+    ownerEmail = null;
+    setupOnly = false;
+    $("change-password").reset();
+    for (const button of document.querySelectorAll("[data-page]")) button.hidden = false;
+    $("current-password-label").hidden = false;
+    $("change-password").elements.current.required = true;
     $("workspace").hidden = true;
     $("login").hidden = false;
     status("");
@@ -257,3 +269,79 @@ $("push-send").addEventListener("click", run(async () => {
   if (result?.accepted !== true) throw new Error("Push ကို Firebase က လက်မခံသေးပါ။");
   status("Firebase က ပို့ရန် လက်ခံပြီးပါပြီ။");
 }));
+
+
+const pkceKey = "chang-thai-admin-pkce";
+const codeKey = "chang-thai-admin-code";
+const base64url = bytes => btoa(String.fromCharCode(...bytes))
+  .replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
+
+$("owner-setup").addEventListener("click", run(async () => {
+  const verifier = base64url(crypto.getRandomValues(new Uint8Array(48)));
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+  sessionStorage.setItem(pkceKey, verifier);
+  const url = new URL("/auth/v1/authorize", config.url);
+  url.search = new URLSearchParams({
+    provider: "google", prompt: "select_account",
+    redirect_to: location.origin + "/?league-auth=1",
+    code_challenge: base64url(new Uint8Array(digest)), code_challenge_method: "s256",
+  });
+  location.assign(url);
+}));
+
+const completeOwnerSetup = run(async () => {
+  const code = sessionStorage.getItem(codeKey);
+  const verifier = sessionStorage.getItem(pkceKey);
+  sessionStorage.removeItem(codeKey);
+  sessionStorage.removeItem(pkceKey);
+  if (!code || !verifier) throw new Error("Google နဲ့ ပြန်ဝင်ပါ။");
+  const session = await api("/auth/v1/token?grant_type=pkce", {
+    method: "POST", body: { auth_code: code, code_verifier: verifier },
+  });
+  if (!ownerRole(session.user)) throw new Error("Chang Thai owner Google account ကို ရွေးပါ။");
+  token = session.access_token;
+  ownerEmail = session.user.email;
+  setupOnly = true;
+  $("profile-email").textContent = ownerEmail;
+  $("current-password-label").hidden = true;
+  $("change-password").elements.current.required = false;
+  for (const button of document.querySelectorAll("[data-page]")) button.hidden = button.dataset.page !== "profile";
+  showPage("profile");
+  $("login").hidden = true;
+  $("workspace").hidden = false;
+  status("Admin password အသစ် သတ်မှတ်ပါ။");
+});
+
+$("change-password").addEventListener("submit", run(async event => {
+  const form = event.currentTarget;
+  try {
+    if (!token || !ownerEmail) throw new Error("Admin ပြန်ဝင်ပါ။");
+    if (form.elements.next.value !== form.elements.confirm.value)
+      throw new Error("Password အသစ် နှစ်ခု တူရပါမယ်။");
+    if (!setupOnly) {
+      let fresh;
+      try {
+        fresh = await api("/auth/v1/token?grant_type=password", {
+          method: "POST", body: { email: ownerEmail, password: form.elements.current.value },
+        });
+      } catch {
+        throw new Error("လက်ရှိ password ကို ပြန်စစ်ပါ။");
+      }
+      if (!ownerRole(fresh.user)) throw new Error("Admin ခွင့်ပြုချက် လိုပါတယ်။");
+      await api("/auth/v1/logout?scope=local", { method: "POST" });
+      token = fresh.access_token;
+    }
+    await api("/auth/v1/user", { method: "PUT", body: { password: form.elements.next.value } });
+    await api("/auth/v1/logout?scope=local", { method: "POST" }).catch(() => {});
+    location.replace("/admin/?password=updated");
+  } finally {
+    form.reset();
+  }
+}));
+
+if (sessionStorage.getItem(codeKey) !== null) {
+  await completeOwnerSetup();
+} else if (new URLSearchParams(location.search).get("password") === "updated") {
+  history.replaceState(null, "", "/admin/");
+  status("Password သိမ်းပြီးပါပြီ။ Password အသစ်နဲ့ ပြန်ဝင်ပါ။");
+}
