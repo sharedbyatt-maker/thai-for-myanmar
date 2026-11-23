@@ -79,12 +79,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     'ကိုယ်ပိုင်',
   ];
   static const _icons = [
-    Icons.route_rounded,
-    Icons.record_voice_over_outlined,
-    Icons.replay_rounded,
-    Icons.inventory_2_outlined,
-    Icons.emoji_events_rounded,
-    Icons.person_outline_rounded,
+    Icons.menu_book_outlined,
+    Icons.chat_bubble_outline_rounded,
+    Icons.published_with_changes_rounded,
+    Icons.task_alt_rounded,
+    Icons.leaderboard_outlined,
+    Icons.account_circle_outlined,
   ];
   @override
   void initState() {
@@ -191,7 +191,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    Icons.translate_rounded,
+                    Icons.school_outlined,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
@@ -226,7 +226,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Thai for Myanmar',
+                                'Chang Thai',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14,
@@ -258,8 +258,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       bottomNavigationBar: wide
           ? null
           : NavigationBar(
-              labelBehavior:
-                  NavigationDestinationLabelBehavior.onlyShowSelected,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               selectedIndex: _selectedIndex,
               onDestinationSelected: _select,
               destinations: List.generate(
@@ -267,6 +266,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 (i) => NavigationDestination(
                   icon: Icon(_icons[i]),
                   label: _labels[i],
+                  tooltip: _labels[i],
                 ),
               ),
             ),

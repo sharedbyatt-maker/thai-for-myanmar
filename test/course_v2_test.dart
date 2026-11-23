@@ -337,7 +337,7 @@ void main() {
   );
 
   testWidgets(
-    'late course resumes on the current node and unit chooser returns to it',
+    'course path button scrolls to the top and back to the current lesson',
     (t) async {
       final state = AppState();
       await state.load();
@@ -377,6 +377,8 @@ void main() {
       );
       await tap(t, find.byKey(const ValueKey('course-jump-u26')));
       expect(find.byKey(const ValueKey('course-unit-u26')), findsOneWidget);
+      await tap(t, find.byKey(const ValueKey('course-continue')));
+      expect(find.byKey(const ValueKey('course-unit-u01')), findsOneWidget);
       await tap(t, find.byKey(const ValueKey('course-continue')));
       expect(
         find.byKey(const ValueKey('course-lesson-u11-1')).hitTestable(),

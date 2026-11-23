@@ -2,7 +2,7 @@
 
 ## App title
 
-Thai for Myanmar
+Chang Thai
 
 ## Short description
 

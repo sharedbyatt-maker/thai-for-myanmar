@@ -290,7 +290,7 @@ void main() {
 
     final quickSpeakDestination = find.descendant(
       of: find.byType(NavigationBar),
-      matching: find.byIcon(Icons.record_voice_over_outlined),
+      matching: find.byIcon(Icons.chat_bubble_outline_rounded),
     );
     await tester.tap(quickSpeakDestination);
     await tester.pump(const Duration(milliseconds: 500));
@@ -381,7 +381,7 @@ void main() {
       tester.widget<NavigationRail>(find.byType(NavigationRail)).destinations,
       hasLength(6),
     );
-    await tester.tap(find.byIcon(Icons.replay_rounded));
+    await tester.tap(find.byIcon(Icons.published_with_changes_rounded));
     await tester.pumpAndSettle();
     await tester.tap(find.text('စာကြောင်းစီ'));
     await tester.pumpAndSettle();
@@ -389,9 +389,9 @@ void main() {
         .widget<Card>(find.byKey(const ValueKey('mode-sentence')))
         .color;
     expect(selected, isNotNull);
-    await tester.tap(find.byIcon(Icons.route_rounded));
+    await tester.tap(find.byIcon(Icons.menu_book_outlined));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.replay_rounded));
+    await tester.tap(find.byIcon(Icons.published_with_changes_rounded));
     await tester.pumpAndSettle();
     expect(
       tester.widget<Card>(find.byKey(const ValueKey('mode-sentence'))).color,
@@ -749,7 +749,7 @@ void main() {
         tester.widget<NavigationBar>(find.byType(NavigationBar)).destinations,
         hasLength(6),
       );
-      await tester.tap(find.byIcon(Icons.inventory_2_outlined));
+      await tester.tap(find.byIcon(Icons.task_alt_rounded));
       await tester.pumpAndSettle();
       expect(find.byType(QuestsScreen), findsOneWidget);
       expect(find.text('ဒီလရဲ့ စိန်ခေါ်မှု'), findsOneWidget);

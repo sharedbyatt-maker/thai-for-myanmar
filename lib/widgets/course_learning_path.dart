@@ -80,6 +80,7 @@ class CourseLearningPath extends StatefulWidget {
 
 class _CourseLearningPathState extends State<CourseLearningPath> {
   final _scroll = ScrollController();
+  final _atTop = ValueNotifier(true);
   final _rows = <({CourseUnit unit, int? lesson})>[];
   final _offsets = <double>[];
   String? _visibleUnit;
@@ -102,6 +103,7 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
   @override
   void dispose() {
     _scroll.dispose();
+    _atTop.dispose();
     super.dispose();
   }
 
@@ -115,6 +117,7 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
       _rows[index].lesson == null ? _dividerHeight : _nodeHeight;
   void _onScroll() {
     if (!_scroll.hasClients || _offsets.isEmpty) return;
+    _atTop.value = _scroll.offset <= 12;
     var unit = _rows.first.unit;
     for (var i = 0; i < _rows.length; i++) {
       if (_offsets[i] > _scroll.offset + 30) break;
@@ -533,12 +536,24 @@ class _CourseLearningPathState extends State<CourseLearningPath> {
                 Positioned(
                   right: 16,
                   bottom: 16,
-                  child: FloatingActionButton.small(
-                    key: const ValueKey('course-continue'),
-                    heroTag: 'course-current',
-                    tooltip: 'လက်ရှိသင်ခန်းစာကို ပြန်သွားမယ်',
-                    onPressed: _goCurrent,
-                    child: const Icon(Icons.my_location_rounded),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _atTop,
+                    builder: (context, atTop, _) => FloatingActionButton.small(
+                      key: const ValueKey('course-continue'),
+                      heroTag: 'course-current',
+                      tooltip: atTop
+                          ? 'လက်ရှိသင်ခန်းစာကို သွားမယ်'
+                          : 'အပေါ်ဆုံးကို သွားမယ်',
+                      onPressed: atTop ? _goCurrent : () => _jump(0),
+                      child: AnimatedRotation(
+                        turns: atTop ? .5 : 0,
+                        duration: MediaQuery.disableAnimationsOf(context)
+                            ? Duration.zero
+                            : const Duration(milliseconds: 200),
+                        curve: Curves.easeOutCubic,
+                        child: const Icon(Icons.arrow_upward_rounded),
+                      ),
+                    ),
                   ),
                 ),
               ],
