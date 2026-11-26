@@ -43,8 +43,9 @@ class AndroidAdsConfig {
 
   String? unit(AdPlacement placement) {
     final formats = values['formats'];
-    if (!deliversLive || formats is! Map || !formatEnabled(placement))
+    if (!deliversLive || formats is! Map || !formatEnabled(placement)) {
       return null;
+    }
     final format = formats[placement.name] as Map;
     final id = format['unitId'];
     return id is String && adUnitPattern.hasMatch(id) ? id : null;
