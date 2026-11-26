@@ -233,11 +233,7 @@ jobs:
             adb install -r build/app/outputs/flutter-apk/app-release.apk
             adb shell monkey -p com.sharedbyatt.thaiformyanmar -c android.intent.category.LAUNCHER 1
             sleep 12
-            if ! adb shell pidof com.sharedbyatt.thaiformyanmar; then
-              adb logcat -d -t 5000 > build/release-launch-logcat.txt
-              cat build/release-launch-logcat.txt
-              exit 1
-            fi
+            adb shell pidof com.sharedbyatt.thaiformyanmar >/dev/null || { adb logcat -d -t 5000; exit 1; }
 
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4
