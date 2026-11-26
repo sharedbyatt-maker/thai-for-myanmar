@@ -231,9 +231,11 @@ jobs:
           script: |
             adb logcat -c
             adb install -r build/app/outputs/flutter-apk/app-release.apk
-            adb shell monkey -p com.sharedbyatt.thaiformyanmar -c android.intent.category.LAUNCHER 1
-            sleep 12
-            adb shell pidof com.sharedbyatt.thaiformyanmar >/dev/null || { adb logcat -d -t 5000; exit 1; }
+            adb shell am start -W -n com.sharedbyatt.thaiformyanmar/.MainActivity
+            sleep 20
+            adb logcat -d -t 5000
+            adb shell dumpsys activity exit-info com.sharedbyatt.thaiformyanmar
+            adb shell pidof com.sharedbyatt.thaiformyanmar
 
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4
