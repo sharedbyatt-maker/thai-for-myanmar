@@ -57,6 +57,23 @@ def configure_brand_resources() -> None:
         tree.write(versioned / "styles.xml", encoding="utf-8")
 
 
+def configure_release_keep_rules(app: Path) -> None:
+    # WorkManager's Room database is created by reflection during Android startup.
+    # Flutter automatically includes app/proguard-rules.pro in the release build.
+    rules = (
+        "-keep class androidx.work.impl.WorkDatabase { *; }",
+        "-keep class androidx.work.impl.WorkDatabase_Impl { *; }",
+    )
+    proguard = app / "proguard-rules.pro"
+    existing = proguard.read_text(encoding="utf-8") if proguard.is_file() else ""
+    missing = [rule for rule in rules if rule not in existing.splitlines()]
+    if missing:
+        with proguard.open("a", encoding="utf-8") as output:
+            if existing and not existing.endswith("\n"):
+                output.write("\n")
+            output.write("\n".join(missing) + "\n")
+
+
 def configure_android_controls(manifest_text: str, gradle: Path) -> str:
     app = gradle.parent
     controls = ROOT / "tool/android_controls"
@@ -105,6 +122,8 @@ def main() -> int:
         raise SystemExit(
             "Android platform files are missing. Run flutter create for Android first."
         )
+
+    configure_release_keep_rules(gradle.parent)
 
     gradle_text = gradle.read_text(encoding="utf-8")
     gradle_text = gradle_text.replace(OLD_PACKAGE, APP_PACKAGE)
