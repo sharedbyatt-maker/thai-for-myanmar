@@ -185,20 +185,69 @@ async function writeRow(table, row, nextSettings) {
   return updated;
 }
 
+const pageDescriptions = {
+  overview: "သင်ရိုး၊ Live settings နဲ့ Publish လုပ်ရန် ကျန်တဲ့ Draft ကို ကြည့်ပါ။",
+  ads: "Android Profile banner ကို ထိန်းချုပ်ပြီး ပေါ်မယ့်နေရာ စမ်းကြည့်ပါ။",
+  lessons: "သင်ခန်းစာ ရှာပါ၊ စာသားနဲ့ အသံကို ပြင်ပြီး Draft သိမ်းပါ။",
+  announcements: "App ကြေညာချက်တင်ပြီး Android Push ပို့ပါ။",
+  updates: "Android version အလိုက် update အသိပေးချက် သတ်မှတ်ပါ။",
+  profile: "Owner အကောင့်နဲ့ ဝင်ရန် password ကို စီမံပါ။",
+};
+
+function renderCourseChart() {
+  const sections = course.sections ?? [];
+  const totals = sections.map(() => 0);
+  let lessonCount = 0;
+  for (const unit of course.units) {
+    lessonCount += unit.lessons.length;
+    if (unit.section > 0 && unit.section <= totals.length) totals[unit.section - 1] += unit.lessons.length;
+  }
+  $("unit-count").textContent = course.units.length;
+  $("section-count").textContent = sections.length;
+  $("lesson-count").textContent = lessonCount;
+  const max = Math.max(1, ...totals);
+  $("lesson-chart").replaceChildren(...sections.map((section, index) => {
+    const row = document.createElement("li");
+    const label = document.createElement("span");
+    const value = document.createElement("strong");
+    const track = document.createElement("span");
+    const bar = document.createElement("span");
+    label.textContent = section;
+    value.textContent = totals[index];
+    track.className = "chart-track";
+    track.setAttribute("aria-hidden", "true");
+    bar.style.inlineSize = `${100 * totals[index] / max}%`;
+    track.append(bar);
+    row.append(label, value, track);
+    return row;
+  }));
+}
+
+function showLiveStatus(id, active, offLabel) {
+  const indicator = $(id);
+  indicator.textContent = active ? "အသက်ဝင်" : offLabel;
+  indicator.dataset.enabled = String(active);
+}
+
 function revision() {
-  const lessonCount = course.units.reduce((sum, unit) => sum + unit.lessons.length, 0);
-  $("unit-count").textContent = `${course.units.length} ယူနစ် · ${lessonCount} သင်ခန်းစာ`;
-  $("live-banner").textContent = published.settings.androidBanner === true ? "ဖွင့်ထား" : "ပိတ်ထား";
   const announcement = published.settings.announcement;
-  $("live-announcement").textContent = announcement?.enabled === true &&
-    new Date(announcement.expiresAt) > new Date() ? "ပြနေပါတယ်" : "မရှိသေးပါ";
+  const bannerEnabled = published.settings.androidBanner === true;
+  const announcementEnabled = announcement?.enabled === true && new Date(announcement.expiresAt) > new Date();
+  const updateEnabled = Number(published.settings.androidUpdate?.latestCode) > 0;
+  showLiveStatus("live-banner", bannerEnabled, "ပိတ်ထား");
+  showLiveStatus("live-announcement", announcementEnabled, "မရှိသေးပါ");
+  showLiveStatus("live-update", updateEnabled, "မရှိသေးပါ");
+  const active = Number(bannerEnabled) + Number(announcementEnabled) + Number(updateEnabled);
+  $("active-count").textContent = `${active}/3`;
+  $("live-ring").style.setProperty("--progress", `${active / 3 * 100}%`);
+  $("live-ring").setAttribute("aria-label", `Live control ၃ ခုတွင် ${active} ခု အသက်ဝင်ပါတယ်။`);
   $("revision").textContent = `Live v${published.revision} · Draft v${draft.revision}`;
   $("draft-state").textContent = changeLabels(draft.settings).length ? "Live တင်ရန် ကျန်ပါတယ်" : "Live နဲ့ ကိုက်ညီပါတယ်";
   $("ads-live").textContent = published.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
   $("ads-draft").textContent = draft.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
   const code = published.settings.androidUpdate?.latestCode;
   $("updates-live").textContent = code ? `Live နောက်ဆုံး version code — ${code}` : "Live update အသိပေးချက် မရှိသေးပါ";
-  const canPush = announcement?.enabled === true && new Date(announcement.expiresAt) > new Date();
+  const canPush = announcementEnabled;
   $("push-send").disabled = !canPush;
   $("push-status").textContent = canPush
     ? `Android သို့ ပို့မယ့် Live ကြေညာချက် — ${announcement.title}`
@@ -207,6 +256,7 @@ function revision() {
 }
 
 function showPage(id) {
+  $("page-description").textContent = pageDescriptions[id];
   $("controls").hidden = id === "profile";
   $("publish-bar").hidden = id === "overview" || id === "profile";
   for (const button of document.querySelectorAll("[data-page]")) {
@@ -311,6 +361,10 @@ function setAudioPreview(url) {
 }
 
 function renderPreviews() {
+  const showAd = $("banner-enabled").checked;
+  $("ads-preview-slot").hidden = !showAd;
+  $("ads-preview-state").textContent = showAd ? "ဖွင့်ထား" : "ပိတ်ထား";
+  $("ads-preview-state").dataset.enabled = String(showAd);
   $("preview-thai").textContent = value("thai-text");
   $("preview-romanization").textContent = value("romanization");
   $("preview-meaning").textContent = value("my-text");
@@ -416,6 +470,7 @@ $("sign-in").addEventListener("submit", run(async event => {
     published = await readRow("chang_thai_controls");
     settings = structuredClone(draft.settings);
     setFields();
+    renderCourseChart();
     revision();
     showPage("overview");
     $("login").hidden = true;
