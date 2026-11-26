@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,9 +38,8 @@ class _MobileAdsController extends ChangeNotifier {
   bool _showing = false;
   bool privacyOptionsRequired = false;
 
-  String _testCode = '';
   AndroidAdsConfig get config => RemoteControls.instance.androidAds;
-  bool get _testTools => !kReleaseMode || config.matchesTestDevice(_testCode);
+  bool get _testTools => !kReleaseMode || config.deliversTest;
   bool get _hasUnits =>
       AdPlacement.values.any((placement) => _configuredUnit(placement) != null);
 
@@ -60,18 +57,6 @@ class _MobileAdsController extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       _prefs = prefs;
-      final savedCode = prefs.getString('ads.testDevice') ?? '';
-      if (AndroidAdsConfig.testDevicePattern.hasMatch(savedCode)) {
-        _testCode = savedCode;
-      } else {
-        final random = Random.secure();
-        _testCode = List.generate(
-          24,
-          (_) => random.nextInt(16).toRadixString(16).toUpperCase(),
-        ).join();
-        await prefs.setString('ads.testDevice', _testCode);
-      }
-      notifyListeners();
       final consent = ConsentInformation.instance;
       final update = Completer<bool>();
       consent.requestConsentInfoUpdate(
@@ -586,44 +571,32 @@ class AdTestSettings extends StatelessWidget {
     return ListenableBuilder(
       listenable: _ads,
       builder: (context, _) {
-        final code = _ads._testCode;
-        if (code.isEmpty) return const SizedBox.shrink();
+        if (!_ads._testTools) return const SizedBox.shrink();
         return ExpansionTile(
           leading: const Icon(Icons.science_outlined),
           title: const Text('AdMob Test ads'),
-          subtitle: Text(
-            _ads._testTools
-                ? 'ဒီဖုန်းမှာ Test ads စမ်းနိုင်ပါတယ်။'
-                : 'Admin Ads မှာ စက်ကုဒ်ချိတ်ပါ။',
-          ),
+          subtitle: const Text('Google Test ads ပုံစံ ၆ မျိုး စမ်းပါ။'),
           childrenPadding: const EdgeInsets.all(12),
           children: [
-            SelectableText(code),
-            TextButton.icon(
-              onPressed: () => Clipboard.setData(ClipboardData(text: code)),
-              icon: const Icon(Icons.copy_outlined),
-              label: const Text('စက်ကုဒ် ကူးမယ်'),
-            ),
-            if (_ads._testTools)
-              Wrap(
-                spacing: 8,
-                children: [
-                  for (final entry in _names.entries)
-                    OutlinedButton(
-                      onPressed:
-                          _ads._unit(entry.key) == null ||
-                              (entry.key.fullScreen &&
-                                  !_ads.canShow(entry.key, test: true))
-                          ? null
-                          : () => _runTest(context, entry.key),
-                      child: Text(entry.value),
-                    ),
-                  TextButton(
-                    onPressed: _ads.preload,
-                    child: const Text('Test ads ပြန်ယူမယ်'),
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final entry in _names.entries)
+                  OutlinedButton(
+                    onPressed:
+                        _ads._unit(entry.key) == null ||
+                            (entry.key.fullScreen &&
+                                !_ads.canShow(entry.key, test: true))
+                        ? null
+                        : () => _runTest(context, entry.key),
+                    child: Text(entry.value),
                   ),
-                ],
-              ),
+                TextButton(
+                  onPressed: _ads.preload,
+                  child: const Text('Test ads ပြန်ယူမယ်'),
+                ),
+              ],
+            ),
           ],
         );
       },

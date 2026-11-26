@@ -6,7 +6,7 @@
 - Android application ID: `com.sharedbyatt.thaiformyanmar`
 - Flutter version: `0.1.0+1` (`0.1.0` version name, `1` build number)
 - V1 account requirement: none
-- AdMob: disabled by default. The Android scaffold uses the Chang Thai App ID in release and Google's test App ID in debug.
+- AdMob: Google test ads by default in ads-enabled releases. The Android scaffold uses the Chang Thai App ID in release and Google's test App ID in debug.
 
 ## Builds
 

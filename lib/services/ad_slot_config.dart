@@ -13,15 +13,22 @@ class AndroidAdsConfig {
   const AndroidAdsConfig(this.values);
   final Map<String, dynamic> values;
 
-  static final testDevicePattern = RegExp(r'^[A-F0-9]{24}$');
+  static const testDefaults = AndroidAdsConfig({
+    'enabled': true,
+    'delivery': 'test',
+    'formats': {
+      'banner': {'enabled': true},
+      'native': {'enabled': true},
+      'interstitial': {'enabled': true},
+      'rewarded': {'enabled': true},
+      'rewardedInterstitial': {'enabled': true},
+      'appOpen': {'enabled': true},
+    },
+  });
+
   bool get enabled => values['enabled'] == true;
   bool get deliversLive => enabled && values['delivery'] == 'live';
-
-  bool matchesTestDevice(String code) =>
-      enabled &&
-      values['delivery'] == 'test' &&
-      testDevicePattern.hasMatch(code) &&
-      values['testDevice'] == code;
+  bool get deliversTest => enabled && values['delivery'] == 'test';
 
   bool formatEnabled(AdPlacement placement) {
     final formats = values['formats'];

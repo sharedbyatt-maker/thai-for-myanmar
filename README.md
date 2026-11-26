@@ -12,7 +12,7 @@ Practical, offline-first Thai for Myanmar speakers living, working, studying, or
 - Bundled lessons, search, favorites, quiz, and progress work without an account or network connection after install.
 - Thai playback is asset-first when a matching bundled recording exists, with verified Thai-only device/browser TTS as the fallback. A non-Thai default voice is never used. The bundled generated audio pack covers all 990 selected forms; independent human listening review remains pending. See [audio pack details](docs/BUNDLED_AUDIO.md).
 - Settings includes a Thai voice test and platform-specific setup guidance. Phrase details accept correction reports saved only on the device, with a copy action for sending through the user's chosen app. Saving a report does not transmit it.
-- AdMob supports six Android formats and is **disabled by default**. The owner controls placements and ad unit IDs through the admin console.
+- AdMob supports six Android formats. Ads-enabled builds default to **Google test ads**. The owner controls placements and ad unit IDs through the admin console.
 - Content and structural validation pass, and an editorial pass checked meaning alignment, natural question phrasing, gendered Thai particles, and Myanmar-readable pronunciation. Independent fluent Thai–Myanmar review is still needed before broad public release, particularly for high-risk workplace, medical, police, immigration, and employment phrases.
 
 ## Run and build

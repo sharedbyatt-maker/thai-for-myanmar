@@ -21,10 +21,13 @@ class RemoteControls {
   static const _cacheKey = 'chang_thai_published_controls_v1';
   Map<String, dynamic> _settings = {};
   int buildNumber = 0;
+  bool _hasLiveSettings = false;
   final audio = <(String, String), String>{};
 
   AndroidAdsConfig get androidAds =>
-      AndroidAdsConfig(controlMap(_settings['androidAds']));
+      _hasLiveSettings && !_settings.containsKey('androidAds')
+      ? AndroidAdsConfig.testDefaults
+      : AndroidAdsConfig(controlMap(_settings['androidAds']));
   Map<String, dynamic> get announcement =>
       controlMap(_settings['announcement']);
   Map<String, dynamic> get update => controlMap(_settings['androidUpdate']);
@@ -113,6 +116,7 @@ class RemoteControls {
       }
       unawaited(_download(downloads));
       _settings = settings;
+      _hasLiveSettings = online;
     } catch (_) {
       // The offline learning bundle is always usable.
     }
