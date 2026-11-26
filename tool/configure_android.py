@@ -47,7 +47,8 @@ def configure_brand_resources() -> None:
             raise SystemExit(f"LaunchTheme missing in {styles}.")
         for name, value in {
             "android:windowSplashScreenBackground": "#111431",
-            "android:windowSplashScreenAnimatedIcon": "@mipmap/ic_launcher",
+            "android:windowSplashScreenAnimatedIcon": "@drawable/chang_thai_launcher_foreground",
+            "android:windowSplashScreenIconBackgroundColor": "#30236F",
         }.items():
             ET.SubElement(launch, "item", name=name).text = value
         versioned = res / f"{qualifier}-v31"
