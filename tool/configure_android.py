@@ -126,6 +126,19 @@ def main() -> int:
         manifest_text,
         count=1,
     )
+    if "android:roundIcon=" not in manifest_text:
+        manifest_text = manifest_text.replace(
+            'android:icon="@mipmap/ic_launcher"',
+            'android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"',
+            1,
+        )
+    else:
+        manifest_text = re.sub(
+            r'android:roundIcon="[^"]+"',
+            'android:roundIcon="@mipmap/ic_launcher_round"',
+            manifest_text,
+            count=1,
+        )
     if "com.google.android.gms.ads.APPLICATION_ID" not in manifest_text:
         manifest_text = manifest_text.replace(
             "</application>",
