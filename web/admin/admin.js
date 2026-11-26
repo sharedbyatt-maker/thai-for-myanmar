@@ -3,6 +3,17 @@ const value = (id) => $(id).value.trim();
 const config = await fetch("/assets/assets/data/league_config.json").then(r => r.json());
 const course = await fetch("/assets/assets/data/course_v2.json").then(r => r.json());
 const romanizations = await fetch("/assets/assets/data/course_pronunciation.json").then(r => r.json());
+const voices = ["male", "female"];
+const exerciseLines = Object.fromEntries(voices.map(voice => {
+  const ids = new Set();
+  for (const [id, line] of Object.entries(course.lines)) {
+    const parts = line.parts?.[voice] ?? [];
+    if (parts.length) ids.add(id);
+    for (const part of parts) ids.add(part);
+  }
+  return [voice, ids];
+}));
+
 let token, draft, published, settings, previewUrl;
 let busy = false;
 let ownerEmail, setupOnly = false;
@@ -45,10 +56,10 @@ async function readRow(table) {
   return row;
 }
 
-async function writeRow(table, row) {
+async function writeRow(table, row, nextSettings = settings) {
   const [updated] = await api(
     `/rest/v1/${table}?id=eq.1&revision=eq.${row.revision}&select=revision,settings`,
-    { method: "PATCH", body: { settings }, headers: { Prefer: "return=representation" } },
+    { method: "PATCH", body: { settings: nextSettings }, headers: { Prefer: "return=representation" } },
   );
   if (!updated) throw new Error("တခြားသူက ပြင်ထားပါတယ်။ ပြန်ဝင်ပြီး နောက်ဆုံး version ကို ဖတ်ပါ။");
   return updated;
@@ -82,8 +93,8 @@ function setFields() {
   $("announcement-enabled").checked = a.enabled === true;
   $("announcement-title").value = a.title ?? "";
   $("announcement-body").value = a.body ?? "";
-  const date = new Date(a.expiresAt);
-  $("announcement-expiry").value = Number.isFinite(date.valueOf())
+  const date = a.expiresAt ? new Date(a.expiresAt) : null;
+  $("announcement-expiry").value = date && Number.isFinite(date.valueOf())
     ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : "";
   for (const [id, key] of [["latest-code", "latestCode"], ["minimum-code", "minimumCode"], ["update-message", "message"]]) {
@@ -118,12 +129,31 @@ function showLesson() {
   $("line-fields").disabled = lines.length === 0;
   showLine();
 }
+function checkExerciseText(id, voice, nextThai, previousThai) {
+  const bundledThai = course.lines[id]?.[voice];
+  if (exerciseLines[voice].has(id) && nextThai !== previousThai && nextThai !== bundledThai) {
+    throw new Error(`စာကြောင်း ${id} ကို စကားလုံးစီတဲ့ လေ့ကျင့်ခန်းတွေမှာ သုံးထားပါတယ်။ ထိုင်းစာပြောင်းလိုပါက course source ထဲမှာ လေ့ကျင့်ခန်းနဲ့အတူ ပြင်ပါ။`);
+  }
+}
+
+function checkDraftExerciseTexts() {
+  for (const [id, forms] of Object.entries(settings.lines ?? {})) {
+    for (const voice of voices) {
+      const bundledThai = course.lines[id]?.[voice];
+      const nextThai = forms?.[voice]?.thai ?? bundledThai;
+      const liveThai = published.settings.lines?.[id]?.[voice]?.thai ?? bundledThai;
+      checkExerciseText(id, voice, nextThai, liveThai);
+    }
+  }
+}
+
 function showLine() {
   const line = selectedLine();
   const voice = value("voice");
   const custom = settings.lines?.[value("line")]?.[voice] ?? {};
   const thai = line?.[voice] ?? "";
   $("thai-text").value = custom.thai ?? thai;
+  $("exercise-text-note").hidden = !exerciseLines[voice].has(value("line"));
   $("my-text").value = custom.my ?? line?.[voice === "male" ? "myMale" : "myFemale"] ?? line?.my ?? "";
   $("romanization").value = custom.romanization ?? romanizations[thai] ?? "";
   $("lesson-audio").value = "";
@@ -195,10 +225,14 @@ $("save-lesson").addEventListener("click", run(async () => {
   const previous = settings.lines?.[lineId]?.[voice] ?? {};
   const file = $("lesson-audio").files[0];
   if (line && (!value("thai-text") || !value("my-text"))) throw new Error("ထိုင်းစာနဲ့ မြန်မာအဓိပ္ပာယ် ဖြည့်ပါ။");
-  if (line && value("thai-text") !== (previous.thai ?? line[voice]) && !file) {
+  const thai = value("thai-text");
+  const previousThai = previous.thai ?? line?.[voice];
+  const thaiChanged = line && thai !== previousThai;
+  if (line) checkExerciseText(lineId, voice, thai, previousThai);
+  if (thaiChanged && thai !== line[voice] && !file) {
     throw new Error("ထိုင်းစာပြောင်းရင် ကိုက်ညီတဲ့ MP3 အသစ်ပါ ထည့်ပါ။");
   }
-  let audio = previous.audio;
+  let audio = thaiChanged ? undefined : previous.audio;
   if (file) {
     if (file.size > 5242880 || !file.name.toLowerCase().endsWith(".mp3")) throw new Error("5 MiB အောက် MP3 ဖိုင်ကို ရွေးပါ။");
     audio = `${crypto.randomUUID()}.mp3`;
@@ -210,7 +244,7 @@ $("save-lesson").addEventListener("click", run(async () => {
   (settings.lessons ??= {})[lesson.id] = { title: value("lesson-title") || lesson.title };
   if (line) {
     ((settings.lines ??= {})[lineId] ??= {})[voice] = {
-      thai: value("thai-text"), my: value("my-text"), romanization: value("romanization"),
+      thai, my: value("my-text"), romanization: value("romanization"),
       ...(audio ? { audio } : {}),
     };
   }
@@ -248,10 +282,27 @@ $("publish").addEventListener("click", run(async () => {
     return;
   }
   collect();
+  checkDraftExerciseTexts();
   draft = await writeRow("chang_thai_admin_draft", draft);
-  published = await writeRow("chang_thai_controls", published);
   revision();
-  status("Publish လုပ်ပြီးပါပြီ။");
+  status("Draft သိမ်းပြီးပါပြီ။ Live သို့ တင်နေပါတယ်…");
+  try {
+    published = await writeRow("chang_thai_controls", published, draft.settings);
+  } catch {
+    const live = await readRow("chang_thai_controls").catch(() => null);
+    if (!live) {
+      throw new Error("Draft သိမ်းပြီးပါပြီ။ Live သို့ တင်ပြီးမပြီး အတည်မပြုနိုင်ပါ။ ချိတ်ဆက်မှု ပြန်ရရင် စစ်ပါ။");
+    }
+    if (JSON.stringify(live.settings) !== JSON.stringify(draft.settings)) {
+      if (live.revision !== published.revision) {
+        throw new Error("Draft သိမ်းပြီးပါပြီ။ Live version ပြောင်းသွားပါတယ်။ နောက်ဆုံး version ကို ပြန်ဝင်စစ်ပြီးမှ Publish လုပ်ပါ။");
+      }
+      throw new Error("Draft သိမ်းပြီးပါပြီ။ Live သို့ မတင်ရသေးပါ။ Publish ပြန်နှိပ်နိုင်ပါတယ်။");
+    }
+    published = live;
+  }
+  revision();
+  status("Live သို့ Publish လုပ်ပြီးပါပြီ။");
 }));
 
 $("push-send").disabled = false;
