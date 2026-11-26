@@ -17,7 +17,6 @@ Future<void> main() async {
   final audioCatalog = await ThaiAudioCatalog.load(rootBundle);
   final appState = AppState();
   await appState.load();
-  await initializeAds();
   runApp(
     ThaiForMyanmarApp(
       repository: repository,
@@ -28,4 +27,5 @@ Future<void> main() async {
       ),
     ),
   );
+  WidgetsBinding.instance.addPostFrameCallback((_) => initializeAds());
 }

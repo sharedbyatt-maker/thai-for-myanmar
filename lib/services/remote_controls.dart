@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'ad_slot_config.dart';
 import 'remote_audio_cache.dart';
 
 Map<String, dynamic> controlMap(Object? value) =>
@@ -22,7 +23,8 @@ class RemoteControls {
   int buildNumber = 0;
   final audio = <(String, String), String>{};
 
-  bool get androidBanner => _settings['androidBanner'] == true;
+  AndroidAdsConfig get androidAds =>
+      AndroidAdsConfig(controlMap(_settings['androidAds']));
   Map<String, dynamic> get announcement =>
       controlMap(_settings['announcement']);
   Map<String, dynamic> get update => controlMap(_settings['androidUpdate']);

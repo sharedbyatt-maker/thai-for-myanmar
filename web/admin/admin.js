@@ -1,3 +1,5 @@
+import { adChangeLabels, adCount, adsFields, collectAdFields, loadAdFields, renderAdPreview, setupAdFields } from "./ad-settings.js";
+
 const $ = (id) => document.getElementById(id);
 const value = (id) => $(id).value.trim();
 async function loadAsset(name) {
@@ -62,8 +64,9 @@ async function showSavedAudio() {
 const lessonFields = [
   "unit-title", "unit-goal", "unit-tips", "lesson-title", "thai-text", "my-text", "romanization",
 ];
+setupAdFields();
 const controlFields = [
-  "banner-enabled", "announcement-enabled", "announcement-title", "announcement-body",
+  ...adsFields, "announcement-enabled", "announcement-title", "announcement-body",
   "announcement-expiry", "latest-code", "minimum-code", "update-message",
 ];
 
@@ -108,9 +111,7 @@ function equalSettings(first, second) {
 function changeLabels(candidate) {
   const live = published.settings;
   const labels = [];
-  if (Boolean(live.androidBanner) !== Boolean(candidate.androidBanner)) {
-    labels.push(candidate.androidBanner ? "Android Profile banner ဖွင့်မယ်" : "Android Profile banner ပိတ်မယ်");
-  }
+  labels.push(...adChangeLabels(live, candidate));
   const groups = [
     ["units", "ယူနစ်"], ["lessons", "သင်ခန်းစာ"], ["lines", "ထိုင်းစာကြောင်းနှင့် အသံ"],
   ];
@@ -187,7 +188,7 @@ async function writeRow(table, row, nextSettings) {
 
 const pageDescriptions = {
   overview: "သင်ရိုး၊ Live settings နဲ့ Publish လုပ်ရန် ကျန်တဲ့ Draft ကို ကြည့်ပါ။",
-  ads: "Android Profile banner ကို ထိန်းချုပ်ပြီး ပေါ်မယ့်နေရာ စမ်းကြည့်ပါ။",
+  ads: "Android AdMob format ၆ မျိုးနဲ့ ပြသမှုအကြိမ်ရေကို စီမံပါ။",
   lessons: "သင်ခန်းစာ ရှာပါ၊ စာသားနဲ့ အသံကို ပြင်ပြီး Draft သိမ်းပါ။",
   announcements: "App ကြေညာချက်တင်ပြီး Android Push ပို့ပါ။",
   updates: "Android version အလိုက် update အသိပေးချက် သတ်မှတ်ပါ။",
@@ -231,20 +232,20 @@ function showLiveStatus(id, active, offLabel) {
 
 function revision() {
   const announcement = published.settings.announcement;
-  const bannerEnabled = published.settings.androidBanner === true;
+  const enabledAds = adCount(published.settings);
   const announcementEnabled = announcement?.enabled === true && new Date(announcement.expiresAt) > new Date();
   const updateEnabled = Number(published.settings.androidUpdate?.latestCode) > 0;
-  showLiveStatus("live-banner", bannerEnabled, "ပိတ်ထား");
+  showLiveStatus("live-banner", enabledAds > 0, "ပိတ်ထား");
   showLiveStatus("live-announcement", announcementEnabled, "မရှိသေးပါ");
   showLiveStatus("live-update", updateEnabled, "မရှိသေးပါ");
-  const active = Number(bannerEnabled) + Number(announcementEnabled) + Number(updateEnabled);
+  const active = Number(enabledAds > 0) + Number(announcementEnabled) + Number(updateEnabled);
   $("active-count").textContent = `${active}/3`;
   $("live-ring").style.setProperty("--progress", `${active / 3 * 100}%`);
   $("live-ring").setAttribute("aria-label", `Live control ၃ ခုတွင် ${active} ခု အသက်ဝင်ပါတယ်။`);
   $("revision").textContent = `Live v${published.revision} · Draft v${draft.revision}`;
   $("draft-state").textContent = changeLabels(draft.settings).length ? "Live တင်ရန် ကျန်ပါတယ်" : "Live နဲ့ ကိုက်ညီပါတယ်";
-  $("ads-live").textContent = published.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
-  $("ads-draft").textContent = draft.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
+  $("ads-live").textContent = `${enabledAds}/6 ဖွင့်ထား`;
+  $("ads-draft").textContent = `${adCount(draft.settings)}/6 ဖွင့်ထား`;
   const code = published.settings.androidUpdate?.latestCode;
   $("updates-live").textContent = code ? `Live နောက်ဆုံး version code — ${code}` : "Live update အသိပေးချက် မရှိသေးပါ";
   const canPush = announcementEnabled;
@@ -270,7 +271,7 @@ function showPage(id) {
 }
 
 function setFields() {
-  $("banner-enabled").checked = settings.androidBanner === true;
+  loadAdFields(settings);
   const a = settings.announcement ?? {};
   $("announcement-enabled").checked = a.enabled === true;
   $("announcement-title").value = a.title ?? "";
@@ -361,10 +362,7 @@ function setAudioPreview(url) {
 }
 
 function renderPreviews() {
-  const showAd = $("banner-enabled").checked;
-  $("ads-preview-slot").hidden = !showAd;
-  $("ads-preview-state").textContent = showAd ? "ဖွင့်ထား" : "ပိတ်ထား";
-  $("ads-preview-state").dataset.enabled = String(showAd);
+  renderAdPreview();
   $("preview-thai").textContent = value("thai-text");
   $("preview-romanization").textContent = value("romanization");
   $("preview-meaning").textContent = value("my-text");
@@ -594,7 +592,11 @@ function collect(next) {
   const enabled = $("announcement-enabled").checked;
   const title = value("announcement-title"), body = value("announcement-body");
   const localExpiry = value("announcement-expiry");
-  if (formChanged(["banner-enabled"])) next.androidBanner = $("banner-enabled").checked;
+  if (formChanged(adsFields)) {
+    const config = collectAdFields();
+    next.androidAds = config;
+    next.androidBanner = config.enabled && config.formats.banner.enabled;
+  }
   if (formChanged(["announcement-enabled", "announcement-title", "announcement-body", "announcement-expiry"])) {
     if (enabled && (!title || !body || !localExpiry || new Date(localExpiry) <= new Date())) {
       throw new Error("ကြေညာချက်ခေါင်းစဉ်၊ စာသားနဲ့ ရှေ့ရက် သက်တမ်းကုန်ချိန် လိုပါတယ်။");

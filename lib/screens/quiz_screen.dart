@@ -6,6 +6,7 @@ import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
 import '../learning/sentence_chunks.dart';
 import '../learning/study_catalog.dart';
+import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import 'study_session_screen.dart';
@@ -188,6 +189,8 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ),
             ),
+          if (widget.active && reviewed.isNotEmpty)
+            const InlineAdSlot(native: true),
           const Center(child: ElephantBuddy(size: 48)),
           Text(
             'ဘာလေ့ကျင့်မလဲ?',

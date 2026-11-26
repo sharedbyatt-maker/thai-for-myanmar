@@ -211,7 +211,7 @@ jobs:
           script: bash tool/run_android_integration.sh
 
       - name: Build release-mode Android App Bundle
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --dart-define=ENABLE_ADS=true --dart-define=ADMOB_PRODUCTION=true
 
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4

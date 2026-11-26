@@ -36,6 +36,7 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   bool _leagueOpen = false;
+  DateTime? _lastPaused;
   StreamSubscription<Uri>? _links;
 
   Future<void> _openLeague() async {
@@ -103,8 +104,19 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) _lastPaused = DateTime.now();
     if (state != AppLifecycleState.resumed) {
       unawaited(widget.playbackService.stop());
+      return;
+    }
+    final paused = _lastPaused;
+    _lastPaused = null;
+    if (paused != null &&
+        DateTime.now().difference(paused) >= const Duration(minutes: 2) &&
+        widget.appState.learning.course.completed.length >= 3 &&
+        (_selectedIndex == 0 || _selectedIndex == 3) &&
+        ModalRoute.of(context)?.isCurrent == true) {
+      maybeShowAppOpenAd();
     }
   }
 
@@ -257,6 +269,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       children: [
                         const RemoteNotices(),
                         Expanded(child: content),
+                        if (_selectedIndex == 5) const InlineAdSlot(),
                       ],
                     ),
                   ),
@@ -266,7 +279,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 children: [
                   const RemoteNotices(),
                   Expanded(child: content),
-                  if (_selectedIndex == 5) const AdBannerSlot(),
+                  if (_selectedIndex == 5) const InlineAdSlot(),
                 ],
               ),
       ),

@@ -10,6 +10,7 @@ import '../learning/course_practice.dart';
 import '../widgets/lesson_answer_feedback.dart';
 import '../widgets/playful_components.dart';
 import '../learning/review_card.dart';
+import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/lesson_preview.dart';
@@ -334,6 +335,7 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
           );
       await widget.appState.saveCourse();
       if (mounted) {
+        preloadLessonAds();
         setState(() {
           _finished = true;
           _moving = false;
@@ -1061,6 +1063,14 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
         color: previewUnitColor(next.unit),
       );
       if (start != true || !mounted) return;
+      if (_earnedXp > 0) {
+        await showLessonTransitionAd(
+          context,
+          completedLessons: widget.appState.learning.course.completed.length,
+          onReward: _bonusLines.length >= 2 ? _showBonusPractice : null,
+        );
+      }
+      if (!mounted) return;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
@@ -1076,6 +1086,69 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
     } finally {
       _moving = false;
     }
+  }
+
+  List<CourseLine> get _bonusLines {
+    final usedMeanings = <String>{};
+    return widget.unit.models
+        .map((id) => widget.course.lines[id])
+        .whereType<CourseLine>()
+        .where((line) => usedMeanings.add(line.myFor(_style)))
+        .take(3)
+        .toList();
+  }
+
+  Future<void> _showBonusPractice() async {
+    final lines = _bonusLines;
+    if (lines.length < 2) return;
+    final options = [...lines]..shuffle();
+    var index = 0;
+    CourseLine? answer;
+    await showDialog<void>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text('အပိုလေ့ကျင့်ခန်း ${index + 1}/${lines.length}'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('မြန်မာအဓိပ္ပာယ် ရွေးပါ။'),
+                Text(lines[index].thai(_style)),
+                for (final option in options)
+                  TextButton(
+                    onPressed: answer != null
+                        ? null
+                        : () => setDialogState(() => answer = option),
+                    child: Text(option.myFor(_style)),
+                  ),
+                if (answer != null)
+                  Text(
+                    answer == lines[index]
+                        ? 'မှန်ပါတယ်။'
+                        : 'အဖြေမှန် — ${lines[index].myFor(_style)}',
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('ပိတ်မယ်'),
+            ),
+            if (answer != null && index + 1 < lines.length)
+              FilledButton(
+                onPressed: () => setDialogState(() {
+                  index++;
+                  answer = null;
+                }),
+                child: const Text('ဆက်မယ်'),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _completionDetails() {
@@ -1196,6 +1269,8 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
               ),
             const SizedBox(height: 16),
             _completionDetails(),
+            if (_bonusLines.length >= 2)
+              AdBonusButton(onReward: _showBonusPractice),
             const SizedBox(height: 12),
             const Text(
               'လေ့ကျင့်မှုကို သိမ်းထားပါတယ်။ အသံမစုံသေးတဲ့အပိုင်းတွေရဲ့ နားထောင်စစ်ဆေးမှုကို နောက်မှ ပြန်လုပ်နိုင်ပါတယ်။ စကားပြောကျွမ်းကျင်မှု အတည်ပြုချက် မဟုတ်ပါ။',

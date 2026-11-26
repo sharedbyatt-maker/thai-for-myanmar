@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ANDROID = ROOT / "android"
 OLD_PACKAGE = "com.sharedbyatt.thai_for_myanmar"
 APP_PACKAGE = "com.sharedbyatt.thaiformyanmar"
+ADMOB_APP_ID = "ca-app-pub-7351657203026829~5088783830"
 TEST_ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
 
 
@@ -129,8 +130,31 @@ def main() -> int:
         manifest_text = manifest_text.replace(
             "</application>",
             '    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" '
-            f'android:value="{TEST_ADMOB_APP_ID}" />\n  </application>',
+            f'android:value="{ADMOB_APP_ID}" />\n  </application>',
         )
+    manifest_text = manifest_text.replace(TEST_ADMOB_APP_ID, ADMOB_APP_ID)
+    if 'com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT' not in manifest_text:
+        manifest_text = manifest_text.replace(
+            "</application>",
+            '    <meta-data android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT" '
+            'android:value="true" />\n  </application>',
+        )
+    debug_manifest = manifest.parent.parent / "debug" / "AndroidManifest.xml"
+    if debug_manifest.is_file():
+        debug_text = debug_manifest.read_text(encoding="utf-8")
+        if "com.google.android.gms.ads.APPLICATION_ID" not in debug_text:
+            debug_text = debug_text.replace(
+                '<manifest ',
+                '<manifest xmlns:tools="http://schemas.android.com/tools" ',
+                1,
+            ) if 'xmlns:tools=' not in debug_text else debug_text
+            debug_text = debug_text.replace(
+                "</manifest>",
+                '    <application><meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" '
+                f'android:value="{TEST_ADMOB_APP_ID}" tools:replace="android:value" />'
+                '</application>\n</manifest>',
+            )
+            debug_manifest.write_text(debug_text, encoding="utf-8")
     # Supabase/app_links owns this callback; disable Flutter's competing handler.
     if 'android.permission.INTERNET' not in manifest_text:
         manifest_text = manifest_text.replace(
@@ -172,7 +196,7 @@ def main() -> int:
     manifest_text = configure_android_controls(manifest_text, gradle)
     manifest.write_text(manifest_text, encoding="utf-8")
     configure_brand_resources()
-    print(f"Android defaults configured: {APP_PACKAGE}; AdMob remains test-only.")
+    print(f"Android defaults configured: {APP_PACKAGE}; production ads require explicit build flags and published settings.")
     return 0
 
 

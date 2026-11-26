@@ -338,3 +338,12 @@ body:has(.workspace:not([hidden]) #controls:not([hidden]) #publish-bar:not([hidd
   .metric-icon { width: 2rem; height: 2rem; }
   .metric > div > span { font-size: .77rem; }
 }
+
+.ad-format-grid { display: grid; gap: .8rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ad-format { min-width: 0; margin: 0; padding: .85rem; border: 1px solid var(--line); border-radius: 10px; background: var(--inset); }
+.ad-format .setting-row { margin: 0; padding: 0; border: 0; background: transparent; }
+.ad-format label:last-child { margin-bottom: 0; }
+.ad-format input[type="text"] { font-family: ui-monospace, monospace; font-size: .85rem; }
+@media (max-width: 640px) {
+  .ad-format-grid { grid-template-columns: minmax(0, 1fr); }
+}
