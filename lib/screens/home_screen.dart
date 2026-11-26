@@ -4,7 +4,6 @@ import '../data/phrase_repository.dart';
 import '../learning/learning_progress.dart';
 import '../learning/study_catalog.dart';
 import '../models/phrase.dart';
-import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/phrase_tile.dart';
@@ -332,7 +331,6 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         const SizedBox(height: 12),
-        const AdBannerSlot(),
       ],
     );
   }
