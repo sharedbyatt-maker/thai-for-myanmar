@@ -216,6 +216,29 @@ jobs:
       - name: Build installable Android ads review APK
         run: flutter build apk --release --dart-define=ENABLE_ADS=true --dart-define=ADMOB_PRODUCTION=true
 
+      - name: Smoke-test the release APK launch on Android
+        timeout-minutes: 12
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          cores: 4
+          disk-size: 2048M
+          emulator-boot-timeout: 300
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
+          disable-animations: true
+          script: |
+            adb logcat -c
+            adb install -r build/app/outputs/flutter-apk/app-release.apk
+            adb shell monkey -p com.sharedbyatt.thaiformyanmar -c android.intent.category.LAUNCHER 1
+            sleep 12
+            if ! adb shell pidof com.sharedbyatt.thaiformyanmar; then
+              adb logcat -d -t 5000 > build/release-launch-logcat.txt
+              cat build/release-launch-logcat.txt
+              exit 1
+            fi
+
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4
         with:
