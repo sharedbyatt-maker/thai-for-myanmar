@@ -14,22 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RemoteControls.instance.load(rootBundle);
   final repository = await PhraseRepository.load(rootBundle);
-  final audioCatalog = await ThaiAudioCatalog.load(rootBundle).catchError(
-    (Object error, StackTrace stack) {
-      // Optional audio must never prevent the offline phrase library opening.
-      FlutterError.reportError(
-        FlutterErrorDetails(
-          exception: error,
-          stack: stack,
-          library: 'Chang Thai startup',
-          context: ErrorDescription(
-            'while loading the optional Thai audio catalog',
-          ),
-        ),
-      );
-      return ThaiAudioCatalog.empty();
-    },
-  );
+  final audioCatalog = await ThaiAudioCatalog.load(rootBundle);
   final appState = AppState();
   await appState.load();
   runApp(
