@@ -24,100 +24,155 @@
 </main>
 <div id="workspace" class="workspace" hidden>
   <aside>
-    <a class="brand" href="/admin/" id="brand"><img src="/app-icon-192.png" alt="" width="36" height="36">Chang Thai</a>
+    <a class="brand" href="/admin/" id="brand"><img src="/app-icon-192.png" alt="" width="42" height="42"><span>Chang Thai<small>Admin Console</small></span></a>
     <nav aria-label="Admin sections">
-      <button type="button" data-page="overview"><span class="nav-icon" aria-hidden="true">▦</span><span>ခြုံငုံကြည့်ရန်</span></button>
-      <button type="button" data-page="ads"><span class="nav-icon" aria-hidden="true">◉</span><span>ကြော်ငြာ</span></button>
-      <button type="button" data-page="lessons"><span class="nav-icon" aria-hidden="true">▤</span><span>သင်ခန်းစာ</span></button>
-      <button type="button" data-page="announcements"><span class="nav-icon" aria-hidden="true">◈</span><span>ကြေညာချက်</span></button>
-      <button type="button" data-page="updates"><span class="nav-icon" aria-hidden="true">↑</span><span>App update</span></button>
-      <button type="button" data-page="profile"><span class="nav-icon" aria-hidden="true">○</span><span>Profile</span></button>
+      <button type="button" data-page="overview"><span class="nav-icon" aria-hidden="true" data-icon="overview"></span><span>ခြုံငုံကြည့်ရန်</span></button>
+      <button type="button" data-page="ads"><span class="nav-icon" aria-hidden="true" data-icon="ads"></span><span>ကြော်ငြာ</span></button>
+      <button type="button" data-page="lessons"><span class="nav-icon" aria-hidden="true" data-icon="lessons"></span><span>သင်ခန်းစာ</span></button>
+      <button type="button" data-page="announcements"><span class="nav-icon" aria-hidden="true" data-icon="announcements"></span><span>ကြေညာချက်</span></button>
+      <button type="button" data-page="updates"><span class="nav-icon" aria-hidden="true" data-icon="updates"></span><span>App update</span></button>
+      <button type="button" data-page="profile"><span class="nav-icon" aria-hidden="true" data-icon="profile"></span><span>Profile</span></button>
     </nav>
-    <button class="quiet" id="sign-out" type="button">ထွက်မယ်</button>
+    <button class="quiet" id="sign-out" type="button"><span aria-hidden="true">↪</span> ထွက်မယ်</button>
   </aside>
   <main class="content">
     <header class="editor-header">
-      <div><h1 id="heading" tabindex="-1">ခြုံငုံကြည့်ရန်</h1><p id="revision"></p></div>
-      <a class="view-app" href="/" target="_blank" rel="noopener">Chang Thai ဖွင့်မယ် ↗</a>
+      <div><h1 id="heading" tabindex="-1">ခြုံငုံကြည့်ရန်</h1><p id="page-description"></p></div>
+      <div class="header-actions"><p id="revision"></p>
+      <a class="view-app" href="/" target="_blank" rel="noopener">App ဖွင့်မယ် <span aria-hidden="true">↗</span></a></div>
     </header>
     <form id="controls" novalidate>
-      <section id="overview">
-        <h2>လက်ရှိ ထုတ်ထားတဲ့အခြေအနေ</h2>
-        <div class="summary">
-          <article><span>သင်ရိုး</span><strong id="unit-count"></strong></article>
-          <article><span>Draft အခြေအနေ</span><strong id="draft-state"></strong></article>
-          <article><span>Android ကြော်ငြာ</span><strong id="live-banner"></strong></article>
-          <article><span>App ကြေညာချက်</span><strong id="live-announcement"></strong></article>
+      <section id="overview" class="screen">
+        <h2 class="sr-only">Admin dashboard</h2>
+        <div class="metric-grid">
+          <article class="panel metric"><span class="metric-icon lilac" aria-hidden="true">▤</span><div><span>သင်ရိုးယူနစ်</span><strong id="unit-count"></strong></div></article>
+          <article class="panel metric"><span class="metric-icon mint" aria-hidden="true">◫</span><div><span>သင်ခန်းစာ</span><strong id="lesson-count"></strong></div></article>
+          <article class="panel metric"><span class="metric-icon blue" aria-hidden="true">◇</span><div><span>သင်ရိုးအပိုင်း</span><strong id="section-count"></strong></div></article>
         </div>
-        <div class="quick-actions" aria-label="အမြန်လုပ်ဆောင်ရန်">
-          <button type="button" data-go="lessons">သင်ခန်းစာ ရှာပြီးပြင်မယ်</button>
-          <button type="button" class="quiet" data-go="announcements">ကြေညာချက် ရေးမယ်</button>
-          <button type="button" class="quiet" id="review-live">Draft နဲ့ Live တိုက်ကြည့်မယ်</button>
+        <div class="dashboard-grid">
+          <article class="panel chart-panel">
+            <header class="panel-heading"><div><h2>သင်ခန်းစာ ဖြန့်ဝေမှု</h2><p>သင်ရိုးအပိုင်းအလိုက် သင်ခန်းစာအရေအတွက်</p></div></header>
+            <ul class="bar-chart" id="lesson-chart"></ul>
+          </article>
+          <article class="panel chart-panel">
+            <header class="panel-heading"><div><h2>Live အခြေအနေ</h2><p>လက်ရှိ အသက်ဝင်တဲ့ control များ</p></div></header>
+            <div class="ring" id="live-ring" role="img"><div><strong id="active-count"></strong><span>အသက်ဝင်</span></div></div>
+            <dl class="live-legend">
+              <div><dt>Android ကြော်ငြာ</dt><dd id="live-banner"></dd></div>
+              <div><dt>App ကြေညာချက်</dt><dd id="live-announcement"></dd></div>
+              <div><dt>Update အသိပေးချက်</dt><dd id="live-update"></dd></div>
+            </dl>
+          </article>
         </div>
-      </section>
-      <section id="ads" hidden>
-        <h2>Android Profile banner</h2>
-        <div class="comparison"><p>Live <strong id="ads-live"></strong></p><p>Draft <strong id="ads-draft"></strong></p></div>
-        <label class="toggle"><input id="banner-enabled" type="checkbox"> Banner ကြော်ငြာ ဖွင့်မယ်</label>
-        <p>AdMob production build နဲ့ banner slot ပါတဲ့ build တွေမှာ အသက်ဝင်ပါမယ်။</p>
-      </section>
-      <section id="lessons" hidden>
-        <h2>သင်ရိုး တည်းဖြတ်ရန်</h2>
-        <label>ယူနစ်၊ သင်ခန်းစာ၊ ထိုင်းစာ သို့မဟုတ် မြန်မာအဓိပ္ပာယ် ရှာရန်<input id="lesson-search" type="search" placeholder="ဥပမာ မိတ်ဆက်၊ နှုတ်ဆက်" autocomplete="off"></label>
-        <div id="lesson-results" class="search-results" aria-live="polite" hidden></div>
-        <div class="fields">
-        <label>ယူနစ်<select id="unit"></select></label>
-        <label>ယူနစ်ခေါင်းစဉ်<input id="unit-title" maxlength="140"></label>
-        <label>သင်ယူရမယ့်အချက်<textarea id="unit-goal" maxlength="800"></textarea></label>
-        <label>လေ့လာရန် လမ်းညွှန်<textarea id="unit-tips" maxlength="800"></textarea></label>
-        <label>သင်ခန်းစာ<select id="lesson"></select></label>
-        <label>သင်ခန်းစာခေါင်းစဉ်<input id="lesson-title" maxlength="140"></label>
-        </div>
-        <label>သင်ခန်းစာထဲက ထိုင်းစာကြောင်း<select id="line"></select></label>
-        <fieldset id="line-fields">
-          <legend>စာသားနှင့် အသံ</legend>
-          <label>အသံပုံစံ<select id="voice"><option value="female">အမျိုးသမီး</option><option value="male">အမျိုးသား</option></select></label>
-          <label>ထိုင်းစာ<input id="thai-text" maxlength="400" aria-describedby="exercise-text-note"></label>
-          <p id="exercise-text-note" hidden>ဒီထိုင်းစာကို စကားလုံးစီတဲ့ လေ့ကျင့်ခန်းမှာ သုံးထားပါတယ်။ ထိုင်းစာပြောင်းလိုပါက course source ထဲမှာ လေ့ကျင့်ခန်းနဲ့အတူ ပြင်ပါ။ အဓိပ္ပာယ်၊ အသံထွက်နဲ့ MP3 ကို ဒီမှာ ပြင်နိုင်ပါတယ်။</p>
-          <label>မြန်မာအဓိပ္ပာယ်<input id="my-text" maxlength="600"></label>
-          <label>English အသံထွက်<input id="romanization" maxlength="400"></label>
-          <label>MP3 အသံဖိုင်<input id="lesson-audio" type="file" accept=".mp3,audio/mpeg"></label>
-          <div class="preview" aria-label="သင်ယူသူ မြင်ရမယ့်ပုံစံ">
-            <strong class="preview-label">သင်ယူသူ မြင်ရမယ့်ပုံစံ</strong>
-            <p id="preview-thai" lang="th"></p>
-            <p id="preview-romanization"></p>
-            <p id="preview-meaning"></p>
-            <audio id="audio-preview" controls preload="none" aria-label="အသံဖိုင် နားထောင်ရန်" hidden></audio>
+        <article class="panel next-actions">
+          <div><h2>ဆက်လုပ်ရန်</h2><p id="draft-state"></p></div>
+          <div class="quick-actions" aria-label="အမြန်လုပ်ဆောင်ရန်">
+            <button type="button" data-go="lessons">သင်ခန်းစာ ပြင်မယ်</button>
+            <button type="button" class="quiet" data-go="announcements">ကြေညာချက် ရေးမယ်</button>
+            <button type="button" class="quiet" id="review-live">Draft နဲ့ Live တိုက်ကြည့်မယ်</button>
           </div>
-        </fieldset>
-
+        </article>
       </section>
-      <section id="announcements" hidden>
-        <h2>App ကြေညာချက်</h2>
-        <label class="toggle"><input id="announcement-enabled" type="checkbox"> App မှာ ပြမယ်</label>
-        <label>ခေါင်းစဉ်<input id="announcement-title" maxlength="100"></label>
-        <label>စာသား<textarea id="announcement-body" maxlength="500"></textarea></label>
-        <label>သက်တမ်းကုန်ချိန်<input id="announcement-expiry" type="datetime-local"></label>
-        <div class="preview" aria-label="ကြေညာချက် အစမ်းကြည့်ရန်">
-          <strong class="preview-label">App မှာ မြင်ရမယ့်ပုံစံ</strong>
-          <p id="announcement-preview-title"></p><p id="announcement-preview-body"></p>
+      <section id="ads" class="screen" hidden>
+        <div class="two-column">
+          <article class="panel">
+            <header class="panel-heading"><div><h2>Android · AdMob</h2><p>Profile စာမျက်နှာမှာ ပေါ်မယ့် banner</p></div><span class="tag">Android</span></header>
+            <div class="comparison">
+              <div><span>Live</span><strong id="ads-live"></strong></div>
+              <div><span>သိမ်းထားသော Draft</span><strong id="ads-draft"></strong></div>
+            </div>
+            <label class="setting-row">
+              <span><strong>Profile banner</strong><small>ကြော်ငြာပြရန် Draft ထဲမှာ ဖွင့်ပါ။</small></span>
+              <input class="switch" id="banner-enabled" type="checkbox" role="switch">
+            </label>
+            <details class="details-panel">
+              <summary>ကြော်ငြာ ပေါ်ဖို့ လိုအပ်ချက်များ</summary>
+              <ul><li>Android production build မှာ AdMob ထည့်ထားရမယ်။</li><li>Banner ad unit နဲ့ consent ကို release build မှာ ချိတ်ထားရမယ်။</li><li>ဒီ Draft ကို Live သို့ Publish လုပ်ရမယ်။</li></ul>
+            </details>
+          </article>
+          <article class="panel preview-panel">
+            <header class="panel-heading"><div><h2>Placement preview</h2><p>Android Profile</p></div><span class="tag" id="ads-preview-state"></span></header>
+            <div class="device" aria-label="Profile banner နေရာ အစမ်းကြည့်ရန်">
+              <div class="device-header"><span aria-hidden="true">‹</span><strong>ကိုယ်ပိုင်</strong></div>
+              <div class="device-profile"><img src="/app-icon-192.png" alt="" width="36" height="36"><strong>Chang Thai</strong></div>
+              <div class="device-item">သင်ယူမှု မှတ်တမ်း</div><div class="device-item">ဆက်တင်</div>
+              <div class="ad-slot" id="ads-preview-slot" hidden>Profile banner နေရာ</div>
+            </div>
+          </article>
         </div>
-        <h2>Android Push</h2>
-        <p id="push-status">Live မှာ ထုတ်ထားတဲ့ ကြေညာချက်ကိုသာ ပို့နိုင်ပါတယ်။</p>
-        <button id="push-send" type="button" disabled>ပို့မယ်</button>
       </section>
-      <section id="updates" hidden>
-        <h2>Android update အသိပေးချက်</h2>
-        <p id="updates-live"></p>
-        <div class="fields">
-        <label>နောက်ဆုံး version code<input id="latest-code" type="number" min="0" max="2100000000"></label>
-        <label>အနည်းဆုံး version code<input id="minimum-code" type="number" min="0" max="2100000000"></label>
+      <section id="lessons" class="screen" hidden>
+        <article class="panel search-panel">
+          <label>သင်ခန်းစာ ရှာရန်<input id="lesson-search" type="search" placeholder="ခေါင်းစဉ်၊ ထိုင်းစာ၊ မြန်မာအဓိပ္ပာယ်" autocomplete="off"></label>
+          <div id="lesson-results" class="search-results" aria-live="polite" hidden></div>
+        </article>
+        <div class="two-column">
+          <article class="panel">
+            <header class="panel-heading"><div><h2>သင်ရိုးနှင့် သင်ခန်းစာ</h2></div></header>
+            <div class="fields"><label>ယူနစ်<select id="unit"></select></label><label>သင်ခန်းစာ<select id="lesson"></select></label></div>
+            <label>ယူနစ်ခေါင်းစဉ်<input id="unit-title" maxlength="140"></label>
+            <label>သင်ခန်းစာခေါင်းစဉ်<input id="lesson-title" maxlength="140"></label>
+            <label>သင်ယူရမယ့်အချက်<textarea id="unit-goal" maxlength="800"></textarea></label>
+            <label>လေ့လာရန် လမ်းညွှန်<textarea id="unit-tips" maxlength="800"></textarea></label>
+          </article>
+          <article class="panel">
+            <header class="panel-heading"><div><h2>စာကြောင်းနှင့် အသံ</h2></div></header>
+            <label>သင်ခန်းစာထဲက ထိုင်းစာကြောင်း<select id="line"></select></label>
+            <fieldset id="line-fields">
+              <legend class="sr-only">စာသားနှင့် အသံ</legend>
+              <label>အသံပုံစံ<select id="voice"><option value="female">အမျိုးသမီး</option><option value="male">အမျိုးသား</option></select></label>
+              <label>ထိုင်းစာ<input id="thai-text" maxlength="400" aria-describedby="exercise-text-note"></label>
+              <p id="exercise-text-note" class="field-note" hidden>ဒီစာကြောင်းကို စကားလုံးစီတဲ့ လေ့ကျင့်ခန်းမှာ သုံးထားပါတယ်။ ထိုင်းစာပြောင်းရင် သင်ရိုး source ထဲမှာ လေ့ကျင့်ခန်းနဲ့အတူ ပြင်ပါ။</p>
+              <label>မြန်မာအဓိပ္ပာယ်<input id="my-text" maxlength="600"></label>
+              <label>English အသံထွက်<input id="romanization" maxlength="400"></label>
+              <label>MP3 အသံဖိုင် <small>အများဆုံး 5 MiB</small><input id="lesson-audio" type="file" accept=".mp3,audio/mpeg"></label>
+              <div class="preview lesson-preview" aria-label="သင်ယူသူ မြင်ရမယ့်ပုံစံ">
+                <strong class="preview-label">သင်ယူသူ မြင်ရမယ့်ပုံစံ</strong>
+                <p id="preview-thai" lang="th"></p><p id="preview-romanization"></p><p id="preview-meaning"></p>
+                <audio id="audio-preview" controls preload="none" aria-label="အသံဖိုင် နားထောင်ရန်" hidden></audio>
+              </div>
+            </fieldset>
+          </article>
         </div>
-        <label>Update စာသား<textarea id="update-message" maxlength="300"></textarea></label>
-        <div class="preview">
-          <strong class="preview-label">ဖုန်းမှာ ပေါ်မယ့် အသိပေးချက် စမ်းကြည့်ရန်</strong>
-          <label>စမ်းမယ့် Android version code<input id="preview-version-code" type="number" min="1" max="2100000000"></label>
-          <p id="version-preview" aria-live="polite"></p>
+      </section>
+      <section id="announcements" class="screen" hidden>
+        <div class="two-column">
+          <article class="panel">
+            <header class="panel-heading"><div><h2>App ကြေညာချက်</h2><p>App မှာ ပြမယ့် စာနဲ့ သက်တမ်းကို သတ်မှတ်ပါ။</p></div></header>
+            <label class="setting-row"><strong>App မှာ ပြမယ်</strong><input class="switch" id="announcement-enabled" type="checkbox" role="switch"></label>
+            <label>ခေါင်းစဉ်<input id="announcement-title" maxlength="100"></label>
+            <label>စာသား<textarea id="announcement-body" maxlength="500"></textarea></label>
+            <label>သက်တမ်းကုန်ချိန်<input id="announcement-expiry" type="datetime-local"></label>
+          </article>
+          <div class="stack">
+            <article class="panel preview-panel">
+              <header class="panel-heading"><div><h2>App preview</h2></div></header>
+              <div class="preview announcement-preview" aria-label="ကြေညာချက် အစမ်းကြည့်ရန်">
+                <span class="metric-icon mint" aria-hidden="true">◈</span><div><p id="announcement-preview-title"></p><p id="announcement-preview-body"></p></div>
+              </div>
+            </article>
+            <article class="panel">
+              <header class="panel-heading"><div><h2>Android Push</h2><p id="push-status"></p></div><span class="tag">Live</span></header>
+              <button id="push-send" type="button" disabled>Live ကြေညာချက် ပို့မယ်</button>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section id="updates" class="screen" hidden>
+        <div class="two-column">
+          <article class="panel">
+            <header class="panel-heading"><div><h2>Android update အသိပေးချက်</h2><p id="updates-live"></p></div></header>
+            <div class="fields">
+              <label>နောက်ဆုံး version code<input id="latest-code" type="number" min="0" max="2100000000"></label>
+              <label>အနည်းဆုံး version code<input id="minimum-code" type="number" min="0" max="2100000000"></label>
+            </div>
+            <label>Update စာသား<textarea id="update-message" maxlength="300"></textarea></label>
+          </article>
+          <article class="panel preview-panel">
+            <header class="panel-heading"><div><h2>ဖုန်းပေါ်က အသိပေးချက် စမ်းကြည့်ရန်</h2></div></header>
+            <label>စမ်းမယ့် Android version code<input id="preview-version-code" type="number" min="1" max="2100000000" placeholder="ဥပမာ 12"></label>
+            <div class="preview"><p id="version-preview" aria-live="polite"></p></div>
+          </article>
         </div>
       </section>
       <footer id="publish-bar">
@@ -127,10 +182,14 @@
         <button id="publish" type="button">Draft သိမ်းပြီး Publish စစ်မယ်</button>
       </footer>
     </form>
-    <section id="profile" hidden>
-      <h2>Owner Profile</h2>
-      <p id="profile-email"></p>
-      <h3 id="password-heading">Password ပြောင်းရန်</h3>
+    <section id="profile" class="screen two-column" hidden>
+      <article class="panel owner-card">
+        <img src="/app-icon-192.png" alt="" width="64" height="64">
+        <h2>Owner Profile</h2>
+        <p id="profile-email"></p>
+      </article>
+      <article class="panel">
+      <header class="panel-heading"><div><h2 id="password-heading">Password ပြောင်းရန်</h2><p>Password အသစ်မှာ အနည်းဆုံး 16 လုံး ထည့်ပါ။</p></div></header>
       <form id="change-password">
         <label id="current-password-label">လက်ရှိ password<input name="current" type="password" autocomplete="current-password" required></label>
         <label>Password အသစ်<input name="next" type="password" autocomplete="new-password" minlength="16" required></label>
@@ -138,6 +197,7 @@
         <label class="toggle"><input id="show-profile-password" type="checkbox"> Password ပြမယ်</label>
         <button type="submit">Password သိမ်းမယ်</button>
       </form>
+      </article>
     </section>
   </main>
 </div>
