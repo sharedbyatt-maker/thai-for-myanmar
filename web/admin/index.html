@@ -65,7 +65,8 @@
         <fieldset id="line-fields">
           <legend>စာသားနှင့် အသံ</legend>
           <label>အသံပုံစံ<select id="voice"><option value="female">အမျိုးသမီး</option><option value="male">အမျိုးသား</option></select></label>
-          <label>ထိုင်းစာ<input id="thai-text" maxlength="400"></label>
+          <label>ထိုင်းစာ<input id="thai-text" maxlength="400" aria-describedby="exercise-text-note"></label>
+          <p id="exercise-text-note" hidden>ဒီထိုင်းစာကို စကားလုံးစီတဲ့ လေ့ကျင့်ခန်းမှာ သုံးထားပါတယ်။ ထိုင်းစာပြောင်းလိုပါက course source ထဲမှာ လေ့ကျင့်ခန်းနဲ့အတူ ပြင်ပါ။ အဓိပ္ပာယ်၊ အသံထွက်နဲ့ MP3 ကို ဒီမှာ ပြင်နိုင်ပါတယ်။</p>
           <label>မြန်မာအဓိပ္ပာယ်<input id="my-text" maxlength="600"></label>
           <label>English အသံထွက်<input id="romanization" maxlength="400"></label>
           <label>MP3 အသံဖိုင်<input id="lesson-audio" type="file" accept=".mp3,audio/mpeg"></label>
