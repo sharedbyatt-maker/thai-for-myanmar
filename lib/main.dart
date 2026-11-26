@@ -22,7 +22,9 @@ Future<void> main() async {
           exception: error,
           stack: stack,
           library: 'Chang Thai startup',
-          context: ErrorDescription('while loading the optional Thai audio catalog'),
+          context: ErrorDescription(
+            'while loading the optional Thai audio catalog',
+          ),
         ),
       );
       return ThaiAudioCatalog.empty();
