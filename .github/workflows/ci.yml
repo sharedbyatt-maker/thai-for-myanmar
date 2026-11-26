@@ -229,11 +229,12 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
           disable-animations: true
           script: |
-            adb logcat -c
             adb install -r build/app/outputs/flutter-apk/app-release.apk
+            adb logcat -b all -c
             adb shell am start -W -n com.sharedbyatt.thaiformyanmar/.MainActivity
             sleep 20
-            adb logcat -d -t 5000
+            adb logcat -b crash -d
+            adb logcat -b main -d -s AndroidRuntime:E flutter:E
             adb shell dumpsys activity exit-info com.sharedbyatt.thaiformyanmar
             adb shell pidof com.sharedbyatt.thaiformyanmar
 
