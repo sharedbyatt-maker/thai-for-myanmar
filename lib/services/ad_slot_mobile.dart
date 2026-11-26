@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,18 +40,38 @@ class _MobileAdsController extends ChangeNotifier {
   bool _showing = false;
   bool privacyOptionsRequired = false;
 
+  String _testCode = '';
   AndroidAdsConfig get config => RemoteControls.instance.androidAds;
+  bool get _testTools => !kReleaseMode || config.matchesTestDevice(_testCode);
   bool get _hasUnits =>
-      !kReleaseMode ||
-      AdPlacement.values.any((placement) => config.unit(placement) != null);
+      AdPlacement.values.any((placement) => _configuredUnit(placement) != null);
 
-  String? _unit(AdPlacement placement) {
-    if (!_ready) return null;
-    return kReleaseMode ? config.unit(placement) : _testIds[placement];
+  String? _configuredUnit(AdPlacement placement) {
+    if (!kReleaseMode || (_testTools && config.formatEnabled(placement))) {
+      return _testIds[placement];
+    }
+    return config.unit(placement);
   }
+
+  String? _unit(AdPlacement placement) =>
+      _ready ? _configuredUnit(placement) : null;
 
   Future<void> initialize() async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      _prefs = prefs;
+      final savedCode = prefs.getString('ads.testDevice') ?? '';
+      if (AndroidAdsConfig.testDevicePattern.hasMatch(savedCode)) {
+        _testCode = savedCode;
+      } else {
+        final random = Random.secure();
+        _testCode = List.generate(
+          24,
+          (_) => random.nextInt(16).toRadixString(16).toUpperCase(),
+        ).join();
+        await prefs.setString('ads.testDevice', _testCode);
+      }
+      notifyListeners();
       final consent = ConsentInformation.instance;
       final update = Completer<bool>();
       consent.requestConsentInfoUpdate(
@@ -67,7 +89,6 @@ class _MobileAdsController extends ChangeNotifier {
         notifyListeners();
         return;
       }
-      _prefs = await SharedPreferences.getInstance();
       await MobileAds.instance.initialize();
       _ready = true;
       notifyListeners();
@@ -167,7 +188,7 @@ class _MobileAdsController extends ChangeNotifier {
     }
   }
 
-  bool canShow(AdPlacement placement) {
+  bool canShow(AdPlacement placement, {bool test = false}) {
     final item = _loaded[placement];
     final prefs = _prefs;
     if (_unit(placement) == null || item == null || _showing || prefs == null) {
@@ -175,6 +196,7 @@ class _MobileAdsController extends ChangeNotifier {
     }
     final now = DateTime.now();
     if (now.difference(item.time) >= const Duration(minutes: 45)) return false;
+    if (test) return _testTools;
     return AdFrequency.canShow(
       placement: placement,
       now: now,
@@ -202,8 +224,8 @@ class _MobileAdsController extends ChangeNotifier {
     }
   }
 
-  Future<bool> show(AdPlacement placement) async {
-    if (!canShow(placement)) return false;
+  Future<bool> show(AdPlacement placement, {bool test = false}) async {
+    if (!canShow(placement, test: test)) return false;
     final ad = _loaded.remove(placement)!.ad;
     _showing = true;
     final done = Completer<bool>();
@@ -212,7 +234,7 @@ class _MobileAdsController extends ChangeNotifier {
     void record(AdWithoutView _) {
       if (displayed) return;
       displayed = true;
-      _recordImpression(placement);
+      if (!test) _recordImpression(placement);
     }
 
     void finish(AdWithoutView _) {
@@ -256,7 +278,15 @@ class _MobileAdsController extends ChangeNotifier {
         default:
           finish(ad);
       }
-      return await done.future.timeout(const Duration(minutes: 2));
+      final receivedReward = await done.future.timeout(
+        const Duration(minutes: 2),
+      );
+      if (!test ||
+          placement == AdPlacement.rewarded ||
+          placement == AdPlacement.rewardedInterstitial) {
+        return receivedReward;
+      }
+      return displayed;
     } catch (_) {
       return earned;
     } finally {
@@ -395,9 +425,15 @@ class InlineAdSlot extends StatelessWidget {
 }
 
 class _InlineAd extends StatefulWidget {
-  const _InlineAd({super.key, required this.id, required this.native});
+  const _InlineAd({
+    super.key,
+    required this.id,
+    required this.native,
+    this.showTestStatus = false,
+  });
   final String id;
   final bool native;
+  final bool showTestStatus;
 
   @override
   State<_InlineAd> createState() => _InlineAdState();
@@ -406,6 +442,7 @@ class _InlineAd extends StatefulWidget {
 class _InlineAdState extends State<_InlineAd> {
   AdWithView? _ad;
   bool _loaded = false;
+  bool _failed = false;
 
   @override
   void initState() {
@@ -416,7 +453,10 @@ class _InlineAdState extends State<_InlineAd> {
 
     void failed(Ad ad, LoadAdError _) {
       if (!mounted || _ad != ad) return;
-      _ad = null;
+      setState(() {
+        _ad = null;
+        _failed = true;
+      });
       unawaited(ad.dispose());
     }
 
@@ -460,7 +500,14 @@ class _InlineAdState extends State<_InlineAd> {
   @override
   Widget build(BuildContext context) {
     final ad = _ad;
-    if (!_loaded || ad == null) return const SizedBox.shrink();
+    if (!_loaded || ad == null) {
+      return widget.showTestStatus
+          ? Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(_failed ? 'Test ad မရသေးပါ။' : 'Test ad ယူနေပါတယ်…'),
+            )
+          : const SizedBox.shrink();
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Center(
@@ -470,6 +517,116 @@ class _InlineAdState extends State<_InlineAd> {
           child: AdWidget(ad: ad),
         ),
       ),
+    );
+  }
+}
+
+class AdTestSettings extends StatelessWidget {
+  const AdTestSettings({super.key});
+
+  static const _names = {
+    AdPlacement.banner: 'Banner',
+    AdPlacement.native: 'Native',
+    AdPlacement.interstitial: 'Interstitial',
+    AdPlacement.rewarded: 'Rewarded',
+    AdPlacement.rewardedInterstitial: 'Rewarded interstitial',
+    AdPlacement.appOpen: 'App open',
+  };
+
+  Future<void> _runTest(BuildContext context, AdPlacement placement) async {
+    if (!_ads._testTools || _ads._unit(placement) == null) return;
+    if (!placement.fullScreen) {
+      await showDialog<void>(
+        context: context,
+        builder: (context) => Dialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text('${_names[placement]} · Test ad'),
+              ),
+              _InlineAd(
+                id: _testIds[placement]!,
+                native: placement == AdPlacement.native,
+                showTestStatus: true,
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('ပိတ်မယ်'),
+              ),
+            ],
+          ),
+        ),
+      );
+      return;
+    }
+    final success = await _ads.show(placement, test: true);
+    if (!context.mounted) return;
+    final rewarded =
+        placement == AdPlacement.rewarded ||
+        placement == AdPlacement.rewardedInterstitial;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success
+              ? (rewarded
+                    ? 'Test reward callback ရပါပြီ။'
+                    : 'Test ad ပြပြီးပါပြီ။')
+              : 'Test ad မပြနိုင်သေးပါ သို့မဟုတ် reward မရသေးပါ။',
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_supported) return const SizedBox.shrink();
+    return ListenableBuilder(
+      listenable: _ads,
+      builder: (context, _) {
+        final code = _ads._testCode;
+        if (code.isEmpty) return const SizedBox.shrink();
+        return ExpansionTile(
+          leading: const Icon(Icons.science_outlined),
+          title: const Text('AdMob Test ads'),
+          subtitle: Text(
+            _ads._testTools
+                ? 'ဒီဖုန်းမှာ Test ads စမ်းနိုင်ပါတယ်။'
+                : 'Admin Ads မှာ စက်ကုဒ်ချိတ်ပါ။',
+          ),
+          childrenPadding: const EdgeInsets.all(12),
+          children: [
+            SelectableText(code),
+            TextButton.icon(
+              onPressed: () => Clipboard.setData(ClipboardData(text: code)),
+              icon: const Icon(Icons.copy_outlined),
+              label: const Text('စက်ကုဒ် ကူးမယ်'),
+            ),
+            if (_ads._testTools)
+              Wrap(
+                spacing: 8,
+                children: [
+                  for (final entry in _names.entries)
+                    OutlinedButton(
+                      onPressed:
+                          _ads._unit(entry.key) == null ||
+                              (entry.key.fullScreen &&
+                                  !_ads.canShow(entry.key, test: true))
+                          ? null
+                          : () => _runTest(context, entry.key),
+                      child: Text(entry.value),
+                    ),
+                  TextButton(
+                    onPressed: _ads.preload,
+                    child: const Text('Test ads ပြန်ယူမယ်'),
+                  ),
+                ],
+              ),
+          ],
+        );
+      },
     );
   }
 }

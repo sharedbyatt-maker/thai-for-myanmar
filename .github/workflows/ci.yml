@@ -213,12 +213,16 @@ jobs:
       - name: Build release-mode Android App Bundle
         run: flutter build appbundle --release --dart-define=ENABLE_ADS=true --dart-define=ADMOB_PRODUCTION=true
 
+      - name: Build installable Android ads review APK
+        run: flutter build apk --release --dart-define=ENABLE_ADS=true --dart-define=ADMOB_PRODUCTION=true
+
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4
         with:
           name: thai-for-myanmar-android-builds
           path: |
             build/review-artifacts/app-debug.apk
+            build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 14

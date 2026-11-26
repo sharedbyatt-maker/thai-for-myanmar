@@ -32,3 +32,10 @@ class AdPrivacyOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
+
+class AdTestSettings extends StatelessWidget {
+  const AdTestSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}

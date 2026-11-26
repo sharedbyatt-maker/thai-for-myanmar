@@ -34,6 +34,7 @@ class SettingsScreen extends StatelessWidget {
             children: [
               const PushPreferenceTile(),
               const AdPrivacyOptions(),
+              const AdTestSettings(),
               Text('အသွင်အပြင်', style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
               Card(

@@ -1,4 +1,4 @@
-import { adChangeLabels, adCount, adsFields, collectAdFields, loadAdFields, renderAdPreview, setupAdFields } from "./ad-settings.js";
+import { adChangeLabels, adCount, adStatus, adsFields, collectAdFields, loadAdFields, renderAdPreview, setupAdFields } from "./ad-settings.js";
 
 const $ = (id) => document.getElementById(id);
 const value = (id) => $(id).value.trim();
@@ -244,8 +244,8 @@ function revision() {
   $("live-ring").setAttribute("aria-label", `Live control ၃ ခုတွင် ${active} ခု အသက်ဝင်ပါတယ်။`);
   $("revision").textContent = `Live v${published.revision} · Draft v${draft.revision}`;
   $("draft-state").textContent = changeLabels(draft.settings).length ? "Live တင်ရန် ကျန်ပါတယ်" : "Live နဲ့ ကိုက်ညီပါတယ်";
-  $("ads-live").textContent = `${enabledAds}/6 ဖွင့်ထား`;
-  $("ads-draft").textContent = `${adCount(draft.settings)}/6 ဖွင့်ထား`;
+  $("ads-live").textContent = adStatus(published.settings);
+  $("ads-draft").textContent = adStatus(draft.settings);
   const code = published.settings.androidUpdate?.latestCode;
   $("updates-live").textContent = code ? `Live နောက်ဆုံး version code — ${code}` : "Live update အသိပေးချက် မရှိသေးပါ";
   const canPush = announcementEnabled;
@@ -595,7 +595,7 @@ function collect(next) {
   if (formChanged(adsFields)) {
     const config = collectAdFields();
     next.androidAds = config;
-    next.androidBanner = config.enabled && config.formats.banner.enabled;
+    next.androidBanner = config.enabled && config.delivery === "live" && config.formats.banner.enabled;
   }
   if (formChanged(["announcement-enabled", "announcement-title", "announcement-body", "announcement-expiry"])) {
     if (enabled && (!title || !body || !localExpiry || new Date(localExpiry) <= new Date())) {

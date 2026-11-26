@@ -12,12 +12,13 @@ const numericFields = [
   ["ads-daily-limit", "dailyLimit", 3, 1, 5],
   ["ads-lesson-interval", "lessonInterval", 4, 4, 30],
 ];
+const testDevicePattern = /^[A-F0-9]{24}$/;
 const unitIdPattern = /^ca-app-pub-[0-9]{16}\/[0-9]{10}$/;
 const $ = id => document.getElementById(id);
 const toggleId = key => `ads-${key}-enabled`;
 const unitId = key => `ads-${key}-id`;
 export const adsFields = [
-  "ads-master",
+  "ads-master", "ads-delivery", "ads-test-device",
   ...numericFields.map(([id]) => id),
   ...formats.flatMap(([key]) => [toggleId(key), unitId(key)]),
 ];
@@ -65,6 +66,8 @@ function adsConfig(settings) {
 export function loadAdFields(settings) {
   const config = adsConfig(settings);
   $("ads-master").checked = config.enabled === true;
+  $("ads-delivery").value = config.delivery === "live" ? "live" : "test";
+  $("ads-test-device").value = config.testDevice ?? "";
   for (const [id, name, fallback] of numericFields) $(id).value = config[name] ?? fallback;
   for (const [key, , , suffix] of formats) {
     const entry = config.formats?.[key];
@@ -74,6 +77,11 @@ export function loadAdFields(settings) {
 }
 
 export function renderAdPreview() {
+  const testing = $("ads-delivery").value === "test";
+  $("ads-test-device-field").hidden = !testing;
+  $("ads-delivery-help").textContent = testing
+    ? "Android Settings → AdMob Test ads က စက်ကုဒ်ကို ထည့်ပါ။ ဒီဖုန်းတစ်လုံးတည်းမှာ Google Test ads ပြပါမယ်။"
+    : "Live ads ပြဖို့ Master switch နဲ့ သက်ဆိုင်ရာ format တွေကို ဖွင့်ပြီး Publish လုပ်ပါ။";
   const showing = $("ads-master").checked && $(toggleId("banner")).checked;
   $("ads-preview-slot").hidden = !showing;
   $("ads-preview-state").textContent = showing ? "ဖွင့်ထား" : "ပိတ်ထား";
@@ -83,15 +91,30 @@ export function renderAdPreview() {
 export function adCount(settings) {
   const config = adsConfig(settings);
   if (config.enabled !== true) return 0;
+  if (config.delivery === "test" && !testDevicePattern.test(config.testDevice)) return 0;
+  if (config.delivery !== "live" && config.delivery !== "test") {
+    return !settings.androidAds && settings.androidBanner === true ? 1 : 0;
+  }
   return formats.filter(([key]) => {
     const entry = config.formats?.[key];
-    return entry?.enabled === true &&
-      (unitIdPattern.test(entry.unitId) || (!settings.androidAds && key === "banner"));
+    return entry?.enabled === true && (config.delivery === "test" || unitIdPattern.test(entry.unitId));
   }).length;
 }
 
+export function adStatus(settings) {
+  const config = adsConfig(settings);
+  const count = adCount(settings);
+  const mode = config.delivery === "test" ? "Test" : "Live";
+  return count ? `${mode} · ${count}/6 ဖွင့်ထား` : "0/6 ဖွင့်ထား";
+}
+
 export function collectAdFields() {
-  const config = { enabled: $("ads-master").checked, formats: {} };
+  const delivery = $("ads-delivery").value === "live" ? "live" : "test";
+  const testDevice = $("ads-test-device").value.trim().toUpperCase();
+  const config = { enabled: $("ads-master").checked, delivery, testDevice, formats: {} };
+  if (delivery === "test" && (testDevice || config.enabled) && !testDevicePattern.test(testDevice)) {
+    throw new Error("Test ads ဖွင့်ရန် Android Settings က စက်ကုဒ် ၂၄ လုံးကို ထည့်ပါ။");
+  }
   for (const [id, key, , min, max] of numericFields) {
     const value = Number($(id).value);
     if (!Number.isInteger(value) || value < min || value > max) {
@@ -102,7 +125,7 @@ export function collectAdFields() {
   for (const [key, name] of formats) {
     const id = $(unitId(key)).value.trim();
     const enabled = $(toggleId(key)).checked;
-    if ((id || enabled) && !unitIdPattern.test(id)) {
+    if ((id || (delivery === "live" && enabled)) && !unitIdPattern.test(id)) {
       throw new Error(`${name} အတွက် မှန်ကန်တဲ့ Ad Unit ID ထည့်ပါ။`);
     }
     config.formats[key] = { enabled, unitId: id };
@@ -113,6 +136,10 @@ export function collectAdFields() {
 export function adChangeLabels(before, after) {
   const old = adsConfig(before), next = adsConfig(after);
   const labels = [];
+  if ((old.delivery ?? "test") !== (next.delivery ?? "test")) {
+    labels.push(next.delivery === "live" ? "Production Live ads mode သို့ပြောင်းမယ်" : "Google Test ads mode သို့ပြောင်းမယ်");
+  }
+  if ((old.testDevice ?? "") !== (next.testDevice ?? "")) labels.push("Test ads စမ်းမယ့်ဖုန်း ပြောင်းမယ်");
   if (old.enabled !== next.enabled) labels.push(next.enabled ? "Android ကြော်ငြာအားလုံး ဖွင့်မယ်" : "Android ကြော်ငြာအားလုံး ပိတ်မယ်");
   for (const [key, name] of formats) {
     const first = old.formats?.[key];
