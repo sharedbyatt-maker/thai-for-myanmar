@@ -6,7 +6,7 @@
 - Android application ID: `com.sharedbyatt.thaiformyanmar`
 - Flutter version: `0.1.0+1` (`0.1.0` version name, `1` build number)
 - V1 account requirement: none
-- AdMob: disabled by default; the Android scaffold uses Google's public test app ID for debug verification only.
+- AdMob: Google test ads by default in ads-enabled releases. The Android scaffold uses the Chang Thai App ID in release and Google's test App ID in debug.
 
 ## Builds
 
@@ -25,9 +25,9 @@ The AAB produced without owner signing material is **not ready for Google Play u
 1. Create/verify the Google Play Console account and accept Google's current agreements.
 2. Choose and review the final app title and store listing.
 3. Create an upload key in a secure owner-controlled environment; store its keystore and passwords outside GitHub. Configure protected GitHub/CI secrets only after agreeing to the release process.
-4. Replace the test AdMob app ID in the generated Android manifest and provide the production banner unit ID using the documented `ADMOB_ANDROID_BANNER_ID` define. Keep ads disabled until this is done and the privacy/consent flow has been reviewed.
+4. Verify Android ads with Google test units, configure Privacy & messaging in AdMob, and review privacy policy and Play Data Safety before publishing ads settings. See [Android AdMob](ADMIN_CONSOLE.md#android-admob) for the production build flags.
 5. Publish a privacy policy URL and complete Data Safety declarations based on enabled SDKs.
 6. Create a Play Console internal testing release, upload the owner-signed AAB, and target Android 16 (API 36) or higher for new-app submissions and updates under the current policy (effective August 31, 2026).
 7. If this is a personal developer account created after November 13, 2023, complete Google's required closed test with at least 12 opted-in testers for 14 continuous days before applying for production access.
 
-Never commit `.jks`, `.keystore`, key properties, passwords, Play credentials, or production AdMob IDs. Google Play account ownership and final policy/store acceptance remain with the owner.
+Never commit `.jks`, `.keystore`, key properties, passwords, or Play credentials. Google Play account ownership and final policy/store acceptance remain with the owner.

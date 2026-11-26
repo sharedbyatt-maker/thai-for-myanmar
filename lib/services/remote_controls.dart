@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'ad_slot_config.dart';
 import 'remote_audio_cache.dart';
 
 Map<String, dynamic> controlMap(Object? value) =>
@@ -20,9 +21,13 @@ class RemoteControls {
   static const _cacheKey = 'chang_thai_published_controls_v1';
   Map<String, dynamic> _settings = {};
   int buildNumber = 0;
+  bool _hasLiveSettings = false;
   final audio = <(String, String), String>{};
 
-  bool get androidBanner => _settings['androidBanner'] == true;
+  AndroidAdsConfig get androidAds =>
+      _hasLiveSettings && !_settings.containsKey('androidAds')
+      ? AndroidAdsConfig.testDefaults
+      : AndroidAdsConfig(controlMap(_settings['androidAds']));
   Map<String, dynamic> get announcement =>
       controlMap(_settings['announcement']);
   Map<String, dynamic> get update => controlMap(_settings['androidUpdate']);
@@ -111,6 +116,7 @@ class RemoteControls {
       }
       unawaited(_download(downloads));
       _settings = settings;
+      _hasLiveSettings = online;
     } catch (_) {
       // The offline learning bundle is always usable.
     }

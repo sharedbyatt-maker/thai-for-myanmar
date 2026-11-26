@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/content_frame.dart';
 import '../widgets/push_preference_tile.dart';
 
+import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../data/phrase_repository.dart';
 import '../services/thai_playback_service.dart';
@@ -32,6 +33,8 @@ class SettingsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             children: [
               const PushPreferenceTile(),
+              const AdPrivacyOptions(),
+              const AdTestSettings(),
               Text('အသွင်အပြင်', style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
               Card(

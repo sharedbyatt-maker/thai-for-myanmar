@@ -76,18 +76,32 @@
       <section id="ads" class="screen" hidden>
         <div class="two-column">
           <article class="panel">
-            <header class="panel-heading"><div><h2>Android · AdMob</h2><p>Profile စာမျက်နှာမှာ ပေါ်မယ့် banner</p></div><span class="tag">Android</span></header>
+            <header class="panel-heading"><div><h2>Android · AdMob</h2><p>ထုတ်ထားတဲ့ config က ads support ပါတဲ့ Android build ကို နောက်တစ်ကြိမ်ဖွင့်ရင် အသက်ဝင်ပါမယ်။</p></div><span class="tag">Android</span></header>
             <div class="comparison">
               <div><span>Live</span><strong id="ads-live"></strong></div>
               <div><span>သိမ်းထားသော Draft</span><strong id="ads-draft"></strong></div>
             </div>
             <label class="setting-row">
-              <span><strong>Profile banner</strong><small>ကြော်ငြာပြရန် Draft ထဲမှာ ဖွင့်ပါ။</small></span>
-              <input class="switch" id="banner-enabled" type="checkbox" role="switch">
+              <span><strong>Android ကြော်ငြာအားလုံး</strong><small>ပိတ်လိုက်ရင် format အားလုံး ပိတ်ပါမယ်။</small></span>
+              <input class="switch" id="ads-master" type="checkbox" role="switch">
             </label>
+            <div class="fields">
+              <label>Ads mode
+                <select id="ads-delivery">
+                  <option value="test">Test ads · ဖုန်းအားလုံး</option>
+                  <option value="live">Live ads · Production</option>
+                </select>
+              </label>
+            </div>
+            <p id="ads-delivery-help"></p>
             <details class="details-panel">
-              <summary>ကြော်ငြာ ပေါ်ဖို့ လိုအပ်ချက်များ</summary>
-              <ul><li>Android production build မှာ AdMob ထည့်ထားရမယ်။</li><li>Banner ad unit နဲ့ consent ကို release build မှာ ချိတ်ထားရမယ်။</li><li>ဒီ Draft ကို Live သို့ Publish လုပ်ရမယ်။</li></ul>
+              <summary>Full-screen ပြသမှု ကန့်သတ်ချက်</summary>
+              <div class="fields">
+                <label>ကြားချိန် (မိနစ်)<input type="number" id="ads-cooldown" min="5" max="120" required></label>
+                <label>တစ်နေ့ အများဆုံး<input type="number" id="ads-daily-limit" min="1" max="5" required></label>
+              </div>
+              <label>သင်ခန်းစာ ဘယ်နှခုပြီးတိုင်း စမ်းပြမလဲ<input type="number" id="ads-lesson-interval" min="4" max="30" required></label>
+              <p>App open ကို ၂၄ နာရီအတွင်း အများဆုံး ၁ ကြိမ် ပြပါမယ်။</p>
             </details>
           </article>
           <article class="panel preview-panel">
@@ -100,6 +114,10 @@
             </div>
           </article>
         </div>
+        <article class="panel">
+          <header class="panel-heading"><div><h2>Ad units နှင့် placements</h2><p>Format တစ်ခုချင်းစီ ဖွင့်ပိတ်ပြီး Ad Unit ID ပြောင်းနိုင်ပါတယ်။</p></div></header>
+          <div class="ad-format-grid" id="ads-formats"></div>
+        </article>
       </section>
       <section id="lessons" class="screen" hidden>
         <article class="panel search-panel">
