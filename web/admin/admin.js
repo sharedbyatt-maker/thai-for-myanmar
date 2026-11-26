@@ -1,10 +1,137 @@
 const $ = (id) => document.getElementById(id);
 const value = (id) => $(id).value.trim();
-const config = await fetch("/assets/assets/data/league_config.json").then(r => r.json());
-const course = await fetch("/assets/assets/data/course_v2.json").then(r => r.json());
-const romanizations = await fetch("/assets/assets/data/course_pronunciation.json").then(r => r.json());
+async function loadAsset(name) {
+  const response = await fetch(`/assets/assets/data/${name}.json`);
+  if (!response.ok) throw new Error("Admin assets unavailable");
+  return response.json();
+}
+
+let config, course, romanizations;
+try {
+  [config, course, romanizations] = await Promise.all([
+    loadAsset("league_config"), loadAsset("course_v2"), loadAsset("course_pronunciation"),
+  ]);
+  $("login-submit").disabled = false;
+  $("owner-setup").disabled = false;
+} catch {
+  $("status").textContent = "Admin ဖွင့်မရသေးပါ။ ချိတ်ဆက်မှု စစ်ပြီး စာမျက်နှာကို ပြန်ဖွင့်ပါ။";
+  throw new Error("Cannot initialize Admin");
+}
+const voices = ["male", "female"];
+const exerciseLines = Object.fromEntries(voices.map(voice => {
+  const ids = new Set();
+  for (const [id, line] of Object.entries(course.lines)) {
+    const parts = line.parts?.[voice] ?? [];
+    if (parts.length) ids.add(id);
+    for (const part of parts) ids.add(part);
+  }
+  return [voice, ids];
+}));
+
 let token, draft, published, settings, previewUrl;
 let busy = false;
+let selection = {};
+let savedForm = {};
+const pickerIds = ["unit", "lesson", "line", "voice"];
+let bundledAudio;
+function audioKey(id, voice, thai) {
+  return JSON.stringify([id, voice, thai]);
+}
+
+async function showSavedAudio() {
+  const id = value("line");
+  const voice = value("voice");
+  const line = course.lines[id];
+  const custom = settings.lines?.[id]?.[voice];
+  if (custom?.audio) {
+    setAudioPreview(config.url + "/storage/v1/object/public/chang-thai-lesson-audio/" + custom.audio);
+    return;
+  }
+  setAudioPreview(null);
+  if (!line) return;
+  bundledAudio ??= Promise.allSettled([loadAsset("thai_audio_manifest"), loadAsset("course_audio_manifest")])
+    .then(manifests => new Map(manifests.flatMap(result => result.value?.entries ?? [])
+      .map(entry => [audioKey(entry.phraseId, entry.form, entry.thai), entry.asset])));
+  const matches = await bundledAudio;
+  if (!settings || id !== value("line") || voice !== value("voice") || previewUrl) return;
+  const thai = custom?.thai ?? line[voice];
+  const source = line.sources?.[voice];
+  const asset = matches.get(audioKey(id, voice, thai)) ?? matches.get(audioKey(source, voice, thai));
+  if (asset) setAudioPreview("/assets/assets/" + asset);
+}
+const lessonFields = [
+  "unit-title", "unit-goal", "unit-tips", "lesson-title", "thai-text", "my-text", "romanization",
+];
+const controlFields = [
+  "banner-enabled", "announcement-enabled", "announcement-title", "announcement-body",
+  "announcement-expiry", "latest-code", "minimum-code", "update-message",
+];
+
+function snapshot(ids) {
+  return Object.fromEntries(ids.map(id => {
+    const element = $(id);
+    return [id, element.type === "checkbox" ? element.checked : element.value];
+  }));
+}
+
+function formChanged(ids) {
+  return Object.entries(snapshot(ids)).some(([id, current]) => savedForm[id] !== current);
+}
+
+function lessonChanged() {
+  return formChanged(lessonFields) || $("lesson-audio").files.length > 0;
+}
+
+function rememberLesson() {
+  selection = snapshot(pickerIds);
+  Object.assign(savedForm, snapshot(lessonFields));
+}
+
+function formDirty() {
+  return lessonChanged() || formChanged(controlFields);
+}
+
+function editStatus() {
+  const dirty = formDirty();
+  $("edit-state").textContent = dirty ? "မသိမ်းရသေးတဲ့ ပြင်ဆင်ချက်ရှိပါတယ်" : "Draft ကို သိမ်းထားပါတယ်";
+  $("discard-edits").disabled = !dirty;
+}
+
+function equalSettings(first, second) {
+  if (Object.is(first, second)) return true;
+  if (!first || !second || typeof first !== "object" || typeof second !== "object") return false;
+  const keys = Object.keys(first);
+  return keys.length === Object.keys(second).length
+    && keys.every(key => Object.hasOwn(second, key) && equalSettings(first[key], second[key]));
+}
+
+function changeLabels(candidate) {
+  const live = published.settings;
+  const labels = [];
+  if (Boolean(live.androidBanner) !== Boolean(candidate.androidBanner)) {
+    labels.push(candidate.androidBanner ? "Android Profile banner ဖွင့်မယ်" : "Android Profile banner ပိတ်မယ်");
+  }
+  const groups = [
+    ["units", "ယူနစ်"], ["lessons", "သင်ခန်းစာ"], ["lines", "ထိုင်းစာကြောင်းနှင့် အသံ"],
+  ];
+  for (const [key, label] of groups) {
+    const before = live[key] ?? {};
+    const after = candidate[key] ?? {};
+    const ids = new Set([...Object.keys(before), ...Object.keys(after)]);
+    const count = [...ids].filter(id => !equalSettings(before[id], after[id])).length;
+    if (count) labels.push(`${label} ${count} ခု ပြောင်းမယ်`);
+  }
+  if ((live.announcement?.enabled || candidate.announcement?.enabled)
+      && !equalSettings(live.announcement, candidate.announcement)) {
+    labels.push(candidate.announcement?.enabled ? `ကြေညာချက် — ${candidate.announcement.title}` : "ကြေညာချက် ပိတ်မယ်");
+  }
+  const liveUpdate = live.androidUpdate ?? {};
+  const nextUpdate = candidate.androidUpdate ?? {};
+  if ((liveUpdate.latestCode || nextUpdate.latestCode) && !equalSettings(liveUpdate, nextUpdate)) {
+    labels.push(nextUpdate.latestCode ? `Android update — version ${nextUpdate.latestCode}` : "Android update အသိပေးချက် ပိတ်မယ်");
+  }
+  return labels;
+}
 let ownerEmail, setupOnly = false;
 const ownerRole = user => user?.app_metadata?.chang_thai_admin === true;
 const status = message => { $("status").textContent = message; };
@@ -33,9 +160,13 @@ function run(action) {
     if (busy) return;
     busy = true;
     status("လုပ်ဆောင်နေပါတယ်…");
+    $("workspace").inert = true;
     try { await action(event); }
     catch (error) { status(error.message); }
-    finally { busy = false; }
+    finally {
+      $("workspace").inert = false;
+      busy = false;
+    }
   };
 }
 
@@ -45,25 +176,87 @@ async function readRow(table) {
   return row;
 }
 
-async function writeRow(table, row) {
+async function writeRow(table, row, nextSettings) {
   const [updated] = await api(
     `/rest/v1/${table}?id=eq.1&revision=eq.${row.revision}&select=revision,settings`,
-    { method: "PATCH", body: { settings }, headers: { Prefer: "return=representation" } },
+    { method: "PATCH", body: { settings: nextSettings }, headers: { Prefer: "return=representation" } },
   );
   if (!updated) throw new Error("တခြားသူက ပြင်ထားပါတယ်။ ပြန်ဝင်ပြီး နောက်ဆုံး version ကို ဖတ်ပါ။");
   return updated;
 }
 
+const pageDescriptions = {
+  overview: "သင်ရိုး၊ Live settings နဲ့ Publish လုပ်ရန် ကျန်တဲ့ Draft ကို ကြည့်ပါ။",
+  ads: "Android Profile banner ကို ထိန်းချုပ်ပြီး ပေါ်မယ့်နေရာ စမ်းကြည့်ပါ။",
+  lessons: "သင်ခန်းစာ ရှာပါ၊ စာသားနဲ့ အသံကို ပြင်ပြီး Draft သိမ်းပါ။",
+  announcements: "App ကြေညာချက်တင်ပြီး Android Push ပို့ပါ။",
+  updates: "Android version အလိုက် update အသိပေးချက် သတ်မှတ်ပါ။",
+  profile: "Owner အကောင့်နဲ့ ဝင်ရန် password ကို စီမံပါ။",
+};
+
+function renderCourseChart() {
+  const sections = course.sections ?? [];
+  const totals = sections.map(() => 0);
+  let lessonCount = 0;
+  for (const unit of course.units) {
+    lessonCount += unit.lessons.length;
+    if (unit.section > 0 && unit.section <= totals.length) totals[unit.section - 1] += unit.lessons.length;
+  }
+  $("unit-count").textContent = course.units.length;
+  $("section-count").textContent = sections.length;
+  $("lesson-count").textContent = lessonCount;
+  const max = Math.max(1, ...totals);
+  $("lesson-chart").replaceChildren(...sections.map((section, index) => {
+    const row = document.createElement("li");
+    const label = document.createElement("span");
+    const value = document.createElement("strong");
+    const track = document.createElement("span");
+    const bar = document.createElement("span");
+    label.textContent = section;
+    value.textContent = totals[index];
+    track.className = "chart-track";
+    track.setAttribute("aria-hidden", "true");
+    bar.style.inlineSize = `${100 * totals[index] / max}%`;
+    track.append(bar);
+    row.append(label, value, track);
+    return row;
+  }));
+}
+
+function showLiveStatus(id, active, offLabel) {
+  const indicator = $(id);
+  indicator.textContent = active ? "အသက်ဝင်" : offLabel;
+  indicator.dataset.enabled = String(active);
+}
+
 function revision() {
-  $("unit-count").textContent = `${course.units.length} ယူနစ်`;
-  $("live-banner").textContent = published.settings.androidBanner === true ? "ဖွင့်ထား" : "ပိတ်ထား";
   const announcement = published.settings.announcement;
-  $("live-announcement").textContent = announcement?.enabled === true &&
-    new Date(announcement.expiresAt) > new Date() ? "ပြနေပါတယ်" : "မရှိသေးပါ";
+  const bannerEnabled = published.settings.androidBanner === true;
+  const announcementEnabled = announcement?.enabled === true && new Date(announcement.expiresAt) > new Date();
+  const updateEnabled = Number(published.settings.androidUpdate?.latestCode) > 0;
+  showLiveStatus("live-banner", bannerEnabled, "ပိတ်ထား");
+  showLiveStatus("live-announcement", announcementEnabled, "မရှိသေးပါ");
+  showLiveStatus("live-update", updateEnabled, "မရှိသေးပါ");
+  const active = Number(bannerEnabled) + Number(announcementEnabled) + Number(updateEnabled);
+  $("active-count").textContent = `${active}/3`;
+  $("live-ring").style.setProperty("--progress", `${active / 3 * 100}%`);
+  $("live-ring").setAttribute("aria-label", `Live control ၃ ခုတွင် ${active} ခု အသက်ဝင်ပါတယ်။`);
   $("revision").textContent = `Live v${published.revision} · Draft v${draft.revision}`;
+  $("draft-state").textContent = changeLabels(draft.settings).length ? "Live တင်ရန် ကျန်ပါတယ်" : "Live နဲ့ ကိုက်ညီပါတယ်";
+  $("ads-live").textContent = published.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
+  $("ads-draft").textContent = draft.settings.androidBanner ? "ဖွင့်ထား" : "ပိတ်ထား";
+  const code = published.settings.androidUpdate?.latestCode;
+  $("updates-live").textContent = code ? `Live နောက်ဆုံး version code — ${code}` : "Live update အသိပေးချက် မရှိသေးပါ";
+  const canPush = announcementEnabled;
+  $("push-send").disabled = !canPush;
+  $("push-status").textContent = canPush
+    ? `Android သို့ ပို့မယ့် Live ကြေညာချက် — ${announcement.title}`
+    : "သက်တမ်းရှိတဲ့ ကြေညာချက်ကို Publish လုပ်ပြီးမှ Android Push ပို့နိုင်ပါတယ်။";
+  editStatus();
 }
 
 function showPage(id) {
+  $("page-description").textContent = pageDescriptions[id];
   $("controls").hidden = id === "profile";
   $("publish-bar").hidden = id === "overview" || id === "profile";
   for (const button of document.querySelectorAll("[data-page]")) {
@@ -71,7 +264,7 @@ function showPage(id) {
     $(button.dataset.page).hidden = !active;
     if (active) {
       button.setAttribute("aria-current", "page");
-      $("heading").textContent = button.textContent;
+      $("heading").textContent = button.lastElementChild.textContent;
     } else button.removeAttribute("aria-current");
   }
 }
@@ -82,15 +275,19 @@ function setFields() {
   $("announcement-enabled").checked = a.enabled === true;
   $("announcement-title").value = a.title ?? "";
   $("announcement-body").value = a.body ?? "";
-  const date = new Date(a.expiresAt);
-  $("announcement-expiry").value = Number.isFinite(date.valueOf())
+  const date = a.expiresAt ? new Date(a.expiresAt) : null;
+  $("announcement-expiry").value = date && Number.isFinite(date.valueOf())
     ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : "";
   for (const [id, key] of [["latest-code", "latestCode"], ["minimum-code", "minimumCode"], ["update-message", "message"]]) {
     $(id).value = settings.androidUpdate?.[key] ?? "";
   }
-  options($("unit"), course.units.map(u => [u.id, u.title]));
+  options($("unit"), course.units.map(u => [u.id, settings.units?.[u.id]?.title ?? u.title]));
   showUnit();
+  savedForm = snapshot([...controlFields, ...lessonFields]);
+  rememberLesson();
+  renderPreviews();
+  editStatus();
 }
 
 const selectedUnit = () => course.units.find(u => u.id === value("unit"));
@@ -101,36 +298,161 @@ function showUnit() {
   const u = selectedUnit();
   const custom = settings.units?.[u.id] ?? {};
   for (const key of ["title", "goal", "tips"]) $("unit-" + key).value = custom[key] ?? u[key];
-  options($("lesson"), u.lessons.map(l => [l.id, l.title]));
+  options($("lesson"), u.lessons.map(l => [l.id, settings.lessons?.[l.id]?.title ?? l.title]));
   showLesson();
 }
-function showLesson() {
-  const l = selectedLesson();
-  $("lesson-title").value = settings.lessons?.[l.id]?.title ?? l.title;
-  const ids = new Set(l.steps.flatMap(s => [s.line, ...(s.lines ?? [])]).filter(id => course.lines[id]));
+function lessonLineIds(lesson) {
+  const ids = new Set(lesson.steps.flatMap(step => [step.line, ...(step.lines ?? [])]).filter(id => course.lines[id]));
   for (const id of ids) {
     for (const parts of Object.values(course.lines[id].parts ?? {})) {
       for (const part of parts) if (course.lines[part]) ids.add(part);
     }
   }
-  const lines = [...ids];
-  options($("line"), lines.map(id => [id, course.lines[id].female]));
+  return [...ids];
+}
+function showLesson() {
+  const lesson = selectedLesson();
+  $("lesson-title").value = settings.lessons?.[lesson.id]?.title ?? lesson.title;
+  const lines = lessonLineIds(lesson);
+  options($("line"), lines.map(id => [id, settings.lines?.[id]?.female?.thai ?? course.lines[id].female]));
   $("line-fields").disabled = lines.length === 0;
   showLine();
 }
+function checkExerciseText(id, voice, nextThai, previousThai) {
+  const bundledThai = course.lines[id]?.[voice];
+  if (exerciseLines[voice].has(id) && nextThai !== previousThai && nextThai !== bundledThai) {
+    throw new Error(`စာကြောင်း ${id} ကို စကားလုံးစီတဲ့ လေ့ကျင့်ခန်းတွေမှာ သုံးထားပါတယ်။ ထိုင်းစာပြောင်းလိုပါက course source ထဲမှာ လေ့ကျင့်ခန်းနဲ့အတူ ပြင်ပါ။`);
+  }
+}
+
+function checkDraftExerciseTexts() {
+  for (const [id, forms] of Object.entries(settings.lines ?? {})) {
+    for (const voice of voices) {
+      const bundledThai = course.lines[id]?.[voice];
+      const nextThai = forms?.[voice]?.thai ?? bundledThai;
+      const liveThai = published.settings.lines?.[id]?.[voice]?.thai ?? bundledThai;
+      checkExerciseText(id, voice, nextThai, liveThai);
+    }
+  }
+}
+
 function showLine() {
   const line = selectedLine();
   const voice = value("voice");
   const custom = settings.lines?.[value("line")]?.[voice] ?? {};
   const thai = line?.[voice] ?? "";
   $("thai-text").value = custom.thai ?? thai;
+  $("exercise-text-note").hidden = !exerciseLines[voice].has(value("line"));
   $("my-text").value = custom.my ?? line?.[voice === "male" ? "myMale" : "myFemale"] ?? line?.my ?? "";
   $("romanization").value = custom.romanization ?? romanizations[thai] ?? "";
   $("lesson-audio").value = "";
   if (previewUrl) URL.revokeObjectURL(previewUrl);
   previewUrl = null;
-  if (custom.audio) $("audio-preview").src = config.url + "/storage/v1/object/public/chang-thai-lesson-audio/" + custom.audio;
-  else $("audio-preview").removeAttribute("src");
+  void showSavedAudio();
+  renderPreviews();
+}
+
+function setAudioPreview(url) {
+  const audio = $("audio-preview");
+  if (url) audio.src = url;
+  else audio.removeAttribute("src");
+  audio.hidden = !url;
+  audio.load();
+}
+
+function renderPreviews() {
+  const showAd = $("banner-enabled").checked;
+  $("ads-preview-slot").hidden = !showAd;
+  $("ads-preview-state").textContent = showAd ? "ဖွင့်ထား" : "ပိတ်ထား";
+  $("ads-preview-state").dataset.enabled = String(showAd);
+  $("preview-thai").textContent = value("thai-text");
+  $("preview-romanization").textContent = value("romanization");
+  $("preview-meaning").textContent = value("my-text");
+  const enabled = $("announcement-enabled").checked;
+  $("announcement-preview-title").textContent = enabled ? value("announcement-title") || "ကြေညာချက် ခေါင်းစဉ်" : "App မှာ မပြပါ";
+  $("announcement-preview-body").textContent = enabled ? value("announcement-body") : "";
+  const preview = value("preview-version-code");
+  const current = Number(preview);
+  const latest = Number(value("latest-code"));
+  const minimum = Number(value("minimum-code"));
+  const result = $("version-preview");
+  if (!preview) result.textContent = "ဖုန်းရဲ့ version code တစ်ခု ထည့်ပါ။";
+  else if (!$("preview-version-code").checkValidity() || !Number.isInteger(current) || latest < minimum) {
+    result.textContent = "Version code တွေကို ပြန်စစ်ပါ။";
+  } else if (current >= latest) result.textContent = "Update အသိပေးချက် မပေါ်ပါ။";
+  else {
+    const title = current < minimum ? "App ကို Update လုပ်ပါ" : "App version အသစ် ရပါပြီ";
+    const message = value("update-message");
+    result.textContent = message ? `${title} — ${message}` : title;
+  }
+}
+
+function openPage(page) {
+  if (busy || (setupOnly && page !== "profile")) return;
+  showPage(page);
+  $("heading").focus();
+}
+
+function lessonNavigationAllowed() {
+  return !lessonChanged() || window.confirm("ဒီစာကြောင်းမှာ မသိမ်းရသေးတဲ့ ပြင်ဆင်ချက်တွေရှိပါတယ်။ ပြန်ပယ်ပြီး ဆက်မလား?");
+}
+
+function restoreSelection(saved) {
+  $("unit").value = saved.unit;
+  showUnit();
+  $("lesson").value = saved.lesson;
+  showLesson();
+  $("line").value = saved.line;
+  $("voice").value = saved.voice;
+  showLine();
+  rememberLesson();
+}
+
+function searchLessons() {
+  const query = value("lesson-search").toLocaleLowerCase().normalize("NFC");
+  const results = $("lesson-results");
+  results.replaceChildren();
+  results.hidden = !query;
+  if (!query) return;
+  const contains = text => String(text ?? "").toLocaleLowerCase().normalize("NFC").includes(query);
+  for (const unit of course.units) {
+    const title = settings.units?.[unit.id]?.title ?? unit.title;
+    for (const lesson of unit.lessons) {
+      const lessonTitle = settings.lessons?.[lesson.id]?.title ?? lesson.title;
+      const line = lessonLineIds(lesson).find(id => {
+        if (contains(id)) return true;
+        const original = course.lines[id];
+        return voices.some(voice => {
+          const override = settings.lines?.[id]?.[voice];
+          return [override?.thai ?? original[voice], override?.my ?? original.my].some(contains);
+        });
+      });
+      if (!line && ![unit.id, title, lesson.id, lessonTitle].some(contains)) continue;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "quiet";
+      button.textContent = `${title} / ${lessonTitle}`;
+      button.addEventListener("click", () => {
+        if (!lessonNavigationAllowed()) return;
+        $("unit").value = unit.id;
+        showUnit();
+        $("lesson").value = lesson.id;
+        showLesson();
+        if (line && Array.from($("line").options).some(option => option.value === line)) {
+          $("line").value = line;
+          showLine();
+        }
+        rememberLesson();
+        editStatus();
+        $("lesson-search").value = "";
+        searchLessons();
+        $("lesson").focus();
+      });
+      results.append(button);
+      if (results.childElementCount === 12) return;
+    }
+  }
+  if (!results.childElementCount) results.textContent = "ကိုက်ညီတဲ့ သင်ခန်းစာ မတွေ့ပါ။";
 }
 
 $("sign-in").addEventListener("submit", run(async event => {
@@ -148,6 +470,7 @@ $("sign-in").addEventListener("submit", run(async event => {
     published = await readRow("chang_thai_controls");
     settings = structuredClone(draft.settings);
     setFields();
+    renderCourseChart();
     revision();
     showPage("overview");
     $("login").hidden = true;
@@ -158,15 +481,22 @@ $("sign-in").addEventListener("submit", run(async event => {
     throw new Error("Email၊ password နဲ့ Admin ခွင့်ပြုချက်ကို စစ်ပါ။");
   } finally {
     form.elements.password.value = "";
+    $("show-login-password").checked = false;
+    $("show-login-password").dispatchEvent(new Event("change"));
   }
 }));
 $("sign-out").addEventListener("click", run(async () => {
+  if (settings && !setupOnly && formDirty() && !window.confirm("မသိမ်းရသေးတဲ့ ပြင်ဆင်ချက်တွေကို ပြန်ပယ်ပြီး ထွက်မလား?")) { status(""); return; }
   try { await api("/auth/v1/logout?scope=local", { method: "POST" }); }
   finally {
     token = null;
     ownerEmail = null;
     setupOnly = false;
+    settings = null;
     $("change-password").reset();
+    $("password-heading").textContent = "Password ပြောင်းရန်";
+    $("profile-email").textContent = "";
+    $("show-profile-password").dispatchEvent(new Event("change"));
     for (const button of document.querySelectorAll("[data-page]")) button.hidden = false;
     $("current-password-label").hidden = false;
     $("change-password").elements.current.required = true;
@@ -175,30 +505,66 @@ $("sign-out").addEventListener("click", run(async () => {
     status("");
   }
 }));
-for (const button of document.querySelectorAll("[data-page]")) {
-  button.addEventListener("click", () => showPage(button.dataset.page));
+for (const button of document.querySelectorAll("[data-page], [data-go]")) {
+  button.addEventListener("click", () => openPage(button.dataset.page ?? button.dataset.go));
 }
-$("unit").addEventListener("change", showUnit);
-$("lesson").addEventListener("change", showLesson);
-$("line").addEventListener("change", showLine);
-$("voice").addEventListener("change", showLine);
+$("brand").addEventListener("click", event => {
+  event.preventDefault();
+  openPage("overview");
+});
+for (const [id, render] of [["unit", showUnit], ["lesson", showLesson], ["line", showLine], ["voice", showLine]]) {
+  $(id).addEventListener("change", () => {
+    if (!lessonNavigationAllowed()) {
+      $(id).value = selection[id];
+      return;
+    }
+    render();
+    rememberLesson();
+    editStatus();
+  });
+}
+$("lesson-search").addEventListener("input", searchLessons);
+$("controls").addEventListener("submit", event => event.preventDefault());
+$("controls").addEventListener("input", () => {
+  if (!settings) return;
+  renderPreviews();
+  editStatus();
+});
+for (const [toggle, form] of [["show-login-password", "sign-in"], ["show-profile-password", "change-password"]]) {
+  $(toggle).addEventListener("change", () => {
+    for (const field of $(form).querySelectorAll("[autocomplete$='password']")) {
+      field.type = $(toggle).checked ? "text" : "password";
+    }
+  });
+}
+window.addEventListener("beforeunload", event => {
+  if (settings && !setupOnly && formDirty()) event.preventDefault();
+});
 $("lesson-audio").addEventListener("change", () => {
   if (previewUrl) URL.revokeObjectURL(previewUrl);
   const file = $("lesson-audio").files[0];
   previewUrl = file ? URL.createObjectURL(file) : null;
-  if (previewUrl) $("audio-preview").src = previewUrl;
+  if (previewUrl) setAudioPreview(previewUrl);
+  else void showSavedAudio();
+  editStatus();
 });
 
-$("save-lesson").addEventListener("click", run(async () => {
+async function collectLesson(next) {
+  if (!lessonChanged()) return;
+  const fields = snapshot(lessonFields);
   const unit = selectedUnit(), lesson = selectedLesson(), line = selectedLine();
   const voice = value("voice"), lineId = value("line");
-  const previous = settings.lines?.[lineId]?.[voice] ?? {};
+  const previous = next.lines?.[lineId]?.[voice] ?? {};
   const file = $("lesson-audio").files[0];
   if (line && (!value("thai-text") || !value("my-text"))) throw new Error("ထိုင်းစာနဲ့ မြန်မာအဓိပ္ပာယ် ဖြည့်ပါ။");
-  if (line && value("thai-text") !== (previous.thai ?? line[voice]) && !file) {
+  const thai = value("thai-text");
+  const previousThai = previous.thai ?? line?.[voice];
+  const thaiChanged = line && thai !== previousThai;
+  if (line) checkExerciseText(lineId, voice, thai, previousThai);
+  if (thaiChanged && thai !== line[voice] && !file) {
     throw new Error("ထိုင်းစာပြောင်းရင် ကိုက်ညီတဲ့ MP3 အသစ်ပါ ထည့်ပါ။");
   }
-  let audio = previous.audio;
+  let audio = thaiChanged ? undefined : previous.audio;
   if (file) {
     if (file.size > 5242880 || !file.name.toLowerCase().endsWith(".mp3")) throw new Error("5 MiB အောက် MP3 ဖိုင်ကို ရွေးပါ။");
     audio = `${crypto.randomUUID()}.mp3`;
@@ -206,58 +572,127 @@ $("save-lesson").addEventListener("click", run(async () => {
       method: "POST", body: file, headers: { "Content-Type": "audio/mpeg", "x-upsert": "false" },
     });
   }
-  (settings.units ??= {})[unit.id] = Object.fromEntries(["title", "goal", "tips"].map(k => [k, value("unit-" + k) || unit[k]]));
-  (settings.lessons ??= {})[lesson.id] = { title: value("lesson-title") || lesson.title };
-  if (line) {
-    ((settings.lines ??= {})[lineId] ??= {})[voice] = {
-      thai: value("thai-text"), my: value("my-text"), romanization: value("romanization"),
+  const changed = id => fields[id] !== savedForm[id];
+  if (["unit-title", "unit-goal", "unit-tips"].some(changed)) {
+    (next.units ??= {})[unit.id] = Object.fromEntries(
+      ["title", "goal", "tips"].map(key => [key, fields["unit-" + key].trim() || unit[key]]),
+    );
+  }
+  if (changed("lesson-title")) {
+    (next.lessons ??= {})[lesson.id] = { title: fields["lesson-title"].trim() || lesson.title };
+  }
+  if (line && (file || ["thai-text", "my-text", "romanization"].some(changed))) {
+    ((next.lines ??= {})[lineId] ??= {})[voice] = {
+      thai, my: fields["my-text"].trim(), romanization: fields.romanization.trim(),
       ...(audio ? { audio } : {}),
     };
   }
-  draft = await writeRow("chang_thai_admin_draft", draft);
-  revision();
-  showLine();
-  status("Lesson draft သိမ်းပြီးပါပြီ။");
-}));
+}
 
-function collect() {
-  if (!$("controls").reportValidity()) throw new Error("ဖြည့်ထားတာတွေကို စစ်ပါ။");
+function collect(next) {
+  if (!formChanged(controlFields)) return;
   const enabled = $("announcement-enabled").checked;
   const title = value("announcement-title"), body = value("announcement-body");
   const localExpiry = value("announcement-expiry");
-  if (enabled && (!title || !body || !localExpiry || new Date(localExpiry) <= new Date())) {
-    throw new Error("ကြေညာချက်ခေါင်းစဉ်၊ စာသားနဲ့ ရှေ့ရက် သက်တမ်းကုန်ချိန် လိုပါတယ်။");
+  if (formChanged(["banner-enabled"])) next.androidBanner = $("banner-enabled").checked;
+  if (formChanged(["announcement-enabled", "announcement-title", "announcement-body", "announcement-expiry"])) {
+    if (enabled && (!title || !body || !localExpiry || new Date(localExpiry) <= new Date())) {
+      throw new Error("ကြေညာချက်ခေါင်းစဉ်၊ စာသားနဲ့ ရှေ့ရက် သက်တမ်းကုန်ချိန် လိုပါတယ်။");
+    }
+    next.announcement = { enabled, title, body, expiresAt: localExpiry ? new Date(localExpiry).toISOString() : null };
   }
-  const latestCode = Number(value("latest-code")), minimumCode = Number(value("minimum-code"));
-  if (!Number.isInteger(latestCode) || !Number.isInteger(minimumCode) || latestCode < minimumCode) {
-    throw new Error("နောက်ဆုံး version code က အနည်းဆုံး version code ထက် မငယ်ရပါ။");
+  if (formChanged(["latest-code", "minimum-code", "update-message"])) {
+    const latestCode = Number(value("latest-code"));
+    const minimumCode = Number(value("minimum-code"));
+    if (!$("latest-code").checkValidity() || !$("minimum-code").checkValidity() || latestCode < minimumCode) {
+      throw new Error("Version code တွေကို 0 မှ 2100000000 အတွင်း ထည့်ပါ။ နောက်ဆုံး version code က အနည်းဆုံး version code ထက် မငယ်ရပါ။");
+    }
+    next.androidUpdate = { latestCode, minimumCode, message: value("update-message") };
   }
-  settings.androidBanner = $("banner-enabled").checked;
-  settings.announcement = { enabled, title, body, expiresAt: localExpiry ? new Date(localExpiry).toISOString() : null };
-  settings.androidUpdate = { latestCode, minimumCode, message: value("update-message") };
 }
-$("save-draft").addEventListener("click", run(async () => {
-  collect();
-  draft = await writeRow("chang_thai_admin_draft", draft);
+function resetFromDraft() {
+  const previousSelection = selection;
+  settings = structuredClone(draft.settings);
+  setFields();
+  restoreSelection(previousSelection);
+  searchLessons();
+  editStatus();
+}
+
+async function saveDraft() {
+  if (!formDirty()) return;
+  const next = structuredClone(draft.settings);
+  collect(next);
+  await collectLesson(next);
+  if (!equalSettings(next, draft.settings)) draft = await writeRow("chang_thai_admin_draft", draft, next);
+  resetFromDraft();
   revision();
+}
+
+$("save-draft").addEventListener("click", run(async () => {
+  await saveDraft();
   status("Draft သိမ်းပြီးပါပြီ။");
 }));
+
+$("discard-edits").addEventListener("click", () => {
+  if (!window.confirm("မသိမ်းရသေးတဲ့ ပြင်ဆင်ချက်တွေကို ပြန်ပယ်မလား?")) return;
+  resetFromDraft();
+  status("သိမ်းထားတဲ့ Draft ကို ပြန်ဖွင့်ထားပါတယ်။");
+});
+
+function reviewDraft(canPublish) {
+  const labels = changeLabels(draft.settings);
+  const dialog = $("publish-review");
+  dialog.returnValue = "cancel";
+  $("confirm-publish").hidden = !canPublish;
+  $("confirm-publish").disabled = equalSettings(draft.settings, published.settings);
+  $("publish-review-description").textContent = `Live v${published.revision} → Draft v${draft.revision}`;
+  $("publish-changes").replaceChildren(...(labels.length ? labels : ["App မှာ မြင်ရမယ့် အပြောင်းအလဲ မရှိပါ။"]).map(label => {
+    const item = document.createElement("li");
+    item.textContent = label;
+    return item;
+  }));
+  dialog.showModal();
+}
+
+$("review-live").addEventListener("click", () => reviewDraft(false));
 $("publish").addEventListener("click", run(async () => {
-  if (!window.confirm("ဒီ setting တွေကို Chang Thai app နဲ့ web ဆီ ထုတ်မလား?")) {
+  await saveDraft();
+  checkDraftExerciseTexts();
+  status("");
+  reviewDraft(true);
+}));
+
+$("publish-review").addEventListener("close", run(async () => {
+  if ($("publish-review").returnValue !== "publish") {
     status("");
     return;
   }
-  collect();
-  draft = await writeRow("chang_thai_admin_draft", draft);
-  published = await writeRow("chang_thai_controls", published);
+  status("Draft သိမ်းပြီးပါပြီ။ Live သို့ တင်နေပါတယ်…");
+  try {
+    published = await writeRow("chang_thai_controls", published, draft.settings);
+  } catch {
+    const live = await readRow("chang_thai_controls").catch(() => null);
+    if (!live) {
+      throw new Error("Draft သိမ်းပြီးပါပြီ။ Live သို့ တင်ပြီးမပြီး အတည်မပြုနိုင်ပါ။ ချိတ်ဆက်မှု ပြန်ရရင် စစ်ပါ။");
+    }
+    if (!equalSettings(live.settings, draft.settings)) {
+      if (live.revision !== published.revision) {
+        throw new Error("Draft သိမ်းပြီးပါပြီ။ Live version ပြောင်းသွားပါတယ်။ နောက်ဆုံး version ကို ပြန်ဝင်စစ်ပြီးမှ Publish လုပ်ပါ။");
+      }
+      throw new Error("Draft သိမ်းပြီးပါပြီ။ Live သို့ မတင်ရသေးပါ။ Publish ပြန်နှိပ်နိုင်ပါတယ်။");
+    }
+    published = live;
+  }
   revision();
-  status("Publish လုပ်ပြီးပါပြီ။");
+  status("Live သို့ Publish လုပ်ပြီးပါပြီ။");
 }));
 
-$("push-send").disabled = false;
 $("push-send").addEventListener("click", run(async () => {
-  if (!published.settings?.announcement?.enabled) {
-    throw new Error("App ကြေညာချက်ကို အရင် Publish လုပ်ပါ။");
+  const announcement = published.settings.announcement;
+  if (!announcement?.enabled || !(new Date(announcement.expiresAt) > new Date())) {
+    revision();
+    throw new Error("သက်တမ်းရှိတဲ့ App ကြေညာချက်ကို အရင် Publish လုပ်ပါ။");
   }
   if (!window.confirm("ထုတ်ထားတဲ့ ကြေညာချက်ကို Android ဖုန်းတွေဆီ ပို့မလား?")) {
     status("");
@@ -304,6 +739,7 @@ const completeOwnerSetup = run(async () => {
   setupOnly = true;
   $("profile-email").textContent = ownerEmail;
   $("current-password-label").hidden = true;
+  $("password-heading").textContent = "Owner password သတ်မှတ်ရန်";
   $("change-password").elements.current.required = false;
   for (const button of document.querySelectorAll("[data-page]")) button.hidden = button.dataset.page !== "profile";
   showPage("profile");
@@ -336,6 +772,7 @@ $("change-password").addEventListener("submit", run(async event => {
     location.replace("/admin/?password=updated");
   } finally {
     form.reset();
+    $("show-profile-password").dispatchEvent(new Event("change"));
   }
 }));
 
