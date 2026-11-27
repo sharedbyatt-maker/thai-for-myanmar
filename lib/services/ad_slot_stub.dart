@@ -4,7 +4,7 @@ void initializeAds() {}
 void preloadLessonAds() {}
 void maybeShowAppOpenAd() {}
 
-Future<void> showLessonTransitionAd(
+Future<void> showLessonCompletionAd(
   BuildContext context, {
   required int completedLessons,
   required Future<void> Function()? onReward,

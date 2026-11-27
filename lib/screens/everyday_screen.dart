@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../data/phrase_repository.dart';
 import '../models/phrase.dart';
+import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../services/thai_playback_service.dart';
 import '../widgets/playful_components.dart';
@@ -250,9 +252,9 @@ class _EverydayScreenState extends State<EverydayScreen> {
                                   Text(
                                     g.$1,
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleSmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
                                   ),
                                 ],
                               ),
@@ -265,6 +267,7 @@ class _EverydayScreenState extends State<EverydayScreen> {
               },
             ),
 
+            const InlineAdSlot(native: true),
             const SizedBox(height: 18),
             LiftButton(
               label: 'ထိုင်းလူမျိုးကို ပြမယ်',

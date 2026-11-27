@@ -39,9 +39,9 @@ class AndroidAdsConfig {
 
   static final adUnitPattern = RegExp(r'^ca-app-pub-[0-9]{16}/[0-9]{10}$');
 
-  int get cooldownMinutes => _number('cooldownMinutes', 8, 5, 120);
-  int get dailyLimit => _number('dailyLimit', 3, 1, 5);
-  int get lessonInterval => _number('lessonInterval', 4, 4, 30);
+  int get cooldownMinutes => _number('cooldownMinutes', 8, 8, 120);
+  int get dailyLimit => _number('dailyLimit', 3, 1, 3);
+  int get lessonInterval => _number('lessonInterval', 2, 2, 30);
 
   int _number(String key, int fallback, int min, int max) {
     final value = values[key];

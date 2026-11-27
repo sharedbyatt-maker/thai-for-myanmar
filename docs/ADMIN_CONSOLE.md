@@ -23,11 +23,11 @@ An Android build with ads support loads the published ad configuration at launch
 
 | Format | Placement |
 | --- | --- |
-| Banner | Android Profile |
-| Native | Review, after scheduled-review content, using Google's labeled small template |
-| Interstitial | Confirmed transition after a newly completed lesson; shows only if ready |
+| Banner | Top of the Android Learn and Profile tabs, with space between the ad and controls |
+| Native | Between content sections in Everyday, Review, Quests, and populated League standings, using Google's labeled small template |
+| Interstitial | After qualifying new lesson completions, before lesson results and navigation; shows only if ready |
 | Rewarded | Optional button on lesson completion offering one extra local practice round |
-| Rewarded interstitial | Eligible lesson transition with an explanation and an explicit skip option |
+| Rewarded interstitial | Eligible new lesson completion with an explanation and an explicit skip option before results |
 | App open | Returning after at least two minutes away, on Learn or Quests after at least three completed lessons |
 
 Full-screen formats share a default eight-minute cooldown and three-per-day device cap. Automatic lesson transitions are eligible every four newly completed lessons by default. App open also has a 24-hour limit. Rewarded interstitial and regular interstitial share the same transition, and a skipped rewarded offer does not fall back to another ad. Quick Speak, SOS, review exercises, and active lessons stay ad-free. The reward grants a local practice round only and is independent of course XP and League scoring.

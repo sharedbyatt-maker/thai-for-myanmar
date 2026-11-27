@@ -1,16 +1,16 @@
 const formats = [
-  ["banner", "Banner", "Profile အောက်ခြေ", "2759288917"],
-  ["native", "Native", "Review စာရင်းထဲက ကြော်ငြာကတ်", "7523375488"],
-  ["interstitial", "Interstitial", "သင်ခန်းစာပြီး နောက်သင်ခန်းစာ ကူးချိန်", "8474650024"],
+  ["banner", "Banner", "သင်ယူနဲ့ ကိုယ်ပိုင် tab အပေါ်ပိုင်း", "2759288917"],
+  ["native", "Native", "နေ့စဉ်စကား၊ ပြန်လေ့ကျင့်၊ စိန်ခေါ်မှုနဲ့ League ဇယားထဲက ကြော်ငြာကတ်", "7523375488"],
+  ["interstitial", "Interstitial", "သင်ခန်းစာပြီး ရလဒ်မပြမီ", "8474650024"],
   ["rewarded", "Rewarded", "အပိုလေ့ကျင့်ခန်းအတွက် ကိုယ်တိုင် ရွေးကြည့်ချိန်", "2567717227"],
-  ["rewardedInterstitial", "Rewarded interstitial", "သင်ခန်းစာကူးချိန်မှာ အပိုလေ့ကျင့်ခန်း ကမ်းလှမ်းမှု", "1801430466"],
+  ["rewardedInterstitial", "Rewarded interstitial", "သင်ခန်းစာရလဒ်မပြမီ အပိုလေ့ကျင့်ခန်း ကမ်းလှမ်းမှု", "1801430466"],
   ["appOpen", "App open", "နောက်ခံကနေ ပြန်ဖွင့်ပြီး သင်ယူ သို့မဟုတ် စိန်ခေါ်မှု tab ပြန်ဝင်ချိန်", "4897212146"],
 ];
 
 const numericFields = [
-  ["ads-cooldown", "cooldownMinutes", 8, 5, 120],
-  ["ads-daily-limit", "dailyLimit", 3, 1, 5],
-  ["ads-lesson-interval", "lessonInterval", 4, 4, 30],
+  ["ads-cooldown", "cooldownMinutes", 8, 8, 120],
+  ["ads-daily-limit", "dailyLimit", 3, 1, 3],
+  ["ads-lesson-interval", "lessonInterval", 2, 2, 30],
 ];
 const unitIdPattern = /^ca-app-pub-[0-9]{16}\/[0-9]{10}$/;
 const $ = id => document.getElementById(id);
@@ -67,7 +67,10 @@ export function loadAdFields(settings) {
   const config = adsConfig(settings);
   $("ads-master").checked = config.enabled === true;
   $("ads-delivery").value = config.delivery === "live" ? "live" : "test";
-  for (const [id, name, fallback] of numericFields) $(id).value = config[name] ?? fallback;
+  for (const [id, name, fallback, min, max] of numericFields) {
+    const value = config[name];
+    $(id).value = Number.isInteger(value) ? Math.min(max, Math.max(min, value)) : fallback;
+  }
   for (const [key, , , suffix] of formats) {
     const entry = config.formats?.[key];
     $(toggleId(key)).checked = entry?.enabled === true;
