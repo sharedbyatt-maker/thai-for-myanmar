@@ -334,6 +334,14 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
             (l) => widget.appState.learning.course.completed.containsKey(l.id),
           );
       await widget.appState.saveCourse();
+      if (!mounted) return;
+      if (_earnedXp > 0) {
+        await showLessonCompletionAd(
+          context,
+          completedLessons: widget.appState.learning.course.completed.length,
+          onReward: _bonusLines.length >= 2 ? _showBonusPractice : null,
+        );
+      }
       if (mounted) {
         preloadLessonAds();
         setState(() {
@@ -1063,14 +1071,6 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
         color: previewUnitColor(next.unit),
       );
       if (start != true || !mounted) return;
-      if (_earnedXp > 0) {
-        await showLessonTransitionAd(
-          context,
-          completedLessons: widget.appState.learning.course.completed.length,
-          onReward: _bonusLines.length >= 2 ? _showBonusPractice : null,
-        );
-      }
-      if (!mounted) return;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(

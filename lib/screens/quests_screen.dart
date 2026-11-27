@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../data/phrase_repository.dart';
 import '../learning/study_quests.dart';
+import '../services/ad_slot.dart';
 import '../services/app_state.dart';
 import '../widgets/playful_components.dart';
 
@@ -13,6 +14,7 @@ class QuestsScreen extends StatefulWidget {
     required this.appState,
     this.onLearn,
     this.active = true,
+    this.showAds = false,
     this.clock,
     super.key,
   });
@@ -20,6 +22,7 @@ class QuestsScreen extends StatefulWidget {
   final AppState appState;
   final VoidCallback? onLearn;
   final bool active;
+  final bool showAds;
   final DateTime Function()? clock;
 
   @override
@@ -168,6 +171,7 @@ class _QuestsScreenState extends State<QuestsScreen> {
           ),
           const SizedBox(height: 12),
           ...quests.daily.map((q) => _QuestCard(quest: q)),
+          if (widget.showAds) const InlineAdSlot(native: true),
           const SizedBox(height: 18),
           Text('ဒီအပတ်', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 12),

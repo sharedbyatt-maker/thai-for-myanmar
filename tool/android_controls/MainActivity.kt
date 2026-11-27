@@ -1,14 +1,39 @@
 package com.sharedbyatt.thaiformyanmar
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private lateinit var push: PushControls
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || savedInstanceState != null) return
+
+        val brandedSplash = ImageView(this).apply {
+            setImageResource(R.drawable.chang_thai_splash)
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            isClickable = true
+        }
+        addContentView(
+            brandedSplash,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
+        )
+        splashScreen.setOnExitAnimationListener { systemSplash ->
+            systemSplash.remove()
+            brandedSplash.postDelayed({
+                (brandedSplash.parent as? ViewGroup)?.removeView(brandedSplash)
+            }, 450)
+        }
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

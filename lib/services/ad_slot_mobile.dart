@@ -314,16 +314,19 @@ void maybeShowAppOpenAd() {
   _ads.preload();
 }
 
-Future<void> showLessonTransitionAd(
+Future<void> showLessonCompletionAd(
   BuildContext context, {
   required int completedLessons,
   required Future<void> Function()? onReward,
 }) async {
-  if (completedLessons < _ads.config.lessonInterval ||
-      completedLessons % _ads.config.lessonInterval != 0) {
-    return;
-  }
-  if (onReward != null && _ads.canShow(AdPlacement.rewardedInterstitial)) {
+  final interval = _ads.config.lessonInterval;
+  if (completedLessons < interval || completedLessons % interval != 0) return;
+
+  final interstitialReady = _ads.canShow(AdPlacement.interstitial);
+  final preferRewarded = (completedLessons ~/ interval).isEven;
+  if (onReward != null &&
+      (preferRewarded || !interstitialReady) &&
+      _ads.canShow(AdPlacement.rewardedInterstitial)) {
     final accepted = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -352,7 +355,7 @@ Future<void> showLessonTransitionAd(
     }
     return;
   }
-  await _ads.show(AdPlacement.interstitial);
+  if (interstitialReady) await _ads.show(AdPlacement.interstitial);
 }
 
 class AdBonusButton extends StatelessWidget {
@@ -401,10 +404,14 @@ class InlineAdSlot extends StatelessWidget {
     listenable: _ads,
     builder: (context, _) {
       final id = _ads._unit(native ? AdPlacement.native : AdPlacement.banner);
-      if (id == null || MediaQuery.sizeOf(context).width < 320) {
+      if (id == null) {
         return const SizedBox.shrink();
       }
-      return _InlineAd(key: ValueKey((id, native)), id: id, native: native);
+      return LayoutBuilder(
+        builder: (context, constraints) => constraints.maxWidth < 320
+            ? const SizedBox.shrink()
+            : _InlineAd(key: ValueKey((id, native)), id: id, native: native),
+      );
     },
   );
 }
@@ -494,7 +501,7 @@ class _InlineAdState extends State<_InlineAd> {
           : const SizedBox.shrink();
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Center(
         child: SizedBox(
           width: 320,

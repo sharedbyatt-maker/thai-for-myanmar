@@ -176,6 +176,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         repository: widget.repository,
         appState: widget.appState,
         onLearn: () => _select(0),
+        showAds: true,
       ),
       LeagueScreen(active: _selectedIndex == 4),
       ProfileScreen(
@@ -196,6 +197,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             ? (i == 0 ? pages[i] : ContentFrame(child: pages[i]))
             : const SizedBox.shrink(),
       ),
+    );
+    final tabContent = Column(
+      children: [
+        Offstage(
+          offstage: _selectedIndex != 0 && _selectedIndex != 5,
+          child: const InlineAdSlot(),
+        ),
+        const RemoteNotices(),
+        Expanded(child: content),
+      ],
     );
     return Scaffold(
       appBar: _selectedIndex == 4
@@ -264,24 +275,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     ),
                   ),
                   const VerticalDivider(width: 1),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const RemoteNotices(),
-                        Expanded(child: content),
-                        if (_selectedIndex == 5) const InlineAdSlot(),
-                      ],
-                    ),
-                  ),
+                  Expanded(child: tabContent),
                 ],
               )
-            : Column(
-                children: [
-                  const RemoteNotices(),
-                  Expanded(child: content),
-                  if (_selectedIndex == 5) const InlineAdSlot(),
-                ],
-              ),
+            : tabContent,
       ),
       bottomNavigationBar: wide
           ? null

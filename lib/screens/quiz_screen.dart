@@ -189,8 +189,6 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ),
             ),
-          if (widget.active && reviewed.isNotEmpty)
-            const InlineAdSlot(native: true),
           const Center(child: ElephantBuddy(size: 48)),
           Text(
             'ဘာလေ့ကျင့်မလဲ?',
@@ -285,6 +283,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
           const SizedBox(height: 20),
+          const InlineAdSlot(native: true),
           ExpansionTile(
             title: const Text('စကားစု ရွေးချယ်ရန်'),
             children: [

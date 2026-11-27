@@ -17,6 +17,14 @@ TEST_ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
 
 def configure_brand_resources() -> None:
     res = ANDROID / "app/src/main/res"
+    for resource in (
+        "mipmap-anydpi-v26/ic_launcher.xml",
+        "mipmap-anydpi-v26/ic_launcher_round.xml",
+        "drawable/chang_thai_launcher_background.xml",
+        "drawable/chang_thai_launcher_foreground.xml",
+        "drawable/chang_thai_launcher_monochrome.xml",
+    ):
+        (res / resource).unlink(missing_ok=True)
     shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
     launch_background = """<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
@@ -47,8 +55,7 @@ def configure_brand_resources() -> None:
             raise SystemExit(f"LaunchTheme missing in {styles}.")
         for name, value in {
             "android:windowSplashScreenBackground": "#111431",
-            "android:windowSplashScreenAnimatedIcon": "@drawable/chang_thai_launcher_foreground",
-            "android:windowSplashScreenIconBackgroundColor": "#30236F",
+            "android:windowSplashScreenAnimatedIcon": "@drawable/chang_thai_startup_icon",
         }.items():
             ET.SubElement(launch, "item", name=name).text = value
         versioned = res / f"{qualifier}-v31"
@@ -146,19 +153,7 @@ def main() -> int:
         manifest_text,
         count=1,
     )
-    if "android:roundIcon=" not in manifest_text:
-        manifest_text = manifest_text.replace(
-            'android:icon="@mipmap/ic_launcher"',
-            'android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round"',
-            1,
-        )
-    else:
-        manifest_text = re.sub(
-            r'android:roundIcon="[^"]+"',
-            'android:roundIcon="@mipmap/ic_launcher_round"',
-            manifest_text,
-            count=1,
-        )
+    manifest_text = manifest_text.replace(' android:roundIcon="@mipmap/ic_launcher_round"', '')
     if "com.google.android.gms.ads.APPLICATION_ID" not in manifest_text:
         manifest_text = manifest_text.replace(
             "</application>",

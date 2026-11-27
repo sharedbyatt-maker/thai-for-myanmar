@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../services/ad_slot.dart';
 import '../services/league_service.dart';
 import '../widgets/content_frame.dart';
 
@@ -293,6 +294,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                   ),
                 ),
               ..._standings(context, rows),
+              if (rows.isNotEmpty) const InlineAdSlot(native: true),
               const SizedBox(height: 16),
               Text('ဒီနေ့ $daily / 100 မှတ်'),
               const SizedBox(height: 8),
