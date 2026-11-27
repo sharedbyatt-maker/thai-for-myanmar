@@ -26,6 +26,15 @@ def configure_brand_resources() -> None:
     ):
         (res / resource).unlink(missing_ok=True)
     shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
+    adaptive = res / "mipmap-anydpi-v26"
+    adaptive.mkdir(parents=True, exist_ok=True)
+    icon_xml = """<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@android:color/white" />
+    <foreground android:drawable="@drawable/chang_thai_startup_icon" />
+</adaptive-icon>
+"""
+    for filename in ("ic_launcher.xml", "ic_launcher_round.xml"):
+        (adaptive / filename).write_text(icon_xml, encoding="utf-8")
     launch_background = """<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape><solid android:color="#111431" /></shape>
@@ -48,11 +57,14 @@ def configure_brand_resources() -> None:
         normal = tree.find("./style[@name='NormalTheme']/item[@name='android:windowBackground']")
         if normal is None:
             raise SystemExit(f"NormalTheme window background missing in {styles}.")
-        normal.text = "@drawable/launch_background"
+        normal.text = "#111431"
         tree.write(styles, encoding="utf-8")
         launch = tree.find("./style[@name='LaunchTheme']")
         if launch is None:
             raise SystemExit(f"LaunchTheme missing in {styles}.")
+        for item in list(launch):
+            if item.get("name") == "android:windowBackground":
+                item.text = "#111431"
         for name, value in {
             "android:windowSplashScreenBackground": "#111431",
             "android:windowSplashScreenAnimatedIcon": "@drawable/chang_thai_startup_icon",
@@ -153,7 +165,8 @@ def main() -> int:
         manifest_text,
         count=1,
     )
-    manifest_text = manifest_text.replace(' android:roundIcon="@mipmap/ic_launcher_round"', '')
+    manifest_text = re.sub(r'\s+android:roundIcon="[^"]+"', "", manifest_text)
+    manifest_text = manifest_text.replace('android:icon="@mipmap/ic_launcher"', 'android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher"', 1)
     if "com.google.android.gms.ads.APPLICATION_ID" not in manifest_text:
         manifest_text = manifest_text.replace(
             "</application>",
