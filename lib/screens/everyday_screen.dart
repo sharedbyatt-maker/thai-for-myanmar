@@ -252,9 +252,9 @@ class _EverydayScreenState extends State<EverydayScreen> {
                                   Text(
                                     g.$1,
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall,
                                   ),
                                 ],
                               ),

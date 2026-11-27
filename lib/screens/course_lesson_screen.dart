@@ -747,8 +747,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                               const Text(
                                 'နမူနာမကြည့်ဘဲ ကိုယ်တိုင် ပြောကြည့်ပါ။ ပြောကြည့်ပြီးတာကို မှတ်သားနိုင်ပေမယ့် အသံထွက်မှန်ကြောင်း အမှတ်မပေးပါ။',
                               ),
-                              if (CoursePractice.reflectionPrompts(widget.unit)
-                                  .isNotEmpty) ...[
+                              if (CoursePractice.reflectionPrompts(
+                                widget.unit,
+                              ).isNotEmpty) ...[
                                 const SizedBox(height: 16),
                                 for (final prompt
                                     in CoursePractice.reflectionPrompts(
@@ -810,9 +811,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                 if (_name.text.trim().isNotEmpty)
                                   Text(
                                     'ကိုယ့်နာမည်: ${_name.text.trim()}\nနမူနာနာမည်နေရာမှာ ကိုယ့်နာမည်ကို အစားထိုးပြောကြည့်ပါ။',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
                                   ),
                                 const Text(
                                   'ကိုယ့်နာမည်ကို ကိုယ်တိုင်ပြောပါ။ နမူနာနာမည်အသံနဲ့ အစားမထိုးပါ။',
@@ -861,9 +862,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                   ),
                                   child: _thaiWithPronunciation(
                                     line,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall,
                                   ),
                                 ),
                               for (final option in _options)
@@ -873,9 +874,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                     key: ValueKey('course-option-${option.id}'),
                                     style: OutlinedButton.styleFrom(
                                       backgroundColor: _selected == option.id
-                                          ? Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primaryContainer
                                           : null,
                                       padding: const EdgeInsets.all(18),
                                     ),
@@ -966,9 +967,9 @@ class _CourseLessonScreenState extends State<CourseLessonScreen> {
                                   style: TextStyle(
                                     color: _correct
                                         ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),

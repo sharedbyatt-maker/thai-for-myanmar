@@ -404,8 +404,9 @@ class _LeagueScreenState extends State<LeagueScreen> {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w800),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 4),
             Text(
@@ -478,9 +479,9 @@ class _LeagueScreenState extends State<LeagueScreen> {
   String _remaining() {
     final end = DateTime.parse(_board!['ends_at'] as String).toUtc();
     final now = _board!['server_now'] is String
-        ? DateTime.parse(_board!['server_now'] as String)
-              .toUtc()
-              .add(_boardAge.elapsed)
+        ? DateTime.parse(
+            _board!['server_now'] as String,
+          ).toUtc().add(_boardAge.elapsed)
         : DateTime.now().toUtc();
     final left = end.difference(now);
     if (left.isNegative) return 'အပတ်သစ်အတွက် ပြန်စစ်ပါ';
