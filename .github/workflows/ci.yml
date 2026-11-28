@@ -228,15 +228,15 @@ jobs:
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
           disable-animations: true
-          script: |
-            adb install -r build/app/outputs/flutter-apk/app-release.apk
-            adb logcat -b all -c
-            adb shell am start -W -n com.sharedbyatt.thaiformyanmar/.MainActivity
-            sleep 20
-            adb logcat -b crash -d
-            adb logcat -b main -d -s AndroidRuntime:E flutter:E
-            adb shell dumpsys activity exit-info com.sharedbyatt.thaiformyanmar
-            adb shell pidof com.sharedbyatt.thaiformyanmar
+          script: bash tool/run_android_release_smoke.sh
+
+      - name: Keep Android startup recording
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang-thai-android-startup
+          path: build/review-artifacts/chang-thai-startup.mp4
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4

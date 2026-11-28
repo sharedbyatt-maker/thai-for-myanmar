@@ -59,10 +59,25 @@ def configure_brand_resources() -> None:
         if normal is None:
             raise SystemExit(f"NormalTheme window background missing in {styles}.")
         normal.text = "#111431"
-        tree.write(styles, encoding="utf-8")
         launch = tree.find("./style[@name='LaunchTheme']")
         if launch is None:
             raise SystemExit(f"LaunchTheme missing in {styles}.")
+        disable_preview = launch.find("item[@name='android:windowDisablePreview']")
+        if disable_preview is None:
+            disable_preview = ET.SubElement(launch, "item", name="android:windowDisablePreview")
+        disable_preview.text = "true"
+        startup = tree.find("./style[@name='StartupTheme']")
+        if startup is None:
+            startup = ET.SubElement(tree.getroot(), "style", name="StartupTheme", parent="LaunchTheme")
+        for name, value in {
+            "android:windowIsTranslucent": "true",
+            "android:windowBackground": "@android:color/transparent",
+        }.items():
+            item = startup.find(f"item[@name='{name}']")
+            if item is None:
+                item = ET.SubElement(startup, "item", name=name)
+            item.text = value
+        tree.write(styles, encoding="utf-8")
         for item in list(launch):
             if item.get("name") == "android:windowBackground":
                 item.text = "#111431"
@@ -131,7 +146,8 @@ def configure_android_controls(manifest_text: str, gradle: Path) -> str:
             )
     activity = app / "src/main/kotlin/com/sharedbyatt/thaiformyanmar"
     activity.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(controls / "MainActivity.kt", activity / "MainActivity.kt")
+    for filename in ("MainActivity.kt", "StartupActivity.kt"):
+        shutil.copyfile(controls / filename, activity / filename)
     implementation = "PushControlsFirebase.kt" if firebase_enabled else "PushControlsStub.kt"
     shutil.copyfile(controls / implementation, activity / "PushControls.kt")
     return manifest_text
@@ -237,6 +253,25 @@ def main() -> int:
         if old_parent.exists() and not any(old_parent.iterdir()):
             old_parent.rmdir()
 
+    if 'android:name=".StartupActivity"' not in manifest_text:
+        launcher_filter = r'<intent-filter>\s*<action android:name="android.intent.action.MAIN"\s*/>\s*<category android:name="android.intent.category.LAUNCHER"\s*/>\s*</intent-filter>'
+        manifest_text, changed = re.subn(launcher_filter, "", manifest_text, count=1)
+        if changed != 1:
+            raise SystemExit("The Android launcher intent filter is missing.")
+        startup_activity = '''
+        <activity
+            android:name=".StartupActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:launchMode="singleTop"
+            android:theme="@style/StartupTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        '''
+        manifest_text = manifest_text.replace("</application>", startup_activity + "</application>", 1)
     manifest_text = configure_android_controls(manifest_text, gradle)
     manifest.write_text(manifest_text, encoding="utf-8")
     configure_brand_resources()

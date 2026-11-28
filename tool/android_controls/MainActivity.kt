@@ -1,38 +1,36 @@
 package com.sharedbyatt.thaiformyanmar
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
+import android.os.ResultReceiver
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private lateinit var push: PushControls
+    override fun onFlutterUiDisplayed() {
+        super.onFlutterUiDisplayed()
+        finishStartup(intent)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || savedInstanceState != null) return
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (!intent.hasExtra(StartupActivity.DISPLAYED_RECEIVER)) return
+        if (flutterEngine?.renderer?.isDisplayingFlutterUi == true) {
+            finishStartup(intent)
+        } else {
+            setIntent(intent)
+        }
+    }
 
-        val brandedSplash = ImageView(this).apply {
-            setImageResource(R.drawable.chang_thai_splash)
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-            isClickable = true
-        }
-        addContentView(
-            brandedSplash,
-            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
-        )
-        splashScreen.setOnExitAnimationListener { systemSplash ->
-            systemSplash.remove()
-            brandedSplash.postDelayed({
-                (brandedSplash.parent as? ViewGroup)?.removeView(brandedSplash)
-            }, 450)
-        }
+    private fun finishStartup(intent: Intent) {
+        @Suppress("DEPRECATION")
+        val startup = intent.getParcelableExtra<ResultReceiver>(StartupActivity.DISPLAYED_RECEIVER)
+        intent.removeExtra(StartupActivity.DISPLAYED_RECEIVER)
+        startup?.send(0, null)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
