@@ -30,10 +30,8 @@ Future<void> _startApp() async {
     // splash is already visible.
     final repositoryFuture = PhraseRepository.load(rootBundle);
     final audioCatalogFuture = ThaiAudioCatalog.load(rootBundle);
-    await Future.wait<void>([
-      RemoteControls.instance.load(rootBundle),
-      appState.load(),
-    ]);
+    unawaited(RemoteControls.instance.load(rootBundle));
+    await appState.load();
 
     final repository = await repositoryFuture;
     final audioCatalog = await audioCatalogFuture;
