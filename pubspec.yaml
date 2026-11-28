@@ -35,7 +35,6 @@ flutter:
     - third_party/licenses/pouple_tim_mit.txt
     - assets/audio/thai/
     - assets/images/course_mascots/
-    - tool/android_brand/drawable-nodpi/chang_thai_splash.png
     - assets/data/league_config.json
     - assets/data/phrase_categories.json
     - assets/data/phrases.json

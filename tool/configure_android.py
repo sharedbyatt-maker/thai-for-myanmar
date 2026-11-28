@@ -23,6 +23,7 @@ def configure_brand_resources() -> None:
         "drawable/chang_thai_launcher_background.xml",
         "drawable/chang_thai_launcher_foreground.xml",
         "drawable/chang_thai_launcher_monochrome.xml",
+        "drawable/chang_thai_startup_icon.xml",
     ):
         (res / resource).unlink(missing_ok=True)
     shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
@@ -30,7 +31,7 @@ def configure_brand_resources() -> None:
     adaptive.mkdir(parents=True, exist_ok=True)
     icon_xml = """<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@android:color/white" />
-    <foreground android:drawable="@drawable/chang_thai_startup_icon" />
+    <foreground android:drawable="@drawable/chang_thai_launcher_icon" />
 </adaptive-icon>
 """
     for filename in ("ic_launcher.xml", "ic_launcher_round.xml"):
@@ -65,9 +66,11 @@ def configure_brand_resources() -> None:
         for item in list(launch):
             if item.get("name") == "android:windowBackground":
                 item.text = "#111431"
+        # Android 12+ shows a system launch window. Leave it unbranded so
+        # MainActivity can display the full artwork as the only branded splash.
         for name, value in {
             "android:windowSplashScreenBackground": "#111431",
-            "android:windowSplashScreenAnimatedIcon": "@drawable/chang_thai_startup_icon",
+            "android:windowSplashScreenAnimatedIcon": "@android:color/transparent",
         }.items():
             ET.SubElement(launch, "item", name=name).text = value
         versioned = res / f"{qualifier}-v31"
