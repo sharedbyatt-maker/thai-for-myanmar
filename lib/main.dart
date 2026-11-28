@@ -69,7 +69,7 @@ class _ChangThaiStartupScreen extends StatelessWidget {
         backgroundColor: Color(0xFF111431),
         body: SizedBox.expand(
           child: Image(
-            image: AssetImage('assets/images/chang_thai_splash.png'),
+            image: AssetImage('tool/android_brand/drawable-nodpi/chang_thai_splash.png'),
             fit: BoxFit.cover,
             filterQuality: FilterQuality.high,
           ),
