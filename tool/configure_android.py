@@ -62,13 +62,21 @@ def configure_brand_resources() -> None:
         launch = tree.find("./style[@name='LaunchTheme']")
         if launch is None:
             raise SystemExit(f"LaunchTheme missing in {styles}.")
-        ET.SubElement(launch, "item", name="android:windowDisablePreview").text = "true"
-        startup = ET.SubElement(tree.getroot(), "style", name="StartupTheme", parent="LaunchTheme")
+        disable_preview = launch.find("item[@name='android:windowDisablePreview']")
+        if disable_preview is None:
+            disable_preview = ET.SubElement(launch, "item", name="android:windowDisablePreview")
+        disable_preview.text = "true"
+        startup = tree.find("./style[@name='StartupTheme']")
+        if startup is None:
+            startup = ET.SubElement(tree.getroot(), "style", name="StartupTheme", parent="LaunchTheme")
         for name, value in {
             "android:windowIsTranslucent": "true",
             "android:windowBackground": "@android:color/transparent",
         }.items():
-            ET.SubElement(startup, "item", name=name).text = value
+            item = startup.find(f"item[@name='{name}']")
+            if item is None:
+                item = ET.SubElement(startup, "item", name=name)
+            item.text = value
         tree.write(styles, encoding="utf-8")
         for item in list(launch):
             if item.get("name") == "android:windowBackground":

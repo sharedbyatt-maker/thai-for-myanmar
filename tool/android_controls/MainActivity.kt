@@ -1,5 +1,6 @@
 package com.sharedbyatt.thaiformyanmar
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,20 @@ class MainActivity : FlutterActivity() {
     private lateinit var push: PushControls
     override fun onFlutterUiDisplayed() {
         super.onFlutterUiDisplayed()
+        finishStartup(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (!intent.hasExtra(StartupActivity.DISPLAYED_RECEIVER)) return
+        if (flutterEngine?.renderer?.isDisplayingFlutterUi == true) {
+            finishStartup(intent)
+        } else {
+            setIntent(intent)
+        }
+    }
+
+    private fun finishStartup(intent: Intent) {
         @Suppress("DEPRECATION")
         val startup = intent.getParcelableExtra<ResultReceiver>(StartupActivity.DISPLAYED_RECEIVER)
         intent.removeExtra(StartupActivity.DISPLAYED_RECEIVER)

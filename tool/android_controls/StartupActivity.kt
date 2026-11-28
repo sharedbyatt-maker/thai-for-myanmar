@@ -28,12 +28,15 @@ class StartupActivity : Activity() {
         setContentView(artwork)
 
         // Present the native artwork before initializing the Flutter engine.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && window.decorView.isHardwareAccelerated) {
-            artwork.viewTreeObserver.registerFrameCommitCallback {
-                artwork.post { openMainActivity() }
+        artwork.post {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && artwork.isHardwareAccelerated) {
+                artwork.viewTreeObserver.registerFrameCommitCallback {
+                    artwork.post { openMainActivity() }
+                }
+                artwork.invalidate()
+            } else {
+                artwork.postOnAnimation { artwork.postOnAnimation { openMainActivity() } }
             }
-        } else {
-            artwork.postOnAnimation { artwork.postOnAnimation { openMainActivity() } }
         }
     }
 
@@ -49,7 +52,7 @@ class StartupActivity : Activity() {
         val main = Intent(this, MainActivity::class.java).apply {
             putExtras(this@StartupActivity.intent)
             putExtra(DISPLAYED_RECEIVER, displayed)
-            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
         startActivity(main)
     }
