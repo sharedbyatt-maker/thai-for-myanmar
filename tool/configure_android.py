@@ -27,6 +27,11 @@ def configure_brand_resources() -> None:
     ):
         (res / resource).unlink(missing_ok=True)
     shutil.copytree(ROOT / "tool/android_brand", res, dirs_exist_ok=True)
+    # Reuse the exact Android splash artwork as Flutter's first-frame startup image.
+    splash_source = ROOT / "tool/android_brand/drawable-nodpi/chang_thai_splash.png"
+    flutter_splash = ROOT / "assets/images/chang_thai_splash.png"
+    flutter_splash.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(splash_source, flutter_splash)
     adaptive = res / "mipmap-anydpi-v26"
     adaptive.mkdir(parents=True, exist_ok=True)
     icon_xml = """<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
