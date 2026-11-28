@@ -3,36 +3,54 @@ package com.sharedbyatt.thaiformyanmar
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private lateinit var push: PushControls
+    private var showStartupArtwork = false
+    private var startupArtwork: ImageView? = null
+    private var artworkShownAt = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        showStartupArtwork = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && savedInstanceState == null
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || savedInstanceState != null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !showStartupArtwork) return
 
-        val brandedSplash = ImageView(this).apply {
+        val artwork = ImageView(this).apply {
             setImageResource(R.drawable.chang_thai_splash)
             scaleType = ImageView.ScaleType.CENTER_CROP
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             isClickable = true
         }
+        startupArtwork = artwork
+        artworkShownAt = SystemClock.uptimeMillis()
         addContentView(
-            brandedSplash,
+            artwork,
             ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
         )
-        splashScreen.setOnExitAnimationListener { systemSplash ->
-            systemSplash.remove()
-            brandedSplash.postDelayed({
-                (brandedSplash.parent as? ViewGroup)?.removeView(brandedSplash)
-            }, 450)
-        }
+        splashScreen.setOnExitAnimationListener { it.remove() }
+    }
+
+    // In surface mode Flutter blocks the activity's first draw until its own
+    // first frame, hiding the native artwork throughout Flutter initialization.
+    override fun getRenderMode(): RenderMode =
+        if (showStartupArtwork) RenderMode.texture else super.getRenderMode()
+
+    override fun onFlutterUiDisplayed() {
+        super.onFlutterUiDisplayed()
+        val artwork = startupArtwork ?: return
+        startupArtwork = null
+        val remaining = (450L - (SystemClock.uptimeMillis() - artworkShownAt)).coerceAtLeast(0)
+        artwork.postOnAnimationDelayed({
+            (artwork.parent as? ViewGroup)?.removeView(artwork)
+        }, remaining)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

@@ -231,12 +231,28 @@ jobs:
           script: |
             adb install -r build/app/outputs/flutter-apk/app-release.apk
             adb logcat -b all -c
-            adb shell am start -W -n com.sharedbyatt.thaiformyanmar/.MainActivity
-            sleep 20
+            mkdir -p build/review-artifacts
+            adb shell input keyevent KEYCODE_HOME
+            adb shell am force-stop com.sharedbyatt.thaiformyanmar
+            adb shell screenrecord --time-limit 9 /sdcard/chang-thai-startup.mp4 &
+            recording_pid=$!
+            sleep 1
+            adb shell am start -W -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n com.sharedbyatt.thaiformyanmar/.MainActivity
+            wait "$recording_pid"
+            adb pull /sdcard/chang-thai-startup.mp4 build/review-artifacts/chang-thai-startup.mp4
+            sleep 11
             adb logcat -b crash -d
             adb logcat -b main -d -s AndroidRuntime:E flutter:E
             adb shell dumpsys activity exit-info com.sharedbyatt.thaiformyanmar
             adb shell pidof com.sharedbyatt.thaiformyanmar
+
+      - name: Keep Android startup recording
+        uses: actions/upload-artifact@v4
+        with:
+          name: chang-thai-android-startup
+          path: build/review-artifacts/chang-thai-startup.mp4
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Keep Android review builds
         uses: actions/upload-artifact@v4
