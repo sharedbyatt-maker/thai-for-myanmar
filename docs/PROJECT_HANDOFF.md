@@ -2,6 +2,30 @@
 
 Recorded 23 November 2026, Thailand time. This is the starting point for a new maintainer or AI session. The GitHub repository is [sharedbyatt-maker/thai-for-myanmar](https://github.com/sharedbyatt-maker/thai-for-myanmar). Check current `main`, GitHub Actions and Render before reporting a new release status.
 
+## Owner-approved V1 baseline (28 November 2026)
+
+The owner has explicitly accepted the current Chang Thai app as the **V1 baseline**.
+Use this as the visual and functional reference for all future updates. Do not
+rework the accepted launcher icon or splash/startup sequence unless explicitly asked.
+
+- **Protected baseline branch:** `baseline/chang-thai-v1`
+- **Exact baseline commit:** [`52b2fd8f3a180a076ebfb87966782f9393920df7`](https://github.com/sharedbyatt-maker/thai-for-myanmar/commit/52b2fd8f3a180a076ebfb87966782f9393920df7)
+- **Merged change:** [PR #60 — Keep the Chang Thai splash visible until the app is ready](https://github.com/sharedbyatt-maker/thai-for-myanmar/pull/60)
+- **CI verification:** [Run #46139950879](https://github.com/sharedbyatt-maker/thai-for-myanmar/actions/runs/46139950879), all five jobs succeeded, including Android release build/startup smoke test, Web build, content audit, and Flutter tests.
+- **Android package ID:** `com.sharedbyatt.thaiformyanmar` — preserve for future updates.
+- **App version in pubspec at this snapshot:** `0.1.0+1`. This is the repository's technical version, not a Play Store release declaration.
+- **Distribution status:** CI produced review APK artifacts. Do not claim production signing or Google Play publication. Confirm the Play Console upload key and next unused version code before preparing a store release.
+- **Baseline artifact retention:** GitHub Actions artifacts are temporary. The baseline branch/commit is the durable source reference; rebuild APKs from it when needed.
+
+### Rules for future updates
+
+1. Start feature/fix work from the latest `main`, not from the baseline branch.
+2. Compare UI, app startup, launcher/splash assets, lessons, audio, progress and navigation against `baseline/chang-thai-v1`.
+3. Keep the baseline branch unchanged. Never force-push or develop directly on it.
+4. Make only the changes the owner requests. Preserve accepted V1 behavior outside that scope.
+5. For a major redesign or major feature generation, discuss a V2 plan first; ordinary bug fixes can remain V1 maintenance updates.
+6. Before delivering an APK, run CI and test the exact release APK. Keep package ID and signing continuity in mind.
+
 ## Product and scope
 
 Chang Thai teaches practical Thai to Burmese speakers, particularly people living, working or travelling in Thailand. The owner selected the current product as **V1**. Release Android first using the owner's existing Google Play developer account. Keep iPhone users on the existing website via Safari **Add to Home Screen**. Native iOS starts after the owner obtains an Apple Developer account. Collect feedback after Android V1 and plan feature or design changes as V2. Keep changes limited to the owner's requested scope.
