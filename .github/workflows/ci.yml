@@ -228,23 +228,7 @@ jobs:
           emulator-boot-timeout: 300
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
           disable-animations: true
-          script: |
-            adb install -r build/app/outputs/flutter-apk/app-release.apk
-            adb logcat -b all -c
-            mkdir -p build/review-artifacts
-            adb shell input keyevent KEYCODE_HOME
-            adb shell am force-stop com.sharedbyatt.thaiformyanmar
-            adb shell screenrecord --time-limit 9 /sdcard/chang-thai-startup.mp4 &
-            recording_pid=$!
-            sleep 1
-            adb shell am start -W -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n com.sharedbyatt.thaiformyanmar/.MainActivity
-            wait "$recording_pid"
-            adb pull /sdcard/chang-thai-startup.mp4 build/review-artifacts/chang-thai-startup.mp4
-            sleep 11
-            adb logcat -b crash -d
-            adb logcat -b main -d -s AndroidRuntime:E flutter:E
-            adb shell dumpsys activity exit-info com.sharedbyatt.thaiformyanmar
-            adb shell pidof com.sharedbyatt.thaiformyanmar
+          script: bash tool/run_android_release_smoke.sh
 
       - name: Keep Android startup recording
         uses: actions/upload-artifact@v4
